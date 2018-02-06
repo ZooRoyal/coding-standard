@@ -20,7 +20,7 @@ function constructor()
         scriptDirectory=$(realpath "$(dirname "$(readlink -f "$(realpath $0)" || echo "$(echo "$(realpath $0)" | sed -e 's,\\,/,g')")")")
     fi
 
-    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontCopyPastDetectPHP -e"
+    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontCopyPasteDetectPHP -e"
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
     cpdCommand="php ${rootDirectory}/vendor/bin/phpcpd -vvv --progress --fuzzy -n --names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php"
@@ -29,7 +29,7 @@ function constructor()
 function show_help()
 {
     echo "This tool executes PHP-CPD on a certain set of PHP files of this Project. It ignores files which are in "
-    echo "directories with a .dontCopyPastDetectPHP file. Subdirectories are ignored too."
+    echo "directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too."
     echo "usage: copy_paste_detect_php [-h]"
     echo "    -h                   Shows this help"
 }
