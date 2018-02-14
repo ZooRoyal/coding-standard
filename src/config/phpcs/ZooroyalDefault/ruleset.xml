@@ -59,7 +59,6 @@
     <rule ref="Generic.Files.OneInterfacePerFile"/>
     <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
     <rule ref="Generic.Formatting.SpaceAfterCast"/>
-    <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
     <rule ref="Generic.Functions.CallTimePassByReference"/>
     <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
     <rule ref="Generic.Metrics.CyclomaticComplexity"/>
