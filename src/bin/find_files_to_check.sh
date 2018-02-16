@@ -75,12 +75,13 @@ function find_raw_diff()
         targetCommit="HEAD"
         while [ $(git cat-file -t $targetCommit^) == "commit" ]
         do
-            numberOfContainingBranches=$(git branch -r --contains $targetCommit^ | wc -l)
+            targetCommit="$targetCommit^"
+            numberOfContainingBranches=$(git branch -r --contains $targetCommit | wc -l)
             if [ "$numberOfContainingBranches" -ne "1" ]
             then
                 break;
             fi
-            targetCommit="$targetCommit^"
+
         done
         rawDiff=$(git diff --name-only --diff-filter=d $targetCommit | grep -i $filter$)
     else
