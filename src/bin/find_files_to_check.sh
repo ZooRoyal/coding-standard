@@ -20,9 +20,11 @@ rootDirectory=""
 targetBranch=""
 stopword=""
 filter=""
+localBranch=""
 
 ##### Functions #####
 
+# This function sets up global variables
 function constructor()
 {
     # readlink has no -f option with Darwin kernels used in Macs
@@ -34,12 +36,14 @@ function constructor()
 
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
-    }
+    localBranch="$(git rev-parse --abbrev-ref HEAD)"
+}
 
+# This function prints the helpme.
 function show_help()
 {
     echo "This tool finds files, which should be considered for code style checks."
-    echo "usage: sniff_php[ -h][ -t <git tree-ish>][ -s <name-of-file>][ -f <filter>][ -e]"
+    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>][ -s <name-of-file>][ -f <filter>][ -e]"
     echo "    -h                   Shows this help"
     echo "    -t <git tree-ish>    Finds PHP-Files which have changed since the current branch parted"
     echo "                         from the target branch only."
@@ -48,21 +52,53 @@ function show_help()
     echo "    -e                   Gathers list of directories which should be excluded"
 }
 
-
+# This function searches for files to check in a certain diff only.
 function find_diff_only()
 {
-    local branchRef="$(git symbolic-ref HEAD 2>/dev/null)"
-    local localBranch=${branchRef##refs/heads/}
-    local refinedDiff=()
+    local rawDiff=""
+    local diff=""
 
-    if [ "$localBranch" = "$targetBranch" ];
+    rawDiff=$(find_raw_diff)
+    diff=$(filter_raw_diff "$rawDiff")
+
+    echo "$diff"
+}
+
+# This function computes the raw diff without filtering by blacklist and such.
+# @return string rawDiff
+function find_raw_diff()
+{
+    local rawDiff=""
+
+    if [ "$localBranch" = "$targetBranch" ] && ! [ "$localBranch" = "master" ];
     then
-        rawDiff=$(git diff --name-only --diff-filter=d HEAD~1 | grep -i $filter$)
+        targetCommit="HEAD"
+        while [ $(git cat-file -t $targetCommit^) == "commit" ]
+        do
+            targetCommit="$targetCommit^"
+            numberOfContainingBranches=$(git branch -r --contains $targetCommit | wc -l)
+            if [ "$numberOfContainingBranches" -ne "1" ]
+            then
+                break;
+            fi
+
+        done
+        rawDiff=$(git diff --name-only --diff-filter=d $targetCommit | grep -i $filter$)
     else
         mergeBase=$(git merge-base HEAD origin/$targetBranch)
         rawDiff=$(git diff --name-only --diff-filter=d $mergeBase | grep -i $filter$)
     fi
+    echo $rawDiff
+}
 
+# This function filters a raw diff by blacklist, stopword and submodule
+# @param string rawDiff
+#
+# @return string filteredDiff
+function filter_raw_diff()
+{
+    local rawDiff=$1
+    local refinedDiff=()
 
     for line in $rawDiff
     do
@@ -109,6 +145,7 @@ function find_diff_only()
 
 }
 
+# This function finds all files to check
 function find_all()
 {
     local blackListParameter=""
@@ -125,6 +162,7 @@ function find_all()
     eval $command
 }
 
+# This function computes a blacklist of directories which should not be checked.
 function compute_blacklisted_directories()
 {
     local rawExcludePathsByFileByStopword
@@ -150,7 +188,7 @@ function compute_blacklisted_directories()
     fi
 }
 
-###############
+##### Main #####
 
 constructor
 
@@ -184,7 +222,7 @@ if [ "$exclusionSwitch" == "true" ]
 then
     compute_blacklisted_directories
     echo ${blacklistedDirectories[*]}
-elif [ -z $targetBranch ]
+elif [ -z $targetBranch ] || [ "$localBranch" = "master" ]
 then
     find_all
 else

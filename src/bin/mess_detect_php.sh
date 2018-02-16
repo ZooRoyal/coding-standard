@@ -31,7 +31,7 @@ function show_help()
 {
     echo "This tool executes PHP-MD on a certain set of PHP files of this Project. It ignores files which are in "
     echo "directories with a .dontMessDetectPHP file. Subdirectories are ignored too."
-    echo "usage: mess_detect_php[ -h][ -t <git tree-ish>]"
+    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>]"
     echo "    -h                   Shows this help"
     echo "    -t <git tree-ish>    Detects mess in PHP-Files which have changed since the current branch parted "
     echo "                         from the target branch only."

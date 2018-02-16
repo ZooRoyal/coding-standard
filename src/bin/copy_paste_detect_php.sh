@@ -30,7 +30,7 @@ function show_help()
 {
     echo "This tool executes PHP-CPD on a certain set of PHP files of this Project. It ignores files which are in "
     echo "directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too."
-    echo "usage: copy_paste_detect_php [-h]"
+    echo "usage: $(basename $0)[ -h]"
     echo "    -h                   Shows this help"
 }
 
