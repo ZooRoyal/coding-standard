@@ -40,7 +40,7 @@ function lint_diff()
     local parameter=""
     local changedPhpFiles=()
 
-    changedPhpFiles=$($findFilesCommand- t $targetBranch)
+    changedPhpFiles=$($findFilesCommand -t $targetBranch)
 
     if [ -z "$changedPhpFiles" ];
     then
