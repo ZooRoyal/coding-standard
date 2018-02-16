@@ -29,7 +29,7 @@ function show_help()
 {
     echo "This tool executes PHP-CS on a certain set of PHP files of this Project. It ignores files which are in "
     echo "directories with a .dontSniffPHP file. Subdirectories are ignored too."
-    echo "usage: sniff_php[ -h][ -t <git tree-ish>]"
+    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>]"
     echo "    -h                   Shows this help"
     echo "    -t <git tree-ish>    Sniffs PHP-Files which have changed since the current branch parted from the target path only."
 }

@@ -11,7 +11,7 @@ file=""
 function show_help()
 {
     echo "This tool finds the closest parent directory containing a file identified by name."
-    echo "usage: find_parent_with_file[ -h][ -d <directory>] -f <file-name>"
+    echo "usage: $(basename $0)[ -h][ -d <directory>] -f <file-name>"
     echo "    -h                Shows this help"
     echo "    -f <file-name>    The name of the file to find."
     echo "    -d <directory>    The directory to start the search. If not set it will use the PWD."

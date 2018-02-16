@@ -43,7 +43,7 @@ function constructor()
 function show_help()
 {
     echo "This tool finds files, which should be considered for code style checks."
-    echo "usage: sniff_php[ -h][ -t <git tree-ish>][ -s <name-of-file>][ -f <filter>][ -e]"
+    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>][ -s <name-of-file>][ -f <filter>][ -e]"
     echo "    -h                   Shows this help"
     echo "    -t <git tree-ish>    Finds PHP-Files which have changed since the current branch parted"
     echo "                         from the target branch only."

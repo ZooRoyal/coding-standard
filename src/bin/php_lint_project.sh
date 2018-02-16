@@ -30,7 +30,7 @@ function show_help()
 {
     echo "This tool lints the PHP-Files of this Project. It ignores files which are in directories with a .dontLintPHP"
     echo "file. Subdirectories are ignored too."
-    echo "usage: php_lint_project[ -h][ -t <git tree-ish>]"
+    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>]"
     echo "    -h                   Shows this help"
     echo "    -t <git tree-ish>    Lints PHP-Files which have changed since the current branch parted from the target Path only."
 }
