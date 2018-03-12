@@ -36,7 +36,7 @@ function constructor()
 
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
-    localBranch="$(git rev-parse --abbrev-ref HEAD)"
+    localBranch="$(git name-rev --name-only HEAD)"
 }
 
 # This function prints the helpme.
