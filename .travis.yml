@@ -26,6 +26,9 @@ script:
   - bash src/bin/sniff_php.sh -t $TRAVIS_BRANCH
   - bash src/bin/mess_detect_php.sh -t $TRAVIS_BRANCH
   - bash src/bin/copy_paste_detect_php.sh
+  - bash src/bin/eslint_js.sh -t $TRAVIS_BRANCH
+  - bash src/bin/stylelint_less.sh -t $TRAVIS_BRANCH
+  - php vendor/bin/phpunit --config phpunit.xml
 
 # allow builds for all branches
 branches:

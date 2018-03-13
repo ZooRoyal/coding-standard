@@ -34,9 +34,9 @@ function constructor()
     findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontSniffJS -f .js"
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
-    sniffCommand="${rootDirectory}/node_modules/eslint/bin/eslint.js --config=$eslintConfig"
-    eslintFixCommand="${rootDirectory}/node_modules/eslint/bin/eslint.js --config=$eslintConfig --fix --ignore-path=$eslintIgnore"
-    eslintFixDryCommand="${rootDirectory}/node_modules/eslint/bin/eslint.js --config=$eslintConfig --fix-dry-run --ignore-path=$eslintIgnore"
+    sniffCommand="${scriptDirectory}/../../node_modules/eslint/bin/eslint.js --config=$eslintConfig"
+    eslintFixCommand="${scriptDirectory}/../../node_modules/eslint/bin/eslint.js --config=$eslintConfig --fix --ignore-path=$eslintIgnore"
+    eslintFixDryCommand="${scriptDirectory}/../../node_modules/eslint/bin/eslint.js --config=$eslintConfig --fix-dry-run --ignore-path=$eslintIgnore"
 }
 
 function show_help()
@@ -110,11 +110,11 @@ function fix_violations()
 {
     local eslintCommand
 
-    if [ fixDryMode == 'true' ]
+    if [ "$fixDryMode" == "true" ]
     then
-        eslintCommand=$eslintFixCommand
-    else
         eslintCommand=$eslintFixDryCommand
+    else
+        eslintCommand=$eslintFixCommand
     fi
 
     for directory in $changedJsFiles; do
@@ -140,6 +140,7 @@ while getopts "hfdt:" opt; do
         ;;
     d)
         echo "Will run in fix dry mode"
+        fixMode=true
         fixDryMode=true
         ;;
     t)

@@ -1,13 +1,13 @@
 {
-  "name": "zooroyalweb",
+  "name": "coding-standard",
   "version": "1.0.0",
-  "description": "ZooRoyal Coding Standard Package.json",
+  "description": "ZooRoyal Coding Standard package.json",
   "private": true,
-  "homepage": "https://www.zooroyal.de",
+  "homepage": "https://github.com/ZooRoyal/coding-standard",
   "engines": {
     "node": "^6.9.5"
   },
-  "devDependencies": {
+  "dependencies": {
     "eslint": "^4.15.0",
     "eslint-config-crockford": "^2.0.0",
     "eslint-config-m99coder": "^0.1.0",
