@@ -1,0 +1,16 @@
+# Files/Directories to be ignored by StyleLint
+
+assets/components/**/
+assets/dist/**/
+themes/Backend/**/
+themes/Frontend/Bare/**/
+themes/Frontend/Responsive/**/
+assets/src/less/theme/fancybox.less
+assets/src/less/theme/flexbox.less
+assets/src/less/theme/glyphicons.less
+assets/src/less/theme/glyphicons-filetypes.less
+assets/src/less/theme/glyphicons-halflings.less
+assets/src/less/theme/glyphicons-social.less
+assets/src/less/theme/print.less
+themes
+themes/**/

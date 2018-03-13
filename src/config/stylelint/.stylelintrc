@@ -1,0 +1,12 @@
+{
+  "extends": [
+    "stylelint-config-standard"
+  ],
+  //"processors": ["@mapbox/stylelint-processor-arbitrary-tags", { "fileFilterRegex": [/\.tpl$/ ] }],
+  "rules": {
+    "at-rule-no-unknown": null,
+    "block-no-empty": true,
+    "no-descending-specificity": null,
+    "selector-pseudo-element-colon-notation": "single"
+  }
+}
