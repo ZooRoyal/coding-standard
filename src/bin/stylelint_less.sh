@@ -30,7 +30,7 @@ function constructor()
     stylelintConfig="${scriptDirectory}/../config/stylelint/bin/stylelint.js"
     stylelintIgnore="${scriptDirectory}/../config/stylelint/.stylelintrc"
 
-    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontSniffJS -f .less"
+    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontSniffLESS -f .less"
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
     sniffCommand="${rootDirectory}/node_modules/stylelint/bin/stylelint.js --config=$stylelintConfig"
