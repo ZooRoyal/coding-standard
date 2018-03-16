@@ -1,0 +1,19 @@
+{
+  "name": "zooroyalweb",
+  "version": "1.0.0",
+  "description": "ZooRoyal Coding Standard Package.json",
+  "private": true,
+  "homepage": "https://www.zooroyal.de",
+  "engines": {
+    "node": "^6.9.5"
+  },
+  "devDependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-crockford": "^2.0.0",
+    "eslint-config-m99coder": "^0.1.0",
+    "eslint-config-recommended": "^2.0.0",
+    "stylelint": "^8.4.0",
+    "stylelint-config-recommended": "^2.0.1",
+    "stylelint-config-standard": "^18.0.0"
+  }
+}
