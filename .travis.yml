@@ -14,7 +14,7 @@ matrix:
     - php: nightly
 
 before_install:
-  - sudo apt-get install realpath
+  - sudo apt-get -qq install realpath
   - travis_retry composer self-update
 
 install:
@@ -35,3 +35,8 @@ branches:
 # disable shallow cloning
 git:
   depth: false
+
+## Cache composer bits
+cache:
+  directories:
+    - $HOME/.composer/cache/files
