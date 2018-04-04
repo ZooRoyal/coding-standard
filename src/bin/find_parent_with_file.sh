@@ -25,7 +25,7 @@ function find_parent_with_file()
         exit 1
     fi
 
-    while [[ $directory != "." && $directory != "" && $directory != "/" ]];
+    while [[ $directory != $(dirname $(realpath .)) && $directory != "" && $directory != "/" ]];
     do
         result=$(find "$directory" -maxdepth 1 -mindepth 1 -iname "$file" | egrep '.*')
         if [ "$?" -eq "0" ]
@@ -39,7 +39,7 @@ function find_parent_with_file()
 
 ###############
 
-while getopts "hf:d:" opt; do
+while getopts ":hf:d:" opt; do
     case "$opt" in
     h)
         show_help

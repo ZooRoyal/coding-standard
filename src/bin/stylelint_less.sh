@@ -7,17 +7,18 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 
 scriptDirectory=""
 sniffCommand=""
-cbfCommand=""
+stylelintFixCommand=""
 fixMode=false
 findViolationsResult=""
 targetBranch=""
-changedPhpFiles=()
+changedLessFiles=()
 
 ##### Functions #####
 
 function constructor()
 {
-    local phpcsConfig
+    local stylelintConfig
+    local stylelintIgnore
 
     # readlink has no -f option with Darwin kernels used in Macs
     if [ "$(uname -s)" = 'Darwin' ]; then
@@ -26,23 +27,24 @@ function constructor()
         scriptDirectory=$(realpath "$(dirname "$(readlink -f "$(realpath $0)" || echo "$(echo "$(realpath $0)" | sed -e 's,\\,/,g')")")")
     fi
 
-    phpcsConfig="${scriptDirectory}/../config/phpcs/ZooroyalDefault/ruleset.xml"
+    stylelintConfig="${scriptDirectory}/../config/stylelint/.stylelintrc"
+    stylelintIgnore="${scriptDirectory}/../config/stylelint/.stylelintignore"
 
-    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontSniffPHP -f .php"
+    findFilesCommand="bash ${scriptDirectory}/find_files_to_check.sh -s .dontSniffLESS -f .less"
     findParentWithFile="bash ${scriptDirectory}/find_parent_with_file.sh"
     rootDirectory=$($findParentWithFile -d $scriptDirectory -f composer.lock)
-    sniffCommand="php ${rootDirectory}/vendor/bin/phpcs -s --extensions=php --standard=$phpcsConfig"
-    cbfCommand="php ${rootDirectory}/vendor/bin/phpcbf --extensions=php --standard=$phpcsConfig"
+    sniffCommand="${scriptDirectory}/../../node_modules/stylelint/bin/stylelint.js --config=$stylelintConfig --ignore-path=$stylelintIgnore"
+    stylelintFixCommand="${scriptDirectory}/../../node_modules/stylelint/bin/stylelint.js --config=$stylelintConfig --fix --ignore-path=$stylelintIgnore"
 }
 
 function show_help()
 {
-    echo "This tool executes PHP-CS on a certain set of PHP files of this Project. It ignores files which are in "
-    echo "directories with a .dontSniffPHP file. Subdirectories are ignored too."
-    echo "usage: $(basename $0)[ -h][ -t <git tree-ish>]"
+    echo "This tool executes STYLELINT on a certain set of Less files of this Project."
+    echo "Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored."
+    echo "usage: stylelint_less [--help] [-t <git tree-ish>]"
     echo "    -h                   Shows this help"
-    echo "    -t <git tree-ish>    Sniffs PHP-Files which have changed since the current branch parted from the target path only."
-    echo "    -f                   Fix mode. Will Call phpcbf to autofix some violations."
+    echo "    -t <git tree-ish>    Lints Less-Files which have changed since the current branch parted from the target path only."
+    echo "    -f                   Fix all changed Less Files"
 }
 
 function sniff()
@@ -52,24 +54,23 @@ function sniff()
         parameter=" -t $targetBranch"
     fi
 
-    changedPhpFiles=$($findFilesCommand$parameter)
+    changedLessFiles=$($findFilesCommand$parameter)
 
-    if [ -z "$changedPhpFiles" ];
+    if [ -z "$changedLessFiles" ];
     then
-        echo "No PHP-Files to check!"
+        echo "No Less-Files to check!"
         exit 0
     fi
 
-    echo "########### PHPCS ###########"
+    echo "########### STYLELINT ###########"
     find_violations
 
     if [ "$findViolationsResult" -ne "0" ] && [ "$fixMode" == "true" ]
     then
-        echo "########### PHPCBF ###########"
+        echo "########### STYLELINT FIX ###########"
         echo "Trying to fix violations"
         fix_violations
 
-        echo "########### PHPCS ###########"
         echo "Revalidating code after attempt to fix it"
         find_violations
 
@@ -89,8 +90,8 @@ function find_violations()
     findViolationsResult=""
     local result=0
 
-    for directory in $changedPhpFiles; do
-        echo "Sniffing $directory"
+    for directory in $changedLessFiles; do
+        echo "StyleLinting $directory"
         $sniffCommand $directory
         sniffResult=$?
         if ! [ "$sniffResult" -eq "0" ]
@@ -104,9 +105,9 @@ function find_violations()
 
 function fix_violations()
 {
-    for directory in $changedPhpFiles; do
+    for directory in $changedLessFiles; do
         echo "Fixing $directory"
-        $cbfCommand $directory
+        $stylelintFixCommand $directory
         sniffResult=$?
     done
 }

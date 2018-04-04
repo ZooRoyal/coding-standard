@@ -1,0 +1,20 @@
+{
+  "name": "coding-standard",
+  "version": "1.0.0",
+  "description": "ZooRoyal Coding Standard package.json",
+  "private": true,
+  "homepage": "https://github.com/ZooRoyal/coding-standard",
+  "engines": {
+    "node": "^6.9.5"
+  },
+  "dependencies": {
+    "eslint": "^4.15.0",
+    "eslint-config-crockford": "^2.0.0",
+    "eslint-config-m99coder": "^0.1.0",
+    "eslint-config-recommended": "^2.0.0",
+    "eslint-plugin-m99coder": "^0.1.0",
+    "stylelint": "^8.4.0",
+    "stylelint-config-recommended": "^2.0.1",
+    "stylelint-config-standard": "^18.0.0"
+  }
+}
