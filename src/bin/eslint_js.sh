@@ -132,7 +132,7 @@ function fix_violations()
 
 constructor
 
-while getopts "hfdt:" opt; do
+while getopts ":hfdt:" opt; do
     case "$opt" in
     h)
         show_help

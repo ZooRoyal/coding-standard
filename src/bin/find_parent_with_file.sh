@@ -39,7 +39,7 @@ function find_parent_with_file()
 
 ###############
 
-while getopts "hf:d:" opt; do
+while getopts ":hf:d:" opt; do
     case "$opt" in
     h)
         show_help

@@ -194,7 +194,7 @@ function compute_blacklisted_directories()
 
 constructor
 
-while getopts "ht:s:f:e" opt; do
+while getopts ":ht:s:f:e" opt; do
     case "$opt" in
     h)
         show_help
@@ -230,4 +230,3 @@ then
 else
     find_diff_only
 fi
-
