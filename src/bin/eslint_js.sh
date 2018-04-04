@@ -52,14 +52,14 @@ function show_help()
 
 function sniff()
 {
-    if [ ! -z "$targetBranch" ];
+    if [ ! -z "$targetBranch" ]
     then
         parameter=" -t $targetBranch"
     fi
 
     changedJsFiles=$($findFilesCommand$parameter)
 
-    if [ -z "$changedJsFiles" ];
+    if [ -z "$changedJsFiles" ]
     then
         echo "No JS-Files to check!"
         exit 0
