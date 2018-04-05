@@ -6,12 +6,13 @@ OPTIND=1         # Reset in case getopts has been used previously in the shell.
 ##### Configuration #####
 
 blacklistedDirectories=(
-"*.eslintrc.js"
-".git"
-".idea"
-".vagrant"
-"node_modules"
-"vendor"
+"**.eslintrc.js"
+"**.git"
+"**.idea"
+"**.vagrant"
+"**node_modules"
+"**vendor"
+"**bower_components"
 )
 
 ##### Variables #####
