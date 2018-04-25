@@ -6,7 +6,7 @@ use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
-class FunctionCommentThrowTagSniffTest extends TestCase
+class DocCommentSniffTest extends TestCase
 {
     /** @var string */
     private static $vendorDir;
@@ -26,7 +26,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     protected function setUp()
     {
         $this->commandPrefix = 'vendor/bin/phpcs '
-            . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag '
+            . '--sniffs=ZooRoyal.Commenting.DocComment '
             . '--standard=' . self::$vendorDir . '/../src/config/phpcs/ZooroyalDefault/ruleset.xml '
             . '-s ';
     }
@@ -39,7 +39,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     public function processApprovesCorrectCount()
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
-            . 'Sniffs/Commenting/Fixtures/FixtureCorrectCountOfTags.php';
+            . 'Sniffs/Commenting/Fixtures/FixtureCorrectComments.php';
         $subject    = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->mustRun();
@@ -54,14 +54,24 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     public function processRejectsIncorrectCount()
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
-            . 'Sniffs/Commenting/Fixtures/FixtureIncorrectCountOfTags.php';
+            . 'Sniffs/Commenting/Fixtures/FixtureIncorrectComments.php';
         $subject    = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->run();
         $subject->wait();
 
         $output = $subject->getOutput();
-        self::assertRegExp('/at least 2 @throws/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.Empty/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentAfterOpen/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeShort/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentBeforeClose/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfter/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.MissingShort/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ShortNotCapital/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeTags/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.NonParamGroup/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfterTagGroup/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.TagValueIndent/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ParamNotFirst/', $output);
     }
 }

@@ -22,4 +22,14 @@ class FixtureCorrectCountOfTags
     {
         throw new Exception();
     }
+
+    /**
+     * That was short
+     *
+     * @throws RuntimeException
+     */
+    public function foo()
+    {
+        $this->bla();
+    }
 }
