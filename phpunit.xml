@@ -7,6 +7,10 @@
         <testsuite name="AllUnitTests">
             <directory>./tests/Unit/</directory>
         </testsuite>
+
+        <testsuite name="AllFunctionalTests">
+            <directory>./tests/Functional/</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">

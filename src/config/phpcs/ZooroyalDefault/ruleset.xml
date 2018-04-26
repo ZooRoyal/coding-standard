@@ -9,6 +9,8 @@
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
 
+    <rule ref="../../../PHPCodeSniffer/Standards/ZooRoyal"/>
+
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">
         <properties>
@@ -100,7 +102,6 @@
     <rule ref="Squiz.Classes.LowercaseClassKeywords"/>
     <rule ref="Squiz.Classes.SelfMemberReference"/>
     <rule ref="Squiz.Commenting.EmptyCatchComment"/>
-    <rule ref="Squiz.Commenting.FunctionCommentThrowTag"/>
     <rule ref="Squiz.Commenting.PostStatementComment"/>
     <rule ref="Squiz.ControlStructures.ForEachLoopDeclaration"/>
     <rule ref="Squiz.ControlStructures.ForLoopDeclaration"/>
