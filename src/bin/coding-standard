@@ -1,0 +1,43 @@
+#!/usr/bin/env php
+<?php
+
+require __DIR__ . '/../../vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\JSESLintCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\JSStyleLintCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\PHPCodeSnifferCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\PHPCopyPasteDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\PHPMessDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\PHPParallelLintCommand;
+
+$builder = new \DI\ContainerBuilder();
+$builder->useAnnotations(true);
+$builder->useAutowiring(true);
+$builder->addDefinitions(__DIR__ . '/../config/phpdi/phpdi.php');
+$container = $builder->build();
+
+$phpCodeSnifferCommand   = $container->get(PHPCodeSnifferCommand::class);
+$findFilesToCheckCommand = $container->get(FindFilesToCheckCommand::class);
+$messDetectCommand       = $container->get(PHPMessDetectorCommand::class);
+$parallelLint            = $container->get(PHPParallelLintCommand::class);
+$copyPasteDetector       = $container->get(PHPCopyPasteDetectorCommand::class);
+$esLint                  = $container->get(JSESLintCommand::class);
+$styleLint               = $container->get(JSStyleLintCommand::class);
+
+$application = new Application();
+
+// ... register commands
+$application->add($phpCodeSnifferCommand);
+$application->add($findFilesToCheckCommand);
+$application->add($messDetectCommand);
+$application->add($parallelLint);
+$application->add($copyPasteDetector);
+$application->add($esLint);
+$application->add($styleLint);
+
+$container->call([$application, 'run'],
+    [$container->get(InputInterface::class), $container->get(OutputInterface::class)]);

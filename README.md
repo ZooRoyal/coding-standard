@@ -20,4 +20,11 @@ composer require "zooroyal/coding-standard"
 
 # Usage
 
-For usage just have a look an the .travis.yml
+Run the command to get usage instructions. 
+```bash
+php vendor/bin/coding-standard
+```
+
+For examples just have a look an the .travis.yml
+
+
