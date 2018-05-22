@@ -6,9 +6,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 
 class PHPCodeSnifferCommand extends Command
@@ -19,10 +16,7 @@ class PHPCodeSnifferCommand extends Command
     /**
      * PHPCodeSnifferCommand constructor.
      *
-     * @param AllCheckableFileFinder  $allCheckableFileFinder
-     * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param PHPCodeSnifferAdapter   $toolAdapter
-     * @param Environment             $environment
+     * @param PHPCodeSnifferAdapter $toolAdapter
      */
     public function __construct(PHPCodeSnifferAdapter $toolAdapter)
     {

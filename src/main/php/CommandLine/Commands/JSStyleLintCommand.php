@@ -6,12 +6,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSESLintAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSStyleLintAdapter;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 
 class JSStyleLintCommand extends Command
 {
@@ -37,7 +32,7 @@ class JSStyleLintCommand extends Command
         $this->setName('stylelint');
         $this->setDescription('Run StyleLint on Less files.');
         $this->setHelp('This tool executes STYLELINT on a certain set of Less files of this Project.'
-        . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
+            . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
         $this->setDefinition(
             new InputDefinition(
                 [

@@ -21,7 +21,7 @@ class JSESLintAdapter implements FixerSupportInterface
     private $filter;
 
     /**
-     * PHPCodeSnifferAdapter constructor.
+     * JSESLintAdapter constructor.
      *
      * @param Environment          $environment
      * @param OutputInterface      $output
@@ -101,7 +101,7 @@ class JSESLintAdapter implements FixerSupportInterface
      * Runs ESLint in normal or fix mode according to settings.
      *
      * @param string $targetBranch
-     * @param bool $processIsolation
+     * @param bool   $processIsolation
      * @param string $fullMessage
      * @param string $tool
      * @param string $diffMessage
