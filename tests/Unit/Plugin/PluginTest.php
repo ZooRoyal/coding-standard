@@ -27,8 +27,10 @@ class PluginTest extends TestCase
     {
         Mockery::close();
     }
-
-    public function testGetSubscribedEvents()
+    /**
+     * @test
+     */
+    public function getSubscribedEvents()
     {
         $result = Plugin::getSubscribedEvents();
 
@@ -51,7 +53,10 @@ class PluginTest extends TestCase
         );
     }
 
-    public function testActivateCalledWithoutErrors()
+    /**
+     * @test
+     */
+    public function activateCalledWithoutErrors()
     {
         list($mockedComposer, $mockedIO) = $this->prepareMocksForActivate();
 
@@ -68,6 +73,7 @@ class PluginTest extends TestCase
     }
 
     /**
+     * @test
      * @dataProvider npmInstallDataProvider
      *
      * @param string $processOutput
@@ -77,7 +83,7 @@ class PluginTest extends TestCase
      * @param int    $writeVerboseCount
      * @param int    $writeVeryVerboseCount
      */
-    public function testNpmInstall(
+    public function npmInstall(
         $processOutput,
         $processCommandLine,
         $isVerbose,

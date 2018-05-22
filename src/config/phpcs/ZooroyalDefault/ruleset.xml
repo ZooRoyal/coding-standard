@@ -9,7 +9,7 @@
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
 
-    <rule ref="../../../PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
 
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">

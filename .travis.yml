@@ -21,12 +21,12 @@ install:
   - travis_retry composer install
 
 script:
-  - bash src/bin/php_lint_project.sh -t $TRAVIS_BRANCH
-  - bash src/bin/sniff_php.sh -t $TRAVIS_BRANCH
-  - bash src/bin/mess_detect_php.sh -t $TRAVIS_BRANCH
-  - bash src/bin/copy_paste_detect_php.sh
-  - bash src/bin/eslint_js.sh -t $TRAVIS_BRANCH
-  - bash src/bin/stylelint_less.sh -t $TRAVIS_BRANCH
+  - src/bin/coding-standard parallel-lint -t $TRAVIS_BRANCH
+  - src/bin/coding-standard sniff -t $TRAVIS_BRANCH
+  - src/bin/coding-standard mess-detect -t $TRAVIS_BRANCH
+  - src/bin/coding-standard copy-paste-detect
+  - src/bin/coding-standard eslint -t $TRAVIS_BRANCH
+  - src/bin/coding-standard stylelint -t $TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
 
 # allow builds for all branches
@@ -42,3 +42,4 @@ git:
 cache:
   directories:
     - $HOME/.composer/cache/files
+    - $HOME/.npm
