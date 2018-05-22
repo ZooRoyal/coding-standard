@@ -40,7 +40,8 @@ class JSStyleLintCommand extends Command
                         'target',
                         't',
                         InputOption::VALUE_REQUIRED,
-                        'Lints Less-Files which have changed since the current branch parted from the target path only.',
+                        'Lints Less-Files which have changed since the current branch parted from the target path '
+                        . 'only. The Value has to be a commit-ish.',
                         ''
                     ),
                     new InputOption(

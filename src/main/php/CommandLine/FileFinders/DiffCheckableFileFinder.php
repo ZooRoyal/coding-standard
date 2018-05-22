@@ -77,13 +77,17 @@ class DiffCheckableFileFinder implements FileFinderInterface
     {
         $targetCommit = 'HEAD';
 
+        $initialNumberOfContainingBranches = $this->processRunner->runAsProcess(
+            'git branch -a --contains HEAD | wc -l'
+        );
+
         while ($this->isParentCommitishACommit($targetCommit)) {
             $targetCommit               .= '^';
             $numberOfContainingBranches = $this->processRunner->runAsProcess(
                 'git branch -a --contains ' . $targetCommit . ' | wc -l'
             );
 
-            if ($numberOfContainingBranches !== '1') {
+            if ($numberOfContainingBranches !== $initialNumberOfContainingBranches) {
                 break;
             }
         }
@@ -117,7 +121,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      */
     private function findFilesInDiffToTarget($targetBranch)
     {
-        $mergeBase = $this->processRunner->runAsProcess('git merge-base HEAD origin/' . $targetBranch);
+        $mergeBase = $this->processRunner->runAsProcess('git merge-base HEAD ' . $targetBranch);
 
         $rawDiffUnfilteredString = $this->processRunner->runAsProcess('git diff --name-only --diff-filter=d '
             . $mergeBase);

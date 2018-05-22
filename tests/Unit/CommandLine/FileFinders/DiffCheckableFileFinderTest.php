@@ -53,7 +53,7 @@ class DiffCheckableFileFinderTest extends TestCase
         $this->subjectParameters[Environment::class]->shouldReceive('getLocalBranch')
             ->withNoArgs()->andReturn($mockedLocalBranch);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git merge-base HEAD origin/' . $mockedTargetBranch)
+            ->with('git merge-base HEAD ' . $mockedTargetBranch)
             ->andReturn($mockedMergeBase);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git diff --name-only --diff-filter=d ' . $mockedMergeBase)
@@ -83,6 +83,9 @@ class DiffCheckableFileFinderTest extends TestCase
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with(H::startsWith('git cat-file -t HEAD'))
             ->andReturn('commit', 'commit', 'tag');
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
+            ->with('git branch -a --contains HEAD | wc -l')
+            ->andReturn('1');
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git branch -a --contains HEAD^ | wc -l')
             ->andReturn('1');

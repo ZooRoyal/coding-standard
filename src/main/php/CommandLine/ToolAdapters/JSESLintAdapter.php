@@ -43,19 +43,19 @@ class JSESLintAdapter implements FixerSupportInterface
         $this->filter   = '.js';
 
         $esLintBlacklistCommand    = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --ignore-pattern=%1$s ' . $rootDirectory;
+            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s ' . $rootDirectory;
         $esLintWhitelistCommand    = $environment->getPackageDirectory()
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s';
         $esLintFixBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix --ignore-pattern=%1$s ' . $rootDirectory;
+            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s ' . $rootDirectory;
         $esLintFixWhitelistCommand = $environment->getPackageDirectory()
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s';
 
         $this->commands = [
-            'ESLINTWL'    => $esLintWhitelistCommand,
-            'ESLINTFIXWL' => $esLintFixWhitelistCommand,
             'ESLINTBL'    => $esLintBlacklistCommand,
+            'ESLINTWL'    => $esLintWhitelistCommand,
             'ESLINTFIXBL' => $esLintFixBlacklistCommand,
+            'ESLINTFIXWL' => $esLintFixWhitelistCommand,
         ];
     }
 
@@ -112,14 +112,19 @@ class JSESLintAdapter implements FixerSupportInterface
     {
         if (empty($targetBranch) || $this->environment->getLocalBranch() === 'master') {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
+            $template = $this->commands[$tool . 'BL'];
+            $prefix   = '--ignore-pattern=';
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
-                $this->commands[$tool . 'BL'],
-                $this->stopword
+                $template,
+                $this->stopword,
+                $prefix,
+                ' '
             );
         } else {
             $this->output->writeln($diffMessage . ' diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
-            $exitCode = $this->genericCommandRunner->runWhitelistCommand(
-                $this->commands[$tool . 'WL'],
+            $template = $this->commands[$tool . 'WL'];
+            $exitCode  = $this->genericCommandRunner->runWhitelistCommand(
+                $template,
                 $targetBranch,
                 $this->stopword,
                 $this->filter,

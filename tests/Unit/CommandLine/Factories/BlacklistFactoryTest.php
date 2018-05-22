@@ -107,7 +107,7 @@ class BlacklistFactoryTest extends TestCase
 
         $this->mockedGitFinder->shouldReceive('in')->once()
             ->with($this->mockedRootDirectory)->andReturnSelf();
-        $this->mockedGitFinder->shouldReceive('files')->once()
+        $this->mockedGitFinder->shouldReceive('directories')->once()
             ->withNoArgs()->andReturnSelf();
         $this->mockedGitFinder->shouldReceive('depth')->once()
             ->with('> 1')->andReturnSelf();
