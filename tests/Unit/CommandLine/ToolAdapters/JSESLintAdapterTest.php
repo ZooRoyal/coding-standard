@@ -141,11 +141,11 @@ class JSESLintAdapterTest extends TestCase
         $mockedTargetBranch
     ) {
         $expectedWrite = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
-            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --ignore-pattern=%1$s '
+            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s '
             . $this->mockedRootDirectory;
 
         $expectedFix = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
-            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix --ignore-pattern=%1$s '
+            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s '
             . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('getLocalBranch')
@@ -155,7 +155,7 @@ class JSESLintAdapterTest extends TestCase
             ->with($message, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
-            ->with($$command, $this->expectedStopword)
+            ->with($$command, $this->expectedStopword, '--ignore-pattern=', ' ')
             ->andReturn($this->expectedExitCode);
 
         $result = $this->subject->$method($mockedTargetBranch, $this->mockedProcessisolation);

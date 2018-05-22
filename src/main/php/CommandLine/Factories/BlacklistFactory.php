@@ -49,7 +49,7 @@ class BlacklistFactory
         }
 
         $finderGit = $this->finderFactory->build();
-        $finderGit->in($this->environment->getRootDirectory())->files()->depth('> 1')->name('.git');
+        $finderGit->in($this->environment->getRootDirectory())->directories()->depth('> 1')->name('.git');
         $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
 
         $finderBlacklist = $this->finderFactory->build();

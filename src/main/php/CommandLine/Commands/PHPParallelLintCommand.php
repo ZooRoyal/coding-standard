@@ -40,7 +40,8 @@ class PHPParallelLintCommand extends Command
                         'target',
                         't',
                         InputOption::VALUE_REQUIRED,
-                        'Finds PHP-Files which have changed since the current branch parted from the target branch only.',
+                        'Finds PHP-Files which have changed since the current branch parted from the target branch '
+                        . 'only. The Value has to be a commit-ish.',
                         ''
                     ),
                     new InputOption(

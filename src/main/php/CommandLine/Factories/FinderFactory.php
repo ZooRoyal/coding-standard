@@ -20,6 +20,7 @@ class FinderFactory
             $result->useBestAdapter();
         }
         $result->ignoreDotFiles(false);
+        $result->ignoreVCS(false);
 
         return $result;
     }

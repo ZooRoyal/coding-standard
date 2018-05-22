@@ -13,9 +13,6 @@ matrix:
   allow_failures:
     - php: nightly
 
-before_install:
-  - sudo apt-get -qq install realpath
-
 install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
   - travis_retry composer install

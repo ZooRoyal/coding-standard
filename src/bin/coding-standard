@@ -1,7 +1,14 @@
 #!/usr/bin/env php
 <?php
 
-require __DIR__ . '/../../vendor/autoload.php';
+$autoloadFiles = array(__DIR__ . '/../../vendor/autoload.php',
+                       __DIR__ . '/../../../../autoload.php');
+
+foreach ($autoloadFiles as $autoloadFile) {
+    if (file_exists($autoloadFile)) {
+        require_once $autoloadFile;
+    }
+}
 
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
@@ -13,12 +20,9 @@ use Zooroyal\CodingStandard\CommandLine\Commands\PHPCodeSnifferCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\PHPCopyPasteDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\PHPMessDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\PHPParallelLintCommand;
+use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
-$builder = new \DI\ContainerBuilder();
-$builder->useAnnotations(true);
-$builder->useAutowiring(true);
-$builder->addDefinitions(__DIR__ . '/../config/phpdi/phpdi.php');
-$container = $builder->build();
+$container = ContainerFactory::getContainerInstance();
 
 $phpCodeSnifferCommand   = $container->get(PHPCodeSnifferCommand::class);
 $findFilesToCheckCommand = $container->get(FindFilesToCheckCommand::class);
