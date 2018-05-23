@@ -49,27 +49,52 @@ class BlacklistFactory
         }
 
         $finderGit = $this->finderFactory->build();
-        $finderGit->in($this->environment->getRootDirectory())->directories()->depth('> 1')->name('.git');
+        $finderGit->in($this->environment->getRootDirectory())->depth('> 0')->path('/.*git$/');
         $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
 
         $finderBlacklist = $this->finderFactory->build();
         $finderBlacklist->in($this->environment->getRootDirectory())->directories();
         foreach ($this->environment->getBlacklistedDirectories() as $blacklistedDirectory) {
-            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory) . '$/')
-                ->notPath('/' . preg_quote($blacklistedDirectory) . './');
+            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory, '/') . '$/')
+                ->notPath('/' . preg_quote($blacklistedDirectory, '/') . './');
         }
         $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArrayOfPaths($finderBlacklist);
 
         $rawExcludePathsUntrimmed = array_merge($rawExcludePathsByFileByStopword, $rawExcludePathsByFileByGit);
-        $rawExcludePathsFromFiles = array_map(
-            function ($value) {
-                return dirname($value);
-            },
-            $rawExcludePathsUntrimmed
-        );
+        $rawExcludePathsFromFiles = array_map('dirname', $rawExcludePathsUntrimmed);
 
         $rawExcludePaths = array_merge($rawExcludePathsByBlacklist, $rawExcludePathsFromFiles);
 
-        return $rawExcludePaths;
+        $filteredArray = $this->deDupePaths($rawExcludePaths);
+
+        return $filteredArray;
+    }
+
+    /**
+     * This method filters subpaths of paths already existing in $rawExcludePaths
+     *
+     * @param string[] $rawExcludePaths
+     *
+     * @return string[]
+     */
+    private function deDupePaths(array $rawExcludePaths)
+    {
+        $filteredArray = $rawExcludePaths;
+        $count         = count($filteredArray);
+        for ($i = 0; $count > $i; $i++) {
+            if (!isset($filteredArray[$i])) {
+                continue;
+            }
+            $item          = $filteredArray[$i];
+            $filteredArray = array_filter(
+                $filteredArray,
+                function ($value) use ($item) {
+                    return !(strlen($value) !== strlen($item) && strpos($value, $item) === 0);
+                }
+            );
+        }
+        $filteredArray = array_values($filteredArray);
+
+        return $filteredArray;
     }
 }
