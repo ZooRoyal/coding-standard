@@ -107,12 +107,10 @@ class BlacklistFactoryTest extends TestCase
 
         $this->mockedGitFinder->shouldReceive('in')->once()
             ->with($this->mockedRootDirectory)->andReturnSelf();
-        $this->mockedGitFinder->shouldReceive('directories')->once()
-            ->withNoArgs()->andReturnSelf();
         $this->mockedGitFinder->shouldReceive('depth')->once()
-            ->with('> 1')->andReturnSelf();
-        $this->mockedGitFinder->shouldReceive('name')->once()
-            ->with('.git')->andReturnSelf();
+            ->with('> 0')->andReturnSelf();
+        $this->mockedGitFinder->shouldReceive('path')->once()
+            ->with('/.*git$/')->andReturnSelf();
 
         $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
             ->with($this->mockedGitFinder)->andReturn([__DIR__]);
@@ -133,15 +131,15 @@ class BlacklistFactoryTest extends TestCase
         }
 
         $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedBlacklistFinder)->andReturn(['/gna/gnarz', '/bra/brarz']);
+            ->with($this->mockedBlacklistFinder)->andReturn(['/gna/gnarz','/gna/gnarz/gnub', '/bra/brarz']);
     }
 
     private function addPathToFinder($parameter)
     {
         $this->mockedBlacklistFinder->shouldReceive('path')->once()
-            ->with('/' . $parameter . '$/')->andReturnSelf();
+            ->with('/' . preg_quote($parameter, '/') . '$/')->andReturnSelf();
         $this->mockedBlacklistFinder->shouldReceive('notPath')->once()
-            ->with('/' . $parameter . './')->andReturnSelf();
+            ->with('/' . preg_quote($parameter, '/') . './')->andReturnSelf();
     }
 
     private function prepareFindersForBlacklistWithoutStopword()
