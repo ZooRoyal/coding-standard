@@ -64,6 +64,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         $packageDirectory = $this->composer->getConfig()->get('vendor-dir')
             . DIRECTORY_SEPARATOR . 'zooroyal' . DIRECTORY_SEPARATOR . 'coding-standard';
         $this->process    = new Process('npm install --prefix ' . $packageDirectory);
+        $this->process->setTimeout(300);
     }
 
     /**
@@ -79,24 +80,31 @@ class Plugin implements PluginInterface, EventSubscriberInterface
     /**
      * Calls NPM on the command line to install package.json into vendor directory
      *
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     *
      * @throws LogicException
      * @throws \Symfony\Component\Process\Exception\RuntimeException
      * @throws ProcessFailedException
      */
     public function npmInstall()
     {
-        if ($this->inputOutput->isVerbose()) {
-            $this->inputOutput->write(sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard'));
+        $inputOutput = $this->inputOutput;
+
+        if ($inputOutput->isVerbose()) {
+            $inputOutput->write(sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard'));
         }
 
-        $result = $this->process->mustRun()->getOutput();
+        if ($inputOutput->isVeryVerbose()) {
+            $inputOutput->write(sprintf('Executed Command: <info>%s</info>', $this->process->getCommandLine()));
+        }
 
-        if ($this->inputOutput->isVeryVerbose()) {
-            $this->inputOutput->write(sprintf('Executed Command: <info>%s</info>', $this->process->getCommandLine()));
-        }
-        if ($this->inputOutput->isVerbose() && !empty($result)) {
-            $this->inputOutput->write(sprintf('<info>%s</info>', $result));
-        }
-        $this->inputOutput->write('<info>NPM packages for zooroyal/coding-standard installed</info>');
+        $inputOutput->write('<info>NPM install</info> for zooroyal/coding-standard:');
+        $this->process->run(function ($type, $buffer) use ($inputOutput) {
+            $inputOutput->write($buffer);
+        });
+
+        $this->process->wait();
+
+        $inputOutput->write('<info>NPM packages installed</info> for zooroyal/coding-standard');
     }
 }
