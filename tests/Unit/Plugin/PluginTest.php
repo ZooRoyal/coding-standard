@@ -27,6 +27,7 @@ class PluginTest extends TestCase
     {
         Mockery::close();
     }
+
     /**
      * @test
      */
@@ -66,9 +67,9 @@ class PluginTest extends TestCase
     public function npmInstallDataProvider()
     {
         return [
-            'non-verbose'  => ['processOutput', 'npm', false, false, 0, 0],
-            'verbose'      => ['processOutput', 'npm', true, false, 1, 0],
-            'very verbose' => ['processOutput', 'npm', true, true, 1, 1],
+            'non-verbose'  => ['npm', false, false, 0, 0],
+            'verbose'      => ['npm', true, false, 1, 0],
+            'very verbose' => ['npm', true, true, 1, 1],
         ];
     }
 
@@ -76,7 +77,6 @@ class PluginTest extends TestCase
      * @test
      * @dataProvider npmInstallDataProvider
      *
-     * @param string $processOutput
      * @param string $processCommandLine
      * @param bool   $isVerbose
      * @param bool   $isVeryVerbose
@@ -84,7 +84,6 @@ class PluginTest extends TestCase
      * @param int    $writeVeryVerboseCount
      */
     public function npmInstall(
-        $processOutput,
         $processCommandLine,
         $isVerbose,
         $isVeryVerbose,
@@ -99,14 +98,12 @@ class PluginTest extends TestCase
         list($mockedComposer, $mockedIO) = $this->prepareMocksForActivate();
 
         $this->prepareMockedProcessForNpmInstall(
-            $processOutput,
             $processCommandLine,
             $writeVeryVerboseCount,
             $mockedProcess
         );
         $this->prepareMockedIoForNpmInstall(
             $processCommandLine,
-            $processOutput,
             $isVerbose,
             $isVeryVerbose,
             $writeVerboseCount,
@@ -146,7 +143,6 @@ class PluginTest extends TestCase
      * Prepares $mockedIO for testNpmInstall
      *
      * @param string                    $processCommandLine
-     * @param string                    $processOutput
      * @param bool                      $isVerbose
      * @param bool                      $isVeryVerbose
      * @param int                       $writeVerboseCount
@@ -155,17 +151,16 @@ class PluginTest extends TestCase
      */
     private function prepareMockedIoForNpmInstall(
         $processCommandLine,
-        $processOutput,
         $isVerbose,
         $isVeryVerbose,
         $writeVerboseCount,
         $writeVeryVerboseCount,
         $mockedIO
     ) {
-        $expectedVerboseWrite       = sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard');
-        $expectedVeryVerboseWrite   = sprintf('Executed Command: <info>%s</info>', $processCommandLine);
-        $expectedVerboseOutputWrite = sprintf('<info>%s</info>', $processOutput);
-        $expectedWrite              = '<info>NPM packages for zooroyal/coding-standard installed</info>';
+        $expectedVerboseWrite     = sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard');
+        $expectedVeryVerboseWrite = sprintf('Executed Command: <info>%s</info>', $processCommandLine);
+        $expectedWrite            = '<info>NPM packages installed</info> for zooroyal/coding-standard';
+        $expectedAnnouncement     = '<info>NPM install</info> for zooroyal/coding-standard:';
 
         $mockedIO->shouldReceive('isVeryVerbose')
             ->andReturn($isVeryVerbose);
@@ -173,10 +168,10 @@ class PluginTest extends TestCase
             ->with($expectedVerboseWrite);
         $mockedIO->shouldReceive('write')->times($writeVeryVerboseCount)
             ->with($expectedVeryVerboseWrite);
-        $mockedIO->shouldReceive('write')->times($writeVerboseCount)
-            ->with($expectedVerboseOutputWrite);
         $mockedIO->shouldReceive('write')->once()
             ->with($expectedWrite);
+        $mockedIO->shouldReceive('write')->once()
+            ->with($expectedAnnouncement);
         $mockedIO->shouldReceive('isVerbose')
             ->andReturn($isVerbose);
     }
@@ -184,21 +179,19 @@ class PluginTest extends TestCase
     /**
      * Prepares $mockedProcess for testNpmInstall
      *
-     * @param string                $processOutput
      * @param string                $processCommandLine
      * @param bool                  $writeVeryVerboseCount
      * @param MockInterface|Process $mockedProcess
      */
     private function prepareMockedProcessForNpmInstall(
-        $processOutput,
         $processCommandLine,
         $writeVeryVerboseCount,
         $mockedProcess
     ) {
-        $mockedProcess->shouldReceive('mustRun')->once()
+        $mockedProcess->shouldReceive('run')->once()
+            ->with(H::callableValue())->andReturn(0);
+        $mockedProcess->shouldReceive('wait')->once()
             ->withNoArgs()->andReturnSelf();
-        $mockedProcess->shouldReceive('getOutput')->once()
-            ->withNoArgs()->andReturn($processOutput);
         $mockedProcess->shouldReceive('getCommandLine')->times($writeVeryVerboseCount)
             ->withNoArgs()->andReturn($processCommandLine);
     }
