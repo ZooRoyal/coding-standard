@@ -181,6 +181,48 @@ class GenericCommandRunnerTest extends TestCase
         self::assertSame($mockedExitCode, $result);
     }
 
+
+    /**
+     * @test
+     */
+    public function runBlacklistCommandEscaped()
+    {
+        $mockedTemplate         = 'My Template %1$s';
+        $mockedStopword         = 'HALT';
+        $mockedPrefix           = 'teil mich!';
+        $mockedGlue             = 'juhu';
+        $mockedBlacklist        = ['mocked', '.files'];
+        $mockedEscapedBlacklist = ['mocked', '\\\\\.files'];
+        $mockedOutput           = 'Das hab ich zu sagen.';
+        $mockedErrorOutput      = 'ERRRRRRRRRRRRROROROROROR';
+        $mockedExitCode         = 0;
+
+        $this->prepareMocksForRunAndWriteToOutput(
+            $mockedEscapedBlacklist,
+            $mockedTemplate,
+            $mockedOutput,
+            $mockedErrorOutput,
+            $mockedGlue,
+            $mockedPrefix
+        );
+        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')->once()
+            ->with($mockedStopword)->andReturn($mockedBlacklist);
+
+        $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
+        $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->times($mockedExitCode)
+            ->with($mockedOutput, OutputInterface::OUTPUT_NORMAL);
+
+        $result = $this->subject->runBlacklistCommand(
+            $mockedTemplate,
+            $mockedStopword,
+            $mockedPrefix,
+            $mockedGlue,
+            true
+        );
+
+        self::assertSame($mockedExitCode, $result);
+    }
+
     /**
      * Prepares mocks for calls of private buildCommand with no ProcessIsolation
      *

@@ -63,7 +63,7 @@ class EnvironmentTest extends TestCase
     public function getLocalBranch()
     {
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git name-rev --name-only HEAD')->andReturn($this->localBranch);
+            ->with('git name-rev --exclude=tag\* --name-only HEAD')->andReturn($this->localBranch);
 
         $this->subject->getLocalBranch();
         $result = $this->subject->getLocalBranch();

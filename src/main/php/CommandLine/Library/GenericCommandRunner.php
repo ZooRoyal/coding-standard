@@ -84,14 +84,24 @@ class GenericCommandRunner
      * @param string $stopword
      * @param string $prefix
      * @param string $glue
+     * @param bool   $escape if true the blacklist entries will be escaped for regexp
      *
      * @return int|null
      */
-    public function runBlacklistCommand($template, $stopword, $prefix = '', $glue = ',')
+    public function runBlacklistCommand($template, $stopword, $prefix = '', $glue = ',', $escape = false)
     {
         $blackList = $this->blacklistFactory->build($stopword);
-        $argument  = $prefix . implode($glue . $prefix, $blackList);
-        $command   = $this->buildCommand($template, $argument);
+        if ($escape) {
+            $blackList = array_map(
+                function ($value) {
+                    return preg_quote(preg_quote($value, '/'), '/');
+                },
+                $blackList
+            );
+        }
+        $argument = $prefix . implode($glue . $prefix, $blackList);
+
+        $command = $this->buildCommand($template, $argument);
 
         return $this->runAndWriteToOutput($command);
     }
