@@ -6,10 +6,12 @@
     <testsuites>
         <testsuite name="AllUnitTests">
             <directory>./tests/Unit/</directory>
+            <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
         </testsuite>
 
         <testsuite name="AllFunctionalTests">
             <directory>./tests/Functional/</directory>
+            <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
         </testsuite>
     </testsuites>
     <filter>

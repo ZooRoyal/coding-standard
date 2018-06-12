@@ -38,7 +38,7 @@ class Environment
     public function getLocalBranch()
     {
         if ($this->localBranch === null) {
-            $this->localBranch = $this->processRunner->runAsProcess('git name-rev --name-only HEAD');
+            $this->localBranch = $this->processRunner->runAsProcess('git name-rev --exclude=tag\* --name-only HEAD');
         }
 
         return $this->localBranch;

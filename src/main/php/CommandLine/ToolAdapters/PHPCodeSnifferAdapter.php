@@ -115,7 +115,10 @@ class PHPCodeSnifferAdapter implements FixerSupportInterface
             $command  = $this->commands[$tool . 'BL'];
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
                 $command,
-                $this->stopword
+                $this->stopword,
+                '',
+                ',',
+                true
             );
         } else {
             $this->output->writeln($diffMessage . ' diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);

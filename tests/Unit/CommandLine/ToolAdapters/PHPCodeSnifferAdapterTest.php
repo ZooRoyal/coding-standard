@@ -129,7 +129,15 @@ class PHPCodeSnifferAdapterTest extends TestCase
 
     /**
      * @test
-     * @dataProvider                                writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
+     * @param string $method
+     * @param string $message
+     * @param string $command
+     * @param string $mockedLocalBranch
+     * @param string $mockedTargetBranch
+     *
+     * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck(
@@ -154,7 +162,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
             ->with($message, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
-            ->with($$command, $this->expectedStopword)
+            ->with($$command, $this->expectedStopword, '', ',', true)
             ->andReturn($this->expectedExitCode);
 
         $result = $this->subject->$method($mockedTargetBranch, $this->mockedProcessisolation);
