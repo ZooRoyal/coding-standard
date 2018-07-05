@@ -116,9 +116,9 @@ class JSStyleLintAdapterTest extends TestCase
                 'Running full check.',
                 'expectedWrite',
                 'myTarget',
-                true
+                true,
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite',  '', false],
+            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', false],
             'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
             'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
             'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
@@ -136,6 +136,7 @@ class JSStyleLintAdapterTest extends TestCase
      * @param string $equalToLocalBranch
      *
      * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck(

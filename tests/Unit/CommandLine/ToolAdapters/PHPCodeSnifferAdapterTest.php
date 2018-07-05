@@ -81,7 +81,6 @@ class PHPCodeSnifferAdapterTest extends TestCase
      */
     public function writeViolationsToOutputWithTargetForWhitelistCheck()
     {
-        $mockedLocalBranch  = 'myLocalBranch';
         $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
             . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s';
@@ -137,6 +136,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
      * @param string $equalToLocalBranch
      *
      * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck(

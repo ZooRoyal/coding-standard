@@ -85,7 +85,6 @@ class PHPParalellLintAdapterTest extends TestCase
      */
     public function writeViolationsToOutputWithTargetForWhitelistCheck()
     {
-        $mockedLocalBranch  = 'myLocalBranch';
         $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s';
 

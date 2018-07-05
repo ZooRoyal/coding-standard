@@ -79,7 +79,6 @@ class PHPMessDetectorAdapterTest extends TestCase
      */
     public function writeViolationsToOutputWithTargetForWhitelistCheck()
     {
-        $mockedLocalBranch  = 'myLocalBranch';
         $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text '
             . $this->mockedPackageDirectory . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php';
