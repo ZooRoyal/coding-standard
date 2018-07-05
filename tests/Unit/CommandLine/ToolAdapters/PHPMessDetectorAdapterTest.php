@@ -85,7 +85,7 @@ class PHPMessDetectorAdapterTest extends TestCase
             . $this->mockedPackageDirectory . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn(false);
+            ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -122,7 +122,7 @@ class PHPMessDetectorAdapterTest extends TestCase
             . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php --exclude %1$s';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn($equalToLocal);
+            ->with('origin/master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);

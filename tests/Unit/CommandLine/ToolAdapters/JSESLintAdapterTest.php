@@ -87,7 +87,7 @@ class JSESLintAdapterTest extends TestCase
             . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')->once()
-            ->with('master')->andReturn(false);
+            ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -156,7 +156,7 @@ class JSESLintAdapterTest extends TestCase
             . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn($equalToLocalBranch);
+            ->with('origin/master')->andReturn($equalToLocalBranch);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with($message, OutputInterface::VERBOSITY_NORMAL);

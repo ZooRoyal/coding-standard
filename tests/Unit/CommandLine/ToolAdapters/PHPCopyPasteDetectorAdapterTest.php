@@ -90,7 +90,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
             '--names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn(false);
+            ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);

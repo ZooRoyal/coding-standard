@@ -90,7 +90,7 @@ class PHPParalellLintAdapterTest extends TestCase
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn(false);
+            ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -129,7 +129,7 @@ class PHPParalellLintAdapterTest extends TestCase
         $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s ./';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('master')->andReturn($equalToLocal);
+            ->with('origin/master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);

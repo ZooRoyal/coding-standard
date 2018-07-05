@@ -112,7 +112,7 @@ class JSStyleLintAdapter implements FixerSupportInterface
      */
     private function runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage)
     {
-        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('master')) {
+        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
                 $this->commands[$tool . 'BL'],
