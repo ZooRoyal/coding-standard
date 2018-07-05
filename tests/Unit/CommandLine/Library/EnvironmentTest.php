@@ -60,20 +60,6 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function getLocalBranch()
-    {
-        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git name-rev --exclude=tag\* --name-only HEAD')->andReturn($this->localBranch);
-
-        $this->subject->getLocalBranch();
-        $result = $this->subject->getLocalBranch();
-
-        self::assertSame($this->localBranch, $result);
-    }
-
-    /**
-     * @test
-     */
     public function getPackageDirectory()
     {
         $result = $this->subject->getPackageDirectory();
@@ -95,5 +81,59 @@ class EnvironmentTest extends TestCase
         $result = $this->subject->getBlacklistedDirectories();
 
         self::assertSame($this->blacklistedDirectories, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function isLocalBranchEqualToReturnsTrueIfCommitHashesAreEqual()
+    {
+        $mockedBranchName = 'my/mocked/branch';
+        $mockedCommitHash = '123qwe0';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 HEAD')->andReturn($mockedCommitHash);
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 ' . $mockedBranchName)->andReturn($mockedCommitHash);
+
+        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        self::assertTrue($result);
+    }
+
+    /**
+     * @test
+     */
+    public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal()
+    {
+        $mockedBranchName      = 'my/mocked/branch';
+        $mockedCommitHash      = '123qwe0';
+        $mockedLocalCommitHash = '0ewq321';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 HEAD')->andReturn($mockedLocalCommitHash);
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 ' . $mockedBranchName)->andReturn($mockedCommitHash);
+
+        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function isLocalBranchEqualToCachesLocalHeadHash()
+    {
+        $mockedBranchName      = 'my/mocked/branch';
+        $mockedCommitHash      = '123qwe0';
+        $mockedLocalCommitHash = '0ewq321';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 HEAD')->andReturn($mockedLocalCommitHash);
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->twice()
+            ->with('git rev-list -n 1 ' . $mockedBranchName)->andReturn($mockedCommitHash);
+
+        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        self::assertFalse($result);
     }
 }

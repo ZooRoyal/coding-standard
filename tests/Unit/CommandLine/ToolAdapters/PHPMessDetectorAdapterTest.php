@@ -84,8 +84,8 @@ class PHPMessDetectorAdapterTest extends TestCase
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text '
             . $this->mockedPackageDirectory . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php';
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -102,24 +102,27 @@ class PHPMessDetectorAdapterTest extends TestCase
     public function writeViolationsToOutputWithTargetForBlacklistCheckDataProvider()
     {
         return [
-            'local master' => ['master', 'myTarget'],
-            'empty target' => ['myBranch', ''],
-            'both'         => ['master', ''],
+            'local master' => ['myTarget', true],
+            'empty target' => ['', false],
+            'both'         => ['', true],
         ];
     }
 
     /**
      * @test
      * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
+     * @param string $mockedTargetBranch
+     * @param boolean $equalToLocal
      */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck($mockedLocalBranch, $mockedTargetBranch)
+    public function writeViolationsToOutputWithTargetForBlacklistCheck($mockedTargetBranch, $equalToLocal)
     {
         $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd '
             . $this->mockedRootDirectory . ' text ' . $this->mockedPackageDirectory
             . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php --exclude %1$s';
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);

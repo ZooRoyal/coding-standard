@@ -45,13 +45,12 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedTargetBranch = 'blaBranch';
         $mockedFilter       = 'blaFilter';
         $mockedStopWord     = 'blaStopword';
-        $mockedLocalBranch  = 'blaLocalBranch';
         $mockedMergeBase    = 'alsdkfujh178290346';
         $mockedFileDiff     = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
         $mockedFiles        = ['dir1/file1', 'dir2/file2'];
 
-        $this->subjectParameters[Environment::class]->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn($mockedLocalBranch);
+        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')->once()
+            ->with($mockedTargetBranch)->andReturn(false);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git merge-base HEAD ' . $mockedTargetBranch)
             ->andReturn($mockedMergeBase);
@@ -78,8 +77,8 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedFileDiff     = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
         $mockedFiles        = ['dir1/file1', 'dir2/file2'];
 
-        $this->subjectParameters[Environment::class]->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn($mockedLocalBranch);
+        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')->once()
+            ->with($mockedLocalBranch)->andReturn(true);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with(H::startsWith('git cat-file -t HEAD'))
             ->andReturn('commit', 'commit', 'tag');

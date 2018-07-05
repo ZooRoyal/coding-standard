@@ -172,8 +172,8 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('exclusionList')->andReturn($mockedExclusiveFlag);
 
-        $this->subjectParameters[Environment::class]->shouldReceive('getLocalBranch')->once()
-            ->withNoArgs()->andReturn('blaaa');
+        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')->once()
+            ->with('master')->andReturn(false);
 
         $this->subjectParameters[DiffCheckableFileFinder::class]->shouldReceive('findFiles')->once()
             ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($expectedArray);

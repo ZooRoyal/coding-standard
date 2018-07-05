@@ -57,8 +57,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      */
     private function findRawDiff($targetBranch = '')
     {
-        $localBranch = $this->environment->getLocalBranch();
-        if ($localBranch === $targetBranch) {
+        if ($this->environment->isLocalBranchEqualTo($targetBranch)) {
             $rawDiffAsString = $this->findFilesOfBranch();
         } else {
             $rawDiffAsString = $this->findFilesInDiffToTarget($targetBranch);

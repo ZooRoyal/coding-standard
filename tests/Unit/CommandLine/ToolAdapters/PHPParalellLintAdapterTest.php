@@ -89,8 +89,8 @@ class PHPParalellLintAdapterTest extends TestCase
         $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s';
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -114,9 +114,9 @@ class PHPParalellLintAdapterTest extends TestCase
     public function writeViolationsToOutputWithTargetForBlacklistCheckDataProvider()
     {
         return [
-            'local master' => ['master', 'myTarget'],
-            'empty target' => ['myBranch', ''],
-            'both'         => ['master', ''],
+            'local master' => ['myTarget', true],
+            'empty target' => ['', true],
+            'both'         => ['', true],
         ];
     }
 
@@ -124,12 +124,12 @@ class PHPParalellLintAdapterTest extends TestCase
      * @test
      * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
      */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck($mockedLocalBranch, $mockedTargetBranch)
+    public function writeViolationsToOutputWithTargetForBlacklistCheck($mockedTargetBranch, $equalToLocal)
     {
         $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s ./';
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);

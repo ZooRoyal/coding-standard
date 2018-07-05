@@ -110,7 +110,7 @@ class JSESLintAdapter implements FixerSupportInterface
      */
     private function runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage)
     {
-        if (empty($targetBranch) || $this->environment->getLocalBranch() === 'master') {
+        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('master')) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $template = $this->commands[$tool . 'BL'];
             $prefix   = '--ignore-pattern=';

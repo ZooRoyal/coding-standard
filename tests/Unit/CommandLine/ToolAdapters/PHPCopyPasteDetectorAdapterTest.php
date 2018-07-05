@@ -85,13 +85,12 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck()
     {
-        $mockedLocalBranch  = 'localBranch';
         $mockedTargetBranch = 'targetBranch';
         $expectedCommand    ='php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd -vvv --progress --fuzzy -n ' .
             '--names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);
