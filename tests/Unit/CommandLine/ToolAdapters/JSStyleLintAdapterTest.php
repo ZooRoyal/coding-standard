@@ -81,13 +81,12 @@ class JSStyleLintAdapterTest extends TestCase
      */
     public function writeViolationsToOutputWithTargetForWhitelistCheck()
     {
-        $mockedLocalBranch  = 'myLocalBranch';
         $mockedTargetBranch = 'myTarget';
         $expectedCommand    = $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
             . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc %1$s';
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')->once()
+            ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
@@ -116,28 +115,36 @@ class JSStyleLintAdapterTest extends TestCase
                 'writeViolationsToOutput',
                 'Running full check.',
                 'expectedWrite',
-                'master',
                 'myTarget',
+                true,
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', 'myBranch', ''],
-            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', 'master', ''],
-            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'master', 'myTarget'],
-            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myBranch', ''],
-            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', 'master', ''],
+            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', false],
+            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
+            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
+            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
+            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', '', true],
         ];
     }
 
     /**
      * @test
-     * @dataProvider                                writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
+     * @param string $method
+     * @param string $message
+     * @param string $command
+     * @param string $mockedTargetBranch
+     * @param string $equalToLocalBranch
+     *
+     * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
+     *
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck(
         $method,
         $message,
         $command,
-        $mockedLocalBranch,
-        $mockedTargetBranch
+        $mockedTargetBranch,
+        $equalToLocalBranch
     ) {
         $expectedWrite = $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js '
             . '--config=' . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc %1$s '
@@ -147,8 +154,8 @@ class JSStyleLintAdapterTest extends TestCase
             . '--config=' . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc --fix %1$s '
             . $this->mockedRootDirectory . '/**' . $this->expectedFilter;
 
-        $this->mockedEnvironment->shouldReceive('getLocalBranch')
-            ->withNoArgs()->andReturn('' . $mockedLocalBranch);
+        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
+            ->with('origin/master')->andReturn($equalToLocalBranch);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with($message, OutputInterface::VERBOSITY_NORMAL);

@@ -59,7 +59,7 @@ class PHPParallelLintAdapter implements ToolAdapterInterface
      */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
-        if (empty($targetBranch) || $this->environment->getLocalBranch() === 'master') {
+        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $this->output->writeln('Running full check.', OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
                 $this->parallelLintBlacklistCommand,

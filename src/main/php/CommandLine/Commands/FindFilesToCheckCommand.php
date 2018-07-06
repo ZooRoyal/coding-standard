@@ -66,7 +66,7 @@ class FindFilesToCheckCommand extends Command
 
         if ($exclusive === true) {
             $result = $this->blacklistFactory->build($stopword);
-        } elseif (empty($targetBranch) || $this->environment->getLocalBranch() === 'master') {
+        } elseif (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $result = $this->allCheckableFileFinder->findFiles($filter, $stopword);
         } else {
             $result = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch);
