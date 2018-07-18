@@ -36,6 +36,8 @@ class ProcessRunner
     {
         $process = new Process($command);
         $process->run();
+        $process->setTimeout(null);
+        $process->setIdleTimeout(60);
         $process->wait();
 
         return $process;
