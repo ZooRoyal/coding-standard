@@ -54,7 +54,8 @@ module.exports = {
         "no-undef": "off",
         "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
         "no-underscore-dangle": "off",
-        "vars-on-top": "off", //temp set to warn cause it does not have options for FOR and WHILE loops // https://github.com/eslint/eslint/issues/2517
-        "m99coder/vars-on-top": [2, {"forStatement": true, "forInStatement": false, "forOfStatement": false}], // https://www.npmjs.com/package/eslint-plugin-m99coder
+        "vars-on-top": "error",
+        "m99coder/vars-on-top": [2, {"forStatement": true, "forInStatement": true, "forOfStatement": true}],
+        "wrap-iife": ["error", "inside"]
     }
 };
