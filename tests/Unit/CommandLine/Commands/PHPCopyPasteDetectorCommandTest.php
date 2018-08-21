@@ -47,7 +47,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPCopyPasteDetectorCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('copy-paste-detect');
+        $localSubject->shouldReceive('setName')->once()->with('sca:copy-paste-detect');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CPD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()

@@ -2,37 +2,23 @@
 namespace Zooroyal\CodingStandard\CommandLine\Commands;
 
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 
-class PHPCodeSnifferCommand extends Command
+class AllToolsCommand extends Command
 {
-    /** @var PHPCodeSnifferAdapter */
-    private $toolAdapter;
-
-    /**
-     * PHPCodeSnifferCommand constructor.
-     *
-     * @param PHPCodeSnifferAdapter $toolAdapter
-     */
-    public function __construct(PHPCodeSnifferAdapter $toolAdapter)
-    {
-        parent::__construct();
-        $this->toolAdapter = $toolAdapter;
-    }
-
     /**
      * {@inheritdoc}
      */
     protected function configure()
     {
-        $this->setName('sca:sniff');
-        $this->setDescription('Run PHP-CS on PHP files.');
-        $this->setHelp('This tool executes PHP-CS on a certain set of PHP files of this Project. '
-            . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.');
+        $this->setName('all');
+        $this->setDescription('Run all static code analysis tools.');
+        $this->setHelp('This tool executes all static code analysis tools on files of this Project. '
+            . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.');
         $this->setDefinition(
             new InputDefinition(
                 [
@@ -66,16 +52,33 @@ class PHPCodeSnifferCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $targetBranch          = $input->getOption('target');
-        $processIsolationInput = $input->getOption('process-isolation');
-        $fixMode               = $input->getOption('fix');
+        $output->writeln('All SCA-Commands will be executed.', OutputInterface::OUTPUT_NORMAL);
 
-        if ($fixMode) {
-            $this->toolAdapter->fixViolations($targetBranch, $processIsolationInput);
+        $resultingExitCode = 0;
+        $inputOptions      = $input->getOptions();
+
+        /** @var Command[] $commands */
+        $commands = $this->getApplication()->all('sca');
+
+        foreach ($commands as $command) {
+            $arguments      = [];
+            $commandOptions = $command->getDefinition()->getOptions();
+            $intersections  = array_keys(array_intersect_key($inputOptions, $commandOptions));
+
+            foreach ($intersections as $intersectionName) {
+                $arguments['--' . $intersectionName] = $input->getOption($intersectionName);
+            }
+
+            $commandInput = new ArrayInput($arguments);
+            $exitCode     = $command->run($commandInput, $output);
+
+            if ($exitCode !== 0) {
+                $output->writeln('Exitcode:' . $exitCode, OutputInterface::OUTPUT_NORMAL);
+            }
+
+            $resultingExitCode = $exitCode !== 0 && $resultingExitCode === 0 ? $exitCode : $resultingExitCode;
         }
 
-        $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
-
-        return $exitCode;
+        return $resultingExitCode;
     }
 }

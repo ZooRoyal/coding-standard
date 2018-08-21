@@ -90,7 +90,7 @@ class JSESLintAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('ESLINT: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
@@ -114,16 +114,16 @@ class JSESLintAdapterTest extends TestCase
         return [
             'local master'     => [
                 'writeViolationsToOutput',
-                'Running full check.',
+                'ESLINT: Running full check',
                 'expectedWrite',
                 'myTarget',
                 true
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite',  '', false],
-            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
-            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
-            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', '', true],
+            'empty target'     => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite',  '', false],
+            'both'             => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite', '', true],
+            'fix local master' => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', 'myTarget', true],
+            'fix empty target' => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', false],
+            'fix both'         => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', true],
         ];
     }
 

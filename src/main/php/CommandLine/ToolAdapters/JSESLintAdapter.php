@@ -69,9 +69,10 @@ class JSESLintAdapter implements FixerSupportInterface
      */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
-        $fullMessage = 'Running full check.';
-        $diffMessage = 'Running check on';
         $tool        = 'ESLINT';
+        $prefix      = $tool . ': ';
+        $fullMessage = $prefix . 'Running full check';
+        $diffMessage = $prefix . 'Running check on';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -88,9 +89,10 @@ class JSESLintAdapter implements FixerSupportInterface
      */
     public function fixViolations($targetBranch = '', $processIsolation = false)
     {
-        $fullMessage = 'Fix all Files.';
-        $diffMessage = 'Fix Files in';
         $tool        = 'ESLINTFIX';
+        $prefix      = $tool . ': ';
+        $fullMessage = $prefix . 'Fix all Files';
+        $diffMessage = $prefix . 'Fix Files in';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -123,7 +125,7 @@ class JSESLintAdapter implements FixerSupportInterface
         } else {
             $this->output->writeln($diffMessage . ' diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
             $template = $this->commands[$tool . 'WL'];
-            $exitCode  = $this->genericCommandRunner->runWhitelistCommand(
+            $exitCode = $this->genericCommandRunner->runWhitelistCommand(
                 $template,
                 $targetBranch,
                 $this->stopword,

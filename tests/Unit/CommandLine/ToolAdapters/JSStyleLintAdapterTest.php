@@ -89,7 +89,7 @@ class JSStyleLintAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('STYLELINT: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
@@ -113,16 +113,16 @@ class JSStyleLintAdapterTest extends TestCase
         return [
             'local master'     => [
                 'writeViolationsToOutput',
-                'Running full check.',
+                'STYLELINT: Running full check',
                 'expectedWrite',
                 'myTarget',
                 true,
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', false],
-            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
-            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
-            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', '', true],
+            'empty target'     => ['writeViolationsToOutput', 'STYLELINT: Running full check', 'expectedWrite', '', false],
+            'both'             => ['writeViolationsToOutput', 'STYLELINT: Running full check', 'expectedWrite', '', true],
+            'fix local master' => ['fixViolations', 'STYLELINTFIX: Fix all Files', 'expectedFix', 'myTarget', true],
+            'fix empty target' => ['fixViolations', 'STYLELINTFIX: Fix all Files', 'expectedFix', '', false],
+            'fix both'         => ['fixViolations', 'STYLELINTFIX: Fix all Files', 'expectedFix', '', true],
         ];
     }
 

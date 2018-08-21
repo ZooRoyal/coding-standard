@@ -71,9 +71,10 @@ class JSStyleLintAdapter implements FixerSupportInterface
      */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
-        $fullMessage = 'Running full check.';
-        $diffMessage = 'Running check on';
         $tool        = 'STYLELINT';
+        $prefix      = $tool . ': ';
+        $fullMessage = $prefix . 'Running full check';
+        $diffMessage = $prefix . 'Running check on';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -90,9 +91,10 @@ class JSStyleLintAdapter implements FixerSupportInterface
      */
     public function fixViolations($targetBranch = '', $processIsolation = false)
     {
-        $fullMessage = 'Fix all Files.';
-        $diffMessage = 'Fix Files in';
         $tool        = 'STYLELINTFIX';
+        $prefix      = $tool . ': ';
+        $fullMessage = $prefix . 'Fix all Files';
+        $diffMessage = $prefix . 'Fix Files in';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
