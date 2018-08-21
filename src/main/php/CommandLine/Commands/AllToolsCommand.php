@@ -34,7 +34,7 @@ class AllToolsCommand extends Command
                         'fix',
                         'f',
                         InputOption::VALUE_NONE,
-                        'Runs CBF to try to fix violations automagically.'
+                        'Orders SCA-Tools to try to fix violations automagically.'
                     ),
                     new InputOption(
                         'process-isolation',
