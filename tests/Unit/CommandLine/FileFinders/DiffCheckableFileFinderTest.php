@@ -106,7 +106,7 @@ class DiffCheckableFileFinderTest extends TestCase
             ->with('git branch -a --contains HEAD^^ | wc -l')
             ->andReturn('2');
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git rev-parse ' . 'HEAD^^')
+            ->with('git rev-parse "HEAD^^"')
             ->andReturn($mockedTargetCommitHash);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git diff --name-only --diff-filter=d ' . $mockedTargetCommitHash)
