@@ -74,7 +74,7 @@ class JSStyleLintAdapter implements FixerSupportInterface
         $tool        = 'STYLELINT';
         $prefix      = $tool . ': ';
         $fullMessage = $prefix . 'Running full check';
-        $diffMessage = $prefix . 'Running check on';
+        $diffMessage = $prefix . 'Running check on diff';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -94,7 +94,7 @@ class JSStyleLintAdapter implements FixerSupportInterface
         $tool        = 'STYLELINTFIX';
         $prefix      = $tool . ': ';
         $fullMessage = $prefix . 'Fix all Files';
-        $diffMessage = $prefix . 'Fix Files in';
+        $diffMessage = $prefix . 'Fix Files in diff';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -114,7 +114,7 @@ class JSStyleLintAdapter implements FixerSupportInterface
      */
     private function runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage)
     {
-        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
+        if ($targetBranch === '' || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
                 $this->commands[$tool . 'BL'],
@@ -123,7 +123,7 @@ class JSStyleLintAdapter implements FixerSupportInterface
                 ' '
             );
         } else {
-            $this->output->writeln($diffMessage . ' diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
+            $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runWhitelistCommand(
                 $this->commands[$tool . 'WL'],
                 $targetBranch,

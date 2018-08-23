@@ -2,6 +2,7 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class FileFilter
 {
@@ -23,19 +24,17 @@ class FileFilter
     /**
      * Filters filepaths by filter and global Blacklist.
      *
-     * @param string[] $filePaths
-     * @param string   $filter
-     * @param string   $stopword
-     *
-     * @return array
+     * @param GitChangeSet $gitChangeSet
+     * @param string       $filter
+     * @param string       $stopword
      */
-    public function filterByBlacklistFilterStringAndStopword($filePaths, $filter = '', $stopword = '')
+    public function filterByBlacklistFilterStringAndStopword(GitChangeSet $gitChangeSet, $filter = '', $stopword = '')
     {
         $this->blacklist = $this->blacklistFactory->build($stopword);
         $blacklist       = $this->blacklist;
 
         $result = array_filter(
-            $filePaths,
+            $gitChangeSet->getFiles(),
             function ($value) use ($blacklist, $filter) {
                 //Filter by Blacklist
                 foreach ($blacklist as $item) {
@@ -51,6 +50,6 @@ class FileFilter
             }
         );
 
-        return $result;
+        $gitChangeSet->setFiles($result);
     }
 }
