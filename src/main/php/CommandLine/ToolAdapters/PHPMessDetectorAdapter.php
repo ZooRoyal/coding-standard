@@ -60,14 +60,18 @@ class PHPMessDetectorAdapter implements ToolAdapterInterface
      */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
+        $prefix = 'PHPMD: ';
+
         if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
-            $this->output->writeln('Running full check.', OutputInterface::VERBOSITY_NORMAL);
+            $fullMessage = $prefix . 'Running full check';
+            $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
                 $this->messDetectCommandBlacklist,
                 $this->stopword
             );
         } else {
-            $this->output->writeln('Running check on diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
+            $diffMessage = $prefix . 'Running check on diff to ';
+            $this->output->writeln($diffMessage . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runWhitelistCommand(
                 $this->messDetectCommandWhitelist,
                 $targetBranch,

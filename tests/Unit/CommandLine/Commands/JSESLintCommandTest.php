@@ -53,7 +53,7 @@ class JSESLintCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(JSESLintCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('eslint');
+        $localSubject->shouldReceive('setName')->once()->with('sca:eslint');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run ESLint on JS files.');
         $localSubject->shouldReceive('setHelp')->once()

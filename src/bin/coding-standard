@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
 
-$autoloadFiles = array(__DIR__ . '/../../vendor/autoload.php',
-                       __DIR__ . '/../../../../autoload.php');
+$autoloadFiles = [
+    __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../../../../autoload.php',
+];
 
 foreach ($autoloadFiles as $autoloadFile) {
     if (file_exists($autoloadFile)) {
@@ -13,6 +15,7 @@ foreach ($autoloadFiles as $autoloadFile) {
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zooroyal\CodingStandard\CommandLine\Commands\AllToolsCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\JSESLintCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\JSStyleLintCommand;
@@ -24,24 +27,27 @@ use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
 $container = ContainerFactory::getContainerInstance();
 
+$parallelLint            = $container->get(PHPParallelLintCommand::class);
 $phpCodeSnifferCommand   = $container->get(PHPCodeSnifferCommand::class);
 $findFilesToCheckCommand = $container->get(FindFilesToCheckCommand::class);
 $messDetectCommand       = $container->get(PHPMessDetectorCommand::class);
-$parallelLint            = $container->get(PHPParallelLintCommand::class);
 $copyPasteDetector       = $container->get(PHPCopyPasteDetectorCommand::class);
 $esLint                  = $container->get(JSESLintCommand::class);
 $styleLint               = $container->get(JSStyleLintCommand::class);
+$allTools                = $container->get(AllToolsCommand::class);
 
 $application = new Application();
 
 // ... register commands
+$application->add($parallelLint);
 $application->add($phpCodeSnifferCommand);
 $application->add($findFilesToCheckCommand);
 $application->add($messDetectCommand);
-$application->add($parallelLint);
 $application->add($copyPasteDetector);
 $application->add($esLint);
 $application->add($styleLint);
+$application->add($allTools);
 
 $container->call([$application, 'run'],
-    [$container->get(InputInterface::class), $container->get(OutputInterface::class)]);
+    [$container->get(InputInterface::class), $container->get(OutputInterface::class)]
+);

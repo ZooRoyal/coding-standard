@@ -87,7 +87,7 @@ class PHPMessDetectorAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPMD: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with($expectedCommand, $mockedTargetBranch, $this->expectedStopword, $this->expectedFilter, true)
@@ -124,7 +124,7 @@ class PHPMessDetectorAdapterTest extends TestCase
             ->with('origin/master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPMD: Running full check', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
             ->with($expectedCommand, $this->expectedStopword)

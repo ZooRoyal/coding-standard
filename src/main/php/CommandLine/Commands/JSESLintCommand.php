@@ -29,7 +29,7 @@ class JSESLintCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('eslint');
+        $this->setName('sca:eslint');
         $this->setDescription('Run ESLint on JS files.');
         $this->setHelp('This tool executes ESLINT on a certain set of JS files of this Project.'
             . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.');

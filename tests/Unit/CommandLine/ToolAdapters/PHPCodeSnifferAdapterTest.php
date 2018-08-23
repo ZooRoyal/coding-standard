@@ -89,7 +89,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPCS: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
@@ -113,16 +113,16 @@ class PHPCodeSnifferAdapterTest extends TestCase
         return [
             'local master'     => [
                 'writeViolationsToOutput',
-                'Running full check.',
+                'PHPCS: Running full check',
                 'expectedWrite',
                 'myTarget',
                 true
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite',  '', false],
-            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
-            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
-            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', '', true],
+            'empty target'     => ['writeViolationsToOutput', 'PHPCS: Running full check', 'expectedWrite',  '', false],
+            'both'             => ['writeViolationsToOutput', 'PHPCS: Running full check', 'expectedWrite', '', true],
+            'fix local master' => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', 'myTarget', true],
+            'fix empty target' => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', '', false],
+            'fix both'         => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', '', true],
         ];
     }
 
