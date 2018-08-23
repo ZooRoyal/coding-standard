@@ -12,9 +12,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\PHPCodeSnifferCommand;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -54,7 +51,7 @@ class PHPCodeSnifferCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPCodeSnifferCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('sniff');
+        $localSubject->shouldReceive('setName')->once()->with('sca:sniff');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CS on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()

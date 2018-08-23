@@ -1,3 +1,5 @@
+if: tag IS blank
+
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
@@ -18,12 +20,7 @@ install:
   - travis_retry composer install
 
 script:
-  - src/bin/coding-standard parallel-lint -t $TRAVIS_BRANCH
-  - src/bin/coding-standard sniff -t $TRAVIS_BRANCH
-  - src/bin/coding-standard mess-detect -t $TRAVIS_BRANCH
-  - src/bin/coding-standard copy-paste-detect
-  - src/bin/coding-standard eslint -t $TRAVIS_BRANCH
-  - src/bin/coding-standard stylelint -t $TRAVIS_BRANCH
+  - src/bin/coding-standard all -t origin/$TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
 
 # allow builds for all branches

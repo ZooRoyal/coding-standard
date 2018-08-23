@@ -49,7 +49,7 @@ class PHPParallelLintCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPParallelLintCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('parallel-lint');
+        $localSubject->shouldReceive('setName')->once()->with('sca:parallel-lint');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run Parallel-Lint on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()

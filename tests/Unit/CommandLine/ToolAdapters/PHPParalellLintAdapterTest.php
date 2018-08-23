@@ -92,7 +92,7 @@ class PHPParalellLintAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPPL: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
@@ -131,7 +131,7 @@ class PHPParalellLintAdapterTest extends TestCase
             ->with('origin/master')->andReturn($equalToLocal);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running full check.', OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPPL: Running full check', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
             ->with($expectedCommand, $this->expectedStopword, $this->expectedPrefix, $this->expectedGlue)

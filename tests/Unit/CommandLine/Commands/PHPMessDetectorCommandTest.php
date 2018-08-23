@@ -51,7 +51,7 @@ class PHPMessDetectorCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('mess-detect');
+        $localSubject->shouldReceive('setName')->once()->with('sca:mess-detect');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-MD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()

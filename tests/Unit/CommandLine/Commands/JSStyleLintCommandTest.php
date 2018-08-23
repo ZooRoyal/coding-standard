@@ -51,7 +51,7 @@ class JSStyleLintCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(JSStyleLintCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('stylelint');
+        $localSubject->shouldReceive('setName')->once()->with('sca:stylelint');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run StyleLint on Less files.');
         $localSubject->shouldReceive('setHelp')->once()

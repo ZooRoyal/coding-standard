@@ -29,7 +29,7 @@ class PHPParallelLintCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('parallel-lint');
+        $this->setName('sca:parallel-lint');
         $this->setDescription('Run Parallel-Lint on PHP files.');
         $this->setHelp('This tool executes Parallel-Lint on a certain set of PHP files of this Project. It '
             . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.');
