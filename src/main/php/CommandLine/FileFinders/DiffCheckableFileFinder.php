@@ -127,7 +127,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      *
      * @param $targetBranch
      *
-     * @return $result
+     * @return GitChangeSet
      */
     private function findFilesInDiffToTarget($targetBranch)
     {
