@@ -54,7 +54,7 @@ module.exports = {
         "no-undef": "off",
         "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
         "no-underscore-dangle": "off",
-        "vars-on-top": "error",
+        "vars-on-top": "off",
         "m99coder/vars-on-top": [2, {"forStatement": true, "forInStatement": true, "forOfStatement": true}],
         "wrap-iife": ["error", "inside"]
     }
