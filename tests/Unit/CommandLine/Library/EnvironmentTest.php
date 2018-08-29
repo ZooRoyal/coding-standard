@@ -92,9 +92,9 @@ class EnvironmentTest extends TestCase
         $mockedCommitHash = '123qwe0';
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git rev-list -n 1 "HEAD"')->andReturn($mockedCommitHash);
+            ->with('git rev-list -n 1 \'HEAD\'')->andReturn($mockedCommitHash);
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git rev-list -n 1 "' . $mockedBranchName . '"')->andReturn($mockedCommitHash);
+            ->with('git rev-list -n 1 \'' . $mockedBranchName . '\'')->andReturn($mockedCommitHash);
 
         $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
         self::assertTrue($result);
@@ -110,9 +110,9 @@ class EnvironmentTest extends TestCase
         $mockedLocalCommitHash = '0ewq321';
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git rev-list -n 1 "HEAD"')->andReturn($mockedLocalCommitHash);
+            ->with('git rev-list -n 1 \'HEAD\'')->andReturn($mockedLocalCommitHash);
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git rev-list -n 1 "' . $mockedBranchName . '"')->andReturn($mockedCommitHash);
+            ->with('git rev-list -n 1 \'' . $mockedBranchName . '\'')->andReturn($mockedCommitHash);
 
         $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
         self::assertFalse($result);
@@ -128,12 +128,27 @@ class EnvironmentTest extends TestCase
         $mockedLocalCommitHash = '0ewq321';
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
-            ->with('git rev-list -n 1 "HEAD"')->andReturn($mockedLocalCommitHash);
+            ->with('git rev-list -n 1 \'HEAD\'')->andReturn($mockedLocalCommitHash);
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->twice()
-            ->with('git rev-list -n 1 "' . $mockedBranchName . '"')->andReturn($mockedCommitHash);
+            ->with('git rev-list -n 1 \'' . $mockedBranchName . '\'')->andReturn($mockedCommitHash);
 
-        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        $this->subject->isLocalBranchEqualTo($mockedBranchName);
         $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
         self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function commitishToHashIsInjectionResistent()
+    {
+        $mockedBranchName = 'HEAD; killall php;';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 \'HEAD\'')->andReturn('bla');
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git rev-list -n 1 \'' . $mockedBranchName . '\'')->andReturn('blub');
+
+        $this->subject->isLocalBranchEqualTo('HEAD; killall php;');
     }
 }

@@ -96,9 +96,9 @@ class DiffCheckableFileFinder implements FileFinderInterface
                 break;
             }
         }
-        $gitCommitHash           = $this->processRunner->runAsProcess('git rev-parse "' . $targetCommit.'"');
+        $gitCommitHash           = $this->processRunner->runAsProcess('git rev-parse "' . $targetCommit . '"');
         $rawDiffUnfilteredString = $this->processRunner->runAsProcess(
-            'git diff --name-only --diff-filter=d ' . $gitCommitHash
+            'git diff --name-only --diff-filter=d ' . escapeshellarg($gitCommitHash)
         );
 
         $rawDiffUnfiltered = explode("\n", trim($rawDiffUnfilteredString));

@@ -76,6 +76,6 @@ class Environment
      */
     private function commitishToHash($branchName)
     {
-        return $this->processRunner->runAsProcess('git rev-list -n 1 "' . $branchName . '"');
+        return $this->processRunner->runAsProcess('git rev-list -n 1 ' . escapeshellarg($branchName));
     }
 }

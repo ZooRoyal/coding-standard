@@ -109,7 +109,7 @@ class DiffCheckableFileFinderTest extends TestCase
             ->with('git rev-parse "HEAD^^"')
             ->andReturn($mockedTargetCommitHash);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git diff --name-only --diff-filter=d ' . $mockedTargetCommitHash)
+            ->with('git diff --name-only --diff-filter=d \'' . $mockedTargetCommitHash . '\'')
             ->andReturn('dir1/file1' . "\n" . 'dir2/file2' . "\n");
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')->once()
             ->with($mockedFiles, $mockedTargetCommitHash)->andReturn($mockedChangeSet);
