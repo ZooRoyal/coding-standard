@@ -43,7 +43,7 @@ class AllCheckableFileFinder implements FileFinderInterface
      */
     public function findFiles($filter = '', $stopword = '', $__unused = '')
     {
-        $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git ls-files')));
+        $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
         $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, null);
 
         $this->fileFilter->filterByBlacklistFilterStringAndStopword($gitChangeSet, $filter, $stopword);

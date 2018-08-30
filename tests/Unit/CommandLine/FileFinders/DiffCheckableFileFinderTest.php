@@ -55,10 +55,10 @@ class DiffCheckableFileFinderTest extends TestCase
         $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')->once()
             ->with($mockedTargetBranch)->andReturn(false);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git merge-base HEAD ' . $mockedTargetBranch)
+            ->with('git', 'merge-base', 'HEAD', $mockedTargetBranch)
             ->andReturn($mockedMergeBase);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git diff --name-only --diff-filter=d ' . $mockedMergeBase)
+            ->with('git', 'diff', '--name-only', '--diff-filter=d', $mockedMergeBase)
             ->andReturn($mockedFileDiff);
 
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')->once()
@@ -90,26 +90,27 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedTargetCommitHash = 'asdasdqwe1231';
         $mockedFiles            = ['dir1/file1', 'dir2/file2'];
         $mockedChangeSet        = new GitChangeSet($mockedFiles, $mockedTargetCommitHash);
+        $mockedNoResultResult   = '* target' . PHP_EOL . '  remotes/origin/target' . PHP_EOL;
 
         $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')
             ->times($isLocalBranchEqualToCount)->with($branch)->andReturn(true);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with(H::startsWith('git cat-file -t HEAD'))
+            ->with('git', 'cat-file', '-t', H::startsWith('HEAD'))
             ->andReturn('commit', 'commit', 'tag');
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git branch -a --contains HEAD | wc -l')
-            ->andReturn('1');
+            ->with('git', 'branch', '-a', '--contains', 'HEAD')
+            ->andReturn($mockedNoResultResult);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git branch -a --contains HEAD^ | wc -l')
-            ->andReturn('1');
+            ->with('git', 'branch', '-a', '--contains', 'HEAD^')
+            ->andReturn($mockedNoResultResult);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git branch -a --contains HEAD^^ | wc -l')
-            ->andReturn('2');
+            ->with('git', 'branch', '-a', '--contains', 'HEAD^^')
+            ->andReturn($mockedNoResultResult . '  remotes/origin/master' . PHP_EOL);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git rev-parse "HEAD^^"')
+            ->with('git', 'rev-parse', 'HEAD^^')
             ->andReturn($mockedTargetCommitHash);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git diff --name-only --diff-filter=d \'' . $mockedTargetCommitHash . '\'')
+            ->with('git', 'diff', '--name-only', '--diff-filter=d', $mockedTargetCommitHash)
             ->andReturn('dir1/file1' . "\n" . 'dir2/file2' . "\n");
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')->once()
             ->with($mockedFiles, $mockedTargetCommitHash)->andReturn($mockedChangeSet);

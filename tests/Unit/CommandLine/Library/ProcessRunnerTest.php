@@ -1,6 +1,8 @@
 <?php
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
@@ -36,5 +38,34 @@ class ProcessRunnerTest extends TestCase
 
         self::assertInstanceOf(Process::class, $result);
         self::assertSame($expectedResult, trim($result->getOutput()));
+    }
+
+    /**
+     * @test
+     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
+     */
+    public function runAsProcessReturningProcessObjectWithArgumentsInjection()
+    {
+        $this->subject->runAsProcess('git', 'version\'; ls');
+    }
+
+    /**
+     * @test
+     */
+    public function runProcessWithArguments()
+    {
+        $result = $this->subject->runAsProcess('git', 'version');
+
+        MatcherAssert::assertThat($result, Matchers::startsWith('git version'));
+        self::assertTrue(true);
+    }
+
+    /**
+     * @test
+     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
+     */
+    public function runProcessWithArgumentsInjection()
+    {
+        $this->subject->runAsProcess('git', 'version\'; ls');
     }
 }

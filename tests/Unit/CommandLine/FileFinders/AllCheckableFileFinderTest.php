@@ -42,7 +42,7 @@ class AllCheckableFileFinderTest extends TestCase
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
+            ->with('git', 'ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
 
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
@@ -63,7 +63,7 @@ class AllCheckableFileFinderTest extends TestCase
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
+            ->with('git', 'ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
 
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
