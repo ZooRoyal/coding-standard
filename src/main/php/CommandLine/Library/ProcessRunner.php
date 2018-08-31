@@ -9,12 +9,14 @@ class ProcessRunner
      * Runs a shell command as single Process and returns the reseult.
      *
      * @param string $command
+     * @param string ...$arguments Multiple strings interpreted as Arguments
      *
      * @return string
      */
-    public function runAsProcess($command)
+    public function runAsProcess($command, ...$arguments)
     {
-        $process = new Process($command);
+        $commandParts = array_merge([$command], $arguments);
+        $process      = new Process($commandParts);
         $process->mustRun()->wait();
 
         $output = $process->getOutput();

@@ -1,19 +1,15 @@
-if: tag IS blank
-
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
 # list any PHP version you want to test against
 php:
-  - 5.6
   - 7.0
-  - nightly
+  - 7.1
+  - 7.2
 
 # optionally set up exclutions and allowed failures in the matrix
 matrix:
   fast_finish: true
-  allow_failures:
-    - php: nightly
 
 install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN

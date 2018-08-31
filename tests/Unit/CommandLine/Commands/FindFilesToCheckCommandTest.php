@@ -15,6 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class FindFilesToCheckCommandTest extends TestCase
@@ -122,6 +123,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedExclusiveFlag = false;
 
         $expectedArray = ['resulting', 'array'];
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         /** @var MockInterface|InputInterface $mockedInputInterface */
         $mockedInputInterface = Mockery::mock(InputInterface::class);
@@ -138,7 +140,9 @@ class FindFilesToCheckCommandTest extends TestCase
             ->with('exclusionList')->andReturn($mockedExclusiveFlag);
 
         $this->subjectParameters[AllCheckableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedStopword)->andReturn($expectedArray);
+            ->with($mockedFilter, $mockedStopword)->andReturn($mockedGitChangeSet);
+
+        $mockedGitChangeSet->shouldReceive('getFiles')->andReturn($expectedArray);
 
         $mockedOutputInterface->shouldReceive('writeln')->once()
             ->with(implode("\n", array_values($expectedArray)));
@@ -156,7 +160,8 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedTargetBranch  = 'myTargetBranch';
         $mockedExclusiveFlag = false;
 
-        $expectedArray = ['resulting', 'array'];
+        $expectedArray      = ['resulting', 'array'];
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         /** @var MockInterface|InputInterface $mockedInputInterface */
         $mockedInputInterface = Mockery::mock(InputInterface::class);
@@ -176,7 +181,9 @@ class FindFilesToCheckCommandTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->subjectParameters[DiffCheckableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($expectedArray);
+            ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($mockedGitChangeSet);
+
+        $mockedGitChangeSet->shouldReceive('getFiles')->andReturn($expectedArray);
 
         $mockedOutputInterface->shouldReceive('writeln')->once()
             ->with(implode("\n", array_values($expectedArray)));

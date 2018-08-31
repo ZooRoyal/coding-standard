@@ -76,12 +76,20 @@ class PHPCodeSnifferAdapterTest extends TestCase
         self::assertInstanceOf(FixerSupportInterface::class, $this->subject);
     }
 
+    public function writeViolationsToOutputWithTargetForWhitelistCheckDataProvider()
+    {
+        return [
+            'with target not matching origin/master' => ['target' => 'myTarget'],
+            'with empty target' => ['target' => null],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider writeViolationsToOutputWithTargetForWhitelistCheckDataProvider
      */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck()
+    public function writeViolationsToOutputWithTargetForWhitelistCheck($target)
     {
-        $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
             . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s';
 
@@ -89,12 +97,12 @@ class PHPCodeSnifferAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('PHPCS: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPCS: Running check on diff', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
                 $expectedCommand,
-                $mockedTargetBranch,
+                $target,
                 $this->expectedStopword,
                 $this->expectedFilter,
                 true,
@@ -102,7 +110,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
             )
             ->andReturn($this->expectedExitCode);
 
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
+        $result = $this->subject->writeViolationsToOutput($target, $this->mockedProcessisolation);
 
         self::assertSame($this->expectedExitCode, $result);
     }
@@ -118,10 +126,10 @@ class PHPCodeSnifferAdapterTest extends TestCase
                 'myTarget',
                 true
             ],
-            'empty target'     => ['writeViolationsToOutput', 'PHPCS: Running full check', 'expectedWrite',  '', false],
+            'no target'        => ['writeViolationsToOutput', 'PHPCS: Running full check', 'expectedWrite',  '', false],
             'both'             => ['writeViolationsToOutput', 'PHPCS: Running full check', 'expectedWrite', '', true],
             'fix local master' => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', '', false],
+            'fix no target'    => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', '', false],
             'fix both'         => ['fixViolations', 'PHPCBF: Fix all Files', 'expectedFix', '', true],
         ];
     }

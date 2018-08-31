@@ -32,7 +32,7 @@ class Environment
     public function getRootDirectory()
     {
         if ($this->rootDirectory === null) {
-            $this->rootDirectory = $this->processRunner->runAsProcess('git rev-parse --show-toplevel');
+            $this->rootDirectory = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
         }
 
         return $this->rootDirectory;
@@ -40,9 +40,11 @@ class Environment
 
     public function getPackageDirectory()
     {
-        return realpath(__DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
+        return realpath(
+            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
             . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . '');
+            . DIRECTORY_SEPARATOR . ''
+        );
     }
 
     public function getBlacklistedDirectories()
@@ -76,6 +78,6 @@ class Environment
      */
     private function commitishToHash($branchName)
     {
-        return $this->processRunner->runAsProcess('git rev-list -n 1 ' . $branchName);
+        return $this->processRunner->runAsProcess('git', 'rev-list', '-n 1', $branchName);
     }
 }

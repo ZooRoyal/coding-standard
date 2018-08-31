@@ -76,13 +76,20 @@ class JSESLintAdapterTest extends TestCase
         self::assertInstanceOf(FixerSupportInterface::class, $this->subject);
     }
 
+    public function writeViolationsToOutputWithTargetForWhitelistCheckDataProvider()
+    {
+        return [
+            'with target not matching origin/master' => ['target' => 'myTarget'],
+            'with empty target' => ['target' => null],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider writeViolationsToOutputWithTargetForWhitelistCheckDataProvider
      */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck()
+    public function writeViolationsToOutputWithTargetForWhitelistCheck($target)
     {
-        $mockedTargetBranch = 'myTarget';
-
         $expectedCommand = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
             . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s';
 
@@ -90,12 +97,12 @@ class JSESLintAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('ESLINT: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('ESLINT: Running check on diff', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
                 $expectedCommand,
-                $mockedTargetBranch,
+                $target,
                 $this->expectedStopword,
                 $this->expectedFilter,
                 true,
@@ -103,7 +110,7 @@ class JSESLintAdapterTest extends TestCase
             )
             ->andReturn($this->expectedExitCode);
 
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
+        $result = $this->subject->writeViolationsToOutput($target, $this->mockedProcessisolation);
 
         self::assertSame($this->expectedExitCode, $result);
     }
@@ -119,10 +126,10 @@ class JSESLintAdapterTest extends TestCase
                 'myTarget',
                 true
             ],
-            'empty target'     => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite',  '', false],
+            'no target'        => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite',  '', false],
             'both'             => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite', '', true],
             'fix local master' => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', false],
+            'fix no target'    => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', false],
             'fix both'         => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', true],
         ];
     }

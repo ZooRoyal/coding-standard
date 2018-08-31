@@ -1,51 +1,58 @@
 <?php
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
+use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\FileFilter;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
     /** @var ProcessRunner */
     private $processRunner;
-    /** @var \Zooroyal\CodingStandard\CommandLine\Library\Environment */
+    /** @var Environment */
     private $environment;
     /** @var FileFilter */
     private $fileFilter;
+    /** @var GitChangeSetFactory */
+    private $gitChangeSetFactory;
 
     /**
      * CheckableFileFinder constructor.
      *
-     * @param ProcessRunner $processRunner
-     * @param Environment   $environment
-     * @param FileFilter    $fileFilter
+     * @param ProcessRunner       $processRunner
+     * @param Environment         $environment
+     * @param FileFilter          $fileFilter
+     * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
         ProcessRunner $processRunner,
         Environment $environment,
-        FileFilter $fileFilter
+        FileFilter $fileFilter,
+        GitChangeSetFactory $gitChangeSetFactory
     ) {
-        $this->processRunner = $processRunner;
-        $this->environment   = $environment;
-        $this->fileFilter    = $fileFilter;
+        $this->processRunner       = $processRunner;
+        $this->environment         = $environment;
+        $this->fileFilter          = $fileFilter;
+        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string $targetBranch
      * @param string $filter
      * @param string $stopword
+     * @param string $targetBranch
      *
-     * @return string[]
+     * @return GitChangeSet
      */
     public function findFiles($filter = '', $stopword = '', $targetBranch = '')
     {
         $rawDiff = $this->findRawDiff($targetBranch);
-        $diff    = $this->fileFilter->filterByBlacklistFilterStringAndStopword($rawDiff, $filter, $stopword);
+        $this->fileFilter->filterByBlacklistFilterStringAndStopword($rawDiff, $filter, $stopword);
 
-        return $diff;
+        return $rawDiff;
     }
 
     /**
@@ -53,47 +60,51 @@ class DiffCheckableFileFinder implements FileFinderInterface
      *
      * @param string $targetBranch
      *
-     * @return string[]
+     * @return GitChangeSet
      */
     private function findRawDiff($targetBranch = '')
     {
-        if ($this->environment->isLocalBranchEqualTo($targetBranch)) {
-            $rawDiffAsString = $this->findFilesOfBranch();
+        if ($targetBranch === null || $this->environment->isLocalBranchEqualTo($targetBranch)) {
+            $rawDiff = $this->findFilesOfBranch();
         } else {
-            $rawDiffAsString = $this->findFilesInDiffToTarget($targetBranch);
+            $rawDiff = $this->findFilesInDiffToTarget($targetBranch);
         }
 
-        return explode("\n", trim($rawDiffAsString));
+        return $rawDiff;
     }
 
     /**
      * This method returns all files of parent commits of local branches HEAD, which are not part of another branch.
-     * The result is a single string as it is the result of the git call.
      *
-     * @return string
+     * @return GitChangeSet
      */
     private function findFilesOfBranch()
     {
         $targetCommit = 'HEAD';
 
-        $initialNumberOfContainingBranches = $this->processRunner->runAsProcess(
-            'git branch -a --contains HEAD | wc -l'
-        );
-
+        $initialNumberOfContainingBranches = $this->getCountOfContainingBranches('HEAD');
         while ($this->isParentCommitishACommit($targetCommit)) {
             $targetCommit               .= '^';
-            $numberOfContainingBranches = $this->processRunner->runAsProcess(
-                'git branch -a --contains ' . $targetCommit . ' | wc -l'
-            );
+            $numberOfContainingBranches = $this->getCountOfContainingBranches($targetCommit);
 
             if ($numberOfContainingBranches !== $initialNumberOfContainingBranches) {
                 break;
             }
         }
-        $rawDiffUnfilteredString = $this->processRunner->runAsProcess('git diff --name-only --diff-filter=d '
-            . $targetCommit);
+        $gitCommitHash           = $this->processRunner->runAsProcess('git', 'rev-parse', $targetCommit);
+        $rawDiffUnfilteredString = $this->processRunner->runAsProcess(
+            'git',
+            'diff',
+            '--name-only',
+            '--diff-filter=d',
+            $gitCommitHash
+        );
 
-        return $rawDiffUnfilteredString;
+        $rawDiffUnfiltered = explode(PHP_EOL, trim($rawDiffUnfilteredString));
+
+        $result = $this->gitChangeSetFactory->build($rawDiffUnfiltered, $gitCommitHash);
+
+        return $result;
     }
 
     /**
@@ -105,26 +116,57 @@ class DiffCheckableFileFinder implements FileFinderInterface
      */
     private function isParentCommitishACommit($targetCommit)
     {
-        $targetType = $this->processRunner->runAsProcess('git cat-file -t ' . $targetCommit . '^');
+        $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
 
         return $targetType === 'commit';
     }
 
     /**
      * This method finds all files in diff to target branch.
-     * The result is a single string as it is the result of the git call.
      *
      * @param $targetBranch
      *
-     * @return string
+     * @return GitChangeSet
      */
     private function findFilesInDiffToTarget($targetBranch)
     {
-        $mergeBase = $this->processRunner->runAsProcess('git merge-base HEAD ' . $targetBranch);
+        $mergeBase = $this->processRunner->runAsProcess('git', 'merge-base', 'HEAD', $targetBranch);
 
-        $rawDiffUnfilteredString = $this->processRunner->runAsProcess('git diff --name-only --diff-filter=d '
-            . $mergeBase);
+        $rawDiffUnfilteredString = $this->processRunner->runAsProcess(
+            'git',
+            'diff',
+            '--name-only',
+            '--diff-filter=d',
+            $mergeBase
+        );
 
-        return $rawDiffUnfilteredString;
+        $rawDiffUnfiltered = explode("\n", trim($rawDiffUnfilteredString));
+
+        $result = $this->gitChangeSetFactory->build($rawDiffUnfiltered, $mergeBase);
+
+        return $result;
+    }
+
+    /**
+     * Calls git to retriev the count of branches this commit is part of.
+     *
+     * @param string $targetCommit
+     *
+     * @return int
+     */
+    private function getCountOfContainingBranches($targetCommit)
+    {
+        $numberOfContainingBranches = substr_count(
+            $this->processRunner->runAsProcess(
+                'git',
+                'branch',
+                '-a',
+                '--contains',
+                $targetCommit
+            ),
+            PHP_EOL
+        );
+
+        return $numberOfContainingBranches;
     }
 }

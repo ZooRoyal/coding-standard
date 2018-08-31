@@ -124,11 +124,17 @@ class GenericCommandRunner
         $processIsolation,
         $glue = ','
     ) {
-        $changedFiles = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch);
+        $gitChangeSet = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch);
+        $changedFiles = $gitChangeSet->getFiles();
 
         $whitelistArguments = empty($changedFiles) || $processIsolation
             ? $changedFiles
             : [implode($glue, $changedFiles)];
+
+        $this->output->writeln(
+            'Checking diff to ' . $gitChangeSet->getCommitHash(),
+            OutputInterface::OUTPUT_NORMAL
+        );
 
         $this->output->writeln(
             'Files to handle:' . "\n" . implode("\n", $changedFiles) . "\n",
