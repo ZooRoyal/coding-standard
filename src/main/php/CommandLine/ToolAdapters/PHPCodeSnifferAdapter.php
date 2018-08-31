@@ -72,7 +72,7 @@ class PHPCodeSnifferAdapter implements FixerSupportInterface
         $tool        = 'PHPCS';
         $prefix      = $tool . ': ';
         $fullMessage = $prefix . 'Running full check';
-        $diffMessage = $prefix . 'Running check on';
+        $diffMessage = $prefix . 'Running check on diff';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -92,7 +92,7 @@ class PHPCodeSnifferAdapter implements FixerSupportInterface
         $tool        = 'PHPCBF';
         $prefix      = $tool . ': ';
         $fullMessage = $prefix . 'Fix all Files';
-        $diffMessage = $prefix . 'Fix Files in';
+        $diffMessage = $prefix . 'Fix Files in diff';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
@@ -112,7 +112,7 @@ class PHPCodeSnifferAdapter implements FixerSupportInterface
      */
     private function runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage)
     {
-        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
+        if ($targetBranch === '' || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $command  = $this->commands[$tool . 'BL'];
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
@@ -123,7 +123,7 @@ class PHPCodeSnifferAdapter implements FixerSupportInterface
                 true
             );
         } else {
-            $this->output->writeln($diffMessage . ' diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
+            $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
             $command  = $this->commands[$tool . 'WL'];
             $exitCode = $this->genericCommandRunner->runWhitelistCommand(
                 $command,

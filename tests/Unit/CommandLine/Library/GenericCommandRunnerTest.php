@@ -10,6 +10,7 @@ use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GenericCommandRunnerTest extends TestCase
@@ -20,9 +21,13 @@ class GenericCommandRunnerTest extends TestCase
     private $subjectParameters;
     /** @var MockInterface|Process */
     private $mockedProcess;
+    /** @var MockInterface|GitChangeSet */
+    private $mockedGitChangeSet;
 
     protected function setUp()
     {
+        $this->mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
+
         $subjectFactory          = new SubjectFactory();
         $buildFragments          = $subjectFactory->buildSubject(GenericCommandRunner::class);
         $this->subject           = $buildFragments['subject'];
@@ -245,6 +250,8 @@ class GenericCommandRunnerTest extends TestCase
             $mockedPrefix . implode($mockedGlue . $mockedPrefix, $mockedChangedFiles)
         );
 
+        $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')
+            ->with('Checking diff to asd', OutputInterface::OUTPUT_NORMAL);
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with('Calling following command:' . "\n" . $mockedCommand, OutputInterface::VERBOSITY_DEBUG);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcessReturningProcessObject')
@@ -270,6 +277,8 @@ class GenericCommandRunnerTest extends TestCase
         foreach ($mockedChangedFiles as $mockedChangedFile) {
             $mockedCommand = sprintf($mockedTemplate, $mockedChangedFile);
 
+            $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')
+                ->with('Checking diff to asd', OutputInterface::OUTPUT_NORMAL);
             $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
                 ->with('Calling following command:' . "\n" . $mockedCommand, OutputInterface::VERBOSITY_DEBUG);
             $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcessReturningProcessObject')
@@ -288,10 +297,17 @@ class GenericCommandRunnerTest extends TestCase
      * @param string   $mockedTargetBranch
      * @param string[] $mockedChangedFiles
      */
-    private function prepareMocksForFindFiles($mockedFilter, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles)
-    {
+    private function prepareMocksForFindFiles(
+        $mockedFilter,
+        $mockedStopword,
+        $mockedTargetBranch,
+        $mockedChangedFiles
+    ) {
+        $this->mockedGitChangeSet->shouldReceive('getCommitHash')->andReturn('asd');
+        $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
+
         $this->subjectParameters[DiffCheckableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($mockedChangedFiles);
+            ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
 
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with(

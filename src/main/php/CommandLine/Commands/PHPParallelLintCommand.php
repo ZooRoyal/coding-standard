@@ -39,10 +39,11 @@ class PHPParallelLintCommand extends Command
                     new InputOption(
                         'target',
                         't',
-                        InputOption::VALUE_REQUIRED,
+                        InputOption::VALUE_OPTIONAL,
                         'Finds PHP-Files which have changed since the current branch parted from the target branch '
-                        . 'only. The Value has to be a commit-ish.',
-                        ''
+                        . 'only. If no branch is set Coding-Standard tries to find the parent branch by automagic. '
+                        . 'The Value, if set, has to be a commit-ish.',
+                        null
                     ),
                     new InputOption(
                         'process-isolation',

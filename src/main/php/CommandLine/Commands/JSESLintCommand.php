@@ -31,17 +31,20 @@ class JSESLintCommand extends Command
     {
         $this->setName('sca:eslint');
         $this->setDescription('Run ESLint on JS files.');
-        $this->setHelp('This tool executes ESLINT on a certain set of JS files of this Project.'
-            . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.');
+        $this->setHelp(
+            'This tool executes ESLINT on a certain set of JS files of this Project.'
+            . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.'
+        );
         $this->setDefinition(
             new InputDefinition(
                 [
                     new InputOption(
                         'target',
                         't',
-                        InputOption::VALUE_REQUIRED,
+                        InputOption::VALUE_OPTIONAL,
                         'Finds JS-Files which have changed since the current branch parted from the target branch '
-                        . 'only. The Value has to be a commit-ish.',
+                        . 'only. If no branch is set Coding-Standard tries to find the parent branch by automagic. '
+                        . 'The Value, if set, has to be a commit-ish.',
                         ''
                     ),
                     new InputOption(

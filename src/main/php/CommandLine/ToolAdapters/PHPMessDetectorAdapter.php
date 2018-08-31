@@ -62,7 +62,7 @@ class PHPMessDetectorAdapter implements ToolAdapterInterface
     {
         $prefix = 'PHPMD: ';
 
-        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
+        if ($targetBranch === '' || $this->environment->isLocalBranchEqualTo('origin/master')) {
             $fullMessage = $prefix . 'Running full check';
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runBlacklistCommand(
@@ -70,8 +70,8 @@ class PHPMessDetectorAdapter implements ToolAdapterInterface
                 $this->stopword
             );
         } else {
-            $diffMessage = $prefix . 'Running check on diff to ';
-            $this->output->writeln($diffMessage . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
+            $diffMessage = $prefix . 'Running check on diff';
+            $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
             $exitCode = $this->genericCommandRunner->runWhitelistCommand(
                 $this->messDetectCommandWhitelist,
                 $targetBranch,

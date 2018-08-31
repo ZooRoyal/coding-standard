@@ -74,26 +74,34 @@ class PHPMessDetectorAdapterTest extends TestCase
         self::assertInstanceOf(ToolAdapterInterface::class, $this->subject);
     }
 
+    public function writeViolationsToOutputWithTargetForWhitelistCheckDataProvider()
+    {
+        return [
+            'with target not matching origin/master' => ['target' => 'myTarget'],
+            'with empty target'                      => ['target' => null],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider writeViolationsToOutputWithTargetForWhitelistCheckDataProvider
      */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck()
+    public function writeViolationsToOutputWithTargetForWhitelistCheck($target)
     {
-        $mockedTargetBranch = 'myTarget';
-        $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text '
+        $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text '
             . $this->mockedPackageDirectory . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('PHPMD: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPMD: Running check on diff', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
-            ->with($expectedCommand, $mockedTargetBranch, $this->expectedStopword, $this->expectedFilter, true)
+            ->with($expectedCommand, $target, $this->expectedStopword, $this->expectedFilter, true)
             ->andReturn($this->expectedExitCode);
 
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
+        $result = $this->subject->writeViolationsToOutput($target, $this->mockedProcessisolation);
 
         self::assertSame($this->expectedExitCode, $result);
     }
@@ -102,7 +110,7 @@ class PHPMessDetectorAdapterTest extends TestCase
     {
         return [
             'local master' => ['myTarget', true],
-            'empty target' => ['', false],
+            'no target'    => ['', false],
             'both'         => ['', true],
         ];
     }
@@ -111,7 +119,7 @@ class PHPMessDetectorAdapterTest extends TestCase
      * @test
      * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
      *
-     * @param string $mockedTargetBranch
+     * @param string  $mockedTargetBranch
      * @param boolean $equalToLocal
      */
     public function writeViolationsToOutputWithTargetForBlacklistCheck($mockedTargetBranch, $equalToLocal)

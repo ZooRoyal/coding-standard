@@ -80,24 +80,32 @@ class PHPParalellLintAdapterTest extends TestCase
         self::assertInstanceOf(ToolAdapterInterface::class, $this->subject);
     }
 
+    public function writeViolationsToOutputWithTargetForWhitelistCheckDataProvider()
+    {
+        return [
+            'with target not matching origin/master' => ['target' => 'myTarget'],
+            'with empty target'                      => ['target' => null],
+        ];
+    }
+
     /**
      * @test
+     * @dataProvider writeViolationsToOutputWithTargetForWhitelistCheckDataProvider
      */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck()
+    public function writeViolationsToOutputWithTargetForWhitelistCheck($target)
     {
-        $mockedTargetBranch = 'myTarget';
         $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/parallel-lint -j 2 %1$s';
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('PHPPL: Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPPL: Running check on diff', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
             ->with(
                 $expectedCommand,
-                $mockedTargetBranch,
+                $target,
                 $this->expectedStopword,
                 $this->expectedFilter,
                 true,
@@ -105,7 +113,7 @@ class PHPParalellLintAdapterTest extends TestCase
             )
             ->andReturn($this->expectedExitCode);
 
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
+        $result = $this->subject->writeViolationsToOutput($target, $this->mockedProcessisolation);
 
         self::assertSame($this->expectedExitCode, $result);
     }
@@ -114,7 +122,7 @@ class PHPParalellLintAdapterTest extends TestCase
     {
         return [
             'local master' => ['myTarget', true],
-            'empty target' => ['', true],
+            'no target'    => ['', true],
             'both'         => ['', true],
         ];
     }

@@ -67,9 +67,9 @@ class FindFilesToCheckCommand extends Command
         if ($exclusive === true) {
             $result = $this->blacklistFactory->build($stopword);
         } elseif (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
-            $result = $this->allCheckableFileFinder->findFiles($filter, $stopword);
+            $result = $this->allCheckableFileFinder->findFiles($filter, $stopword)->getFiles();
         } else {
-            $result = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch);
+            $result = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch)->getFiles();
         }
 
         $output->writeln(implode("\n", array_values($result)));
@@ -87,9 +87,10 @@ class FindFilesToCheckCommand extends Command
                 new InputOption(
                     'target',
                     't',
-                    InputOption::VALUE_REQUIRED,
+                    InputOption::VALUE_OPTIONAL,
                     'Finds PHP-Files which have changed since the current branch parted from the target branch '
-                    . 'only. The Value has to be a commit-ish.',
+                    . 'only. If no branch is set Coding-Standard tries to find the parent branch by automagic. '
+                        . 'The Value, if set, has to be a commit-ish.',
                     ''
                 ),
                 new InputOption(

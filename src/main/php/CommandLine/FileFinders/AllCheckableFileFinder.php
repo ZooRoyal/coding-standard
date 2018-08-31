@@ -1,8 +1,10 @@
 <?php
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
+use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\FileFilter;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class AllCheckableFileFinder implements FileFinderInterface
 {
@@ -10,19 +12,24 @@ class AllCheckableFileFinder implements FileFinderInterface
     private $processRunner;
     /** @var FileFilter */
     private $fileFilter;
+    /** @var GitChangeSetFactory */
+    private $gitChangeSetFactory;
 
     /**
      * AllCheckableFileFinder constructor.
      *
-     * @param ProcessRunner $processRunner
-     * @param FileFilter    $fileFilter
+     * @param ProcessRunner       $processRunner
+     * @param FileFilter          $fileFilter
+     * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
         ProcessRunner $processRunner,
-        FileFilter $fileFilter
+        FileFilter $fileFilter,
+        GitChangeSetFactory $gitChangeSetFactory
     ) {
-        $this->processRunner = $processRunner;
-        $this->fileFilter    = $fileFilter;
+        $this->processRunner       = $processRunner;
+        $this->fileFilter          = $fileFilter;
+        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
@@ -32,14 +39,15 @@ class AllCheckableFileFinder implements FileFinderInterface
      * @param string $filter
      * @param string $__unused
      *
-     * @return string[]
+     * @return GitChangeSet
      */
     public function findFiles($filter = '', $stopword = '', $__unused = '')
     {
-        $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git ls-files')));
+        $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
+        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, null);
 
-        $result = $this->fileFilter->filterByBlacklistFilterStringAndStopword($filesFromGit, $filter, $stopword);
+        $this->fileFilter->filterByBlacklistFilterStringAndStopword($gitChangeSet, $filter, $stopword);
 
-        return $result;
+        return $gitChangeSet;
     }
 }
