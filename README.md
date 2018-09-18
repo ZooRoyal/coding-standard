@@ -20,7 +20,15 @@ Furthermore there is a php script in src/bin which is meant to be used in the .t
 To install this package just run
 
 ```bash
-composer require "zooroyal/coding-standard"
+composer require --dev "zooroyal/coding-standard"
+```
+
+# Update
+
+To update this package just run
+
+```bash
+composer update "zooroyal/coding-standard"
 ```
 
 # Usage
