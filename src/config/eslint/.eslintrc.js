@@ -46,7 +46,7 @@ module.exports = {
             "always"
         ],
         "one-var": "off",
-        "eqeqeq": ["error", "always", {"null": "ignore"}],
+        "eqeqeq": ["error", "smart"],
         "curly": "error",
         "for-direction": "error",
         "no-tabs": "error",
