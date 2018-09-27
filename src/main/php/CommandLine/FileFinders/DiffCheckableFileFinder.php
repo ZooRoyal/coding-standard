@@ -41,9 +41,9 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string $targetBranch
      * @param string $filter
      * @param string $stopword
+     * @param string $targetBranch
      *
      * @return GitChangeSet
      */

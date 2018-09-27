@@ -8,8 +8,8 @@ class ProcessRunner
     /**
      * Runs a shell command as single Process and returns the reseult.
      *
-     * @param string   $command
-     * @param string[] $arguments Multiple strings interpreted as Arguments
+     * @param string $command
+     * @param string ...$arguments Multiple strings interpreted as Arguments
      *
      * @return string
      */

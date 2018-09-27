@@ -16,7 +16,7 @@ class GitChangeSetFactory
      *
      * @return GitChangeSet
      */
-    public function build(array $files, $commitHash)
+    public function build(array $files, $commitHash = '')
     {
         return new GitChangeSet($files, $commitHash);
     }

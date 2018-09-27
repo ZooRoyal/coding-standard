@@ -18,7 +18,7 @@ class GitChangeSet
      * @param string[] $files
      * @param string   $commitHash
      */
-    public function __construct(array $files, $commitHash)
+    public function __construct(array $files, $commitHash = '')
     {
         $this->files      = $files;
         $this->commitHash = $commitHash;

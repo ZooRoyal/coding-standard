@@ -35,8 +35,8 @@ class AllCheckableFileFinder implements FileFinderInterface
     /**
      * This function finds all files to check.
      *
-     * @param string $stopword
      * @param string $filter
+     * @param string $stopword
      * @param string $__unused
      *
      * @return GitChangeSet
@@ -44,7 +44,7 @@ class AllCheckableFileFinder implements FileFinderInterface
     public function findFiles($filter = '', $stopword = '', $__unused = '')
     {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
-        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, null);
+        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');
 
         $this->fileFilter->filterByBlacklistFilterStringAndStopword($gitChangeSet, $filter, $stopword);
 
