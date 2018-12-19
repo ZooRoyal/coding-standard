@@ -5,7 +5,6 @@
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
-    "no-descending-specificity": null,
-    "selector-pseudo-element-colon-notation": "single"
+    "no-descending-specificity": null
   }
 }
