@@ -94,7 +94,6 @@
     <rule ref="MySource.Debug.FirebugConsole"/>
     <rule ref="MySource.Objects.CreateWidgetTypeCallback"/>
     <rule ref="MySource.Objects.DisallowNewWidget"/>
-    <rule ref="MySource.PHP.AjaxNullComparison"/>
     <rule ref="MySource.PHP.EvalObjectFactory"/>
     <rule ref="MySource.Strings.JoinStrings"/>
 
