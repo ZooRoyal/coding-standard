@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;

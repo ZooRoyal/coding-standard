@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -10,8 +10,8 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPMessDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -67,7 +67,7 @@ class PHPMessDetectorCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(2),
+                                H::arrayWithSize(3),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )
@@ -112,6 +112,8 @@ class PHPMessDetectorCommandTest extends TestCase
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
+        $this->mockedInputInterface->shouldReceive('getOption')->once()
+            ->with('auto-target')->andReturn(false);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('process-isolation')->andReturn($mockedProcessIsolation);
     }

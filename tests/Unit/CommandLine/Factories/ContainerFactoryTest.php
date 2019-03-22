@@ -14,7 +14,7 @@ class ContainerFactoryTest extends TestCase
      */
     public function getContainerInstance()
     {
-        $result    = ContainerFactory::getContainerInstance();
+        $result    = ContainerFactory::getUnboundContainerInstance();
         $buildItem = $result->get(OutputInterface::class);
 
         self::assertInstanceOf(Container::class, $result);

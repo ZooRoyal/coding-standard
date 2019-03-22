@@ -3,9 +3,12 @@ language: php
 
 # list any PHP version you want to test against
 php:
-  - 7.0
-  - 7.1
-  - 7.2
+  - '7.0'
+  - '7.1'
+  - '7.2'
+env:
+  - COMPOSER_PARAMETER=--prefer-lowest
+  - COMPOSER_PARAMETER=
 
 # optionally set up exclutions and allowed failures in the matrix
 matrix:
@@ -13,10 +16,10 @@ matrix:
 
 install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
-  - travis_retry composer install
+  - travis_retry composer update $COMPOSER_PARAMETER
 
 script:
-  - src/bin/coding-standard all -t origin/$TRAVIS_BRANCH
+  - src/bin/coding-standard sca:all -t origin/$TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
 
 # allow builds for all branches

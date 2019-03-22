@@ -3,6 +3,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 
 class GenericCommandRunner
@@ -11,30 +12,30 @@ class GenericCommandRunner
     private $output;
     /** @var ProcessRunner */
     private $processRunner;
-    /** @var DiffCheckableFileFinder */
-    private $diffCheckableFileFinder;
+    /** @var AdaptableFileFinder */
+    private $adaptableFileFinder;
     /** @var BlacklistFactory */
     private $blacklistFactory;
 
     /**
      * AbstractToolAdapter constructor.
      *
-     * @param OutputInterface         $output
-     * @param ProcessRunner           $processRunner
-     * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param BlacklistFactory        $blacklistFactory
+     * @param OutputInterface $output
+     * @param ProcessRunner $processRunner
+     * @param AdaptableFileFinder $adaptableFileFinder
+     * @param BlacklistFactory $blacklistFactory
      *
      * @inject
      */
     public function __construct(
         OutputInterface $output,
         ProcessRunner $processRunner,
-        DiffCheckableFileFinder $diffCheckableFileFinder,
+        AdaptableFileFinder $adaptableFileFinder,
         BlacklistFactory $blacklistFactory
     ) {
         $this->output                  = $output;
         $this->processRunner           = $processRunner;
-        $this->diffCheckableFileFinder = $diffCheckableFileFinder;
+        $this->adaptableFileFinder = $adaptableFileFinder;
         $this->blacklistFactory        = $blacklistFactory;
     }
 
@@ -44,7 +45,7 @@ class GenericCommandRunner
      *
      * @param string $template
      * @param string $targetBranch
-     * @param string $stopword
+     * @param string $blacklistToken
      * @param string $filter
      * @param bool   $processIsolation
      * @param string $glue
@@ -54,15 +55,15 @@ class GenericCommandRunner
     public function runWhitelistCommand(
         $template,
         $targetBranch,
-        $stopword,
+        $blacklistToken,
         $filter,
         $processIsolation = false,
         $glue = ','
-    ) {
+    ): int {
         $exitCode           = 0;
         $whitelistArguments = $this->buildWhitelistArguments(
             $targetBranch,
-            $stopword,
+            $blacklistToken,
             $filter,
             $processIsolation,
             $glue
@@ -81,16 +82,16 @@ class GenericCommandRunner
      * Builds a CLI-Command by inserting a blacklist of file paths in the command template and executes it.
      *
      * @param string $template
-     * @param string $stopword
+     * @param string $blacklistToken
      * @param string $prefix
      * @param string $glue
      * @param bool   $escape if true the blacklist entries will be escaped for regexp
      *
      * @return int|null
      */
-    public function runBlacklistCommand($template, $stopword, $prefix = '', $glue = ',', $escape = false)
+    public function runBlacklistCommand($template, $blacklistToken, $prefix = '', $glue = ',', $escape = false)
     {
-        $blackList = $this->blacklistFactory->build($stopword);
+        $blackList = $this->blacklistFactory->build($blacklistToken);
         if ($escape) {
             $blackList = array_map(
                 function ($value) {
@@ -110,7 +111,7 @@ class GenericCommandRunner
      * Builds a list of arguments for insertion into the template.
      *
      * @param string $targetBranch
-     * @param string $stopword
+     * @param string $blacklistToken
      * @param string $filter
      * @param bool   $processIsolation
      * @param string $glue
@@ -119,12 +120,12 @@ class GenericCommandRunner
      */
     private function buildWhitelistArguments(
         $targetBranch,
-        $stopword,
+        $blacklistToken,
         $filter,
         $processIsolation,
         $glue = ','
-    ) {
-        $gitChangeSet = $this->diffCheckableFileFinder->findFiles($filter, $stopword, $targetBranch);
+    ): array {
+        $gitChangeSet = $this->adaptableFileFinder->findFiles($filter, $blacklistToken, '', $targetBranch);
         $changedFiles = $gitChangeSet->getFiles();
 
         $whitelistArguments = empty($changedFiles) || $processIsolation

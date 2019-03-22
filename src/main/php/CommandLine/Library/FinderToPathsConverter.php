@@ -7,13 +7,13 @@ use Symfony\Component\Finder\SplFileInfo;
 class FinderToPathsConverter
 {
     /**
-     * Converts Finder objects to Arrays of their RealPaths.
+     * Converts Finder objects to Arrays of their Full Real Paths.
      *
      * @param $finder
      *
      * @return string[]
      */
-    public function finderToArrayOfPaths(Finder $finder)
+    public function finderToArrayOfPaths(Finder $finder): array
     {
         $result = array_map(
             function ($value) {

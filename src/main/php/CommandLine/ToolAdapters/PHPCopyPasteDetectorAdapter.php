@@ -49,7 +49,7 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
      */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
-        $fullMessage = 'PHPCPD: Running full check';
+        $fullMessage = 'PHPCPD : Running full check';
 
         $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
         $exitCode = $this->genericCommandRunner->runBlacklistCommand(

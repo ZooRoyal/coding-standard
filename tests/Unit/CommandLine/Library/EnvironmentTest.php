@@ -1,9 +1,12 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
+use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
@@ -31,10 +34,10 @@ class EnvironmentTest extends TestCase
     protected function setUp()
     {
         $this->rootDirectory = '/my/root';
-        $this->localBranch   = 'localBranch';
+        $this->localBranch = 'localBranch';
 
         $this->mockedProcessRunner = Mockery::mock(ProcessRunner::class);
-        $this->subject             = new Environment($this->mockedProcessRunner);
+        $this->subject = new Environment($this->mockedProcessRunner);
     }
 
     protected function tearDown()
@@ -105,8 +108,8 @@ class EnvironmentTest extends TestCase
      */
     public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal()
     {
-        $mockedBranchName      = 'my/mocked/branch';
-        $mockedCommitHash      = '123qwe0';
+        $mockedBranchName = 'my/mocked/branch';
+        $mockedCommitHash = '123qwe0';
         $mockedLocalCommitHash = '0ewq321';
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
@@ -123,8 +126,8 @@ class EnvironmentTest extends TestCase
      */
     public function isLocalBranchEqualToCachesLocalHeadHash()
     {
-        $mockedBranchName      = 'my/mocked/branch';
-        $mockedCommitHash      = '123qwe0';
+        $mockedBranchName = 'my/mocked/branch';
+        $mockedCommitHash = '123qwe0';
         $mockedLocalCommitHash = '0ewq321';
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
@@ -135,5 +138,68 @@ class EnvironmentTest extends TestCase
         $this->subject->isLocalBranchEqualTo($mockedBranchName);
         $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
         self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function isLocalBranchEqualToReturnsFalseIfParameterNoBranch()
+    {
+        $mockedBranchName = 'my/mocked/branch';
+        $mockedLocalCommitHash = '0ewq321';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git', 'rev-list', '-n 1', 'HEAD')->andReturn($mockedLocalCommitHash);
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git', 'rev-list', '-n 1', $mockedBranchName)
+            ->andThrow(Mockery::mock(ProcessFailedException::class));
+
+        $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
+        self::assertFalse($result);
+    }
+
+    /**
+     * @test
+     */
+    public function guessParentBranchAsCommitHashFindParent()
+    {
+        $mockedBranch = 'myBranch';
+        $expectedHash = 'asdasqweqwe12312323234';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'branch', '-a', '--contains', $mockedBranch)->andReturn('a');
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git', 'cat-file', '-t', H::containsString($mockedBranch))->andReturn('commit');
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'branch', '-a', '--contains', $mockedBranch . '^')->andReturn('a' . PHP_EOL . 'b');
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'rev-parse', $mockedBranch . '^')->andReturn($expectedHash);
+
+        $result = $this->subject->guessParentBranchAsCommitHash($mockedBranch);
+        self::assertSame($expectedHash, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function guessParentBranchAsCommitHashFindNoParent()
+    {
+        $mockedBranch = 'myBranch';
+        $expectedHash = 'asdasqweqwe12312323234';
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'branch', '-a', '--contains', $mockedBranch)->andReturn('a');
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with('git', 'cat-file', '-t', H::containsString($mockedBranch))->andReturn('blarb');
+
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'rev-parse', $mockedBranch)->andReturn($expectedHash);
+
+        $result = $this->subject->guessParentBranchAsCommitHash($mockedBranch);
+        self::assertSame($expectedHash, $result);
     }
 }

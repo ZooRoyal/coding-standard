@@ -1,5 +1,8 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
+
+use Symfony\Component\Process\Exception\ProcessFailedException;
 
 /**
  * This Class supplies information about the environment the script is running in.
@@ -64,9 +67,74 @@ class Environment
         if ($this->localHeadHash === null) {
             $this->localHeadHash = $this->commitishToHash('HEAD');
         }
-        $targetCommitHash = $this->commitishToHash($targetBranch);
+        try {
+            $targetCommitHash = $this->commitishToHash($targetBranch);
+        } catch (ProcessFailedException $exception) {
+            return false;
+        }
 
         return $targetCommitHash === $this->localHeadHash;
+    }
+
+    /**
+     * This method searches the first parent commit which is part of another branch and returns this commit as merge base
+     * with parent branch.
+     *
+     * @param string $branchName
+     *
+     * @return string
+     */
+    public function guessParentBranchAsCommitHash($branchName = 'HEAD'): string
+    {
+        $initialNumberOfContainingBranches = $this->getCountOfContainingBranches($branchName);
+        while ($this->isParentCommitishACommit($branchName)) {
+            $branchName .= '^';
+            $numberOfContainingBranches = $this->getCountOfContainingBranches($branchName);
+
+            if ($numberOfContainingBranches !== $initialNumberOfContainingBranches) {
+                break;
+            }
+        }
+        $gitCommitHash = $this->processRunner->runAsProcess('git', 'rev-parse', $branchName);
+
+        return $gitCommitHash;
+    }
+
+    /**
+     * Calls git to retriev the count of branches this commit is part of.
+     *
+     * @param string $targetCommit
+     *
+     * @return int
+     */
+    private function getCountOfContainingBranches($targetCommit): int
+    {
+        $numberOfContainingBranches = substr_count(
+            $this->processRunner->runAsProcess(
+                'git',
+                'branch',
+                '-a',
+                '--contains',
+                $targetCommit
+            ),
+            PHP_EOL
+        );
+
+        return $numberOfContainingBranches;
+    }
+
+    /**
+     * Returns true if $targetCommit commit-ish is a valid commit.
+     *
+     * @param string $targetCommit
+     *
+     * @return bool
+     */
+    private function isParentCommitishACommit($targetCommit): bool
+    {
+        $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
+
+        return $targetType === 'commit';
     }
 
     /**

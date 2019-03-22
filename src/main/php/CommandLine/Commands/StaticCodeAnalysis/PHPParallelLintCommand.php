@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -39,11 +39,16 @@ class PHPParallelLintCommand extends Command
                     new InputOption(
                         'target',
                         't',
-                        InputOption::VALUE_OPTIONAL,
-                        'Finds PHP-Files which have changed since the current branch parted from the target branch '
-                        . 'only. If no branch is set Coding-Standard tries to find the parent branch by automagic. '
-                        . 'The Value, if set, has to be a commit-ish.',
-                        null
+                        InputOption::VALUE_REQUIRED,
+                        'Finds Files which have changed since the current branch parted from the target branch '
+                        . 'only. The Value has to be a commit-ish.'
+                    ),
+                    new InputOption(
+                        'auto-target',
+                        'a',
+                        InputOption::VALUE_NONE,
+                        'Finds Files which have changed since the current branch parted from the parent branch '
+                        . 'only. It tries to find the parent branch by automagic.'
                     ),
                     new InputOption(
                         'process-isolation',
@@ -61,7 +66,7 @@ class PHPParallelLintCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $targetBranch          = $input->getOption('target');
+        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
         $processIsolationInput = $input->getOption('process-isolation');
 
         $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);

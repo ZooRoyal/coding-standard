@@ -1,13 +1,13 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPCopyPasteDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPasteDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 

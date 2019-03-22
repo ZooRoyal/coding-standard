@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
@@ -17,8 +18,8 @@ class BlacklistFactory
      * BlacklistFactory constructor.
      *
      * @param FinderToPathsConverter $finderToRealPathConverter
-     * @param Environment            $environment
-     * @param FinderFactory          $finderFactory
+     * @param Environment $environment
+     * @param FinderFactory $finderFactory
      */
     public function __construct(
         FinderToPathsConverter $finderToRealPathConverter,
@@ -26,46 +27,35 @@ class BlacklistFactory
         FinderFactory $finderFactory
     ) {
         $this->finderToRealPathConverter = $finderToRealPathConverter;
-        $this->environment               = $environment;
-        $this->finderFactory             = $finderFactory;
+        $this->environment = $environment;
+        $this->finderFactory = $finderFactory;
     }
 
     /**
      * This function computes a blacklist of directories which should not be checked.
      *
-     * @param $stopword
+     * @param string $token
+     * @param bool $deDuped
      *
      * @return string[]
      */
-    public function build($stopword = '')
+    public function build($token = '', bool $deDuped = true): array
     {
-        $rawExcludePathsByFileByStopword = [];
+        $rawExcludePathsByFileByToken = [];
 
-        if ($stopword !== '') {
-            $findStopword = $this->finderFactory->build();
-            $findStopword->in($this->environment->getRootDirectory())->files()->name($stopword);
-            $rawExcludePathsByFileByStopword = $this->finderToRealPathConverter
-                ->finderToArrayOfPaths($findStopword);
+        if ($token !== '') {
+            $rawExcludePathsByFileByToken = $this->findTokenDirectories($token);
         }
+        $rawExcludePathsByFileByGit = $this->findGitDirectories();
+        $rawExcludePathsByBlacklist = $this->findDirectoriesFromEnvironment($this->environment);
 
-        $finderGit = $this->finderFactory->build();
-        $finderGit->in($this->environment->getRootDirectory())->depth('> 0')->path('/.*git$/');
-        $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
+        $rawExcludePaths = array_merge(
+            $rawExcludePathsByBlacklist,
+            $rawExcludePathsByFileByToken,
+            $rawExcludePathsByFileByGit
+        );
 
-        $finderBlacklist = $this->finderFactory->build();
-        $finderBlacklist->in($this->environment->getRootDirectory())->directories();
-        foreach ($this->environment->getBlacklistedDirectories() as $blacklistedDirectory) {
-            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory, '/') . '$/')
-                ->notPath('/' . preg_quote($blacklistedDirectory, '/') . './');
-        }
-        $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArrayOfPaths($finderBlacklist);
-
-        $rawExcludePathsUntrimmed = array_merge($rawExcludePathsByFileByStopword, $rawExcludePathsByFileByGit);
-        $rawExcludePathsFromFiles = array_map('dirname', $rawExcludePathsUntrimmed);
-
-        $rawExcludePaths = array_merge($rawExcludePathsByBlacklist, $rawExcludePathsFromFiles);
-
-        $filteredArray = $this->deDupePaths($rawExcludePaths);
+        $filteredArray = $deDuped === true ? $this->deDupePaths($rawExcludePaths) : $rawExcludePaths;
 
         return $filteredArray;
     }
@@ -80,12 +70,12 @@ class BlacklistFactory
     private function deDupePaths(array $rawExcludePaths)
     {
         $filteredArray = $rawExcludePaths;
-        $count         = count($filteredArray);
+        $count = count($filteredArray);
         for ($i = 0; $count > $i; $i++) {
             if (!isset($filteredArray[$i])) {
                 continue;
             }
-            $item          = $filteredArray[$i];
+            $item = $filteredArray[$i];
             $filteredArray = array_filter(
                 $filteredArray,
                 function ($value) use ($item) {
@@ -96,5 +86,53 @@ class BlacklistFactory
         $filteredArray = array_values($filteredArray);
 
         return $filteredArray;
+    }
+
+    /**
+     * Searches for directories containing stopword files.
+     *
+     * @param string $token
+     *
+     * @return string[]
+     */
+    public function findTokenDirectories(string $token): array
+    {
+        $tokenFinder = $this->finderFactory->build();
+        $tokenFinder->in($this->environment->getRootDirectory())->files()->name($token);
+        $rawExcludePathsByToken = $this->finderToRealPathConverter
+            ->finderToArrayOfPaths($tokenFinder);
+        return array_map('dirname', $rawExcludePathsByToken);
+    }
+
+    /**
+     * Finds submodules of in the project directory.
+     *
+     * @return string[]
+     */
+    private function findGitDirectories(): array
+    {
+        $finderGit = $this->finderFactory->build();
+        $finderGit->in($this->environment->getRootDirectory())->depth('> 0')->path('/.git$/');
+        $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
+        return array_map('dirname', $rawExcludePathsByFileByGit);
+    }
+
+    /**
+     * Finds blacklisted directories by Environment.
+     *
+     * @param Environment $environment
+     *
+     * @return string[]
+     */
+    private function findDirectoriesFromEnvironment(Environment $environment): array
+    {
+        $finderBlacklist = $this->finderFactory->build();
+        $finderBlacklist->in($environment->getRootDirectory())->directories();
+        foreach ($environment->getBlacklistedDirectories() as $blacklistedDirectory) {
+            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory, '/') . '$/')
+                ->notPath('/' . preg_quote($blacklistedDirectory, '/') . './');
+        }
+        $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArrayOfPaths($finderBlacklist);
+        return $rawExcludePathsByBlacklist;
     }
 }

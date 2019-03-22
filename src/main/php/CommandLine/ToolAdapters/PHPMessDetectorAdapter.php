@@ -1,32 +1,28 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 
-class PHPMessDetectorAdapter implements ToolAdapterInterface
+class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
-    private $messDetectCommandWhitelist;
+    protected $blacklistToken = '.dontMessDetectPHP';
     /** @var string */
-    private $messDetectCommandBlacklist;
-    /** @var OutputInterface */
-    private $output;
-    /** @var Environment */
-    private $environment;
-    /** @var GenericCommandRunner */
-    private $genericCommandRunner;
+    protected $filter = '.php';
     /** @var string */
-    private $stopword;
+    protected $blacklistGlue = ',';
     /** @var string */
-    private $filter;
+    protected $whitelistGlue = ',';
+
 
     /**
      * PHPCodeSnifferAdapter constructor.
      *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
+     * @param Environment $environment
+     * @param OutputInterface $output
      * @param GenericCommandRunner $genericCommandRunner
      */
     public function __construct(
@@ -34,52 +30,27 @@ class PHPMessDetectorAdapter implements ToolAdapterInterface
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->environment          = $environment;
-        $this->output               = $output;
+        $this->environment = $environment;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
         $phpMessDetectorConfig = $environment->getPackageDirectory() . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml';
-        $rootDirectory         = $environment->getRootDirectory();
+        $rootDirectory = $environment->getRootDirectory();
 
-        $this->stopword = '.dontMessDetectPHP';
-        $this->filter   = '.php';
-
-        $this->messDetectCommandWhitelist = 'php ' . $rootDirectory . '/vendor/bin/phpmd %1$s' .
+        $this->commands['PHPMDWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd %1$s' .
             ' text ' . $phpMessDetectorConfig . ' --suffixes php';
-        $this->messDetectCommandBlacklist = 'php ' . $rootDirectory . '/vendor/bin/phpmd '
+        $this->commands['PHPMDBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd '
             . $rootDirectory . ' text ' . $phpMessDetectorConfig . ' --suffixes php --exclude %1$s';
     }
 
-    /**
-     * Search for violations by using PHPCS and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
-     */
     public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
     {
-        $prefix = 'PHPMD: ';
+        $toolShortName = 'PHPMD';
+        $prefix = $toolShortName . ' : ';
+        $fullMessage = $prefix . 'Running full check';
+        $diffMessage = $prefix . 'Running check on diff';
 
-        if ($targetBranch === '' || $this->environment->isLocalBranchEqualTo('origin/master')) {
-            $fullMessage = $prefix . 'Running full check';
-            $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
-            $exitCode = $this->genericCommandRunner->runBlacklistCommand(
-                $this->messDetectCommandBlacklist,
-                $this->stopword
-            );
-        } else {
-            $diffMessage = $prefix . 'Running check on diff';
-            $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
-            $exitCode = $this->genericCommandRunner->runWhitelistCommand(
-                $this->messDetectCommandWhitelist,
-                $targetBranch,
-                $this->stopword,
-                $this->filter,
-                $processIsolation
-            );
-        }
+        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
 
         return $exitCode;
     }
