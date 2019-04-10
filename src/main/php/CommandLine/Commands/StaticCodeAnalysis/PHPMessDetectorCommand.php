@@ -32,8 +32,10 @@ class PHPMessDetectorCommand extends Command
     {
         $this->setName('sca:mess-detect');
         $this->setDescription('Run PHP-MD on PHP files.');
-        $this->setHelp('This tool executes PHP-MD on a certain set of PHP files of this Project. It ignores files which are in '
-            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.');
+        $this->setHelp(
+            'This tool executes PHP-MD on a certain set of PHP files of this Project. It ignores files which are in '
+            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.'
+        );
         $this->setDefinition(
             new InputDefinition(
                 [

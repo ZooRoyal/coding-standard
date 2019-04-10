@@ -9,9 +9,9 @@ interface FileFinderInterface
     /**
      * This method searches for files by using Git as indexing service.
      *
-     * @param string $filter
-     * @param string $blacklistToken
-     * @param string $whitelistToken
+     * @param string       $filter
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
      * @param string|false $targetBranch
      *
      * @return GitChangeSet
@@ -21,5 +21,5 @@ interface FileFinderInterface
         string $blacklistToken = '',
         string $whitelistToken = '',
         $targetBranch = ''
-    ): GitChangeSet;
+    ) : GitChangeSet;
 }

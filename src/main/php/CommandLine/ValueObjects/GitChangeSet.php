@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ValueObjects;
 
 /**
@@ -20,7 +21,7 @@ class GitChangeSet
      */
     public function __construct(array $files, $commitHash = '')
     {
-        $this->files      = $files;
+        $this->files = $files;
         $this->commitHash = $commitHash;
     }
 

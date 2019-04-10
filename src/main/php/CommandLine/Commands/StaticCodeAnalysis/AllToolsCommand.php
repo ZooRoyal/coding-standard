@@ -4,9 +4,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
-use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class AllToolsCommand extends AbstractFixableToolCommand
@@ -18,8 +16,10 @@ class AllToolsCommand extends AbstractFixableToolCommand
     {
         $this->setName('sca:all');
         $this->setDescription('Run all static code analysis tools.');
-        $this->setHelp('This tool executes all static code analysis tools on files of this Project. '
-            . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.');
+        $this->setHelp(
+            'This tool executes all static code analysis tools on files of this Project. '
+            . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.'
+        );
         $this->setDefinition($this->buildInputDefinition());
     }
 

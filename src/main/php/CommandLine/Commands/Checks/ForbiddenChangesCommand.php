@@ -25,7 +25,7 @@ class ForbiddenChangesCommand extends Command
      * ForbiddenChangesCommand constructor.
      *
      * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param Environment $environment
+     * @param Environment             $environment
      */
     public function __construct(
         DiffCheckableFileFinder $diffCheckableFileFinder,
@@ -43,10 +43,12 @@ class ForbiddenChangesCommand extends Command
     {
         $this->setName('checks:forbidden-changes');
         $this->setDescription('Checks for unwanted code changes.');
-        $this->setHelp('This tool checks if there where changes made to files. If a parent directory contains a '
+        $this->setHelp(
+            'This tool checks if there where changes made to files. If a parent directory contains a '
             . ' ' . $this->blacklistToken . ' file the tools will report the violation. Changes in subdirectories of a '
             . 'marked directory may be allowed by placing a ' . $this->whitelistToken . ' file in the subdirectory.'
-            . ' Use parameter to determine if this should be handled as Warning or not.');
+            . ' Use parameter to determine if this should be handled as Warning or not.'
+        );
         $this->setDefinition(
             new InputDefinition(
                 [
@@ -92,7 +94,7 @@ class ForbiddenChangesCommand extends Command
      * Communicates the result to the User.
      *
      * @param OutputInterface $output
-     * @param string[] $wrongfullyChangedFiles
+     * @param string[]        $wrongfullyChangedFiles
      */
     private function publishFindingsToUser(OutputInterface $output, array $wrongfullyChangedFiles)
     {

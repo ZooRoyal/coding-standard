@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,11 +29,11 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->output               = $output;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
         $this->stopword = '.dontCopyPasteDetectPHP';
-        $rootDirectory  = $environment->getRootDirectory();
+        $rootDirectory = $environment->getRootDirectory();
 
         $this->copyPasteDetectCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcpd -vvv '
             . '--progress --fuzzy -n --names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s '

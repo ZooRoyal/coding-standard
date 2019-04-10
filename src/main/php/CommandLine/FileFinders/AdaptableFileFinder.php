@@ -24,10 +24,10 @@ class AdaptableFileFinder implements FileFinderInterface
     /**
      * AdaptableFileFinder constructor.
      *
-     * @param GitInputValidator $gitInputValidator
-     * @param AllCheckableFileFinder $allCheckableFileFinder
+     * @param GitInputValidator       $gitInputValidator
+     * @param AllCheckableFileFinder  $allCheckableFileFinder
      * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param Environment $environment
+     * @param Environment             $environment
      */
     public function __construct(
         GitInputValidator $gitInputValidator,
@@ -52,7 +52,7 @@ class AdaptableFileFinder implements FileFinderInterface
         string $blacklistToken = '',
         string $whitelistToken = '',
         $targetBranchInput = ''
-    ): GitChangeSet {
+    ) : GitChangeSet {
         if ($targetBranchInput !== false
             && $targetBranchInput !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranchInput)

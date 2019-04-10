@@ -17,7 +17,7 @@ class GitChangeSetFilter
      * FileFilter constructor.
      *
      * @param BlacklistFactory $blacklistFactory
-     * @param Environment $environment
+     * @param Environment      $environment
      */
     public function __construct(BlacklistFactory $blacklistFactory, Environment $environment)
     {
@@ -29,9 +29,9 @@ class GitChangeSetFilter
      * Filters file paths by filter and global Blacklist.
      *
      * @param GitChangeSet $gitChangeSet
-     * @param string $filter
-     * @param string $blacklistToken
-     * @param string $whitelistToken
+     * @param string       $filter
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
      */
     public function filter(
         GitChangeSet $gitChangeSet,
@@ -59,13 +59,13 @@ class GitChangeSetFilter
     /**
      * Iterates over the files and returns files as configured in list and filter.
      *
-     * @param string $filter
+     * @param string   $filter
      * @param string[] $files
      * @param string[] $list
      *
      * @return array
      */
-    protected function iterateOverFiles(string $filter, array $files, array $list): array
+    protected function iterateOverFiles(string $filter, array $files, array $list) : array
     {
         $result = [];
         foreach ($files as $filePath) {
@@ -102,7 +102,7 @@ class GitChangeSetFilter
      *
      * @throws LogicException
      */
-    private function mergeLists(array $blacklist, array $whitelist): array
+    private function mergeLists(array $blacklist, array $whitelist) : array
     {
         if (count(array_intersect($blacklist, $whitelist)) !== 0) {
             throw new LogicException('Directories can\'t be black- and whitelisted at the same time', 1553780055);

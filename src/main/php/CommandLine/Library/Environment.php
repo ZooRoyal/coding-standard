@@ -84,7 +84,7 @@ class Environment
      *
      * @return string
      */
-    public function guessParentBranchAsCommitHash($branchName = 'HEAD'): string
+    public function guessParentBranchAsCommitHash($branchName = 'HEAD') : string
     {
         $initialNumberOfContainingBranches = $this->getCountOfContainingBranches($branchName);
         while ($this->isParentCommitishACommit($branchName)) {
@@ -107,7 +107,7 @@ class Environment
      *
      * @return int
      */
-    private function getCountOfContainingBranches($targetCommit): int
+    private function getCountOfContainingBranches($targetCommit) : int
     {
         $numberOfContainingBranches = substr_count(
             $this->processRunner->runAsProcess(
@@ -130,7 +130,7 @@ class Environment
      *
      * @return bool
      */
-    private function isParentCommitishACommit($targetCommit): bool
+    private function isParentCommitishACommit($targetCommit) : bool
     {
         $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
 

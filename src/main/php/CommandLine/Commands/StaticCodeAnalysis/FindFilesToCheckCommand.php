@@ -20,7 +20,7 @@ class FindFilesToCheckCommand extends Command
     /**
      * FindFilesToCheckCommand constructor.
      *
-     * @param BlacklistFactory $blacklistFactory
+     * @param BlacklistFactory    $blacklistFactory
      * @param AdaptableFileFinder $adaptableFileFinder
      */
     public function __construct(
@@ -76,7 +76,7 @@ class FindFilesToCheckCommand extends Command
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function buildInputDefinition(): InputDefinition
+    private function buildInputDefinition() : InputDefinition
     {
         return new InputDefinition(
             [

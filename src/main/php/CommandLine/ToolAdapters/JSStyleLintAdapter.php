@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,17 +31,17 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->environment          = $environment;
-        $this->output               = $output;
+        $this->environment = $environment;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
         $stylelintConfig = $environment->getPackageDirectory() . '/src/config/stylelint/.stylelintrc';
-        $rootDirectory   = $environment->getRootDirectory();
+        $rootDirectory = $environment->getRootDirectory();
 
-        $styleLintBlacklistCommand    = $environment->getPackageDirectory()
+        $styleLintBlacklistCommand = $environment->getPackageDirectory()
             . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' %1$s ' . $rootDirectory
             . '/**' . $this->filter;
-        $styleLintWhitelistCommand    = $environment->getPackageDirectory()
+        $styleLintWhitelistCommand = $environment->getPackageDirectory()
             . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' %1$s';
         $styleLintFixBlacklistCommand = $environment->getPackageDirectory()
             . '/node_modules/stylelint/bin/stylelint.js --config='
@@ -49,9 +50,9 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
             . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' --fix %1$s';
 
         $this->commands = [
-            'STYLELINTWL'    => $styleLintWhitelistCommand,
+            'STYLELINTWL' => $styleLintWhitelistCommand,
             'STYLELINTFIXWL' => $styleLintFixWhitelistCommand,
-            'STYLELINTBL'    => $styleLintBlacklistCommand,
+            'STYLELINTBL' => $styleLintBlacklistCommand,
             'STYLELINTFIXBL' => $styleLintFixBlacklistCommand,
         ];
     }
@@ -61,8 +62,8 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
      */
     public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
-        $tool        = 'STYLELINT';
-        $prefix      = $tool . ' : ';
+        $tool = 'STYLELINT';
+        $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
@@ -76,8 +77,8 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
      */
     public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
-        $tool        = 'STYLELINTFIX';
-        $prefix      = $tool . ' : ';
+        $tool = 'STYLELINTFIX';
+        $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Fix all Files';
         $diffMessage = $prefix . 'Fix Files in diff';
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 interface FixerSupportInterface
@@ -7,7 +8,7 @@ interface FixerSupportInterface
      * Tries to fix violations.
      *
      * @param string|null $targetBranch
-     * @param bool   $processIsolation
+     * @param bool        $processIsolation
      *
      * @return int|null
      */

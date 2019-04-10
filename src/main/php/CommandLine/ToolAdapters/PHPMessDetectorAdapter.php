@@ -21,8 +21,8 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * PHPCodeSnifferAdapter constructor.
      *
-     * @param Environment $environment
-     * @param OutputInterface $output
+     * @param Environment          $environment
+     * @param OutputInterface      $output
      * @param GenericCommandRunner $genericCommandRunner
      */
     public function __construct(

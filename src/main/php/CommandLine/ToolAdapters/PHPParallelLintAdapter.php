@@ -22,8 +22,8 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * PHPParallelLintAdapter constructor.
      *
-     * @param Environment $environment
-     * @param OutputInterface $output
+     * @param Environment          $environment
+     * @param OutputInterface      $output
      * @param GenericCommandRunner $genericCommandRunner
      */
     public function __construct(
@@ -39,7 +39,7 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
 
         $this->commands['PHPPLWL'] = 'php ' . $rootDirectory
             . '/vendor/bin/parallel-lint -j 2 %1$s';
-        $this->commands['PHPPLBL'] =  'php ' . $rootDirectory
+        $this->commands['PHPPLBL'] = 'php ' . $rootDirectory
             . '/vendor/bin/parallel-lint -j 2 %1$s ./';
     }
 

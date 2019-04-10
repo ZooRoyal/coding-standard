@@ -24,8 +24,10 @@ class PHPCodeSnifferCommand extends AbstractFixableToolCommand
     {
         $this->setName('sca:sniff');
         $this->setDescription('Run PHP-CS on PHP files.');
-        $this->setHelp('This tool executes PHP-CS on a certain set of PHP files of this Project. '
-            . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.');
+        $this->setHelp(
+            'This tool executes PHP-CS on a certain set of PHP files of this Project. '
+            . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.'
+        );
         $this->setDefinition($this->buildInputDefinition());
     }
 }
