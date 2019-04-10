@@ -55,8 +55,8 @@ class JSESLintCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run ESLint on JS files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes ESLINT on a certain set of JS files of this Project.'
-                . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.');
+            ->with('This tool executes ESLINT on a certain set of JS files of this project.'
+                . ' Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(

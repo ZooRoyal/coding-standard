@@ -26,7 +26,7 @@ class JSESLintCommand extends AbstractFixableToolCommand
         $this->setDescription('Run ESLint on JS files.');
         $this->setHelp(
             'This tool executes ESLINT on a certain set of JS files of this project.'
-            . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.'
+            . ' Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.'
         );
         $this->setDefinition($this->buildInputDefinition());
     }
