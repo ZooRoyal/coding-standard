@@ -57,14 +57,9 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     }
 
     /**
-     * Search for violations by using STYLELINT and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
         $tool        = 'STYLELINT';
         $prefix      = $tool . ' : ';
@@ -77,14 +72,9 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     }
 
     /**
-     * Tries to fix violations by calling STYLELINT in fix mode.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
         $tool        = 'STYLELINTFIX';
         $prefix      = $tool . ' : ';

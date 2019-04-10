@@ -19,8 +19,8 @@ class AllCheckableFileFinder implements FileFinderInterface
     /**
      * AllCheckableFileFinder constructor.
      *
-     * @param ProcessRunner $processRunner
-     * @param GitChangeSetFilter $gitChangeSetFilter
+     * @param ProcessRunner       $processRunner
+     * @param GitChangeSetFilter  $gitChangeSetFilter
      * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
@@ -36,15 +36,19 @@ class AllCheckableFileFinder implements FileFinderInterface
     /**
      * This function finds all files to check.
      *
-     * @param string $filter
-     * @param string $blacklistToken
-     * @param string $whitelistToken
-     * @param string $targetBranch
+     * @param string       $filter
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
+     * @param string|false $targetBranch
      *
      * @return GitChangeSet
      */
-    public function findFiles($filter = '', $blacklistToken = '', $whitelistToken = '', $targetBranch = ''): GitChangeSet
-    {
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranch = ''
+    ) : GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
         $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');
 

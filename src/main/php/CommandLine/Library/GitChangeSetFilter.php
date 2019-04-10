@@ -33,8 +33,12 @@ class GitChangeSetFilter
      * @param string $blacklistToken
      * @param string $whitelistToken
      */
-    public function filter(GitChangeSet $gitChangeSet, $filter = '', $blacklistToken = '', $whitelistToken = '')
-    {
+    public function filter(
+        GitChangeSet $gitChangeSet,
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = ''
+    ) {
         $whitelist = [];
         $deDuped = true;
 
@@ -61,7 +65,7 @@ class GitChangeSetFilter
      *
      * @return array
      */
-    protected function iterateOverFiles($filter, array $files, array $list): array
+    protected function iterateOverFiles(string $filter, array $files, array $list): array
     {
         $result = [];
         foreach ($files as $filePath) {

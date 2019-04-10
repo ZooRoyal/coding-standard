@@ -140,10 +140,10 @@ class ForbiddenChangesCommandTest extends TestCase
      * @param string|null $mockedTargetGuess
      */
     public function executeInteractsWithWarningFlag(
-        $warning,
-        $expectedResultMatcher,
-        $messageMatcher,
-        $expectedWrongfullyChangesFiles,
+        bool $warning,
+        Matcher $expectedResultMatcher,
+        Matcher $messageMatcher,
+        array $expectedWrongfullyChangesFiles,
         $mockedTargetBranch,
         $mockedTargetGuess
     ) {

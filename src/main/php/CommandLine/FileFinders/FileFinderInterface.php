@@ -12,9 +12,14 @@ interface FileFinderInterface
      * @param string $filter
      * @param string $blacklistToken
      * @param string $whitelistToken
-     * @param string $targetBranch
+     * @param string|false $targetBranch
      *
      * @return GitChangeSet
      */
-    public function findFiles($filter = '', $blacklistToken = '', $whitelistToken = '', $targetBranch = ''): GitChangeSet;
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranch = ''
+    ): GitChangeSet;
 }

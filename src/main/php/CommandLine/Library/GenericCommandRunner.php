@@ -1,10 +1,10 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 
 class GenericCommandRunner
 {
@@ -33,10 +33,10 @@ class GenericCommandRunner
         AdaptableFileFinder $adaptableFileFinder,
         BlacklistFactory $blacklistFactory
     ) {
-        $this->output                  = $output;
-        $this->processRunner           = $processRunner;
+        $this->output = $output;
+        $this->processRunner = $processRunner;
         $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->blacklistFactory        = $blacklistFactory;
+        $this->blacklistFactory = $blacklistFactory;
     }
 
 
@@ -47,20 +47,20 @@ class GenericCommandRunner
      * @param string $targetBranch
      * @param string $blacklistToken
      * @param string $filter
-     * @param bool   $processIsolation
+     * @param bool $processIsolation
      * @param string $glue
      *
      * @return int
      */
     public function runWhitelistCommand(
-        $template,
-        $targetBranch,
-        $blacklistToken,
-        $filter,
-        $processIsolation = false,
-        $glue = ','
+        string $template,
+        string $targetBranch,
+        string $blacklistToken,
+        string $filter,
+        bool $processIsolation = false,
+        string $glue = ','
     ): int {
-        $exitCode           = 0;
+        $exitCode = 0;
         $whitelistArguments = $this->buildWhitelistArguments(
             $targetBranch,
             $blacklistToken,
@@ -85,12 +85,17 @@ class GenericCommandRunner
      * @param string $blacklistToken
      * @param string $prefix
      * @param string $glue
-     * @param bool   $escape if true the blacklist entries will be escaped for regexp
+     * @param bool $escape if true the blacklist entries will be escaped for regexp
      *
      * @return int|null
      */
-    public function runBlacklistCommand($template, $blacklistToken, $prefix = '', $glue = ',', $escape = false)
-    {
+    public function runBlacklistCommand(
+        string $template,
+        string $blacklistToken,
+        string $prefix = '',
+        string $glue = ',',
+        bool $escape = false
+    ) {
         $blackList = $this->blacklistFactory->build($blacklistToken);
         if ($escape) {
             $blackList = array_map(
@@ -113,17 +118,17 @@ class GenericCommandRunner
      * @param string $targetBranch
      * @param string $blacklistToken
      * @param string $filter
-     * @param bool   $processIsolation
+     * @param bool $processIsolation
      * @param string $glue
      *
      * @return string[]
      */
     private function buildWhitelistArguments(
-        $targetBranch,
-        $blacklistToken,
-        $filter,
-        $processIsolation,
-        $glue = ','
+        string $targetBranch,
+        string $blacklistToken,
+        string $filter,
+        bool $processIsolation,
+        string $glue = ','
     ): array {
         $gitChangeSet = $this->adaptableFileFinder->findFiles($filter, $blacklistToken, '', $targetBranch);
         $changedFiles = $gitChangeSet->getFiles();
@@ -156,7 +161,7 @@ class GenericCommandRunner
     private function runAndWriteToOutput($commandWithParameters)
     {
         $exitCode = 0;
-        $process  = $this->processRunner->runAsProcessReturningProcessObject(
+        $process = $this->processRunner->runAsProcessReturningProcessObject(
             $commandWithParameters
         );
         if ($process->getExitCode() !== 0) {

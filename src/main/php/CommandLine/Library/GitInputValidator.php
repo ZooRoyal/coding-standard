@@ -19,7 +19,7 @@ class GitInputValidator
         $this->processRunner = $processRunner;
     }
 
-    public function isCommitishValid(string $commitish)
+    public function isCommitishValid(string $commitish) : bool
     {
         try {
             $this->processRunner->runAsProcess('git', 'rev-parse', $commitish);

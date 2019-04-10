@@ -41,8 +41,13 @@ abstract class AbstractBlackAndWhitelistAdapter
      *
      * @return int|null
      */
-    protected function runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage)
-    {
+    protected function runTool(
+        string $targetBranch,
+        bool $processIsolation,
+        string $fullMessage,
+        string $tool,
+        string $diffMessage
+    ) {
         if ($targetBranch === false || $this->environment->isLocalBranchEqualTo($targetBranch)) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $template = $this->commands[$tool . 'BL'];
@@ -69,37 +74,37 @@ abstract class AbstractBlackAndWhitelistAdapter
         return $exitCode;
     }
 
-    public function getBlacklistToken(): string
+    public function getBlacklistToken() : string
     {
         return $this->blacklistToken;
     }
 
-    public function getFilter(): string
+    public function getFilter() : string
     {
         return $this->filter;
     }
 
-    public function getBlacklistPrefix(): string
+    public function getBlacklistPrefix() : string
     {
         return $this->blacklistPrefix;
     }
 
-    public function getBlacklistGlue(): string
+    public function getBlacklistGlue() : string
     {
         return $this->blacklistGlue;
     }
 
-    public function getWhitelistGlue(): string
+    public function getWhitelistGlue() : string
     {
         return $this->whitelistGlue;
     }
 
-    public function getCommands(): array
+    public function getCommands() : array
     {
         return $this->commands;
     }
 
-    public function isEscape(): bool
+    public function isEscape() : bool
     {
         return $this->escape;
     }

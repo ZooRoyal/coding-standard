@@ -20,8 +20,8 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * CheckableFileFinder constructor.
      *
-     * @param ProcessRunner $processRunner
-     * @param GitChangeSetFilter $fileFilter
+     * @param ProcessRunner       $processRunner
+     * @param GitChangeSetFilter  $fileFilter
      * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
@@ -37,17 +37,21 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string $filter
-     * @param string $blacklistToken
-     * @param string $whitelistToken
-     * @param string $targetBranch
+     * @param string       $filter
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
+     * @param string|false $targetBranch
      *
      * @return GitChangeSet
      *
      * @throws InvalidArgumentException
      */
-    public function findFiles($filter = '', $blacklistToken = '', $whitelistToken = '', $targetBranch = ''): GitChangeSet
-    {
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranch = ''
+    ) : GitChangeSet {
         if (empty($targetBranch)) {
             throw new InvalidArgumentException(
                 'Finding a diff makes no sense without a target branch.',
@@ -64,11 +68,11 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This method finds all files in diff to target branch.
      *
-     * @param $targetBranch
+     * @param string $targetBranch
      *
      * @return GitChangeSet
      */
-    private function findFilesInDiffToTarget($targetBranch): GitChangeSet
+    private function findFilesInDiffToTarget(string $targetBranch) : GitChangeSet
     {
         $mergeBase = $this->processRunner->runAsProcess('git', 'merge-base', 'HEAD', $targetBranch);
 

@@ -54,7 +54,7 @@ class ForbiddenChangesCommand extends Command
                         'warn',
                         'w',
                         InputOption::VALUE_NONE,
-                        'Exists with exit code 0 event if violations are found'
+                        'Exists with exit code 0 even if violations are found'
                     ),
                     new InputOption(
                         'target',

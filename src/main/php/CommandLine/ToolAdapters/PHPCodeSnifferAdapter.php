@@ -24,8 +24,8 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * PHPCodeSnifferAdapter constructor.
      *
-     * @param Environment $environment
-     * @param OutputInterface $output
+     * @param Environment          $environment
+     * @param OutputInterface      $output
      * @param GenericCommandRunner $genericCommandRunner
      */
     public function __construct(
@@ -58,14 +58,9 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     }
 
     /**
-     * Search for violations by using PHPCS and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
         $tool = 'PHPCS';
         $prefix = $tool . ' : ';
@@ -78,14 +73,9 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     }
 
     /**
-     * Tries to fix violations by calling PHPCBF.
-     *
-     * @param string $targetBranch
-     * @param bool $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
         $tool = 'PHPCBF';
         $prefix = $tool . ' : ';

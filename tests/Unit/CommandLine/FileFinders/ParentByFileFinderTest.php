@@ -56,11 +56,11 @@ class ParentByFileFinderTest extends TestCase
     }
 
     /**
-     * DataProvider for findParentByFileDoesNotFindsFile.
+     * DataProvider for findParentByFileDoesNotFindFile.
      *
      * @return string[]
      */
-    public function findParentByFileDoesNotFindsFileDataProvider(): array
+    public function findParentByFileDoesNotFindFileDataProvider(): array
     {
         return [
             'Leading /' => ['/my/directory'],
@@ -72,11 +72,11 @@ class ParentByFileFinderTest extends TestCase
 
     /**
      * @test
-     * @dataProvider findParentByFileDoesNotFindsFileDataProvider
+     * @dataProvider findParentByFileDoesNotFindFileDataProvider
      *
      * @param string $mockedDirectory
      */
-    public function findParentByFileDoesNotFindsFile(string $mockedDirectory)
+    public function findParentByFileDoesNotFindFile(string $mockedDirectory)
     {
         $mockedFileName = 'myFileName';
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -30,16 +31,16 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->environment          = $environment;
-        $this->output               = $output;
+        $this->environment = $environment;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
-        $esLintConfig  = $environment->getPackageDirectory() . '/src/config/eslint/.eslintrc.js';
+        $esLintConfig = $environment->getPackageDirectory() . '/src/config/eslint/.eslintrc.js';
         $rootDirectory = $environment->getRootDirectory();
 
-        $esLintBlacklistCommand    = $environment->getPackageDirectory()
+        $esLintBlacklistCommand = $environment->getPackageDirectory()
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s ' . $rootDirectory;
-        $esLintWhitelistCommand    = $environment->getPackageDirectory()
+        $esLintWhitelistCommand = $environment->getPackageDirectory()
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s';
         $esLintFixBlacklistCommand = $environment->getPackageDirectory()
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s ' . $rootDirectory;
@@ -47,25 +48,20 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
             . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s';
 
         $this->commands = [
-            'ESLINTBL'    => $esLintBlacklistCommand,
-            'ESLINTWL'    => $esLintWhitelistCommand,
+            'ESLINTBL' => $esLintBlacklistCommand,
+            'ESLINTWL' => $esLintWhitelistCommand,
             'ESLINTFIXBL' => $esLintFixBlacklistCommand,
             'ESLINTFIXWL' => $esLintFixWhitelistCommand,
         ];
     }
 
     /**
-     * Search for violations by using ESLINT and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
-        $tool        = 'ESLINT';
-        $prefix      = $tool . ' : ';
+        $tool = 'ESLINT';
+        $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
@@ -75,17 +71,12 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     }
 
     /**
-     * Tries to fix violations by calling ESLINT in fix mode.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
-        $tool        = 'ESLINTFIX';
-        $prefix      = $tool . ' : ';
+        $tool = 'ESLINTFIX';
+        $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Fix all Files';
         $diffMessage = $prefix . 'Fix Files in diff';
 

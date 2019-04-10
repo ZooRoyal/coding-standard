@@ -43,7 +43,10 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
             . $rootDirectory . ' text ' . $phpMessDetectorConfig . ' --suffixes php --exclude %1$s';
     }
 
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    /**
+     * {@inheritDoc}
+     */
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
         $toolShortName = 'PHPMD';
         $prefix = $toolShortName . ' : ';

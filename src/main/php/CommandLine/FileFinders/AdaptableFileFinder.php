@@ -47,13 +47,17 @@ class AdaptableFileFinder implements FileFinderInterface
      *
      * @throws InvalidArgumentException
      */
-    public function findFiles($filter = '', $blacklistToken = '', $whitelistToken = '', $targetBranchInput = ''): GitChangeSet
-    {
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranchInput = ''
+    ): GitChangeSet {
         if ($targetBranchInput !== false
             && $targetBranchInput !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranchInput)
         ) {
-            throw new InvalidArgumentException('Target '.$targetBranchInput.' is no valid commit-ish.', 1553766210);
+            throw new InvalidArgumentException('Target ' . $targetBranchInput . ' is no valid commit-ish.', 1553766210);
         }
 
         $finder = $targetBranchInput === false || $this->environment->isLocalBranchEqualTo($targetBranchInput)

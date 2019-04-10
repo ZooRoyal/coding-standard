@@ -40,14 +40,9 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
     }
 
     /**
-     * Search for violations by using PHPCBD and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
         $fullMessage = 'PHPCPD : Running full check';
 
