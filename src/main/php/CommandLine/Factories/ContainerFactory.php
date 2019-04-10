@@ -22,6 +22,7 @@ class ContainerFactory
      * Returns the single application container instance to use.
      *
      * @return Container
+     *
      * @throws Exception
      */
     public static function getContainerInstance() : Container

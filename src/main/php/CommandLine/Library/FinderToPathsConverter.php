@@ -10,7 +10,7 @@ class FinderToPathsConverter
     /**
      * Converts Finder objects to Arrays of their relative paths.
      *
-     * @param $finder
+     * @param Finder $finder
      *
      * @return string[]
      */
