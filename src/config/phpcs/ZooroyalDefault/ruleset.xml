@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ruleset name="ZooRoyal Default Coding Style">
     <description>
-        This ruleset is used in the CI-Build of this Project. Not compliant code will result in a failing build.
+        This ruleset is used in the CI-Build of this project. Not compliant code will result in a failing build.
     </description>
 
     <!-- Referenced Rulesets -->

@@ -55,7 +55,7 @@ class JSStyleLintCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run StyleLint on Less files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes STYLELINT on a certain set of Less files of this Project.'
+            ->with('This tool executes STYLELINT on a certain set of Less files of this project.'
                 . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(

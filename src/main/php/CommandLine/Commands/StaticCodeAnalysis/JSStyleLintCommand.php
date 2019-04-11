@@ -25,7 +25,7 @@ class JSStyleLintCommand extends AbstractFixableToolCommand
         $this->setName('sca:stylelint');
         $this->setDescription('Run StyleLint on Less files.');
         $this->setHelp(
-            'This tool executes STYLELINT on a certain set of Less files of this Project.'
+            'This tool executes STYLELINT on a certain set of Less files of this project.'
             . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.'
         );
         $this->setDefinition($this->buildInputDefinition());

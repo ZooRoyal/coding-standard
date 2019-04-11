@@ -55,7 +55,7 @@ class PHPMessDetectorCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-MD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-MD on a certain set of PHP files of this Project. It ignores files ' .
+            ->with('This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files ' .
                 'which are in directories with a .dontMessDetectPHP file. Subdirectories are ignored too.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(

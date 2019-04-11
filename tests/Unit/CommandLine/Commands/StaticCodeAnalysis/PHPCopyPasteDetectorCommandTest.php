@@ -51,7 +51,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CPD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-CPD on a certain set of PHP files of this Project. It ignores '
+            ->with('This tool executes PHP-CPD on a certain set of PHP files of this project. It ignores '
                 . 'files which are in directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too.');
 
         $localSubject->configure();

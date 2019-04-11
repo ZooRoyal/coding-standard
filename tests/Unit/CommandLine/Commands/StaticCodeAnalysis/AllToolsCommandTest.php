@@ -52,7 +52,7 @@ class AllToolsCommandTest extends TestCase
             ->with('Run all static code analysis tools.');
         $localSubject->shouldReceive('setHelp')->once()
             ->with(
-                'This tool executes all static code analysis tools on files of this Project. '
+                'This tool executes all static code analysis tools on files of this project. '
                 . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.'
             );
         $localSubject->shouldReceive('setDefinition')->once()

@@ -55,7 +55,7 @@ class PHPCodeSnifferCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CS on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-CS on a certain set of PHP files of this Project. '
+            ->with('This tool executes PHP-CS on a certain set of PHP files of this project. '
                 . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(

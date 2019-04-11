@@ -14,7 +14,7 @@ class ProcessRunner
      *
      * @return string
      */
-    public function runAsProcess($command, ...$arguments) : string
+    public function runAsProcess(string $command, ...$arguments) : string
     {
         $commandParts = implode(' ', array_merge([$command], $arguments));
         $process = new Process($commandParts);

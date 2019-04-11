@@ -39,7 +39,7 @@ class BlacklistFactory
      *
      * @return string[]
      */
-    public function build($token = '', bool $deDuped = true) : array
+    public function build(string $token = '', bool $deDuped = true) : array
     {
         $rawExcludePathsByFileByToken = [];
 

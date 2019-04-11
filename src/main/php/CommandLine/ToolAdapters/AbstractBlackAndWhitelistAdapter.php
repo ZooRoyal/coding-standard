@@ -33,16 +33,16 @@ abstract class AbstractBlackAndWhitelistAdapter
     /**
      * Runs ESLint in normal or fix mode according to settings.
      *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     * @param string $fullMessage
-     * @param string $tool
-     * @param string $diffMessage
+     * @param string|false|null $targetBranch
+     * @param bool              $processIsolation
+     * @param string            $fullMessage
+     * @param string            $tool
+     * @param string            $diffMessage
      *
      * @return int|null
      */
     protected function runTool(
-        string $targetBranch,
+        $targetBranch,
         bool $processIsolation,
         string $fullMessage,
         string $tool,

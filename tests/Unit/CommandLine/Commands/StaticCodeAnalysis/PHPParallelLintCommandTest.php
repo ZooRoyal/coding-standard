@@ -51,7 +51,7 @@ class PHPParallelLintCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run Parallel-Lint on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes Parallel-Lint on a certain set of PHP files of this Project. It '
+            ->with('This tool executes Parallel-Lint on a certain set of PHP files of this project. It '
                 . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.');
         $localSubject->configure();
     }

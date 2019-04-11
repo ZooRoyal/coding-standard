@@ -57,7 +57,7 @@ class GenericCommandRunnerTest extends TestCase
      *
      * @param int $mockedExitCode
      */
-    public function runWhitelistCommandWithAllParameters($mockedExitCode)
+    public function runWhitelistCommandWithAllParameters(int $mockedExitCode)
     {
         $mockedTemplate = 'My Template %1$s';
         $mockedTargetBranch = 'MyTarget';

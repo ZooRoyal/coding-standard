@@ -17,7 +17,7 @@ class AllToolsCommand extends AbstractFixableToolCommand
         $this->setName('sca:all');
         $this->setDescription('Run all static code analysis tools.');
         $this->setHelp(
-            'This tool executes all static code analysis tools on files of this Project. '
+            'This tool executes all static code analysis tools on files of this project. '
             . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.'
         );
         $this->setDefinition($this->buildInputDefinition());

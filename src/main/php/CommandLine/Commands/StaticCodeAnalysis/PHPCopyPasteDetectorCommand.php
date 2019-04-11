@@ -31,7 +31,7 @@ class PHPCopyPasteDetectorCommand extends Command
         $this->setName('sca:copy-paste-detect');
         $this->setDescription('Run PHP-CPD on PHP files.');
         $this->setHelp(
-            'This tool executes PHP-CPD on a certain set of PHP files of this Project. It ignores '
+            'This tool executes PHP-CPD on a certain set of PHP files of this project. It ignores '
             . 'files which are in directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too.'
         );
     }

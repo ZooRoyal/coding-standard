@@ -5,7 +5,6 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
@@ -56,7 +55,7 @@ class AdaptableFileFinderTest extends TestCase
      *
      * @return array
      */
-    public function findFilesCallsAllCheckableFileFinderDataProvider()
+    public function findFilesCallsAllCheckableFileFinderDataProvider() : array
     {
         return [
             'targetBranch' => ['targetBranchInput' => false, 'isLocalBranch' => false, 'finder' => AllCheckableFileFinder::class],
@@ -70,9 +69,16 @@ class AdaptableFileFinderTest extends TestCase
      * @test
      *
      * @dataProvider findFilesCallsAllCheckableFileFinderDataProvider
+     *
+     * @param bool   $targetBranchInput
+     * @param bool   $isLocalBranch
+     * @param string $finder
      */
-    public function findFilesCallsAllCheckableFileFinder($targetBranchInput, $isLocalBranch, $finder)
-    {
+    public function findFilesCallsAllCheckableFileFinder(
+        bool $targetBranchInput,
+        bool $isLocalBranch,
+        string $finder
+    ) {
         $mockedFilter = 'asdqwe';
         $mockedBlacklistToken = 'qwegfasdfqwe';
         $mockedWhitelistToken = '12123sdfasdf123123';

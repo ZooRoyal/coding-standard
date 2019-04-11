@@ -100,20 +100,20 @@ class JSESLintAdapterTest extends TestCase
      *
      * @return array
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider() : array
     {
         return [
             'find Violations' => [
                 'tool' => 'ESLINT',
                 'fullMessage' => 'ESLINT : Running full check',
                 'diffMessage' => 'ESLINT : Running check on diff',
-                'method' => 'writeViolationsToOutput'
+                'method' => 'writeViolationsToOutput',
             ],
             'fix Violations' => [
                 'tool' => 'ESLINTFIX',
                 'fullMessage' => 'ESLINTFIX : Fix all Files',
                 'diffMessage' => 'ESLINTFIX : Fix Files in diff',
-                'method' => 'fixViolations'
+                'method' => 'fixViolations',
             ],
         ];
     }
@@ -122,13 +122,17 @@ class JSESLintAdapterTest extends TestCase
      * @test
      * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
-     * @param $tool
-     * @param $fullMessage
-     * @param $diffMessage
-     * @param $method
+     * @param string $tool
+     * @param string $fullMessage
+     * @param string $diffMessage
+     * @param string $method
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResult($tool, $fullMessage, $diffMessage, $method)
-    {
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
+        string $tool,
+        string $fullMessage,
+        string $diffMessage,
+        string $method
+    ) {
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;

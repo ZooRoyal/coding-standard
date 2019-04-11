@@ -54,4 +54,14 @@ class GitInputValidatorTest extends TestCase
 
         self::assertFalse($result);
     }
+
+    /**
+     * @test
+     */
+    public function isCommitishValidWithNullAndFails()
+    {
+        $result = $this->subject->isCommitishValid(null);
+
+        self::assertFalse($result);
+    }
 }

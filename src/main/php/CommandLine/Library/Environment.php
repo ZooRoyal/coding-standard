@@ -2,8 +2,6 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
-use Symfony\Component\Process\Exception\ProcessFailedException;
-
 /**
  * This Class supplies information about the environment the script is running in.
  */
@@ -26,13 +24,16 @@ class Environment
     ];
     /** @var ProcessRunner */
     private $processRunner;
+    /** @var GitInputValidator */
+    private $gitInputValidator;
 
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(ProcessRunner $processRunner, GitInputValidator $gitInputValidator)
     {
         $this->processRunner = $processRunner;
+        $this->gitInputValidator = $gitInputValidator;
     }
 
-    public function getRootDirectory()
+    public function getRootDirectory() : string
     {
         if ($this->rootDirectory === null) {
             $this->rootDirectory = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
@@ -41,7 +42,7 @@ class Environment
         return $this->rootDirectory;
     }
 
-    public function getPackageDirectory()
+    public function getPackageDirectory() : string
     {
         return realpath(
             __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
@@ -50,7 +51,7 @@ class Environment
         );
     }
 
-    public function getBlacklistedDirectories()
+    public function getBlacklistedDirectories() : array
     {
         return $this->blacklistedDirectories;
     }
@@ -58,20 +59,20 @@ class Environment
     /**
      * Compare if the HEAD of $targetBrnach equals the HEAD of the local branch.
      *
-     * @param string $targetBranch
+     * @param string|null $targetBranch
      *
      * @return bool
      */
-    public function isLocalBranchEqualTo($targetBranch)
+    public function isLocalBranchEqualTo($targetBranch) : bool
     {
+        if (!$this->gitInputValidator->isCommitishValid($targetBranch)) {
+            return false;
+        }
         if ($this->localHeadHash === null) {
             $this->localHeadHash = $this->commitishToHash('HEAD');
         }
-        try {
-            $targetCommitHash = $this->commitishToHash($targetBranch);
-        } catch (ProcessFailedException $exception) {
-            return false;
-        }
+
+        $targetCommitHash = $this->commitishToHash($targetBranch);
 
         return $targetCommitHash === $this->localHeadHash;
     }
@@ -84,7 +85,7 @@ class Environment
      *
      * @return string
      */
-    public function guessParentBranchAsCommitHash($branchName = 'HEAD') : string
+    public function guessParentBranchAsCommitHash(string $branchName = 'HEAD') : string
     {
         $initialNumberOfContainingBranches = $this->getCountOfContainingBranches($branchName);
         while ($this->isParentCommitishACommit($branchName)) {
@@ -107,7 +108,7 @@ class Environment
      *
      * @return int
      */
-    private function getCountOfContainingBranches($targetCommit) : int
+    private function getCountOfContainingBranches(string $targetCommit) : int
     {
         $numberOfContainingBranches = substr_count(
             $this->processRunner->runAsProcess(
@@ -130,7 +131,7 @@ class Environment
      *
      * @return bool
      */
-    private function isParentCommitishACommit($targetCommit) : bool
+    private function isParentCommitishACommit(string $targetCommit) : bool
     {
         $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
 
@@ -144,7 +145,7 @@ class Environment
      *
      * @return string
      */
-    private function commitishToHash($branchName)
+    private function commitishToHash(string $branchName) : string
     {
         return $this->processRunner->runAsProcess('git', 'rev-list', '-n 1', $branchName);
     }

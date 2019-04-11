@@ -51,22 +51,22 @@ class AdaptableFileFinder implements FileFinderInterface
         string $filter = '',
         string $blacklistToken = '',
         string $whitelistToken = '',
-        $targetBranchInput = ''
+        $targetBranch = ''
     ) : GitChangeSet {
-        if ($targetBranchInput !== false
-            && $targetBranchInput !== null
-            && !$this->gitInputValidator->isCommitishValid($targetBranchInput)
+        if ($targetBranch !== false
+            && $targetBranch !== null
+            && !$this->gitInputValidator->isCommitishValid($targetBranch)
         ) {
-            throw new InvalidArgumentException('Target ' . $targetBranchInput . ' is no valid commit-ish.', 1553766210);
+            throw new InvalidArgumentException('Target ' . $targetBranch . ' is no valid commit-ish.', 1553766210);
         }
 
-        $finder = $targetBranchInput === false || $this->environment->isLocalBranchEqualTo($targetBranchInput)
+        $finder = $targetBranch === false || $this->environment->isLocalBranchEqualTo($targetBranch)
             ? $this->allCheckableFileFinder
             : $this->diffCheckableFileFinder;
 
-        $targetBranch = $targetBranchInput ?? $this->environment->guessParentBranchAsCommitHash();
+        $actualTargetBranch = $targetBranch ?? $this->environment->guessParentBranchAsCommitHash();
 
-        $result = $finder->findFiles($filter, $blacklistToken, $whitelistToken, $targetBranch);
+        $result = $finder->findFiles($filter, $blacklistToken, $whitelistToken, $actualTargetBranch);
 
         return $result;
     }

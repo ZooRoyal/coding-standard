@@ -43,18 +43,18 @@ class GenericCommandRunner
     /**
      * Builds a CLI-Command by inserting a whitelist of file paths in the command template and executes it.
      *
-     * @param string $template
-     * @param string $targetBranch
-     * @param string $blacklistToken
-     * @param string $filter
-     * @param bool   $processIsolation
-     * @param string $glue
+     * @param string      $template
+     * @param string|null $targetBranch
+     * @param string      $blacklistToken
+     * @param string      $filter
+     * @param bool        $processIsolation
+     * @param string      $glue
      *
      * @return int
      */
     public function runWhitelistCommand(
         string $template,
-        string $targetBranch,
+        $targetBranch,
         string $blacklistToken,
         string $filter,
         bool $processIsolation = false,
@@ -115,16 +115,16 @@ class GenericCommandRunner
     /**
      * Builds a list of arguments for insertion into the template.
      *
-     * @param string $targetBranch
-     * @param string $blacklistToken
-     * @param string $filter
-     * @param bool   $processIsolation
-     * @param string $glue
+     * @param string|null $targetBranch
+     * @param string      $blacklistToken
+     * @param string      $filter
+     * @param bool        $processIsolation
+     * @param string      $glue
      *
      * @return string[]
      */
     private function buildWhitelistArguments(
-        string $targetBranch,
+        $targetBranch,
         string $blacklistToken,
         string $filter,
         bool $processIsolation,
