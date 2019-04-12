@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -10,12 +10,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPCodeSnifferCommand;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSESLintCommand;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSESLintAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPCodeSnifferCommandTest extends TestCase
+class JSESLintCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -29,7 +29,7 @@ class PHPCodeSnifferCommandTest extends TestCase
     protected function setUp()
     {
         $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(PHPCodeSnifferCommand::class);
+        $buildFragments          = $subjectFactory->buildSubject(JSESLintCommand::class);
         $this->subject           = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
@@ -49,14 +49,14 @@ class PHPCodeSnifferCommandTest extends TestCase
     public function configure()
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
-        $localSubject = Mockery::mock(PHPCodeSnifferCommand::class, $this->subjectParameters)->makePartial();
+        $localSubject = Mockery::mock(JSESLintCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('sca:sniff');
+        $localSubject->shouldReceive('setName')->once()->with('sca:eslint');
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Run PHP-CS on PHP files.');
+            ->with('Run ESLint on JS files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-CS on a certain set of PHP files of this Project. '
-                . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.');
+            ->with('This tool executes ESLINT on a certain set of JS files of this project.'
+                . ' Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
@@ -67,7 +67,7 @@ class PHPCodeSnifferCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(3),
+                                H::arrayWithSize(4),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )
@@ -94,9 +94,9 @@ class PHPCodeSnifferCommandTest extends TestCase
 
         $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
 
-        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->once()
+        $this->subjectParameters[JSESLintAdapter::class]->shouldReceive('fixViolations')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
-        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+        $this->subjectParameters[JSESLintAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
@@ -116,8 +116,8 @@ class PHPCodeSnifferCommandTest extends TestCase
 
         $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
 
-        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->never();
-        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+        $this->subjectParameters[JSESLintAdapter::class]->shouldReceive('fixViolations')->never();
+        $this->subjectParameters[JSESLintAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
@@ -130,12 +130,13 @@ class PHPCodeSnifferCommandTest extends TestCase
      *
      * @param $mockedTargetBranch
      * @param $mockedProcessIsolation
-     * @param $mockedFixMode
      */
     private function prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
+        $this->mockedInputInterface->shouldReceive('getOption')->once()
+            ->with('auto-target')->andReturn(false);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('process-isolation')->andReturn($mockedProcessIsolation);
         $this->mockedInputInterface->shouldReceive('getOption')->once()

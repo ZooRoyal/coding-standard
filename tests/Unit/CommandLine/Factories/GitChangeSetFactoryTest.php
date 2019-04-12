@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\CommandLine\Factories;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;

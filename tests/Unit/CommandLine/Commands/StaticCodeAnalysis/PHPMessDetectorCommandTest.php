@@ -1,19 +1,21 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPCopyPasteDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPParallelLintCommand;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPParallelLintAdapter;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPParallelLintCommandTest extends TestCase
+class PHPMessDetectorCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -27,7 +29,7 @@ class PHPParallelLintCommandTest extends TestCase
     protected function setUp()
     {
         $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(PHPParallelLintCommand::class);
+        $buildFragments          = $subjectFactory->buildSubject(PHPMessDetectorCommand::class);
         $this->subject           = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
@@ -47,16 +49,39 @@ class PHPParallelLintCommandTest extends TestCase
     public function configure()
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
-        $localSubject = Mockery::mock(PHPParallelLintCommand::class, $this->subjectParameters)->makePartial();
+        $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('sca:parallel-lint');
+        $localSubject->shouldReceive('setName')->once()->with('sca:mess-detect');
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Run Parallel-Lint on PHP files.');
+            ->with('Run PHP-MD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes Parallel-Lint on a certain set of PHP files of this Project. It '
-                . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.');
+            ->with('This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files ' .
+                'which are in directories with a .dontMessDetectPHP file. Subdirectories are ignored too.');
+        $localSubject->shouldReceive('setDefinition')->once()
+            ->with(
+                Mockery::on(
+                    function ($value) {
+                        MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
+                        /** @var InputDefinition $value */
+                        $options = $value->getOptions();
+                        MatcherAssert::assertThat(
+                            $options,
+                            H::allOf(
+                                H::arrayWithSize(3),
+                                H::everyItem(
+                                    H::anInstanceOf(InputOption::class)
+                                )
+                            )
+                        );
+
+                        return true;
+                    }
+                )
+            );
+
         $localSubject->configure();
     }
+
 
     /**
      * @test
@@ -69,7 +94,7 @@ class PHPParallelLintCommandTest extends TestCase
 
         $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation);
 
-        $this->subjectParameters[PHPParallelLintAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+        $this->subjectParameters[PHPMessDetectorAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
@@ -87,6 +112,8 @@ class PHPParallelLintCommandTest extends TestCase
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
+        $this->mockedInputInterface->shouldReceive('getOption')->once()
+            ->with('auto-target')->andReturn(false);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('process-isolation')->andReturn($mockedProcessIsolation);
     }

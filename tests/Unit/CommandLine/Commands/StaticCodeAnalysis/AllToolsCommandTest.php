@@ -1,8 +1,8 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\CommandLine\Commands;
+
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
-use Hamcrest\Matchers;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
@@ -13,8 +13,8 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\AllToolsCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\AllToolsCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 
 class AllToolsCommandTest extends TestCase
 {
@@ -29,7 +29,7 @@ class AllToolsCommandTest extends TestCase
     {
         $this->subject = new AllToolsCommand();
 
-        $this->mockedInputInterface  = Mockery::mock(InputInterface::class);
+        $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }
 
@@ -47,12 +47,12 @@ class AllToolsCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(AllToolsCommand::class)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('all');
+        $localSubject->shouldReceive('setName')->once()->with('sca:all');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run all static code analysis tools.');
         $localSubject->shouldReceive('setHelp')->once()
             ->with(
-                'This tool executes all static code analysis tools on files of this Project. '
+                'This tool executes all static code analysis tools on files of this project. '
                 . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.'
             );
         $localSubject->shouldReceive('setDefinition')->once()
@@ -65,7 +65,7 @@ class AllToolsCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(3),
+                                H::arrayWithSize(4),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )
@@ -95,22 +95,26 @@ class AllToolsCommandTest extends TestCase
     public function executeRunsAllCommands($returnValue, $outputCount)
     {
         /** @var MockInterface|AllToolsCommand $subject */
-        $subject              = Mockery::mock(AllToolsCommand::class)->makePartial();
-        $mockedCommand        = Mockery::mock(Command::class);
-        $sharedOption         = 'option1';
-        $sharedOptionValue    = 'blablabla';
-        $forgedInputOptions   = [$sharedOption => 'bla', 'asd' => 'qwe'];
+        $subject = Mockery::mock(AllToolsCommand::class)->makePartial();
+        $mockedCommand = Mockery::mock(Command::class);
+        $mockedCommandAll = Mockery::mock(Command::class);
+        $sharedOption = 'option1';
+        $sharedOptionValue = 'blablabla';
+        $forgedInputOptions = [$sharedOption => 'bla', 'asd' => 'qwe'];
         $forgedCommandOptions = [$sharedOption => 'blub', 'qwe' => 'asd'];
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
             ->with('All SCA-Commands will be executed.', 1);
-
         $this->mockedInputInterface->shouldReceive('getOptions')->once()
             ->andReturn($forgedInputOptions);
 
         $subject->shouldReceive('getApplication->all')->once()
-            ->with('sca')->andReturn([$mockedCommand, $mockedCommand]);
+            ->with('sca')->andReturn([$mockedCommandAll, $mockedCommand, $mockedCommand]);
 
+        $mockedCommandAll->shouldReceive('getName')->once()
+            ->andReturn('sca:all');
+        $mockedCommand->shouldReceive('getName')
+            ->andReturn('sca:bla');
         $mockedCommand->shouldReceive('getDefinition->getOptions')
             ->andReturn($forgedCommandOptions);
 
@@ -118,14 +122,12 @@ class AllToolsCommandTest extends TestCase
             ->with($sharedOption)->andReturn($sharedOptionValue);
 
         $mockedCommand->shouldReceive('run')
-            ->with(Matchers::anInstanceOf(ArrayInput::class), $this->mockedOutputInterface)
+            ->with(H::anInstanceOf(ArrayInput::class), $this->mockedOutputInterface)
             ->andReturn($returnValue);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->times($outputCount)
             ->with('Exitcode:' . $returnValue, 1);
-
         $result = $subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
-
         self::assertSame($returnValue, $result);
     }
 }

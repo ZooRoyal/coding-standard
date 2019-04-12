@@ -14,7 +14,7 @@ class BlacklistFactoryTest extends TestCase
     {
         mkdir(__DIR__ . '/Fixtures/gitExclude/.git');
 
-        $container     = ContainerFactory::getContainerInstance();
+        $container     = ContainerFactory::getUnboundContainerInstance();
         $this->subject = $container->get(BlacklistFactory::class);
     }
 

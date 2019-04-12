@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\CommandLine\ValueObjects;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ValueObjects;
 
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;

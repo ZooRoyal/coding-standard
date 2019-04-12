@@ -74,6 +74,15 @@ class BlacklistFactoryTest extends TestCase
         self::assertSame($expctedResult, $result);
     }
 
+    public function findStopwordDirectoriesUsesCacheOnMultipleCalls()
+    {
+        $forgedStopword = 'asd';
+        $this->prepareStopwordFinder($forgedStopword);
+
+        $this->subject->findTokenDirectories($forgedStopword);
+        $this->subject->findTokenDirectories($forgedStopword);
+    }
+
 
     /**
      * Prepares Stopword Finder Mock for successfull test.
@@ -110,7 +119,7 @@ class BlacklistFactoryTest extends TestCase
         $this->mockedGitFinder->shouldReceive('depth')->once()
             ->with('> 0')->andReturnSelf();
         $this->mockedGitFinder->shouldReceive('path')->once()
-            ->with('/.*git$/')->andReturnSelf();
+            ->with('/.git$/')->andReturnSelf();
 
         $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
             ->with($this->mockedGitFinder)->andReturn([__DIR__]);

@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -10,12 +10,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPMessDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCodeSnifferCommand;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPMessDetectorCommandTest extends TestCase
+class PHPCodeSnifferCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -29,7 +29,7 @@ class PHPMessDetectorCommandTest extends TestCase
     protected function setUp()
     {
         $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(PHPMessDetectorCommand::class);
+        $buildFragments          = $subjectFactory->buildSubject(PHPCodeSnifferCommand::class);
         $this->subject           = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
@@ -49,14 +49,14 @@ class PHPMessDetectorCommandTest extends TestCase
     public function configure()
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
-        $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
+        $localSubject = Mockery::mock(PHPCodeSnifferCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('sca:mess-detect');
+        $localSubject->shouldReceive('setName')->once()->with('sca:sniff');
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Run PHP-MD on PHP files.');
+            ->with('Run PHP-CS on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-MD on a certain set of PHP files of this Project. It ignores files ' .
-                'which are in directories with a .dontMessDetectPHP file. Subdirectories are ignored too.');
+            ->with('This tool executes PHP-CS on a certain set of PHP files of this project. '
+                . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.');
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
@@ -67,7 +67,7 @@ class PHPMessDetectorCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(2),
+                                H::arrayWithSize(4),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )
@@ -82,19 +82,42 @@ class PHPMessDetectorCommandTest extends TestCase
         $localSubject->configure();
     }
 
+    /**
+     * @test
+     */
+    public function executeFullBuildWithFix()
+    {
+        $mockedTargetBranch     = '';
+        $mockedProcessIsolation = true;
+        $mockedFixMode          = true;
+        $expectedExitCode       = 0;
+
+        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
+
+        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->once()
+            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+
+        $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
+
+        self::assertSame($expectedExitCode, $result);
+    }
 
     /**
      * @test
      */
-    public function writeViolationsToOutput()
+    public function executeFullBuildWithoutFix()
     {
         $mockedTargetBranch     = '';
         $mockedProcessIsolation = true;
+        $mockedFixMode          = false;
         $expectedExitCode       = 0;
 
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation);
+        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
 
-        $this->subjectParameters[PHPMessDetectorAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->never();
+        $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
@@ -107,12 +130,17 @@ class PHPMessDetectorCommandTest extends TestCase
      *
      * @param $mockedTargetBranch
      * @param $mockedProcessIsolation
+     * @param $mockedFixMode
      */
-    private function prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation)
+    private function prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
+            ->with('auto-target')->andReturn(false);
+        $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('process-isolation')->andReturn($mockedProcessIsolation);
+        $this->mockedInputInterface->shouldReceive('getOption')->once()
+            ->with('fix')->andReturn($mockedFixMode);
     }
 }

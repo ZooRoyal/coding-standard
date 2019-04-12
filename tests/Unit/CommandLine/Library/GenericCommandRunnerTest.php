@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Mockery;
@@ -7,7 +8,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
@@ -28,9 +29,9 @@ class GenericCommandRunnerTest extends TestCase
     {
         $this->mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
-        $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(GenericCommandRunner::class);
-        $this->subject           = $buildFragments['subject'];
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(GenericCommandRunner::class);
+        $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
         $this->mockedProcess = Mockery::mock(Process::class);
@@ -56,17 +57,17 @@ class GenericCommandRunnerTest extends TestCase
      *
      * @param int $mockedExitCode
      */
-    public function runWhitelistCommandWithAllParameters($mockedExitCode)
+    public function runWhitelistCommandWithAllParameters(int $mockedExitCode)
     {
-        $mockedTemplate         = 'My Template %1$s';
-        $mockedTargetBranch     = 'MyTarget';
-        $mockedStopword         = 'HALT';
-        $mockedFilter           = 'Morty';
+        $mockedTemplate = 'My Template %1$s';
+        $mockedTargetBranch = 'MyTarget';
+        $mockedStopword = 'HALT';
+        $mockedFilter = 'Morty';
         $mockedProcessIsolation = true;
-        $glue                   = 'juhu';
-        $mockedChangedFiles     = ['mocked', 'files'];
-        $mockedOutput           = 'Das hab ich zu sagen.';
-        $mockedErrorOutput      = 'ROOOOOOOOOOORERROR!';
+        $glue = 'juhu';
+        $mockedChangedFiles = ['mocked', 'files'];
+        $mockedOutput = 'Das hab ich zu sagen.';
+        $mockedErrorOutput = 'ROOOOOOOOOOORERROR!';
 
         $this->prepareMocksForFindFiles($mockedFilter, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
         $this->prepareMocksForRunAndWriteToOutputProcessIsolation(
@@ -110,15 +111,15 @@ class GenericCommandRunnerTest extends TestCase
      */
     public function runWhitelistCommandWithNoProcessIsolation($mockedExitCode)
     {
-        $mockedTemplate         = 'My Template %1$s';
-        $mockedTargetBranch     = 'MyTarget';
-        $mockedStopword         = 'HALT';
-        $mockedFilter           = 'Morty';
+        $mockedTemplate = 'My Template %1$s';
+        $mockedTargetBranch = 'MyTarget';
+        $mockedStopword = 'HALT';
+        $mockedFilter = 'Morty';
         $mockedProcessIsolation = false;
-        $mockedGlue             = 'juhu';
-        $mockedChangedFiles     = ['mocked', 'files'];
-        $mockedOutput           = 'Das hab ich zu sagen.';
-        $mockedErrorOutput      = 'ERROR ERRRRRRRRRROR';
+        $mockedGlue = 'juhu';
+        $mockedChangedFiles = ['mocked', 'files'];
+        $mockedOutput = 'Das hab ich zu sagen.';
+        $mockedErrorOutput = 'ERROR ERRRRRRRRRROR';
 
         $this->prepareMocksForFindFiles($mockedFilter, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
         $this->prepareMocksForRunAndWriteToOutput(
@@ -152,14 +153,14 @@ class GenericCommandRunnerTest extends TestCase
      */
     public function runBlacklistCommand()
     {
-        $mockedTemplate    = 'My Template %1$s';
-        $mockedStopword    = 'HALT';
-        $mockedPrefix      = 'teil mich!';
-        $mockedGlue        = 'juhu';
-        $mockedBlacklist   = ['mocked', 'files'];
-        $mockedOutput      = 'Das hab ich zu sagen.';
+        $mockedTemplate = 'My Template %1$s';
+        $mockedStopword = 'HALT';
+        $mockedPrefix = 'teil mich!';
+        $mockedGlue = 'juhu';
+        $mockedBlacklist = ['mocked', 'files'];
+        $mockedOutput = 'Das hab ich zu sagen.';
         $mockedErrorOutput = 'ERRRRRRRRRRRRROROROROROR';
-        $mockedExitCode    = 0;
+        $mockedExitCode = 0;
 
         $this->prepareMocksForRunAndWriteToOutput(
             $mockedBlacklist,
@@ -192,15 +193,15 @@ class GenericCommandRunnerTest extends TestCase
      */
     public function runBlacklistCommandEscaped()
     {
-        $mockedTemplate         = 'My Template %1$s';
-        $mockedStopword         = 'HALT';
-        $mockedPrefix           = 'teil mich!';
-        $mockedGlue             = 'juhu';
-        $mockedBlacklist        = ['mocked', '.files'];
+        $mockedTemplate = 'My Template %1$s';
+        $mockedStopword = 'HALT';
+        $mockedPrefix = 'teil mich!';
+        $mockedGlue = 'juhu';
+        $mockedBlacklist = ['mocked', '.files'];
         $mockedEscapedBlacklist = ['mocked', '\\\\\.files'];
-        $mockedOutput           = 'Das hab ich zu sagen.';
-        $mockedErrorOutput      = 'ERRRRRRRRRRRRROROROROROR';
-        $mockedExitCode         = 0;
+        $mockedOutput = 'Das hab ich zu sagen.';
+        $mockedErrorOutput = 'ERRRRRRRRRRRRROROROROROR';
+        $mockedExitCode = 0;
 
         $this->prepareMocksForRunAndWriteToOutput(
             $mockedEscapedBlacklist,
@@ -232,10 +233,10 @@ class GenericCommandRunnerTest extends TestCase
      * Prepares mocks for calls of private buildCommand with no ProcessIsolation
      *
      * @param string[] $mockedChangedFiles
-     * @param string   $mockedTemplate
-     * @param string   $mockedOutput
-     * @param string   $mockedGlue
-     * @param string   $mockedPrefix
+     * @param string $mockedTemplate
+     * @param string $mockedOutput
+     * @param string $mockedGlue
+     * @param string $mockedPrefix
      */
     private function prepareMocksForRunAndWriteToOutput(
         $mockedChangedFiles,
@@ -292,9 +293,9 @@ class GenericCommandRunnerTest extends TestCase
     /**
      * Prepare mocks for call to findFiles.
      *
-     * @param string   $mockedFilter
-     * @param string   $mockedStopword
-     * @param string   $mockedTargetBranch
+     * @param string $mockedFilter
+     * @param string $mockedStopword
+     * @param string $mockedTargetBranch
      * @param string[] $mockedChangedFiles
      */
     private function prepareMocksForFindFiles(
@@ -306,8 +307,8 @@ class GenericCommandRunnerTest extends TestCase
         $this->mockedGitChangeSet->shouldReceive('getCommitHash')->andReturn('asd');
         $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
 
-        $this->subjectParameters[DiffCheckableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedStopword, $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
+        $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
+            ->with($mockedFilter, $mockedStopword, '', $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
 
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with(

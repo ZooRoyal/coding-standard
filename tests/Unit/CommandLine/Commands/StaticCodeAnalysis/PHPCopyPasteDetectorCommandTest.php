@@ -1,13 +1,13 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\PHPCopyPasteDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPasteDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -51,7 +51,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CPD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes PHP-CPD on a certain set of PHP files of this Project. It ignores '
+            ->with('This tool executes PHP-CPD on a certain set of PHP files of this project. It ignores '
                 . 'files which are in directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too.');
 
         $localSubject->configure();

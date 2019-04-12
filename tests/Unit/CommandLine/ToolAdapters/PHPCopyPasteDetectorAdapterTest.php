@@ -93,7 +93,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
             ->with('origin/master')->andReturn(false);
 
         $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('PHPCPD: Running full check', OutputInterface::VERBOSITY_NORMAL);
+            ->with('PHPCPD : Running full check', OutputInterface::VERBOSITY_NORMAL);
 
         $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
             ->with($expectedCommand, $this->expectedStopword, $this->expectedPrefix, $this->expectedGlue)
