@@ -1,5 +1,6 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\CommandLine\Factories;
+
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
@@ -11,13 +12,13 @@ class GitChangeSetFactoryTest extends TestCase
      */
     public function buildReturns()
     {
-        $expectedFiles      = ['asd', 'qwe'];
+        $expectedFiles = ['asd', 'qwe'];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSetFactory();
-        $result  = $subject->build($expectedFiles, $expectedCommitHash);
+        $result = $subject->build($expectedFiles, $expectedCommitHash);
 
-        $resultingFiles      = $result->getFiles();
+        $resultingFiles = $result->getFiles();
         $resultingCommitHash = $result->getCommitHash();
 
         self::assertSame($expectedFiles, $resultingFiles);

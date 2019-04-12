@@ -1,27 +1,28 @@
 <?php
-namespace Zooroyal\CodingStandard\CommandLine\Commands;
+
+namespace Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSESLintAdapter;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 
-class JSESLintCommand extends Command
+class PHPMessDetectorCommand extends Command
 {
-    /** @var JSESLintAdapter */
+    /** @var PHPMessDetectorAdapter */
     private $toolAdapter;
 
     /**
-     * JSESLintCommand constructor.
+     * PHPMessDetectorCommand constructor.
      *
-     * @param JSESLintAdapter $toolAdapter
+     * @param PHPMessDetectorAdapter $toolAdapter
      */
-    public function __construct(JSESLintAdapter $toolAdapter)
+    public function __construct(PHPMessDetectorAdapter $toolAdapter)
     {
-        parent::__construct();
         $this->toolAdapter = $toolAdapter;
+        parent::__construct();
     }
 
     /**
@@ -29,11 +30,11 @@ class JSESLintCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('sca:eslint');
-        $this->setDescription('Run ESLint on JS files.');
+        $this->setName('sca:mess-detect');
+        $this->setDescription('Run PHP-MD on PHP files.');
         $this->setHelp(
-            'This tool executes ESLINT on a certain set of JS files of this Project.'
-            . 'Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.'
+            'This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files which are in '
+            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.'
         );
         $this->setDefinition(
             new InputDefinition(
@@ -41,17 +42,16 @@ class JSESLintCommand extends Command
                     new InputOption(
                         'target',
                         't',
-                        InputOption::VALUE_OPTIONAL,
-                        'Finds JS-Files which have changed since the current branch parted from the target branch '
-                        . 'only. If no branch is set Coding-Standard tries to find the parent branch by automagic. '
-                        . 'The Value, if set, has to be a commit-ish.',
-                        ''
+                        InputOption::VALUE_REQUIRED,
+                        'Finds files which have changed since the current branch parted from the target branch '
+                        . 'only. The value has to be a commit-ish.'
                     ),
                     new InputOption(
-                        'fix',
-                        'f',
+                        'auto-target',
+                        'a',
                         InputOption::VALUE_NONE,
-                        'Runs EsLint to try to fix violations automagically.'
+                        'Finds files which have changed since the current branch parted from the parent branch '
+                        . 'only. It tries to find the parent branch by automagic.'
                     ),
                     new InputOption(
                         'process-isolation',
@@ -69,13 +69,8 @@ class JSESLintCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $targetBranch          = $input->getOption('target');
+        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
         $processIsolationInput = $input->getOption('process-isolation');
-        $fixMode               = $input->getOption('fix');
-
-        if ($fixMode) {
-            $this->toolAdapter->fixViolations($targetBranch, $processIsolationInput);
-        }
 
         $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
 

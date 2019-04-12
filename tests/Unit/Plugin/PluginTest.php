@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\Plugin;
 
 use Composer\Composer;
@@ -67,8 +68,8 @@ class PluginTest extends TestCase
     public function npmInstallDataProvider()
     {
         return [
-            'non-verbose'  => ['npm', false, false, 0, 0],
-            'verbose'      => ['npm', true, false, 1, 0],
+            'non-verbose' => ['npm', false, false, 0, 0],
+            'verbose' => ['npm', true, false, 1, 0],
             'very verbose' => ['npm', true, true, 1, 1],
         ];
     }
@@ -157,10 +158,10 @@ class PluginTest extends TestCase
         $writeVeryVerboseCount,
         $mockedIO
     ) {
-        $expectedVerboseWrite     = sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard');
+        $expectedVerboseWrite = sprintf('<info>%s</info>', 'Installing NPM-Packages for Coding-Standard');
         $expectedVeryVerboseWrite = sprintf('Executed Command: <info>%s</info>', $processCommandLine);
-        $expectedWrite            = '<info>NPM packages installed</info> for zooroyal/coding-standard';
-        $expectedAnnouncement     = '<info>NPM install</info> for zooroyal/coding-standard:';
+        $expectedWrite = '<info>NPM packages installed</info> for zooroyal/coding-standard';
+        $expectedAnnouncement = '<info>NPM install</info> for zooroyal/coding-standard:';
 
         $mockedIO->shouldReceive('isVeryVerbose')
             ->andReturn($isVeryVerbose);
@@ -180,7 +181,7 @@ class PluginTest extends TestCase
      * Prepares $mockedProcess for testNpmInstall
      *
      * @param string                $processCommandLine
-     * @param bool                  $writeVeryVerboseCount
+     * @param int                   $writeVeryVerboseCount
      * @param MockInterface|Process $mockedProcess
      */
     private function prepareMockedProcessForNpmInstall(

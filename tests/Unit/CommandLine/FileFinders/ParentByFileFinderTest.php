@@ -1,40 +1,33 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Finder\Finder;
-use Zooroyal\CodingStandard\CommandLine\Factories\FinderFactory;
+use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\ParentByFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class ParentByFileFinderTest extends TestCase
 {
-    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Library\Environment */
-    private $mockedEnvironment;
-    /** @var MockInterface|FinderFactory */
-    private $mockedFinderFactory;
     /** @var ParentByFileFinder */
     private $subject;
+    /** @var MockInterface[] */
+    private $subjectParameters;
     /** @var string */
     private $mockedRootDirectory = '/my/root/directory';
-    /** @var MockInterface|Finder */
-    private $mockedFinder;
 
     protected function setUp()
     {
-        $this->mockedFinder = Mockery::mock(Finder::class);
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(ParentByFileFinder::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
-        $this->mockedFinderFactory = Mockery::mock(FinderFactory::class);
-        $this->mockedFinderFactory->shouldReceive('build')->withNoArgs()
-            ->andReturn($this->mockedFinder);
-
-        $this->mockedEnvironment = Mockery::mock(Environment::class);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')->withNoArgs()
+        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')->withNoArgs()
             ->andReturn($this->mockedRootDirectory);
-
-        $this->subject = new ParentByFileFinder($this->mockedEnvironment, $this->mockedFinderFactory);
     }
 
     protected function tearDown()
@@ -46,28 +39,53 @@ class ParentByFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findParentByFile()
+    public function findParentByFileFindsFile()
     {
-        $mockedFileName  = 'myFileName';
+        $mockedFileName = 'myFileName';
         $mockedDirectory = '/my/directory';
-        $expectedResult  = '/my';
+        $expectedResult = '/my';
 
-        $this->mockedFinder->shouldReceive('in')->once()
-            ->with('/my/directory')->andReturn($this->mockedFinder);
-        $this->mockedFinder->shouldReceive('in')->once()
-            ->with('/my')->andReturn($this->mockedFinder);
-        $this->mockedFinder->shouldReceive('files')->twice()
-            ->withNoArgs()->andReturn($this->mockedFinder);
-        $this->mockedFinder->shouldReceive('depth')->twice()
-            ->with('== 1')->andReturn($this->mockedFinder);
-        $this->mockedFinder->shouldReceive('name')->twice()
-            ->with('*' . $mockedFileName . '*')->andReturn($this->mockedFinder);
-        $this->mockedFinder->shouldReceive('count')->twice()
-            ->withNoArgs()->andReturn(0, 1);
+        $this->subjectParameters[Filesystem::class]->shouldReceive('exists')
+            ->with($mockedDirectory . '/' . $mockedFileName)->andReturn(false);
+        $this->subjectParameters[Filesystem::class]->shouldReceive('exists')
+            ->with($expectedResult . '/' . $mockedFileName)->andReturn(true);
 
         $result = $this->subject->findParentByFile($mockedFileName, $mockedDirectory);
 
         self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * DataProvider for findParentByFileDoesNotFindFile.
+     *
+     * @return mixed[]
+     */
+    public function findParentByFileDoesNotFindFileDataProvider() : array
+    {
+        return [
+            'Leading /' => ['/my/directory'],
+            'Leading .' => ['./my/directory'],
+            'Leading RootDirectory' => ['./my/directory'],
+            'No Leading string' => [$this->mockedRootDirectory . '/' . 'my/directory'],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider findParentByFileDoesNotFindFileDataProvider
+     *
+     * @param string $mockedDirectory
+     */
+    public function findParentByFileDoesNotFindFile(string $mockedDirectory)
+    {
+        $mockedFileName = 'myFileName';
+
+        $this->subjectParameters[Filesystem::class]->shouldReceive('exists')
+            ->withAnyArgs()->andReturn(false);
+
+        $result = $this->subject->findParentByFile($mockedFileName, $mockedDirectory);
+
+        self::assertNull($result);
     }
 
     /**

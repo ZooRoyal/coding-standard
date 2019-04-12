@@ -1,6 +1,9 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolAdapters;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -9,57 +12,41 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSESLintAdapter;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
 class JSESLintAdapterTest extends TestCase
 {
-    /** @var JSESLintAdapter */
-    private $subject;
     /** @var MockInterface|Environment */
     private $mockedEnvironment;
     /** @var MockInterface|GenericCommandRunner */
     private $mockedGenericCommandRunner;
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
+    /** @var MockInterface|JSESLintAdapter */
+    private $partialSubject;
     /** @var string */
     private $mockedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
-    /** @var string */
-    private $expectedStopword;
-    /** @var string */
-    private $expectedFilter;
-    /** @var int */
-    private $expectedExitCode;
-    /** @var bool */
-    private $mockedProcessisolation;
-    /** @var string */
-    private $expectedGlue;
 
     protected function setUp()
     {
-        $this->mockedEnvironment          = Mockery::mock(Environment::class);
+        $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
-        $this->mockedOutputInterface      = Mockery::mock(OutputInterface::class);
+        $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
 
         $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory    = '/root/directory';
-
-        $this->mockedProcessisolation = true;
-        $this->expectedExitCode       = 0;
-        $this->expectedStopword       = '.dontSniffJS';
-        $this->expectedFilter         = '.js';
-        $this->expectedGlue           = ' ';
+        $this->mockedRootDirectory = '/root/directory';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
-        $this->subject = new JSESLintAdapter(
-            $this->mockedEnvironment,
-            $this->mockedOutputInterface,
-            $this->mockedGenericCommandRunner
-        );
+        $this->partialSubject = Mockery::mock(
+            JSESLintAdapter::class,
+            [$this->mockedEnvironment, $this->mockedOutputInterface, $this->mockedGenericCommandRunner]
+        )->shouldAllowMockingProtectedMethods()->makePartial();
     }
 
     protected function tearDown()
@@ -71,110 +58,100 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
+    public function constructSetsUpSubjectCorrectly()
+    {
+        self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
+        self::assertSame('.js', $this->partialSubject->getFilter());
+        self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
+        self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
+        self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
+
+        MatcherAssert::assertThat(
+            $this->partialSubject->getCommands(),
+            H::allOf(
+                H::hasKeyValuePair(
+                    'ESLINTBL',
+                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
+                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s '
+                    . $this->mockedRootDirectory
+                ),
+                H::hasKeyValuePair(
+                    'ESLINTWL',
+                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
+                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s'
+                ),
+                H::hasKeyValuePair(
+                    'ESLINTFIXBL',
+                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
+                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s '
+                    . $this->mockedRootDirectory
+                ),
+                H::hasKeyValuePair(
+                    'ESLINTFIXWL',
+                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
+                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s'
+                )
+            )
+        );
+    }
+
+    /**
+     * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
+     *
+     * @return array
+     */
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider() : array
+    {
+        return [
+            'find Violations' => [
+                'tool' => 'ESLINT',
+                'fullMessage' => 'ESLINT : Running full check',
+                'diffMessage' => 'ESLINT : Running check on diff',
+                'method' => 'writeViolationsToOutput',
+            ],
+            'fix Violations' => [
+                'tool' => 'ESLINTFIX',
+                'fullMessage' => 'ESLINTFIX : Fix all Files',
+                'diffMessage' => 'ESLINTFIX : Fix Files in diff',
+                'method' => 'fixViolations',
+            ],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
+     *
+     * @param string $tool
+     * @param string $fullMessage
+     * @param string $diffMessage
+     * @param string $method
+     */
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
+        string $tool,
+        string $fullMessage,
+        string $diffMessage,
+        string $method
+    ) {
+        $mockedProcessIsolation = true;
+        $mockedTargetBranch = 'myTargetBranch';
+        $expectedResult = 123123123;
+
+        $this->partialSubject->shouldReceive('runTool')->once()
+            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->andReturn($expectedResult);
+
+        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
+
+        self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
     public function phpCodeSnifferAdapterimplementsInterface()
     {
-        self::assertInstanceOf(FixerSupportInterface::class, $this->subject);
+        self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
+        self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);
     }
-
-    public function writeViolationsToOutputWithTargetForWhitelistCheckDataProvider()
-    {
-        return [
-            'with target not matching origin/master' => ['target' => 'myTarget'],
-            'with empty target' => ['target' => null],
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider writeViolationsToOutputWithTargetForWhitelistCheckDataProvider
-     */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck($target)
-    {
-        $expectedCommand = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
-            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s';
-
-        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')->once()
-            ->with('origin/master')->andReturn(false);
-
-        $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('ESLINT: Running check on diff', OutputInterface::VERBOSITY_NORMAL);
-
-        $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
-            ->with(
-                $expectedCommand,
-                $target,
-                $this->expectedStopword,
-                $this->expectedFilter,
-                true,
-                $this->expectedGlue
-            )
-            ->andReturn($this->expectedExitCode);
-
-        $result = $this->subject->writeViolationsToOutput($target, $this->mockedProcessisolation);
-
-        self::assertSame($this->expectedExitCode, $result);
-    }
-
-
-    public function writeViolationsToOutputWithTargetForBlacklistCheckDataProvider()
-    {
-        return [
-            'local master'     => [
-                'writeViolationsToOutput',
-                'ESLINT: Running full check',
-                'expectedWrite',
-                'myTarget',
-                true
-            ],
-            'no target'        => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite',  '', false],
-            'both'             => ['writeViolationsToOutput', 'ESLINT: Running full check', 'expectedWrite', '', true],
-            'fix local master' => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', 'myTarget', true],
-            'fix no target'    => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', false],
-            'fix both'         => ['fixViolations', 'ESLINTFIX: Fix all Files', 'expectedFix', '', true],
-        ];
-    }
-
-    /**
-     * @test
-     *
-     * @param string $method
-     * @param string $message
-     * @param string $command
-     * @param string $mockedTargetBranch
-     * @param string $equalToLocalBranch
-     *
-     * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
-     */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck(
-        $method,
-        $message,
-        $command,
-        $mockedTargetBranch,
-        $equalToLocalBranch
-    ) {
-        $expectedWrite = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
-            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s '
-            . $this->mockedRootDirectory;
-
-        $expectedFix = $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js '
-            . '--config=' . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s '
-            . $this->mockedRootDirectory;
-
-        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('origin/master')->andReturn($equalToLocalBranch);
-
-        $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with($message, OutputInterface::VERBOSITY_NORMAL);
-
-        $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
-            ->with($$command, $this->expectedStopword, '--ignore-pattern=', ' ')
-            ->andReturn($this->expectedExitCode);
-
-        $result = $this->subject->$method($mockedTargetBranch, $this->mockedProcessisolation);
-
-        self::assertSame($this->expectedExitCode, $result);
-    }
-
 }

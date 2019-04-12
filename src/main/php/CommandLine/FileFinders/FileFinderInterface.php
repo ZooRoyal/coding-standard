@@ -1,7 +1,25 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
+
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 interface FileFinderInterface
 {
-    public function findFiles($filter = '', $stopword = '', $targetBranch = '');
+    /**
+     * This method searches for files by using Git as indexing service.
+     *
+     * @param string      $filter
+     * @param string      $blacklistToken
+     * @param string      $whitelistToken
+     * @param string|bool $targetBranch
+     *
+     * @return GitChangeSet
+     */
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranch = ''
+    ) : GitChangeSet;
 }

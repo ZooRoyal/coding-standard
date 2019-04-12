@@ -1,14 +1,13 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
-use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\FileFilter;
+use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -19,18 +18,13 @@ class DiffCheckableFileFinderTest extends TestCase
     private $subjectParameters;
     /** @var DiffCheckableFileFinder */
     private $subject;
-    /** @var string */
-    private $mockedRootDirectory = '/my/root';
 
     protected function setUp()
     {
-        $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(DiffCheckableFileFinder::class);
-        $this->subject           = $buildFragments['subject'];
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(DiffCheckableFileFinder::class);
+        $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
-
-        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
     }
 
     protected function tearDown()
@@ -41,19 +35,27 @@ class DiffCheckableFileFinderTest extends TestCase
 
     /**
      * @test
+     * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
+     */
+    public function findFilesWithoutTargetBranchMakesNoSense()
+    {
+        $this->subject->findFiles('', '', '', '');
+    }
+
+    /**
+     * @test
      */
     public function findDiffByGitDiff()
     {
         $mockedTargetBranch = 'blaBranch';
-        $mockedFilter       = 'blaFilter';
-        $mockedStopWord     = 'blaStopword';
-        $mockedMergeBase    = 'alsdkfujh178290346';
-        $mockedFileDiff     = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
-        $mockedFiles        = ['dir1/file1', 'dir2/file2'];
-        $mockedChangeSet    = new GitChangeSet($mockedFiles, $mockedMergeBase);
+        $mockedFilter = 'blaFilter';
+        $mockedBlacklistToken = 'blaStopword';
+        $mockedWhitelistToken = 'blaGO';
+        $mockedMergeBase = 'alsdkfujh178290346';
+        $mockedFileDiff = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
+        $mockedFiles = ['dir1/file1', 'dir2/file2'];
+        $mockedChangeSet = new GitChangeSet($mockedFiles, $mockedMergeBase);
 
-        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')->once()
-            ->with($mockedTargetBranch)->andReturn(false);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git', 'merge-base', 'HEAD', $mockedTargetBranch)
             ->andReturn($mockedMergeBase);
@@ -64,62 +66,10 @@ class DiffCheckableFileFinderTest extends TestCase
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')->once()
             ->with($mockedFiles, $mockedMergeBase)->andReturn($mockedChangeSet);
 
-        $this->subjectParameters[FileFilter::class]->shouldReceive('filterByBlacklistFilterStringAndStopword')
-            ->with($mockedChangeSet, $mockedFilter, $mockedStopWord)
+        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
+            ->with($mockedChangeSet, $mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken)
             ->andReturn($mockedFileDiff);
 
-        $this->subject->findFiles($mockedFilter, $mockedStopWord, $mockedTargetBranch);
+        $this->subject->findFiles($mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch);
     }
-
-    public function findDiffByRecursiveCommitSearchDataProvider()
-    {
-        return [
-            'with same branch'  => ['branch' => 'blaaarg', 'target' => 'blaaarg', 'isLocalBranchEqualToCount' => 1],
-            'with empty target' => ['branch' => 'blaaarg', 'target' => null, 'isLocalBranchEqualToCount' => 0],
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider findDiffByRecursiveCommitSearchDataProvider
-     */
-    public function findDiffByRecursiveCommitSearch($branch, $target, $isLocalBranchEqualToCount)
-    {
-        $mockedFilter           = 'blaFilter';
-        $mockedStopWord         = 'blaStopword';
-        $mockedTargetCommitHash = 'asdasdqwe1231';
-        $mockedFiles            = ['dir1/file1', 'dir2/file2'];
-        $mockedChangeSet        = new GitChangeSet($mockedFiles, $mockedTargetCommitHash);
-        $mockedNoResultResult   = '* target' . PHP_EOL . '  remotes/origin/target' . PHP_EOL;
-
-        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')
-            ->times($isLocalBranchEqualToCount)->with($branch)->andReturn(true);
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'cat-file', '-t', H::startsWith('HEAD'))
-            ->andReturn('commit', 'commit', 'tag');
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', 'HEAD')
-            ->andReturn($mockedNoResultResult);
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', 'HEAD^')
-            ->andReturn($mockedNoResultResult);
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', 'HEAD^^')
-            ->andReturn($mockedNoResultResult . '  remotes/origin/master' . PHP_EOL);
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git', 'rev-parse', 'HEAD^^')
-            ->andReturn($mockedTargetCommitHash);
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'diff', '--name-only', '--diff-filter=d', $mockedTargetCommitHash)
-            ->andReturn('dir1/file1' . "\n" . 'dir2/file2' . "\n");
-        $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')->once()
-            ->with($mockedFiles, $mockedTargetCommitHash)->andReturn($mockedChangeSet);
-        $this->subjectParameters[FileFilter::class]->shouldReceive('filterByBlacklistFilterStringAndStopword')
-            ->with($mockedChangeSet, $mockedFilter, $mockedStopWord);
-
-        $this->subject->findFiles($mockedFilter, $mockedStopWord, $target);
-        self::assertSame($mockedChangeSet->getFiles(), $mockedFiles);
-        self::assertSame($mockedChangeSet->getCommitHash(), $mockedTargetCommitHash);
-    }
-
 }

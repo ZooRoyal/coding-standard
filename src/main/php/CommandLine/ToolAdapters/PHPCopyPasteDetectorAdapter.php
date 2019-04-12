@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -28,11 +29,11 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->output               = $output;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
         $this->stopword = '.dontCopyPasteDetectPHP';
-        $rootDirectory  = $environment->getRootDirectory();
+        $rootDirectory = $environment->getRootDirectory();
 
         $this->copyPasteDetectCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcpd -vvv '
             . '--progress --fuzzy -n --names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s '
@@ -40,16 +41,11 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
     }
 
     /**
-     * Search for violations by using PHPCBD and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
-        $fullMessage = 'PHPCPD: Running full check';
+        $fullMessage = 'PHPCPD : Running full check';
 
         $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
         $exitCode = $this->genericCommandRunner->runBlacklistCommand(

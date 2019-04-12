@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use Symfony\Component\Finder\Finder;

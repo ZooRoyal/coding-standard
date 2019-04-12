@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting;
 
 use PHP_CodeSniffer\Files\File;
@@ -44,7 +45,7 @@ class FunctionCommentThrowTagSniff
             return;
         }
 
-        $find   = Tokens::$methodPrefixes;
+        $find = Tokens::$methodPrefixes;
         $find[] = T_WHITESPACE;
 
         $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
@@ -64,8 +65,8 @@ class FunctionCommentThrowTagSniff
 
         // Find all the exception type token within the current scope.
         $thrownExceptions = [];
-        $currPos          = $stackPtr;
-        $foundThrows      = false;
+        $currPos = $stackPtr;
+        $foundThrows = false;
         do {
             $currPos = $phpcsFile->findNext([T_THROW, T_ANON_CLASS, T_CLOSURE], ($currPos + 1), $stackPtrEnd);
             if ($currPos === false) {
@@ -149,9 +150,13 @@ class FunctionCommentThrowTagSniff
                         );
 
                         if ($tokens[$thrownVar]['content'] === $tokens[$nextToken]['content']) {
-                            $exceptions = explode('|',
-                                $phpcsFile->getTokensAsString(($tokens[$catch]['parenthesis_opener'] + 1),
-                                    ($thrownVar - $tokens[$catch]['parenthesis_opener'] - 1)));
+                            $exceptions = explode(
+                                '|',
+                                $phpcsFile->getTokensAsString(
+                                    ($tokens[$catch]['parenthesis_opener'] + 1),
+                                    ($thrownVar - $tokens[$catch]['parenthesis_opener'] - 1)
+                                )
+                            );
                             foreach ($exceptions as $exception) {
                                 $thrownExceptions[] = trim($exception);
                             }
@@ -168,7 +173,7 @@ class FunctionCommentThrowTagSniff
         // Only need one @throws tag for each type of exception thrown.
         $thrownExceptions = array_unique($thrownExceptions);
 
-        $throwTags    = [];
+        $throwTags = [];
         $commentStart = $tokens[$commentEnd]['comment_opener'];
         foreach ($tokens[$commentStart]['comment_tags'] as $tag) {
             if ($tokens[$tag]['content'] !== '@throws') {
@@ -177,7 +182,7 @@ class FunctionCommentThrowTagSniff
 
             if ($tokens[($tag + 2)]['code'] === T_DOC_COMMENT_STRING) {
                 $exception = $tokens[($tag + 2)]['content'];
-                $space     = strpos($exception, ' ');
+                $space = strpos($exception, ' ');
                 if ($space !== false) {
                     $exception = substr($exception, 0, $space);
                 }
@@ -204,10 +209,10 @@ class FunctionCommentThrowTagSniff
 
         // Make sure @throws tag count matches thrown count.
         $thrownCount = count($thrownExceptions);
-        $tagCount    = count($throwTags);
+        $tagCount = count($throwTags);
         if ($thrownCount > $tagCount) {
             $error = 'Expected at least %s @throws tag(s) in function comment; %s found';
-            $data  = [
+            $data = [
                 $thrownCount,
                 $tagCount,
             ];
@@ -221,7 +226,7 @@ class FunctionCommentThrowTagSniff
         foreach ($thrownExceptions as $throw) {
             if (isset($throwTags[$throw]) === false) {
                 $error = 'Missing @throws tag for "%s" exception';
-                $data  = [$throw];
+                $data = [$throw];
                 $phpcsFile->addError($error, $commentEnd, 'Missing', $data);
             }
         }

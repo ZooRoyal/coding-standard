@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Process\Process;
@@ -8,21 +9,21 @@ class ProcessRunner
     /**
      * Runs a shell command as single Process and returns the reseult.
      *
-     * @param string $command
-     * @param string ...$arguments Multiple strings interpreted as Arguments
+     * @param string               $command
+     * @param string|string[]|null ...$arguments Multiple strings interpreted as Arguments
      *
      * @return string
      */
-    public function runAsProcess($command, ...$arguments)
+    public function runAsProcess(string $command, ...$arguments) : string
     {
-        $commandParts = array_merge([$command], $arguments);
-        $process      = new Process($commandParts);
+        $commandParts = implode(' ', array_merge([$command], $arguments));
+        $process = new Process($commandParts);
         $process->mustRun()->wait();
 
         $output = $process->getOutput();
         $result = empty($process->getErrorOutput())
             ? $output
-            : $output . "\n" . $process->getErrorOutput();
+            : $output . PHP_EOL . $process->getErrorOutput();
 
         return trim($result);
     }
@@ -34,7 +35,7 @@ class ProcessRunner
      *
      * @return Process
      */
-    public function runAsProcessReturningProcessObject($command)
+    public function runAsProcessReturningProcessObject($command) : Process
     {
         $process = new Process($command);
         $process->run();

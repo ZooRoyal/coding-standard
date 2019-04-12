@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;

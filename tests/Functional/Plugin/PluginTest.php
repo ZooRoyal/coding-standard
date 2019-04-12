@@ -1,14 +1,8 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Functional\Plugin;
 
-use Composer\Composer;
-use Composer\Config;
-use Composer\IO\IOInterface;
-use Composer\Script\ScriptEvents;
-use Hamcrest\MatcherAssert;
-use Hamcrest\Matchers as H;
 use Mockery;
-use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
