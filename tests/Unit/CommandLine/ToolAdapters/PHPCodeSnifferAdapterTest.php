@@ -72,23 +72,23 @@ class PHPCodeSnifferAdapterTest extends TestCase
                 H::hasKeyValuePair(
                     'PHPCSWL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-                    . $this->mockedPackageDirectory. '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFWL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
-                    . $this->mockedPackageDirectory. '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCSBL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-                    . $this->mockedPackageDirectory. '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
                     . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFBL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
-                    . $this->mockedPackageDirectory. '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
                     . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 )
             )
@@ -98,7 +98,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
     /**
      * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
      *
-     * @return array
+     * @return mixed[]
      */
     public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
     {
@@ -107,13 +107,13 @@ class PHPCodeSnifferAdapterTest extends TestCase
                 'tool' => 'PHPCS',
                 'fullMessage' => 'PHPCS : Running full check',
                 'diffMessage' => 'PHPCS : Running check on diff',
-                'method' => 'writeViolationsToOutput'
+                'method' => 'writeViolationsToOutput',
             ],
             'fix Violations' => [
                 'tool' => 'PHPCBF',
                 'fullMessage' => 'PHPCBF : Fix all Files',
                 'diffMessage' => 'PHPCBF : Fix Files in diff',
-                'method' => 'fixViolations'
+                'method' => 'fixViolations',
             ],
         ];
     }
@@ -122,13 +122,17 @@ class PHPCodeSnifferAdapterTest extends TestCase
      * @test
      * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
-     * @param $tool
-     * @param $fullMessage
-     * @param $diffMessage
-     * @param $method
+     * @param string $tool
+     * @param string $fullMessage
+     * @param string $diffMessage
+     * @param string $method
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResult($tool, $fullMessage, $diffMessage, $method)
-    {
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
+        string $tool,
+        string $fullMessage,
+        string $diffMessage,
+        string $method
+    ) {
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;

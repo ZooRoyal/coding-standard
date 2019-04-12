@@ -6,6 +6,6 @@ use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Console\Output\OutputInterface;
 
 return [
-    InputInterface::class  => DI\get(ArgvInput::class),
+    InputInterface::class => DI\get(ArgvInput::class),
     OutputInterface::class => DI\get(ConsoleOutput::class),
 ];

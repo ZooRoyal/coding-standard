@@ -124,6 +124,7 @@ class GitChangeSetFilterTest extends TestCase
      */
     public function filterThrowsExceptionIfBlackAndWhitelisted()
     {
+        /** @var MockInterface|GitChangeSet $mockedFileList */
         $mockedFileList = Mockery::mock(GitChangeSet::class);
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';

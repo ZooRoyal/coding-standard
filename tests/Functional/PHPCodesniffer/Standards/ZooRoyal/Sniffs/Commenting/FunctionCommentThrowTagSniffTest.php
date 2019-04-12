@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting;
 
 use Composer\Autoload\ClassLoader;
@@ -17,7 +18,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     public static function setUpBeforeClass()
     {
         parent::setUpBeforeClass();
-        $reflection      = new ReflectionClass(ClassLoader::class);
+        $reflection = new ReflectionClass(ClassLoader::class);
         self::$vendorDir = dirname(dirname($reflection->getFileName()));
 
         require_once self::$vendorDir . '/squizlabs/php_codesniffer/autoload.php';
@@ -40,7 +41,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectCountOfTags.php';
-        $subject    = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->mustRun();
         $subject->wait();
@@ -55,7 +56,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectCountOfTags.php';
-        $subject    = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->run();
         $subject->wait();

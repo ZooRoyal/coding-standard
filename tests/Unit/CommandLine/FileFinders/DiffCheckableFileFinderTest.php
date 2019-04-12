@@ -2,7 +2,6 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
-use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;

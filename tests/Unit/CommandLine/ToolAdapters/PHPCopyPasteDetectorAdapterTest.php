@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolAdapters;
 
 use Mockery;
@@ -40,19 +41,19 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
 
     protected function setUp()
     {
-        $this->mockedEnvironment          = Mockery::mock(Environment::class);
+        $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
-        $this->mockedOutputInterface      = Mockery::mock(OutputInterface::class);
+        $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
 
         $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory    = '/root/directory';
+        $this->mockedRootDirectory = '/root/directory';
 
         $this->mockedProcessisolation = true;
-        $this->expectedExitCode       = 0;
-        $this->expectedStopword       = '.dontCopyPasteDetectPHP';
-        $this->expectedFilter         = '.php';
-        $this->expectedPrefix         = '--exclude ';
-        $this->expectedGlue           = ' ';
+        $this->expectedExitCode = 0;
+        $this->expectedStopword = '.dontCopyPasteDetectPHP';
+        $this->expectedFilter = '.php';
+        $this->expectedPrefix = '--exclude ';
+        $this->expectedGlue = ' ';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
@@ -86,7 +87,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     public function writeViolationsToOutputWithTargetForBlacklistCheck()
     {
         $mockedTargetBranch = 'targetBranch';
-        $expectedCommand    ='php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd -vvv --progress --fuzzy -n ' .
+        $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd -vvv --progress --fuzzy -n ' .
             '--names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')

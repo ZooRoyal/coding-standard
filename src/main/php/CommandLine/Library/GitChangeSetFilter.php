@@ -61,7 +61,7 @@ class GitChangeSetFilter
      *
      * @param string   $filter
      * @param string[] $files
-     * @param string[] $list
+     * @param bool[]   $list
      *
      * @return array
      */

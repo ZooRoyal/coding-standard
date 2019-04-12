@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
 use DI\Container;
@@ -14,7 +15,7 @@ class ContainerFactoryTest extends TestCase
      */
     public function getContainerInstance()
     {
-        $result    = ContainerFactory::getUnboundContainerInstance();
+        $result = ContainerFactory::getUnboundContainerInstance();
         $buildItem = $result->get(OutputInterface::class);
 
         self::assertInstanceOf(Container::class, $result);
@@ -35,8 +36,8 @@ class ContainerFactoryTest extends TestCase
      */
     public function getContainerInstanceReturnsSameInstance()
     {
-        $result1    = ContainerFactory::getContainerInstance();
-        $result2    = ContainerFactory::getContainerInstance();
+        $result1 = ContainerFactory::getContainerInstance();
+        $result2 = ContainerFactory::getContainerInstance();
 
         self::assertSame($result1, $result2);
     }

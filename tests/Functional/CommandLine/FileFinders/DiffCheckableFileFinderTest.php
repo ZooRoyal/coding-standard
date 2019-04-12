@@ -76,7 +76,7 @@ class DiffCheckableFileFinderTest extends TestCase
         string $forgedRootDirectory,
         string $targetBranch,
         string $forgedRawDiffUnfilteredString
-    ): Container {
+    ) : Container {
         $targetMergeBase = '123asdasdMergeBase123123asd';
 
         $mockedEnvironment = Mockery::mock(Environment::class);

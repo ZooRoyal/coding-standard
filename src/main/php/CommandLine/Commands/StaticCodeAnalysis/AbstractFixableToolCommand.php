@@ -7,11 +7,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
 abstract class AbstractFixableToolCommand extends Command
 {
-    /** @var PHPCodeSnifferAdapter */
+    /** @var FixerSupportInterface|ToolAdapterInterface */
     protected $toolAdapter;
 
     /**

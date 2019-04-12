@@ -154,12 +154,12 @@ class FindFilesToCheckCommandTest extends TestCase
     /**
      * Prepare $mockedInputInterface for test.
      *
-     * @param $mockedInputInterface
-     * @param string $mockedBlacklistToken
-     * @param string $mockedWhitelistToken
-     * @param string $mockedFilter
-     * @param string $mockedTargetBranch
-     * @param bool $mockedExclusiveFlag
+     * @param MockInterface $mockedInputInterface
+     * @param string        $mockedBlacklistToken
+     * @param string        $mockedWhitelistToken
+     * @param string        $mockedFilter
+     * @param string        $mockedTargetBranch
+     * @param bool          $mockedExclusiveFlag
      */
     protected function prepareMockedInputInterface(
         MockInterface $mockedInputInterface,

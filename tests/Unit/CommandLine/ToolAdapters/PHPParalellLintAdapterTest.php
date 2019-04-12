@@ -93,7 +93,7 @@ class PHPParalellLintAdapterTest extends TestCase
                 'tool' => 'PHPPL',
                 'fullMessage' => 'PHPPL : Running full check',
                 'diffMessage' => 'PHPPL : Running check on diff',
-                'method' => 'writeViolationsToOutput'
+                'method' => 'writeViolationsToOutput',
             ],
         ];
     }
@@ -102,13 +102,17 @@ class PHPParalellLintAdapterTest extends TestCase
      * @test
      * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
-     * @param $tool
-     * @param $fullMessage
-     * @param $diffMessage
-     * @param $method
+     * @param string $tool
+     * @param string $fullMessage
+     * @param string $diffMessage
+     * @param string $method
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResult($tool, $fullMessage, $diffMessage, $method)
-    {
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
+        string $tool,
+        string $fullMessage,
+        string $diffMessage,
+        string $method
+    ) {
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;

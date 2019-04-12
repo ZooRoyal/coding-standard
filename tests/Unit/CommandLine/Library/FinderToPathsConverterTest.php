@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Hamcrest\MatcherAssert;

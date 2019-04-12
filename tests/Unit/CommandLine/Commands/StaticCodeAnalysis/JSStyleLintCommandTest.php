@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
@@ -28,12 +29,12 @@ class JSStyleLintCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(JSStyleLintCommand::class);
-        $this->subject           = $buildFragments['subject'];
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(JSStyleLintCommand::class);
+        $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
-        $this->mockedInputInterface  = Mockery::mock(InputInterface::class);
+        $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }
 
@@ -55,8 +56,10 @@ class JSStyleLintCommandTest extends TestCase
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run StyleLint on Less files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes STYLELINT on a certain set of Less files of this project.'
-                . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
+            ->with(
+                'This tool executes STYLELINT on a certain set of Less files of this project.'
+                . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.'
+            );
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
@@ -87,10 +90,10 @@ class JSStyleLintCommandTest extends TestCase
      */
     public function executeFullBuildWithFix()
     {
-        $mockedTargetBranch     = '';
+        $mockedTargetBranch = '';
         $mockedProcessIsolation = true;
-        $mockedFixMode          = true;
-        $expectedExitCode       = 0;
+        $mockedFixMode = true;
+        $expectedExitCode = 0;
 
         $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
 
@@ -109,10 +112,10 @@ class JSStyleLintCommandTest extends TestCase
      */
     public function executeFullBuildWithoutFix()
     {
-        $mockedTargetBranch     = '';
+        $mockedTargetBranch = '';
         $mockedProcessIsolation = true;
-        $mockedFixMode          = false;
-        $expectedExitCode       = 0;
+        $mockedFixMode = false;
+        $expectedExitCode = 0;
 
         $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
 
@@ -128,10 +131,11 @@ class JSStyleLintCommandTest extends TestCase
     /**
      * This method prepares the InputInterface mocks.
      *
-     * @param $mockedTargetBranch
-     * @param $mockedProcessIsolation
+     * @param string $mockedTargetBranch
+     * @param bool   $mockedProcessIsolation
+     * @param bool   $mockedFixMode
      */
-    private function prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedProcessIsolation, bool $mockedFixMode)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);

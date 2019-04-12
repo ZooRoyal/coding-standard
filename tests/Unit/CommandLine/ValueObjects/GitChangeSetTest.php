@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ValueObjects;
 
 use PHPUnit\Framework\TestCase;
@@ -11,12 +12,12 @@ class GitChangeSetTest extends TestCase
      */
     public function readWriteCycle()
     {
-        $expectedFiles      = ['asd', 'qwe'];
+        $expectedFiles = ['asd', 'qwe'];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($expectedFiles, $expectedCommitHash);
 
-        $resultingFiles      = $subject->getFiles();
+        $resultingFiles = $subject->getFiles();
         $resultingCommitHash = $subject->getCommitHash();
 
         self::assertSame($expectedFiles, $resultingFiles);
@@ -28,8 +29,8 @@ class GitChangeSetTest extends TestCase
      */
     public function readWriteCycleWithSetter()
     {
-        $forgedFiles        = ['asd'];
-        $expectedFiles      = ['asd', 'qwe'];
+        $forgedFiles = ['asd'];
+        $expectedFiles = ['asd', 'qwe'];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($forgedFiles, $expectedCommitHash);

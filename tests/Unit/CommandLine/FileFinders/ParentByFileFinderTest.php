@@ -58,9 +58,9 @@ class ParentByFileFinderTest extends TestCase
     /**
      * DataProvider for findParentByFileDoesNotFindFile.
      *
-     * @return string[]
+     * @return mixed[]
      */
-    public function findParentByFileDoesNotFindFileDataProvider(): array
+    public function findParentByFileDoesNotFindFileDataProvider() : array
     {
         return [
             'Leading /' => ['/my/directory'],

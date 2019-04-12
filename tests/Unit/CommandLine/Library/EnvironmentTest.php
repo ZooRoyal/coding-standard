@@ -6,7 +6,6 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;

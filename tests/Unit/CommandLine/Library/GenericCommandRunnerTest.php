@@ -233,10 +233,10 @@ class GenericCommandRunnerTest extends TestCase
      * Prepares mocks for calls of private buildCommand with no ProcessIsolation
      *
      * @param string[] $mockedChangedFiles
-     * @param string $mockedTemplate
-     * @param string $mockedOutput
-     * @param string $mockedGlue
-     * @param string $mockedPrefix
+     * @param string   $mockedTemplate
+     * @param string   $mockedOutput
+     * @param string   $mockedGlue
+     * @param string   $mockedPrefix
      */
     private function prepareMocksForRunAndWriteToOutput(
         $mockedChangedFiles,
@@ -265,15 +265,16 @@ class GenericCommandRunnerTest extends TestCase
     /**
      * Prepares mocks for calls of private buildCommand
      *
-     * @param $mockedChangedFiles
-     * @param $mockedTemplate
-     * @param $mockedOutput
+     * @param array  $mockedChangedFiles
+     * @param string $mockedTemplate
+     * @param string $mockedOutput
+     * @param string $mockedErrorOutput
      */
     private function prepareMocksForRunAndWriteToOutputProcessIsolation(
-        $mockedChangedFiles,
-        $mockedTemplate,
-        $mockedOutput,
-        $mockedErrorOutput
+        array $mockedChangedFiles,
+        string $mockedTemplate,
+        string $mockedOutput,
+        string $mockedErrorOutput
     ) {
         foreach ($mockedChangedFiles as $mockedChangedFile) {
             $mockedCommand = sprintf($mockedTemplate, $mockedChangedFile);
@@ -293,16 +294,16 @@ class GenericCommandRunnerTest extends TestCase
     /**
      * Prepare mocks for call to findFiles.
      *
-     * @param string $mockedFilter
-     * @param string $mockedStopword
-     * @param string $mockedTargetBranch
+     * @param string   $mockedFilter
+     * @param string   $mockedStopword
+     * @param string   $mockedTargetBranch
      * @param string[] $mockedChangedFiles
      */
     private function prepareMocksForFindFiles(
-        $mockedFilter,
-        $mockedStopword,
-        $mockedTargetBranch,
-        $mockedChangedFiles
+        string $mockedFilter,
+        string $mockedStopword,
+        string $mockedTargetBranch,
+        array $mockedChangedFiles
     ) {
         $this->mockedGitChangeSet->shouldReceive('getCommitHash')->andReturn('asd');
         $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
