@@ -37,6 +37,67 @@ Run the command to get usage instructions.
 ```bash
 php vendor/bin/coding-standard
 ```
+```
+Available commands:
+  find-files                Finds files for code style checks.
+  help                      Displays help for a command
+  list                      Lists commands
+ checks
+  checks:forbidden-changes  Checks for unwanted code changes.
+ sca
+  sca:all                   Run all static code analysis tools.
+  sca:copy-paste-detect     Run PHP-CPD on PHP files.
+  sca:eslint                Run ESLint on JS files.
+  sca:mess-detect           Run PHP-MD on PHP files.
+  sca:parallel-lint         Run Parallel-Lint on PHP files.
+  sca:sniff                 Run PHP-CS on PHP files.
+  sca:stylelint             Run StyleLint on Less files.
+```
+
+## Example `sca:all`
+
+```bash
+vendor/bin/coding-standard sca:all -h
+```
+```
+Usage:
+  sca:all [options]
+
+Options:
+  -t, --target=TARGET      Finds Files which have changed since the current branch parted from the target 
+                           branch only. The Value has to be a commit-ish. [default: false]
+  -a, --auto-target        Finds Files which have changed since the current branch parted from the parent 
+                           branch only. It tries to find the parent branch by automagic.
+  -f, --fix                Runs tool to try to fix violations automagically.
+  -p, --process-isolation  Runs all checks in separate processes. Slow but not as resource hungry.
+  -h, --help               Display this help message
+  -q, --quiet              Do not output any message
+  -V, --version            Display this application version
+      --ansi               Force ANSI output
+      --no-ansi            Disable ANSI output
+  -n, --no-interaction     Do not ask any interactive question
+  -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output 
+                           and 3 for debug
+
+Help:
+  This tool executes all static code analysis tools on files of this project. It ignores files which are in 
+  directories with a .dont<toolshortcut> file. Subdirectories are ignored too.
+```
+
+The all command forwards all applicable parameters to all implemented static code analysis tools.
+
+```bash
+vendor/bin/coding-standard sca:all -a -f
+```
+
+This command for example tries to find the parent branch by automagic (-a) and tells all static code analysis 
+tools to fix found violations if they are able to.
+
+```bash
+vendor/bin/coding-standard sca:all -t origin/master
+```
+
+This command computes the diff to the branch origin/master and searches for all violations in this files.
 
 For examples just have a look an the .travis.yml
 
