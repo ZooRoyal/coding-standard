@@ -35,7 +35,7 @@ class ProcessRunner
      *
      * @return Process
      */
-    public function runAsProcessReturningProcessObject($command) : Process
+    public function runAsProcessReturningProcessObject(string $command) : Process
     {
         $process = new Process($command);
         $process->run();
