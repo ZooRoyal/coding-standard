@@ -35,7 +35,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
-        $esLintConfig = $environment->getPackageDirectory() . '/src/config/eslint/.eslintrc.js';
+        $esLintConfig = $environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
         $rootDirectory = $environment->getRootDirectory();
 
         $esLintBlacklistCommand = $environment->getPackageDirectory()

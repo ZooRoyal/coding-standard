@@ -61,7 +61,7 @@ class JSStyleLintAdapterTest extends TestCase
     public function constructSetsUpSubjectCorrectly()
     {
         $expectedFilter = '.less';
-
+        $config = '/config/stylelint/.stylelintrc';
         self::assertSame('.dontSniffLESS', $this->partialSubject->getBlacklistToken());
         self::assertSame($expectedFilter, $this->partialSubject->getFilter());
         self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
@@ -74,23 +74,23 @@ class JSStyleLintAdapterTest extends TestCase
                 H::hasKeyValuePair(
                     'STYLELINTWL',
                     $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc %1$s'
+                    . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXWL',
                     $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc --fix %1$s'
+                    . $this->mockedPackageDirectory . $config . ' --fix %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTBL',
                     $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc %1$s '
+                    . $this->mockedPackageDirectory . $config . ' %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXBL',
                     $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/stylelint/.stylelintrc --fix %1$s '
+                    . $this->mockedPackageDirectory . $config . ' --fix %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 )
             )

@@ -9,7 +9,11 @@
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
 
-    <rule ref="../../../main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <config name="testVersion" value="7.0-"/>
+    <rule ref="PHPCompatibility"/>
+
+    <!-- Custom Rule-->
+    <rule ref="../../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
 
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">
@@ -102,6 +106,83 @@
     <rule ref="PEAR.Functions.ValidDefaultValue"/>
     <rule ref="PEAR.WhiteSpace.ObjectOperatorIndent"/>
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
+
+    <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
+    <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
+        <properties>
+            <property name="forbiddenAnnotations" type="array">
+                <element value="@author"/>
+                <element value="@created"/>
+                <element value="@version"/>
+                <element value="@package"/>
+                <element value="@copyright"/>
+                <element value="@license"/>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Commenting.InlineDocCommentDeclaration"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowEqualOperators"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
+    <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
+        <properties>
+            <property name="allowPartialUses" type="bool" value="true"/>
+            <property name="allowFullyQualifiedNameForCollidingClasses" type="bool" value="false"/>
+            <property name="allowFullyQualifiedGlobalFunctions" type="bool" value="true"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.UnusedUses">
+        <properties>
+            <property name="searchAnnotations" type="bool" value="true"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
+
+    <!--
+        https://packagist.org/packages/bmitch/codor are planed for PHP > 7.0
+
+        Codor.Files.MethodFlagParameter
+        Codor.Classes.ConstructorLoop
+        Codor.Classes.FinalPrivate
+        Codor.Classes.PropertyDeclaration
+        Codor.Syntax.NullCoalescing
+        Codor.Syntax.LinesAfterMethod
+
+        Codor.TypeHints.MixedReturnType
+        Codor.Files.FunctionParameter
+        Codor.Files.ReturnNull
+        Codor.Files.IndentationLevel
+    -->
+    <!--
+        Buggy with sniffversion 4.0 and php 7.0
+        <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
+            <properties>
+                <property name="usefulAnnotations" type="array">
+                    <element value="@test"/>
+                    <element value="@dataProvider"/>
+                    <element value="@expectedException"/>
+                </property>
+            </properties>
+        </rule>
+    -->
+
+    <!--
+        No Effect
+        <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
+            <properties>
+                <property name="spacesCountBeforeColon" type="int" value="3"/>
+            </properties>
+        </rule>
+    -->
+
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
     <rule ref="Squiz.Classes.ClassDeclaration"/>

@@ -28,8 +28,6 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     private $mockedRootDirectory;
     /** @var string */
     private $expectedStopword;
-    /** @var string */
-    private $expectedFilter;
     /** @var int */
     private $expectedExitCode;
     /** @var bool */
@@ -51,7 +49,6 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->mockedProcessisolation = true;
         $this->expectedExitCode = 0;
         $this->expectedStopword = '.dontCopyPasteDetectPHP';
-        $this->expectedFilter = '.php';
         $this->expectedPrefix = '--exclude ';
         $this->expectedGlue = ' ';
 

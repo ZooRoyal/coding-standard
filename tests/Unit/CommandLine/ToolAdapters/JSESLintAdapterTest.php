@@ -60,6 +60,8 @@ class JSESLintAdapterTest extends TestCase
      */
     public function constructSetsUpSubjectCorrectly()
     {
+        $configFile = '/config/eslint/.eslintrc.js';
+
         self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
         self::assertSame('.js', $this->partialSubject->getFilter());
         self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
@@ -72,24 +74,24 @@ class JSESLintAdapterTest extends TestCase
                 H::hasKeyValuePair(
                     'ESLINTBL',
                     $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s '
+                    . $this->mockedPackageDirectory . $configFile . ' %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTWL',
                     $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js %1$s'
+                    . $this->mockedPackageDirectory . $configFile . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXBL',
                     $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s '
+                    . $this->mockedPackageDirectory . $configFile . ' --fix %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXWL',
                     $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . '/src/config/eslint/.eslintrc.js --fix %1$s'
+                    . $this->mockedPackageDirectory . $configFile . ' --fix %1$s'
                 )
             )
         );

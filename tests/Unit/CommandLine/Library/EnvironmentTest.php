@@ -17,8 +17,6 @@ class EnvironmentTest extends TestCase
     private $subject;
     /** @var string */
     private $rootDirectory;
-    /** @var string */
-    private $localBranch;
     /** @var string[] */
     private $blacklistedDirectories = [
         '.eslintrc.js',
@@ -35,7 +33,6 @@ class EnvironmentTest extends TestCase
     protected function setUp()
     {
         $this->rootDirectory = '/my/root';
-        $this->localBranch = 'localBranch';
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);

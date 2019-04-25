@@ -6,22 +6,14 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
-use Zooroyal\CodingStandard\Plugin\Plugin;
 
 class PluginTest extends TestCase
 {
-    /** @var Plugin */
-    private $subject;
     /** @var string[] */
     private $composerArtefactPaths = [
         __DIR__ . '/Fixtures/ComposerTest/vendor/',
         __DIR__ . '/Fixtures/ComposerTest/composer.lock',
     ];
-
-    protected function setUp()
-    {
-        $this->subject = new Plugin();
-    }
 
     protected function tearDown()
     {

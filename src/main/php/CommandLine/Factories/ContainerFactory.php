@@ -46,7 +46,7 @@ class ContainerFactory
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
         $builder->useAutowiring(true);
-        $builder->addDefinitions(__DIR__ . '/../../../../config/phpdi/phpdi.php');
+        $builder->addDefinitions(__DIR__ . '/../Config/phpdi.php');
         return $builder->build();
     }
 }

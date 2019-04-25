@@ -97,7 +97,7 @@ class ForbiddenChangesCommandTest extends TestCase
             'warning' => [
                 'warning' => true,
                 'expectedResult' => H::is(0),
-                'messageMatcher' => h::allOf(
+                'messageMatcher' => H::allOf(
                     H::containsString('The following files violate change constraints: '),
                     H::containsString('Some file')
                 ),
@@ -109,7 +109,7 @@ class ForbiddenChangesCommandTest extends TestCase
             'error' => [
                 'warning' => false,
                 'expectedResult' => H::not(0),
-                'messageMatcher' => h::allOf(
+                'messageMatcher' => H::allOf(
                     H::containsString('The following files violate change constraints: '),
                     H::containsString('Some file')
                 ),

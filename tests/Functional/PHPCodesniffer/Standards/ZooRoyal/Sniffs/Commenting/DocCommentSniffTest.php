@@ -27,9 +27,7 @@ class DocCommentSniffTest extends TestCase
     protected function setUp()
     {
         $this->commandPrefix = 'vendor/bin/phpcs '
-            . '--sniffs=ZooRoyal.Commenting.DocComment '
-            . '--standard=' . self::$vendorDir . '/../src/config/phpcs/ZooroyalDefault/ruleset.xml '
-            . '-s ';
+            . '--sniffs=ZooRoyal.Commenting.DocComment --standard=ZooRoyal -s ';
     }
 
     /**
