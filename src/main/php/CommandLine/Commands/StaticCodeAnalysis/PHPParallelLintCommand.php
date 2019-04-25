@@ -1,27 +1,28 @@
 <?php
-namespace Zooroyal\CodingStandard\CommandLine\Commands;
+
+namespace Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSStyleLintAdapter;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPParallelLintAdapter;
 
-class JSStyleLintCommand extends Command
+class PHPParallelLintCommand extends Command
 {
-    /** @var JSStyleLintAdapter */
+    /** @var PHPParallelLintAdapter */
     private $toolAdapter;
 
     /**
-     * JSStyleLintCommand constructor.
+     * PHPParallelLintCommand constructor.
      *
-     * @param JSStyleLintAdapter $toolAdapter
+     * @param PHPParallelLintAdapter $toolAdapter
      */
-    public function __construct(JSStyleLintAdapter $toolAdapter)
+    public function __construct(PHPParallelLintAdapter $toolAdapter)
     {
-        parent::__construct();
         $this->toolAdapter = $toolAdapter;
+        parent::__construct();
     }
 
     /**
@@ -29,10 +30,12 @@ class JSStyleLintCommand extends Command
      */
     protected function configure()
     {
-        $this->setName('stylelint');
-        $this->setDescription('Run StyleLint on Less files.');
-        $this->setHelp('This tool executes STYLELINT on a certain set of Less files of this Project.'
-            . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
+        $this->setName('sca:parallel-lint');
+        $this->setDescription('Run Parallel-Lint on PHP files.');
+        $this->setHelp(
+            'This tool executes Parallel-Lint on a certain set of PHP files of this project. It '
+            . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.'
+        );
         $this->setDefinition(
             new InputDefinition(
                 [
@@ -40,15 +43,15 @@ class JSStyleLintCommand extends Command
                         'target',
                         't',
                         InputOption::VALUE_REQUIRED,
-                        'Lints Less-Files which have changed since the current branch parted from the target path '
-                        . 'only. The Value has to be a commit-ish.',
-                        ''
+                        'Finds files which have changed since the current branch parted from the target branch '
+                        . 'only. The value has to be a commit-ish.'
                     ),
                     new InputOption(
-                        'fix',
-                        'f',
+                        'auto-target',
+                        'a',
                         InputOption::VALUE_NONE,
-                        'Fix all changed Less Files'
+                        'Finds files which have changed since the current branch parted from the parent branch '
+                        . 'only. It tries to find the parent branch by automagic.'
                     ),
                     new InputOption(
                         'process-isolation',
@@ -66,13 +69,8 @@ class JSStyleLintCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $targetBranch          = $input->getOption('target');
+        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
         $processIsolationInput = $input->getOption('process-isolation');
-        $fixMode               = $input->getOption('fix');
-
-        if ($fixMode) {
-            $this->toolAdapter->fixViolations($targetBranch, $processIsolationInput);
-        }
 
         $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
 

@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 interface ToolAdapterInterface
@@ -6,10 +7,10 @@ interface ToolAdapterInterface
     /**
      * Search for violations by using PHPCS and write finds to screen.
      *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
+     * @param string|null $targetBranch
+     * @param bool        $processIsolation
      *
      * @return int|null
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false);
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false);
 }

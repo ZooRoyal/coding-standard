@@ -1,6 +1,9 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolAdapters;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -9,57 +12,41 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
 class PHPCodeSnifferAdapterTest extends TestCase
 {
-    /** @var PHPCodeSnifferAdapter */
-    private $subject;
     /** @var MockInterface|Environment */
     private $mockedEnvironment;
     /** @var MockInterface|GenericCommandRunner */
     private $mockedGenericCommandRunner;
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
+    /** @var MockInterface|PHPCodeSnifferAdapter */
+    private $partialSubject;
     /** @var string */
     private $mockedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
-    /** @var string */
-    private $expectedStopword;
-    /** @var string */
-    private $expectedFilter;
-    /** @var int */
-    private $expectedExitCode;
-    /** @var bool */
-    private $mockedProcessisolation;
-    /** @var string */
-    private $expectedGlue;
 
     protected function setUp()
     {
-        $this->mockedEnvironment          = Mockery::mock(Environment::class);
+        $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
-        $this->mockedOutputInterface      = Mockery::mock(OutputInterface::class);
+        $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
 
         $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory    = '/root/directory';
-
-        $this->mockedProcessisolation = true;
-        $this->expectedExitCode       = 0;
-        $this->expectedStopword       = '.dontSniffPHP';
-        $this->expectedFilter         = '.php';
-        $this->expectedGlue           = ' ';
+        $this->mockedRootDirectory = '/root/directory';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
-        $this->subject = new PHPCodeSnifferAdapter(
-            $this->mockedEnvironment,
-            $this->mockedOutputInterface,
-            $this->mockedGenericCommandRunner
-        );
+        $this->partialSubject = Mockery::mock(
+            PHPCodeSnifferAdapter::class,
+            [$this->mockedEnvironment, $this->mockedOutputInterface, $this->mockedGenericCommandRunner]
+        )->shouldAllowMockingProtectedMethods()->makePartial();
     }
 
     protected function tearDown()
@@ -71,102 +58,100 @@ class PHPCodeSnifferAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function constructSetsUpSubjectCorrectly()
     {
-        self::assertInstanceOf(FixerSupportInterface::class, $this->subject);
+        self::assertSame('.dontSniffPHP', $this->partialSubject->getBlacklistToken());
+        self::assertSame('.php', $this->partialSubject->getFilter());
+        self::assertSame('', $this->partialSubject->getBlacklistPrefix());
+        self::assertSame(',', $this->partialSubject->getBlacklistGlue());
+        self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
+
+        MatcherAssert::assertThat(
+            $this->partialSubject->getCommands(),
+            H::allOf(
+                H::hasKeyValuePair(
+                    'PHPCSWL',
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                ),
+                H::hasKeyValuePair(
+                    'PHPCBFWL',
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                ),
+                H::hasKeyValuePair(
+                    'PHPCSBL',
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    . ' --ignore=%1$s ' . $this->mockedRootDirectory
+                ),
+                H::hasKeyValuePair(
+                    'PHPCBFBL',
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
+                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    . ' --ignore=%1$s ' . $this->mockedRootDirectory
+                )
+            )
+        );
     }
 
     /**
-     * @test
+     * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
+     *
+     * @return mixed[]
      */
-    public function writeViolationsToOutputWithTargetForWhitelistCheck()
-    {
-        $mockedTargetBranch = 'myTarget';
-        $expectedCommand    = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-            . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s';
-
-        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('origin/master')->andReturn(false);
-
-        $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with('Running check on diff to ' . $mockedTargetBranch, OutputInterface::VERBOSITY_NORMAL);
-
-        $this->mockedGenericCommandRunner->shouldReceive('runWhitelistCommand')->once()
-            ->with(
-                $expectedCommand,
-                $mockedTargetBranch,
-                $this->expectedStopword,
-                $this->expectedFilter,
-                true,
-                $this->expectedGlue
-            )
-            ->andReturn($this->expectedExitCode);
-
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
-
-        self::assertSame($this->expectedExitCode, $result);
-    }
-
-
-    public function writeViolationsToOutputWithTargetForBlacklistCheckDataProvider()
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
     {
         return [
-            'local master'     => [
-                'writeViolationsToOutput',
-                'Running full check.',
-                'expectedWrite',
-                'myTarget',
-                true
+            'find Violations' => [
+                'tool' => 'PHPCS',
+                'fullMessage' => 'PHPCS : Running full check',
+                'diffMessage' => 'PHPCS : Running check on diff',
+                'method' => 'writeViolationsToOutput',
             ],
-            'empty target'     => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite',  '', false],
-            'both'             => ['writeViolationsToOutput', 'Running full check.', 'expectedWrite', '', true],
-            'fix local master' => ['fixViolations', 'Fix all Files.', 'expectedFix', 'myTarget', true],
-            'fix empty target' => ['fixViolations', 'Fix all Files.', 'expectedFix', '', false],
-            'fix both'         => ['fixViolations', 'Fix all Files.', 'expectedFix', '', true],
+            'fix Violations' => [
+                'tool' => 'PHPCBF',
+                'fullMessage' => 'PHPCBF : Fix all Files',
+                'diffMessage' => 'PHPCBF : Fix Files in diff',
+                'method' => 'fixViolations',
+            ],
         ];
     }
 
     /**
      * @test
+     * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
+     * @param string $tool
+     * @param string $fullMessage
+     * @param string $diffMessage
      * @param string $method
-     * @param string $message
-     * @param string $command
-     * @param string $mockedTargetBranch
-     * @param string $equalToLocalBranch
-     *
-     * @dataProvider writeViolationsToOutputWithTargetForBlacklistCheckDataProvider
-     *
-     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck(
-        $method,
-        $message,
-        $command,
-        $mockedTargetBranch,
-        $equalToLocalBranch
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
+        string $tool,
+        string $fullMessage,
+        string $diffMessage,
+        string $method
     ) {
-        $expectedWrite = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-            . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml --ignore=%1$s '
-            . $this->mockedRootDirectory;
+        $mockedProcessIsolation = true;
+        $mockedTargetBranch = 'myTargetBranch';
+        $expectedResult = 123123123;
 
-        $expectedFix = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
-            . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml --ignore=%1$s '
-            . $this->mockedRootDirectory;
+        $this->partialSubject->shouldReceive('runTool')->once()
+            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->andReturn($expectedResult);
 
-        $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
-            ->with('origin/master')->andReturn($equalToLocalBranch);
+        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
 
-        $this->mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with($message, OutputInterface::VERBOSITY_NORMAL);
-
-        $this->mockedGenericCommandRunner->shouldReceive('runBlacklistCommand')->once()
-            ->with($$command, $this->expectedStopword, '', ',', true)
-            ->andReturn($this->expectedExitCode);
-
-        $result = $this->subject->$method($mockedTargetBranch, $this->mockedProcessisolation);
-
-        self::assertSame($this->expectedExitCode, $result);
+        self::assertSame($expectedResult, $result);
     }
 
+    /**
+     * @test
+     */
+    public function phpCodeSnifferAdapterimplementsInterface()
+    {
+        self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
+        self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);
+    }
 }

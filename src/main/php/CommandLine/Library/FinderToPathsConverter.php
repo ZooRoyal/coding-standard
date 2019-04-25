@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Finder\Finder;
@@ -7,13 +8,13 @@ use Symfony\Component\Finder\SplFileInfo;
 class FinderToPathsConverter
 {
     /**
-     * Converts Finder objects to Arrays of their RealPaths.
+     * Converts Finder objects to Arrays of their relative paths.
      *
-     * @param $finder
+     * @param Finder $finder
      *
      * @return string[]
      */
-    public function finderToArrayOfPaths(Finder $finder)
+    public function finderToArrayOfPaths(Finder $finder) : array
     {
         $result = array_map(
             function ($value) {

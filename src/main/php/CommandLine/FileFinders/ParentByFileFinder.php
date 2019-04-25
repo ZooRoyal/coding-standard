@@ -1,21 +1,22 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Factories\FinderFactory;
+use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 
 class ParentByFileFinder
 {
     /** @var Environment */
     private $environment;
-    /** @var FinderFactory */
-    private $finderFactory;
+    /** @var Filesystem */
+    private $filesystem;
 
-    public function __construct(Environment $environment, FinderFactory $finderFactory)
+    public function __construct(Environment $environment, Filesystem $filesystem)
     {
-        $this->environment   = $environment;
-        $this->finderFactory = $finderFactory;
+        $this->environment = $environment;
+        $this->filesystem = $filesystem;
     }
 
     /**
@@ -33,16 +34,15 @@ class ParentByFileFinder
             throw new InvalidArgumentException('$fileName (value was ' . $fileName . ') must be set.', 1525785151);
         }
 
-        $directory = $directory !== null ? $directory : getcwd();
-        $hit       = null;
+        $directory = $directory ?? getcwd();
+        $hit = null;
 
         while ($directory !== $this->environment->getRootDirectory()
             && $directory !== ''
+            && $directory !== '.'
             && $directory !== '/'
         ) {
-            $stopFileFinder = $this->finderFactory->build();
-            $stopFileFinder->in($directory)->files()->depth('== 1')->name('*' . $fileName . '*');
-            if (count($stopFileFinder) !== 0) {
+            if ($this->filesystem->exists($directory . '/' . $fileName)) {
                 $hit = $directory;
                 break;
             }

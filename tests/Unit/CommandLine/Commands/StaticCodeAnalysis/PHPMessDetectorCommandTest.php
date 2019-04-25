@@ -1,5 +1,6 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands;
+
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnalysis;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -10,12 +11,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\JSStyleLintCommand;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSStyleLintAdapter;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class JSStyleLintCommandTest extends TestCase
+class PHPMessDetectorCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -28,12 +29,12 @@ class JSStyleLintCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(JSStyleLintCommand::class);
-        $this->subject           = $buildFragments['subject'];
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(PHPMessDetectorCommand::class);
+        $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
 
-        $this->mockedInputInterface  = Mockery::mock(InputInterface::class);
+        $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }
 
@@ -49,14 +50,16 @@ class JSStyleLintCommandTest extends TestCase
     public function configure()
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
-        $localSubject = Mockery::mock(JSStyleLintCommand::class, $this->subjectParameters)->makePartial();
+        $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('stylelint');
+        $localSubject->shouldReceive('setName')->once()->with('sca:mess-detect');
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Run StyleLint on Less files.');
+            ->with('Run PHP-MD on PHP files.');
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool executes STYLELINT on a certain set of Less files of this Project.'
-                . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.');
+            ->with(
+                'This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files ' .
+                'which are in directories with a .dontMessDetectPHP file. Subdirectories are ignored too.'
+            );
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
@@ -82,42 +85,19 @@ class JSStyleLintCommandTest extends TestCase
         $localSubject->configure();
     }
 
-    /**
-     * @test
-     */
-    public function executeFullBuildWithFix()
-    {
-        $mockedTargetBranch     = '';
-        $mockedProcessIsolation = true;
-        $mockedFixMode          = true;
-        $expectedExitCode       = 0;
-
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
-
-        $this->subjectParameters[JSStyleLintAdapter::class]->shouldReceive('fixViolations')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
-        $this->subjectParameters[JSStyleLintAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
-
-        $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
-
-        self::assertSame($expectedExitCode, $result);
-    }
 
     /**
      * @test
      */
-    public function executeFullBuildWithoutFix()
+    public function writeViolationsToOutput()
     {
-        $mockedTargetBranch     = '';
+        $mockedTargetBranch = '';
         $mockedProcessIsolation = true;
-        $mockedFixMode          = false;
-        $expectedExitCode       = 0;
+        $expectedExitCode = 0;
 
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
+        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation);
 
-        $this->subjectParameters[JSStyleLintAdapter::class]->shouldReceive('fixViolations')->never();
-        $this->subjectParameters[JSStyleLintAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
+        $this->subjectParameters[PHPMessDetectorAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
@@ -128,16 +108,16 @@ class JSStyleLintCommandTest extends TestCase
     /**
      * This method prepares the InputInterface mocks.
      *
-     * @param $mockedTargetBranch
-     * @param $mockedProcessIsolation
+     * @param string $mockedTargetBranch
+     * @param bool   $mockedProcessIsolation
      */
-    private function prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedProcessIsolation)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('process-isolation')->andReturn($mockedProcessIsolation);
+            ->with('auto-target')->andReturn(false);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('fix')->andReturn($mockedFixMode);
+            ->with('process-isolation')->andReturn($mockedProcessIsolation);
     }
 }

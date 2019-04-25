@@ -1,12 +1,15 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\FileFilter;
+use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class AllCheckableFileFinderTest extends TestCase
@@ -18,9 +21,9 @@ class AllCheckableFileFinderTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory          = new SubjectFactory();
-        $buildFragments          = $subjectFactory->buildSubject(AllCheckableFileFinder::class);
-        $this->subject           = $buildFragments['subject'];
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(AllCheckableFileFinder::class);
+        $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
@@ -35,19 +38,22 @@ class AllCheckableFileFinderTest extends TestCase
      */
     public function findAll()
     {
-        $expectedFilter   = 'asd';
-        $expectedStopword = 'StopMeNow';
-        $expectedResult   = ['qwe'];
+        $expectedFilter = 'asd';
+        $expectedBlacklistToken = 'StopMeNow';
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
+            ->with('git', 'ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
 
-        $this->subjectParameters[FileFilter::class]->shouldReceive('filterByBlacklistFilterStringAndStopword')
-            ->with(['asd', 'qwe'], $expectedFilter, $expectedStopword)->andReturn(['qwe']);
+        $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
+            ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
 
-        $result = $this->subject->findFiles($expectedFilter, $expectedStopword);
+        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
+            ->with($mockedGitChangeSet, $expectedFilter, $expectedBlacklistToken);
 
-        self::assertSame($expectedResult, $result);
+        $result = $this->subject->findFiles($expectedFilter, $expectedBlacklistToken);
+
+        self::assertSame($mockedGitChangeSet, $result);
     }
 
     /**
@@ -55,16 +61,19 @@ class AllCheckableFileFinderTest extends TestCase
      */
     public function findAllWithNoParameter()
     {
-        $expectedResult   = ['qwe'];
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
+            ->with('git', 'ls-files')->andReturn('asd' . "\n" . 'qwe' . "\n");
 
-        $this->subjectParameters[FileFilter::class]->shouldReceive('filterByBlacklistFilterStringAndStopword')
-            ->with(['asd', 'qwe'], '', '')->andReturn(['qwe']);
+        $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
+            ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
+
+        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
+            ->with($mockedGitChangeSet, '', '');
 
         $result = $this->subject->findFiles();
 
-        self::assertSame($expectedResult, $result);
+        self::assertSame($mockedGitChangeSet, $result);
     }
 }

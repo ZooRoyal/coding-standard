@@ -1,130 +1,93 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\FileFilter;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
+use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
     /** @var ProcessRunner */
     private $processRunner;
-    /** @var \Zooroyal\CodingStandard\CommandLine\Library\Environment */
-    private $environment;
-    /** @var FileFilter */
+    /** @var GitChangeSetFilter */
     private $fileFilter;
+    /** @var GitChangeSetFactory */
+    private $gitChangeSetFactory;
 
     /**
      * CheckableFileFinder constructor.
      *
-     * @param ProcessRunner $processRunner
-     * @param Environment   $environment
-     * @param FileFilter    $fileFilter
+     * @param ProcessRunner       $processRunner
+     * @param GitChangeSetFilter  $fileFilter
+     * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
         ProcessRunner $processRunner,
-        Environment $environment,
-        FileFilter $fileFilter
+        GitChangeSetFilter $fileFilter,
+        GitChangeSetFactory $gitChangeSetFactory
     ) {
         $this->processRunner = $processRunner;
-        $this->environment   = $environment;
-        $this->fileFilter    = $fileFilter;
+        $this->fileFilter = $fileFilter;
+        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string $targetBranch
-     * @param string $filter
-     * @param string $stopword
+     * @param string       $filter
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
+     * @param string|false $targetBranch
      *
-     * @return string[]
+     * @return GitChangeSet
+     *
+     * @throws InvalidArgumentException
      */
-    public function findFiles($filter = '', $stopword = '', $targetBranch = '')
-    {
-        $rawDiff = $this->findRawDiff($targetBranch);
-        $diff    = $this->fileFilter->filterByBlacklistFilterStringAndStopword($rawDiff, $filter, $stopword);
-
-        return $diff;
-    }
-
-    /**
-     * This function computes the raw diff without filtering by blacklist and such.
-     *
-     * @param string $targetBranch
-     *
-     * @return string[]
-     */
-    private function findRawDiff($targetBranch = '')
-    {
-        if ($this->environment->isLocalBranchEqualTo($targetBranch)) {
-            $rawDiffAsString = $this->findFilesOfBranch();
-        } else {
-            $rawDiffAsString = $this->findFilesInDiffToTarget($targetBranch);
-        }
-
-        return explode("\n", trim($rawDiffAsString));
-    }
-
-    /**
-     * This method returns all files of parent commits of local branches HEAD, which are not part of another branch.
-     * The result is a single string as it is the result of the git call.
-     *
-     * @return string
-     */
-    private function findFilesOfBranch()
-    {
-        $targetCommit = 'HEAD';
-
-        $initialNumberOfContainingBranches = $this->processRunner->runAsProcess(
-            'git branch -a --contains HEAD | wc -l'
-        );
-
-        while ($this->isParentCommitishACommit($targetCommit)) {
-            $targetCommit               .= '^';
-            $numberOfContainingBranches = $this->processRunner->runAsProcess(
-                'git branch -a --contains ' . $targetCommit . ' | wc -l'
+    public function findFiles(
+        string $filter = '',
+        string $blacklistToken = '',
+        string $whitelistToken = '',
+        $targetBranch = ''
+    ) : GitChangeSet {
+        if (empty($targetBranch)) {
+            throw new InvalidArgumentException(
+                'Finding a diff makes no sense without a target branch.',
+                1553857649
             );
-
-            if ($numberOfContainingBranches !== $initialNumberOfContainingBranches) {
-                break;
-            }
         }
-        $rawDiffUnfilteredString = $this->processRunner->runAsProcess('git diff --name-only --diff-filter=d '
-            . $targetCommit);
 
-        return $rawDiffUnfilteredString;
-    }
+        $rawDiff = $this->findFilesInDiffToTarget($targetBranch);
+        $this->fileFilter->filter($rawDiff, $filter, $blacklistToken, $whitelistToken);
 
-    /**
-     * Returns true if $targetCommit commit-ish is a valid commit.
-     *
-     * @param string $targetCommit
-     *
-     * @return bool
-     */
-    private function isParentCommitishACommit($targetCommit)
-    {
-        $targetType = $this->processRunner->runAsProcess('git cat-file -t ' . $targetCommit . '^');
-
-        return $targetType === 'commit';
+        return $rawDiff;
     }
 
     /**
      * This method finds all files in diff to target branch.
-     * The result is a single string as it is the result of the git call.
      *
-     * @param $targetBranch
+     * @param string $targetBranch
      *
-     * @return string
+     * @return GitChangeSet
      */
-    private function findFilesInDiffToTarget($targetBranch)
+    private function findFilesInDiffToTarget(string $targetBranch) : GitChangeSet
     {
-        $mergeBase = $this->processRunner->runAsProcess('git merge-base HEAD ' . $targetBranch);
+        $mergeBase = $this->processRunner->runAsProcess('git', 'merge-base', 'HEAD', $targetBranch);
 
-        $rawDiffUnfilteredString = $this->processRunner->runAsProcess('git diff --name-only --diff-filter=d '
-            . $mergeBase);
+        $rawDiffUnfilteredString = $this->processRunner->runAsProcess(
+            'git',
+            'diff',
+            '--name-only',
+            '--diff-filter=d',
+            $mergeBase
+        );
 
-        return $rawDiffUnfilteredString;
+        $rawDiffUnfiltered = explode("\n", trim($rawDiffUnfilteredString));
+
+        $result = $this->gitChangeSetFactory->build($rawDiffUnfiltered, $mergeBase);
+
+        return $result;
     }
 }

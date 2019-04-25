@@ -1,4 +1,5 @@
 <?php
+
 namespace Zooroyal\CodingStandard\Plugin;
 
 use Composer\Composer;
@@ -41,7 +42,7 @@ class Plugin implements PluginInterface, EventSubscriberInterface
             ScriptEvents::POST_INSTALL_CMD => [
                 ['npmInstall', 0],
             ],
-            ScriptEvents::POST_UPDATE_CMD  => [
+            ScriptEvents::POST_UPDATE_CMD => [
                 ['npmInstall', 0],
             ],
         ];
@@ -58,12 +59,12 @@ class Plugin implements PluginInterface, EventSubscriberInterface
      */
     public function activate(Composer $composer, IOInterface $inputOutput)
     {
-        $this->composer    = $composer;
+        $this->composer = $composer;
         $this->inputOutput = $inputOutput;
 
         $packageDirectory = $this->composer->getConfig()->get('vendor-dir')
             . DIRECTORY_SEPARATOR . 'zooroyal' . DIRECTORY_SEPARATOR . 'coding-standard';
-        $this->process    = new Process('npm install --prefix ' . $packageDirectory);
+        $this->process = new Process('npm install --prefix ' . $packageDirectory);
         $this->process->setTimeout(300);
     }
 
@@ -99,9 +100,11 @@ class Plugin implements PluginInterface, EventSubscriberInterface
         }
 
         $inputOutput->write('<info>NPM install</info> for zooroyal/coding-standard:');
-        $this->process->run(function ($type, $buffer) use ($inputOutput) {
-            $inputOutput->write($buffer);
-        });
+        $this->process->run(
+            function ($type, $buffer) use ($inputOutput) {
+                $inputOutput->write($buffer);
+            }
+        );
 
         $this->process->wait();
 

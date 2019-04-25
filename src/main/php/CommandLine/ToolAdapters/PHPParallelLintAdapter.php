@@ -1,26 +1,23 @@
 <?php
+
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 
-class PHPParallelLintAdapter implements ToolAdapterInterface
+class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
-    private $parallelLintWhitelistCommand;
+    protected $blacklistToken = '.dontLintPHP';
     /** @var string */
-    private $parallelLintBlacklistCommand;
-    /** @var OutputInterface */
-    private $output;
-    /** @var Environment */
-    private $environment;
-    /** @var GenericCommandRunner */
-    private $genericCommandRunner;
+    protected $filter = '.php';
     /** @var string */
-    private $stopword;
+    protected $blacklistPrefix = '--exclude ';
     /** @var string */
-    private $filter;
+    protected $blacklistGlue = ' ';
+    /** @var string */
+    protected $whitelistGlue = ' ';
 
     /**
      * PHPParallelLintAdapter constructor.
@@ -34,50 +31,30 @@ class PHPParallelLintAdapter implements ToolAdapterInterface
         OutputInterface $output,
         GenericCommandRunner $genericCommandRunner
     ) {
-        $this->environment          = $environment;
-        $this->output               = $output;
+        $this->environment = $environment;
+        $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
         $rootDirectory = $environment->getRootDirectory();
 
-        $this->stopword = '.dontLintPHP';
-        $this->filter   = '.php';
-
-        $this->parallelLintWhitelistCommand = 'php ' . $rootDirectory
+        $this->commands['PHPPLWL'] = 'php ' . $rootDirectory
             . '/vendor/bin/parallel-lint -j 2 %1$s';
-        $this->parallelLintBlacklistCommand = 'php ' . $rootDirectory
+        $this->commands['PHPPLBL'] = 'php ' . $rootDirectory
             . '/vendor/bin/parallel-lint -j 2 %1$s ./';
     }
 
+
     /**
-     * Search for violations by using PHPCS and write finds to screen.
-     *
-     * @param string $targetBranch
-     * @param bool   $processIsolation
-     *
-     * @return int|null
+     * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
-        if (empty($targetBranch) || $this->environment->isLocalBranchEqualTo('origin/master')) {
-            $this->output->writeln('Running full check.', OutputInterface::VERBOSITY_NORMAL);
-            $exitCode = $this->genericCommandRunner->runBlacklistCommand(
-                $this->parallelLintBlacklistCommand,
-                $this->stopword,
-                '--exclude ',
-                ' '
-            );
-        } else {
-            $this->output->writeln('Running check on diff to ' . $targetBranch, OutputInterface::VERBOSITY_NORMAL);
-            $exitCode = $this->genericCommandRunner->runWhitelistCommand(
-                $this->parallelLintWhitelistCommand,
-                $targetBranch,
-                $this->stopword,
-                $this->filter,
-                $processIsolation,
-                ' '
-            );
-        }
+        $toolShortName = 'PHPPL';
+        $prefix = $toolShortName . ' : ';
+        $fullMessage = $prefix . 'Running full check';
+        $diffMessage = $prefix . 'Running check on diff';
+
+        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
 
         return $exitCode;
     }
