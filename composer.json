@@ -38,7 +38,11 @@
     "doctrine/annotations": "^1.2",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.5.0",
     "slevomat/coding-standard": "^4.0",
-    "phpcompatibility/php-compatibility": "^9.1"
+    "phpcompatibility/php-compatibility": "^9.1",
+    "php-http/guzzle5-adapter": "^1",
+    "knplabs/github-api": "^2.11",
+    "guzzlehttp/psr7": "^1.5",
+    "davidrjonas/composer-lock-diff": "^1.4"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -59,7 +63,9 @@
     }
   },
   "bin": [
-    "src/bin/coding-standard"
+    "src/bin/coding-standard",
+    "src/bin/github"
+
   ],
   "scripts": {
     "post-update-cmd": "npm update",

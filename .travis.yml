@@ -1,3 +1,5 @@
+f: tag IS blank
+
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
@@ -6,21 +8,34 @@ php:
   - '7.0'
   - '7.1'
   - '7.2'
-env:
-  - COMPOSER_PARAMETER=--prefer-lowest
-  - COMPOSER_PARAMETER=
 
-# optionally set up exclutions and allowed failures in the matrix
+env:
+  global:
+    - TARGET_COMMIT=$([[ ! -z TRAVIS_PULL_REQUEST_SHA ]] && git merge-base HEAD origin/master) || echo ${TRAVIS_PULL_REQUEST_SHA}
+  matrix:
+    - COMPOSER_PARAMETER=--prefer-lowest
+    - COMPOSER_PARAMETER=
+
 matrix:
   fast_finish: true
 
 install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
-  - travis_retry composer update $COMPOSER_PARAMETER
+  - travis_retry composer update -n --no-progress --no-suggest $COMPOSER_PARAMETER
+  - composer show -i
 
 script:
-  - src/bin/coding-standard sca:all -t origin/$TRAVIS_BRANCH
+  - composer validate -n
+  - src/bin/coding-standard sca:all -t $TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
+  - >
+    MESSAGE=$(vendor/bin/composer-lock-diff --from=$TARGET_COMMIT --no-links --md);
+    echo "${MESSAGE}";
+    if ! [[ -z ${MESSAGE} || -z ${TRAVIS_PULL_REQUEST_SHA} ]]; then
+      echo "Commenting on composer.lock ...";
+      echo "Parameter: $TRAVIS_PULL_REQUEST, $TRAVIS_PULL_REQUEST_SHA, $MESSAGE, composer.lock, 1"
+      src/bin/github pull:comment:add $GH_TOKEN zooroyal zooroyalweb $TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST_SHA "$MESSAGE" "composer.lock" 1;
+    fi
 
 # allow builds for all branches
 branches:
