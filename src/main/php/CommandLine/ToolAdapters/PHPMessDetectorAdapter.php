@@ -34,7 +34,7 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
         $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
-        $phpMessDetectorConfig = $environment->getPackageDirectory() . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml';
+        $phpMessDetectorConfig = $environment->getPackageDirectory() . '/config/phpmd/phpmd.xml';
         $rootDirectory = $environment->getRootDirectory();
 
         $this->commands['PHPMDWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd %1$s' .

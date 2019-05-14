@@ -27,9 +27,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     protected function setUp()
     {
         $this->commandPrefix = 'vendor/bin/phpcs '
-            . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag '
-            . '--standard=' . self::$vendorDir . '/../src/config/phpcs/ZooroyalDefault/ruleset.xml '
-            . '-s ';
+            . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag --standard=ZooRoyal -s ';
     }
 
     /**

@@ -1,4 +1,5 @@
 <?php
+// @codingStandardsIgnoreStart
 /**
  * Ensures doc blocks follow basic formatting.
  *
@@ -6,6 +7,7 @@
  * @copyright 2006-2015 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   https://github.com/squizlabs/PHP_CodeSniffer/blob/master/licence.txt BSD Licence
  */
+// @codingStandardsIgnoreEnd
 
 namespace Zooroyal\CodingStandard\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting;
 

@@ -1,9 +1,11 @@
 {
   "require": {
-    "zooroyal/coding-standard" : "@dev"
+    "zooroyal/coding-standard": "@dev"
   },
-  "repositories": [{
-    "type": "vcs",
-    "url": "../../../../../"
-  }]
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "../../../../../"
+    }
+  ]
 }

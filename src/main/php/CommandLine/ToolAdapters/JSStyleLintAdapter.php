@@ -35,7 +35,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $this->output = $output;
         $this->genericCommandRunner = $genericCommandRunner;
 
-        $stylelintConfig = $environment->getPackageDirectory() . '/src/config/stylelint/.stylelintrc';
+        $stylelintConfig = $environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
         $rootDirectory = $environment->getRootDirectory();
 
         $styleLintBlacklistCommand = $environment->getPackageDirectory()
@@ -60,7 +60,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): int
     {
         $tool = 'STYLELINT';
         $prefix = $tool . ' : ';

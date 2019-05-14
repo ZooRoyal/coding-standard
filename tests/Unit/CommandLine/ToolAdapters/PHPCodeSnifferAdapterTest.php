@@ -71,24 +71,20 @@ class PHPCodeSnifferAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPCSWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard=ZooRoyal %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
-                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml %1$s'
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard=ZooRoyal %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCSBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
-                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard=ZooRoyal'
                     . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
-                    . $this->mockedPackageDirectory . '/src/config/phpcs/ZooroyalDefault/ruleset.xml'
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard=ZooRoyal'
                     . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 )
             )

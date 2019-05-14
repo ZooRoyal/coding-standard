@@ -18,8 +18,6 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToC
 
 class AllToolsCommandTest extends TestCase
 {
-    /** @var AllToolsCommand */
-    private $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
     /** @var MockInterface|OutputInterface */
@@ -27,8 +25,6 @@ class AllToolsCommandTest extends TestCase
 
     protected function setUp()
     {
-        $this->subject = new AllToolsCommand();
-
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }

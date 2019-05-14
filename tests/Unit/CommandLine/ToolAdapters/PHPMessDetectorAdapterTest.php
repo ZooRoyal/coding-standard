@@ -66,19 +66,20 @@ class PHPMessDetectorAdapterTest extends TestCase
         self::assertSame(',', $this->partialSubject->getBlacklistGlue());
         self::assertSame(',', $this->partialSubject->getWhitelistGlue());
 
+        $config = '/config/phpmd/phpmd.xml';
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPMDWL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text ' . $this->mockedPackageDirectory
-                    . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php'
+                    . $config . ' --suffixes php'
                 ),
                 H::hasKeyValuePair(
                     'PHPMDBL',
                     'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd ' . $this->mockedRootDirectory
                     . ' text ' . $this->mockedPackageDirectory
-                    . '/src/config/phpmd/ZooRoyalDefault/phpmd.xml --suffixes php --exclude %1$s'
+                    . $config . ' --suffixes php --exclude %1$s'
                 )
             )
         );
