@@ -15,8 +15,10 @@
     "eslint-plugin-promise": "^3.8.0",
     "eslint-plugin-standard": "^3.0.1",
     "stylelint": "^9.10.1",
+    "stylelint-config-rational-order": "^0.1.2",
     "stylelint-config-recommended": "^2.0.1",
-    "stylelint-config-standard": "^18.0.0"
+    "stylelint-config-standard": "^18.0.0",
+    "stylelint-order": "^3.0.0"
   },
   "repository": {
     "type": "git",

@@ -1,10 +1,21 @@
 {
   "extends": [
-    "stylelint-config-standard"
+    "stylelint-config-standard",
+    "stylelint-config-rational-order"
+  ],
+  "plugins": [
+    "stylelint-order"
   ],
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "order/order": [
+      "custom-properties",
+      "declarations",
+      "rules",
+      "at-rules"
+    ],
+    "order/properties-alphabetical-order": true
   }
 }
