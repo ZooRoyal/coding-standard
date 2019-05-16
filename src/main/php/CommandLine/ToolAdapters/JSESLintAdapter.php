@@ -11,7 +11,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /** @var string */
     protected $blacklistToken = '.dontSniffJS';
     /** @var string */
-    protected $filter = '.js';
+    protected $filter = '--ext .js';
     /** @var string */
     protected $blacklistPrefix = '--ignore-pattern=';
     /** @var string */
@@ -39,13 +39,14 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         $rootDirectory = $environment->getRootDirectory();
 
         $esLintBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s ' . $rootDirectory;
+            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' %1$s ' . $rootDirectory;
         $esLintWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' %1$s';
+            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' %1$s';
         $esLintFixBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s ' . $rootDirectory;
+            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' --fix %1$s '
+            . $rootDirectory;
         $esLintFixWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/eslint/bin/eslint.js --config=' . $esLintConfig . ' --fix %1$s';
+            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' --fix %1$s';
 
         $this->commands = [
             'ESLINTBL' => $esLintBlacklistCommand,
@@ -67,6 +68,12 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
+        // This is because of the god damn stupid behavior change of eslint if no files to lint were found
+        if ($exitCode === 2) {
+            $exitCode = 0;
+            $this->output->write('We ignore this for now!', true);
+        }
+
         return $exitCode;
     }
 
@@ -81,6 +88,12 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         $diffMessage = $prefix . 'Fix Files in diff';
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
+
+        // This is because of the god damn stupid behavior change of eslint if no files to lint were found
+        if ($exitCode === 2) {
+            $exitCode = 0;
+            $this->output->write('We ignore this for now!', true);
+        }
 
         return $exitCode;
     }

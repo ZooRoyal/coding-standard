@@ -14,6 +14,9 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSESLintAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
+/**
+ * Class JSESLintAdapterTest
+ */
 class JSESLintAdapterTest extends TestCase
 {
     /** @var MockInterface|Environment */
@@ -28,6 +31,8 @@ class JSESLintAdapterTest extends TestCase
     private $mockedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
+    /** @var string */
+    private $filter = '--ext .js';
 
     protected function setUp()
     {
@@ -63,7 +68,7 @@ class JSESLintAdapterTest extends TestCase
         $configFile = '/config/eslint/.eslintrc.js';
 
         self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
-        self::assertSame('.js', $this->partialSubject->getFilter());
+        self::assertSame($this->filter, $this->partialSubject->getFilter());
         self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
@@ -73,25 +78,25 @@ class JSESLintAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'ESLINTBL',
-                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . $configFile . ' %1$s '
+                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTWL',
-                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . $configFile . ' %1$s'
+                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXBL',
-                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . $configFile . ' --fix %1$s '
+                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' --fix %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXWL',
-                    $this->mockedPackageDirectory . '/node_modules/eslint/bin/eslint.js --config='
-                    . $this->mockedPackageDirectory . $configFile . ' --fix %1$s'
+                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' --fix %1$s'
                 )
             )
         );
@@ -110,12 +115,32 @@ class JSESLintAdapterTest extends TestCase
                 'fullMessage' => 'ESLINT : Running full check',
                 'diffMessage' => 'ESLINT : Running check on diff',
                 'method' => 'writeViolationsToOutput',
+                'toolResult' => 123123123,
+                'expectedResult' => 123123123,
             ],
             'fix Violations' => [
                 'tool' => 'ESLINTFIX',
                 'fullMessage' => 'ESLINTFIX : Fix all Files',
                 'diffMessage' => 'ESLINTFIX : Fix Files in diff',
                 'method' => 'fixViolations',
+                'toolResult' => 123123123,
+                'expectedResult' => 123123123,
+            ],
+            'find Violations without files to lint' => [
+                'tool' => 'ESLINT',
+                'fullMessage' => 'ESLINT : Running full check',
+                'diffMessage' => 'ESLINT : Running check on diff',
+                'method' => 'writeViolationsToOutput',
+                'toolResult' => 2,
+                'expectedResult' => 0,
+            ],
+            'fix Violations  without files to lint' => [
+                'tool' => 'ESLINTFIX',
+                'fullMessage' => 'ESLINTFIX : Fix all Files',
+                'diffMessage' => 'ESLINTFIX : Fix Files in diff',
+                'method' => 'fixViolations',
+                'toolResult' => 2,
+                'expectedResult' => 0,
             ],
         ];
     }
@@ -128,20 +153,25 @@ class JSESLintAdapterTest extends TestCase
      * @param string $fullMessage
      * @param string $diffMessage
      * @param string $method
+     * @param int    $toolResult
+     * @param int    $expectedResult
      */
     public function callMethodsWithParametersCallsRunToolAndReturnsResult(
         string $tool,
         string $fullMessage,
         string $diffMessage,
-        string $method
+        string $method,
+        int $toolResult,
+        int $expectedResult
     ) {
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
-        $expectedResult = 123123123;
 
         $this->partialSubject->shouldReceive('runTool')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
-            ->andReturn($expectedResult);
+            ->andReturn($toolResult);
+        $this->mockedOutputInterface->shouldReceive('write')
+            ->with(H::containsString('ignore this'), true);
 
         $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
 
@@ -151,7 +181,7 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterImplementsInterface()
     {
         self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

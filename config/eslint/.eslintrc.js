@@ -1,25 +1,33 @@
+const path = require("path");
 module.exports = {
     "extends": [
         "eslint:recommended",
-        "eslint-config-crockford"
+        "standard",
+        "eslint-config-crockford",
+        "plugin:import/errors",
+        "plugin:import/warnings"
     ],
     "plugins": [
-        "m99coder"
+        "m99coder",
+        "standard",
+        "import"
     ],
     "parserOptions": {
         "ecmaVersion": 6,
+        "sourceType": "module",
         "ecmaFeatures": {
+            "jsx": false,
             "impliedStrict": true
-        }
+        },
+        "useJSXTextNode": true
     },
     "root": true,
     "env": {
         "browser": true,
         "jquery": true,
         "es6": true,
-        "jasmine": true,
+        "jest": true,
         "node": true,
-        "mocha": true,
         "builtin": true
     },
     "globals": {
@@ -69,6 +77,7 @@ module.exports = {
         "no-implied-eval": "error",
         "no-script-url": "error",
         "no-useless-call": "error",
+        "vars-on-top": "off",
         //es6
         "arrow-spacing": ["error", { "before": true, "after": true }],
         "no-confusing-arrow": ["error", {"allowParens": false }],
@@ -77,10 +86,20 @@ module.exports = {
         "no-dupe-class-members": "error",
         "no-duplicate-imports": "error",
         "no-useless-computed-key": "error",
-
         "no-restricted-properties": "error",
         "operator-linebreak": "error",
         "no-nested-ternary": "error",
-        "no-unneeded-ternary": "error"
+        "no-unneeded-ternary": "error",
+        //plugin:standard
+        'standard/object-curly-even-spacing': [2, "either"],
+        'standard/array-bracket-even-spacing': [2, "either"],
+        'standard/computed-property-even-spacing': [2, "even"],
+        'standard/no-callback-literal': [2, ["cb", "callback"]],
+        //plugin:import
+        "import/no-unresolved": [2, {commonjs: true, amd: true}],
+        "import/named": 2,
+        "import/namespace": 2,
+        "import/default": 2,
+        "import/export": 2
     }
 };

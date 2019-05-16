@@ -1,0 +1,26 @@
+div::before {
+  color: red;
+}
+
+.inline {
+  color: green;
+}
+
+div::placeholder {
+  --my-crazy-color: red;
+
+  z-index: 20;
+  display: block;
+  width: 200px;
+  height: 100px;
+  color: red;
+  font-size: 20px;
+  background: red;
+  border: 1px solid red;
+  -moz-transition: all 0.5s;
+  -ms-transition: all 0.5s;
+  -webkit-transition: all 0.5s;
+  -o-transition: all 0.5s;
+  transition: all 0.5s;
+  &:extend(.inline);
+}

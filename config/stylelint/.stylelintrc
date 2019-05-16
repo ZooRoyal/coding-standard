@@ -1,10 +1,15 @@
 {
   "extends": [
-    "stylelint-config-standard"
+    "stylelint-config-standard",
+    "stylelint-config-rational-order"
   ],
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
     "no-descending-specificity": null
-  }
+  },
+  "plugins": [
+    "stylelint-order",
+    "stylelint-config-rational-order/plugin"
+  ]
 }
