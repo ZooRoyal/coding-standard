@@ -73,23 +73,23 @@ class JSStyleLintAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'STYLELINTWL',
-                    $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
+                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXWL',
-                    $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
+                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' --fix %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTBL',
-                    $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
+                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXBL',
-                    $this->mockedPackageDirectory . '/node_modules/stylelint/bin/stylelint.js --config='
+                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' --fix %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 )
