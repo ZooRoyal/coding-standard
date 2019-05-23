@@ -39,15 +39,15 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $rootDirectory = $environment->getRootDirectory();
 
         $styleLintBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' %1$s ' . $rootDirectory
+            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' %1$s ' . $rootDirectory
             . '/**' . $this->filter;
         $styleLintWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' %1$s';
+            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' %1$s';
         $styleLintFixBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/stylelint/bin/stylelint.js --config='
+            . '/node_modules/.bin/stylelint --config='
             . $stylelintConfig . ' --fix %1$s ' . $rootDirectory . '/**' . $this->filter;
         $styleLintFixWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/stylelint/bin/stylelint.js --config=' . $stylelintConfig . ' --fix %1$s';
+            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' --fix %1$s';
 
         $this->commands = [
             'STYLELINTWL' => $styleLintWhitelistCommand,
