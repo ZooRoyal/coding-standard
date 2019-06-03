@@ -1,13 +1,10 @@
-f: tag IS blank
-
 # see http://about.travis-ci.org/docs/user/languages/php/ for more hints
 language: php
 
 # list any PHP version you want to test against
 php:
   - '7.0'
-  - '7.1'
-  - '7.2'
+  - '7.3'
 
 env:
   global:
@@ -19,8 +16,15 @@ env:
 matrix:
   fast_finish: true
 
-install:
+before_install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
+  - composer validate -n
+  - >
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+      composer global require --no-progress infection/infection;
+    fi
+
+install:
   - travis_retry composer update -n --no-progress --no-suggest $COMPOSER_PARAMETER
   - composer show -i
 
@@ -29,12 +33,8 @@ script:
   - src/bin/coding-standard sca:all -t $TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
   - >
-    MESSAGE=$(vendor/bin/composer-lock-diff --from=$TARGET_COMMIT --no-links --md);
-    echo "${MESSAGE}";
-    if ! [[ -z ${MESSAGE} || -z ${TRAVIS_PULL_REQUEST_SHA} ]]; then
-      echo "Commenting on composer.lock ...";
-      echo "Parameter: $TRAVIS_PULL_REQUEST, $TRAVIS_PULL_REQUEST_SHA, $MESSAGE, composer.lock, 1"
-      src/bin/github pull:comment:add $GH_TOKEN zooroyal zooroyalweb $TRAVIS_PULL_REQUEST $TRAVIS_PULL_REQUEST_SHA "$MESSAGE" "composer.lock" 1;
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+      $(composer config --global home)/$(composer config --global bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
     fi
 
 # allow builds for all branches

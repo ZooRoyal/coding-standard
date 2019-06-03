@@ -26,7 +26,7 @@ class DocCommentSniffTest extends TestCase
 
     protected function setUp()
     {
-        $this->commandPrefix = 'vendor/bin/phpcs '
+        $this->commandPrefix = 'php ' . self::$vendorDir . '/bin/phpcs '
             . '--sniffs=ZooRoyal.Commenting.DocComment --standard=ZooRoyal -s ';
     }
 

@@ -1,0 +1,17 @@
+{
+    "timeout": 10,
+    "source": {
+        "directories": [
+            "src\/main\/php"
+        ],
+        "excludes": [
+            "PHPCodeSniffer"
+        ]
+    },
+    "logs": {
+        "text": "infection.log"
+    },
+    "mutators": {
+        "@default": true
+    }
+}

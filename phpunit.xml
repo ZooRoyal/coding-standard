@@ -13,12 +13,17 @@
             <directory>./tests/Functional/</directory>
             <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
         </testsuite>
+
+        <testsuite name="AllSystemTests">
+            <directory>./tests/System/</directory>
+        </testsuite>
     </testsuites>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
             <directory suffix=".php">./src</directory>
             <exclude>
                 <file>./src/config</file>
+                <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
             </exclude>
         </whitelist>
     </filter>
