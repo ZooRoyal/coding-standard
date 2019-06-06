@@ -8,7 +8,7 @@ php:
 
 env:
   global:
-    - TARGET_COMMIT=$([[ ! -z ${TRAVIS_PULL_REQUEST_SHA} ]] && git merge-base HEAD origin/master) || echo ${TRAVIS_PULL_REQUEST_SHA}
+    - TARGET_COMMIT=$([[ -z ${TRAVIS_PULL_REQUEST_SHA} ]] && git merge-base HEAD origin/master || echo ${TRAVIS_PULL_REQUEST_SHA})
   matrix:
     - COMPOSER_PARAMETER=--prefer-lowest
     - COMPOSER_PARAMETER=
