@@ -37,7 +37,7 @@ class IssueCommentAddCommand extends Command
             new InputDefinition(
                 [
                     new InputArgument('token', InputArgument::REQUIRED, 'Access token or password for user.'),
-                    new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation og the repository.'),
+                    new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation of the repository.'),
                     new InputArgument('repository', InputArgument::REQUIRED, 'Repository of the issue.'),
                     new InputArgument('issue_id', InputArgument::REQUIRED, 'ID of the issue to add the command to.'),
                     new InputArgument('body', InputArgument::REQUIRED, 'Body of the comment.'),

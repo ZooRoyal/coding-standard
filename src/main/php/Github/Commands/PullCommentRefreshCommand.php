@@ -42,7 +42,7 @@ class PullCommentRefreshCommand extends Command
             new InputDefinition(
                 [
                     new InputArgument('token', InputArgument::REQUIRED, 'Access token or password for user.'),
-                    new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation og the repository.'),
+                    new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation of the repository.'),
                     new InputArgument('repository', InputArgument::REQUIRED, 'Repository of the issue.'),
                     new InputArgument('pullNumber', InputArgument::REQUIRED, 'ID of the pull request.'),
                     new InputArgument('commitId', InputArgument::REQUIRED, 'ID of the commit.'),
