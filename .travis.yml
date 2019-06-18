@@ -4,23 +4,38 @@ language: php
 # list any PHP version you want to test against
 php:
   - '7.0'
-  - '7.1'
-  - '7.2'
-env:
-  - COMPOSER_PARAMETER=--prefer-lowest
-  - COMPOSER_PARAMETER=
+  - '7.3'
 
-# optionally set up exclutions and allowed failures in the matrix
+env:
+  global:
+    - TARGET_COMMIT=$([[ -z ${TRAVIS_PULL_REQUEST_SHA} ]] && git merge-base HEAD origin/master || echo ${TRAVIS_PULL_REQUEST_SHA})
+  matrix:
+    - COMPOSER_PARAMETER=--prefer-lowest
+    - COMPOSER_PARAMETER=
+
 matrix:
   fast_finish: true
 
-install:
+before_install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
-  - travis_retry composer update $COMPOSER_PARAMETER
+  - composer validate -n
+  - >
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+      composer global require --no-progress infection/infection;
+    fi
+
+install:
+  - travis_retry composer update -n --no-progress --no-suggest $COMPOSER_PARAMETER
+  - composer show -i
 
 script:
-  - src/bin/coding-standard sca:all -t origin/$TRAVIS_BRANCH
+  - composer validate -n
+  - src/bin/coding-standard sca:all -t $TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
+  - >
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+      $(composer config --global home)/$(composer config --global bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
+    fi
 
 # allow builds for all branches
 branches:
