@@ -103,6 +103,14 @@ For examples just have a look an the .travis.yml
 
 # Usage github
 
+Add an implementation for guzzleX by using php-http/ package (requires since release 2.4): 
+For example: https://packagist.org/packages/php-http/guzzle6-adapter.
+
+```bash
+php composer require --dev php-http/guzzle6-adapter
+```
+
+
 Run the command to get usage instructions. 
 ```bash
 php vendor/bin/github
