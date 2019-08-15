@@ -28,6 +28,8 @@ class JSStyleLintAdapterTest extends TestCase
     private $mockedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
+    /** @var string */
+    private $mockedNodeModulesDirectory;
 
     protected function setUp()
     {
@@ -37,11 +39,14 @@ class JSStyleLintAdapterTest extends TestCase
 
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
+        $this->mockedNodeModulesDirectory = $this->mockedRootDirectory . '/node_modules';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
+        $this->mockedEnvironment->shouldReceive('getNodeModulesDirectory')
+            ->withNoArgs()->andReturn($this->mockedNodeModulesDirectory);
 
         $this->partialSubject = Mockery::mock(
             JSStyleLintAdapter::class,
@@ -73,23 +78,23 @@ class JSStyleLintAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'STYLELINTWL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXWL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' --fix %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTBL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXBL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/stylelint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/stylelint --config='
                     . $this->mockedPackageDirectory . $config . ' --fix %1$s '
                     . $this->mockedRootDirectory . '/**' . $expectedFilter
                 )

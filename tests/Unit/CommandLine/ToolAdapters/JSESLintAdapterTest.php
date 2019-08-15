@@ -33,6 +33,8 @@ class JSESLintAdapterTest extends TestCase
     private $mockedRootDirectory;
     /** @var string */
     private $filter = '--ext .js';
+    /** @var string */
+    private $mockedNodeModulesDirectory;
 
     protected function setUp()
     {
@@ -42,11 +44,14 @@ class JSESLintAdapterTest extends TestCase
 
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
+        $this->mockedNodeModulesDirectory = $this->mockedRootDirectory . '/node_modules';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
+        $this->mockedEnvironment->shouldReceive('getNodeModulesDirectory')
+            ->withNoArgs()->andReturn($this->mockedNodeModulesDirectory);
 
         $this->partialSubject = Mockery::mock(
             JSESLintAdapter::class,
@@ -78,24 +83,24 @@ class JSESLintAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'ESLINTBL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/eslint --config='
                     . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTWL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/eslint --config='
                     . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXBL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/eslint --config='
                     . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' --fix %1$s '
                     . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXWL',
-                    $this->mockedPackageDirectory . '/node_modules/.bin/eslint --config='
+                    $this->mockedNodeModulesDirectory . '/.bin/eslint --config='
                     . $this->mockedPackageDirectory . $configFile . ' ' . $this->filter . ' --fix %1$s'
                 )
             )

@@ -36,17 +36,14 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         $this->genericCommandRunner = $genericCommandRunner;
 
         $esLintConfig = $environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
-        $rootDirectory = $environment->getRootDirectory();
-
-        $esLintBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' %1$s ' . $rootDirectory;
-        $esLintWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' %1$s';
-        $esLintFixBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' --fix %1$s '
-            . $rootDirectory;
-        $esLintFixWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/eslint --config=' . $esLintConfig . ' ' . $this->filter . ' --fix %1$s';
+        $esLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig
+            . ' ' . $this->filter . ' %1$s ' . $environment->getRootDirectory();
+        $esLintWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig
+            . ' ' . $this->filter . ' %1$s';
+        $esLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig . ' '
+            . $this->filter . ' --fix %1$s ' . $environment->getRootDirectory();
+        $esLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig . ' '
+            . $this->filter . ' --fix %1$s';
 
         $this->commands = [
             'ESLINTBL' => $esLintBlacklistCommand,
