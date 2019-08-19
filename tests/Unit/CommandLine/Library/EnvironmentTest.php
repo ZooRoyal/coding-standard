@@ -49,6 +49,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function getRootDirectory()
     {
@@ -63,6 +64,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function getPackageDirectory()
     {

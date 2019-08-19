@@ -36,14 +36,14 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $this->genericCommandRunner = $genericCommandRunner;
 
         $stylelintConfig = $environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $styleLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config=' . $stylelintConfig
-            . ' %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
+        $styleLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
         $styleLintWhitelistCommand = $environment->getNodeModulesDirectory()
             . '/.bin/stylelint --config=' . $stylelintConfig . ' %1$s';
-        $styleLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config=' . $stylelintConfig
-            . ' --fix %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
-        $styleLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config=' . $stylelintConfig
-            . ' --fix %1$s';
+        $styleLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' --fix %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
+        $styleLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' --fix %1$s';
 
         $this->commands = [
             'STYLELINTWL' => $styleLintWhitelistCommand,
@@ -56,7 +56,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false) : int
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): int
     {
         $tool = 'STYLELINT';
         $prefix = $tool . ' : ';
