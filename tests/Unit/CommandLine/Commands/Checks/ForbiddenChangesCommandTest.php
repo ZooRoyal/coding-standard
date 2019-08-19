@@ -19,6 +19,11 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
+/**
+ * Class ForbiddenChangesCommandTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ForbiddenChangesCommandTest extends TestCase
 {
     /** @var ForbiddenChangesCommand */

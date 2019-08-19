@@ -36,18 +36,14 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $this->genericCommandRunner = $genericCommandRunner;
 
         $stylelintConfig = $environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $rootDirectory = $environment->getRootDirectory();
-
-        $styleLintBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' %1$s ' . $rootDirectory
-            . '/**' . $this->filter;
-        $styleLintWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' %1$s';
-        $styleLintFixBlacklistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/stylelint --config='
-            . $stylelintConfig . ' --fix %1$s ' . $rootDirectory . '/**' . $this->filter;
-        $styleLintFixWhitelistCommand = $environment->getPackageDirectory()
-            . '/node_modules/.bin/stylelint --config=' . $stylelintConfig . ' --fix %1$s';
+        $styleLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
+        $styleLintWhitelistCommand = $environment->getNodeModulesDirectory()
+            . '/.bin/stylelint --config=' . $stylelintConfig . ' %1$s';
+        $styleLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' --fix %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
+        $styleLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
+            . $stylelintConfig . ' --fix %1$s';
 
         $this->commands = [
             'STYLELINTWL' => $styleLintWhitelistCommand,

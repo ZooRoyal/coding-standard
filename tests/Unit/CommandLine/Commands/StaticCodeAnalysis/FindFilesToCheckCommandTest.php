@@ -17,6 +17,11 @@ use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
+/**
+ * Class FindFilesToCheckCommandTest
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FindFilesToCheckCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */

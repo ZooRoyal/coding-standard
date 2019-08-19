@@ -2,13 +2,13 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
+use ComposerLocator;
+
 /**
  * This Class supplies information about the environment the script is running in.
  */
 class Environment
 {
-    /** @var string */
-    private $rootDirectory;
     /** @var string */
     private $localHeadHash;
 
@@ -27,28 +27,29 @@ class Environment
     /** @var GitInputValidator */
     private $gitInputValidator;
 
-    public function __construct(ProcessRunner $processRunner, GitInputValidator $gitInputValidator)
-    {
+    public function __construct(
+        ProcessRunner $processRunner,
+        GitInputValidator $gitInputValidator
+    ) {
         $this->processRunner = $processRunner;
         $this->gitInputValidator = $gitInputValidator;
     }
 
     public function getRootDirectory() : string
     {
-        if ($this->rootDirectory === null) {
-            $this->rootDirectory = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
-        }
-
-        return $this->rootDirectory;
+        return realpath(ComposerLocator::getRootPath());
     }
 
     public function getPackageDirectory() : string
     {
         return realpath(
-            __DIR__ . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . ''
+            ComposerLocator::getPath('zooroyal/coding-standard')
         );
+    }
+
+    public function getNodeModulesDirectory()
+    {
+        return $this->getRootDirectory() . '/node_modules';
     }
 
     public function getBlacklistedDirectories() : array

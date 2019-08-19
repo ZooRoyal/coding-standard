@@ -1,7 +1,7 @@
 {
   "name": "zooroyal/coding-standard",
   "description": "This is the ZooRoyal coding standard.",
-  "type": "composer-plugin",
+  "type": "phpcodesniffer-standard",
   "keywords": [
     "ZooRoyal",
     "phpcs",
@@ -40,7 +40,9 @@
     "slevomat/coding-standard": "^4.0",
     "phpcompatibility/php-compatibility": "^9.1",
     "knplabs/github-api": "^2.11",
-    "guzzlehttp/psr7": "^1.5"
+    "guzzlehttp/psr7": "^1.5",
+    "foxy/foxy": "^1.0.0",
+    "mindplay/composer-locator": "^2.1"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
@@ -71,7 +73,7 @@
     "post-install-cmd": "npm install"
   },
   "extra": {
-    "class": "Zooroyal\\CodingStandard\\Plugin\\Plugin"
+    "foxy": true
   },
   "config": {
     "optimize-autoloader": true

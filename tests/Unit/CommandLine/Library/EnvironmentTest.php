@@ -32,7 +32,7 @@ class EnvironmentTest extends TestCase
 
     protected function setUp()
     {
-        $this->rootDirectory = '/my/root';
+        $this->rootDirectory = __DIR__;
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);
@@ -48,13 +48,14 @@ class EnvironmentTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function getRootDirectory()
     {
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git', 'rev-parse', '--show-toplevel')->andReturn($this->rootDirectory);
+        $mockedComposerLocator = Mockery::mock('alias:ComposerLocator');
+        $mockedComposerLocator->shouldReceive('getRootPath')->once()->andReturn($this->rootDirectory);
 
-        $this->subject->getRootDirectory();
         $result = $this->subject->getRootDirectory();
 
         self::assertSame($this->rootDirectory, $result);
@@ -62,18 +63,32 @@ class EnvironmentTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function getPackageDirectory()
     {
+        $mockedComposerLocator = Mockery::mock('alias:ComposerLocator');
+        $mockedComposerLocator->shouldReceive('getPath')->once()
+            ->with('zooroyal/coding-standard')->andReturn($this->rootDirectory);
+
         $result = $this->subject->getPackageDirectory();
 
-        $expectedPath = realpath(
-            __DIR__ . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . '..'
-            . DIRECTORY_SEPARATOR . '..'
-        );
-        self::assertSame($expectedPath, $result);
+        self::assertSame($this->rootDirectory, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getNodeModulesDirectory()
+    {
+        $localSubject = Mockery::mock(Environment::class)->makePartial();
+        $localSubject->shouldReceive('getRootDirectory')->once()
+            ->andReturn($this->rootDirectory);
+
+        $result = $localSubject->getNodeModulesDirectory();
+
+        self::assertSame($this->rootDirectory . '/node_modules', $result);
     }
 
     /**
