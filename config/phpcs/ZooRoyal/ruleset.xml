@@ -9,7 +9,7 @@
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
 
-    <config name="testVersion" value="7.0-"/>
+    <config name="testVersion" value="7.1-"/>
     <rule ref="PHPCompatibility"/>
 
     <!-- Custom Rule-->

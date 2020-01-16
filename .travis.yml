@@ -3,7 +3,7 @@ language: php
 
 # list any PHP version you want to test against
 php:
-  - '7.0'
+  - '7.1'
   - '7.3'
 
 env:
@@ -20,7 +20,7 @@ before_install:
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
   - composer validate -n
   - >
-    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+    if [[ ${TRAVIS_PHP_VERSION} != '7.1' ]]; then
       composer global require --no-progress infection/infection;
     fi
 
@@ -33,7 +33,7 @@ script:
   - src/bin/coding-standard sca:all -t $TRAVIS_BRANCH
   - php vendor/bin/phpunit --config phpunit.xml
   - >
-    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+    if [[ ${TRAVIS_PHP_VERSION} != '7.1' ]]; then
       $(composer config --global home)/$(composer config --global bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
     fi
 
