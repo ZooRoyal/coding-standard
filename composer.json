@@ -40,7 +40,7 @@
     "slevomat/coding-standard": "^4.0",
     "phpcompatibility/php-compatibility": "^9.1",
     "knplabs/github-api": "^2.11",
-    "guzzlehttp/psr7": "^1.5",
+    "guzzlehttp/psr7": "^1.4",
     "foxy/foxy": "^1.0.0",
     "mindplay/composer-locator": "^2.1"
   },
