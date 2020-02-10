@@ -20,34 +20,40 @@ class PullCommentRefreshCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
+
     /** @var FindFilesToCheckCommand */
     private $subject;
+
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
+
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
+
     /** @var array<string> */
-    private $mockedArguments;
+    private $mockedArguments = [
+        'token' => 'myToken',
+        'user_name' => 'foobar',
+        'organisation' => 'myOrganisation',
+        'repository' => 'myRepository',
+        'pullNumber' => 'myIssueId',
+        'body' => 'myBody',
+        'commitId' => 'myCommitId',
+        'path' => 'myPath',
+        'position' => 1,
+    ];
+
     /** @var array<string> */
     private $mockedOwnCurrentComment;
+
     /** @var string */
     private $mockedLogin = 'MyLogin';
+
     /** @var array<string|array<string>> */
     private $mockedOwnStaleComment;
 
     protected function setUp()
     {
-        $this->mockedArguments = [
-            'token' => 'myToken',
-            'organisation' => 'myOrganisation',
-            'repository' => 'myRepository',
-            'pullNumber' => 'myIssueId',
-            'body' => 'myBody',
-            'commitId' => 'myCommitId',
-            'path' => 'myPath',
-            'position' => 1,
-        ];
-
         $this->mockedOwnCurrentComment = $mockedOwnCurrentComment = [
             'id' => 25,
             'position' => $this->mockedArguments['position'],
@@ -100,6 +106,7 @@ class PullCommentRefreshCommandTest extends TestCase
                         H::allOf(
                             H::hasItems(
                                 HP::hasProperty('name', 'token'),
+                                HP::hasProperty('name', 'user_name'),
                                 HP::hasProperty('name', 'organisation'),
                                 HP::hasProperty('name', 'repository'),
                                 HP::hasProperty('name', 'pullNumber'),
@@ -196,7 +203,7 @@ class PullCommentRefreshCommandTest extends TestCase
         $mockedAllComments = [$this->mockedOwnStaleComment, $this->mockedOwnCurrentComment];
 
         $this->subjectParameters[Client::class]->shouldReceive('authenticate')->once()
-            ->with($this->mockedArguments['token'], '', Client::AUTH_URL_TOKEN);
+            ->with($this->mockedArguments['user_name'], $this->mockedArguments['token'], Client::AUTH_HTTP_PASSWORD);
 
         $this->subjectParameters[Client::class]->shouldReceive('currentUser->show')->once()
             ->withNoArgs()->andReturn(['login' => $this->mockedLogin]);

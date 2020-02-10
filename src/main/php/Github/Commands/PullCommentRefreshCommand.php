@@ -3,6 +3,7 @@
 namespace Zooroyal\CodingStandard\Github\Commands;
 
 use Github\Client;
+use Github\Exception\MissingArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -42,6 +43,7 @@ class PullCommentRefreshCommand extends Command
             new InputDefinition(
                 [
                     new InputArgument('token', InputArgument::REQUIRED, 'Access token or password for user.'),
+                    new InputArgument('user_name', InputArgument::REQUIRED, 'The Github username'),
                     new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation of the repository.'),
                     new InputArgument('repository', InputArgument::REQUIRED, 'Repository of the issue.'),
                     new InputArgument('pullNumber', InputArgument::REQUIRED, 'ID of the pull request.'),
@@ -73,7 +75,7 @@ class PullCommentRefreshCommand extends Command
     {
         $arguments = $input->getArguments();
 
-        $this->client->authenticate($arguments['token'], '', Client::AUTH_URL_TOKEN);
+        $this->client->authenticate($arguments['user_name'], $arguments['token'], Client::AUTH_HTTP_PASSWORD);
 
         list($ownComments, $staleComments) = $this->getCommentSets($arguments);
 
@@ -135,6 +137,8 @@ class PullCommentRefreshCommand extends Command
      * @param array $arguments
      *
      * @return void
+     *
+     * @throws MissingArgumentException
      */
     private function createComment(array $arguments)
     {
@@ -161,6 +165,8 @@ class PullCommentRefreshCommand extends Command
      * @param array $arguments
      *
      * @return void
+     *
+     * @throws MissingArgumentException
      */
     private function updateComment(array $ownComments, array $staleComments, array $arguments)
     {

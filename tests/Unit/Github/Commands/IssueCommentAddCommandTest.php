@@ -63,6 +63,7 @@ class IssueCommentAddCommandTest extends TestCase
                         H::allOf(
                             H::hasItems(
                                 HP::hasProperty('name', 'token'),
+                                HP::hasProperty('name', 'user_name'),
                                 HP::hasProperty('name', 'organisation'),
                                 HP::hasProperty('name', 'repository'),
                                 HP::hasProperty('name', 'issue_id'),
@@ -86,6 +87,7 @@ class IssueCommentAddCommandTest extends TestCase
         $expectedRepositoryValue = 'myRepository';
         $expectedIssueIdValue = 'myIssueId';
         $expectedBodyValue = 'myBody';
+        $username = 'foo';
         $expectedParameterValue = ['body' => $expectedBodyValue];
 
         $this->mockedInputInterface->shouldReceive('getArgument')->once()
@@ -97,10 +99,12 @@ class IssueCommentAddCommandTest extends TestCase
         $this->mockedInputInterface->shouldReceive('getArgument')->once()
             ->with('issue_id')->andReturn($expectedIssueIdValue);
         $this->mockedInputInterface->shouldReceive('getArgument')->once()
+            ->with('user_name')->andReturn($username);
+        $this->mockedInputInterface->shouldReceive('getArgument')->once()
             ->with('body')->andReturn($expectedBodyValue);
 
         $this->subjectParameters[Client::class]->shouldReceive('authenticate')->once()
-            ->with($expectedTokenValue, '', Client::AUTH_URL_TOKEN);
+            ->with($username, $expectedTokenValue, Client::AUTH_HTTP_PASSWORD);
         $this->subjectParameters[Client::class]->shouldReceive('issue->comments->create')->once()
             ->with($expectedOrganisationValue, $expectedRepositoryValue, $expectedIssueIdValue, $expectedParameterValue);
 
