@@ -128,22 +128,23 @@ Available commands:
 ## Example `pull:comment:refresh`
 
 ```bash
-vendor/bin/github pull:comment:refresh asdad12313 ACME-Org MyRepository 12341 as123asd "Hey Guys" "./myFile.txt" 1
+vendor/bin/github pull:comment:refresh asdad12313 username ACME-Org MyRepository 12341 as123asd "Hey Guys" "./myFile.txt" 1
 ```
 
 ```
 Usage:
-  pull:comment:refresh <token> <organisation> <repository> <pullNumber> <commitId> <body> <path> [<position>]
+  pull:comment:refresh <token> <username> <organisation> <repository> <pullNumber> <commitId> <body> <path> [<position>]
 
 Arguments:
   token                 Access token or password for user.
+  username              The Github username.
   organisation          The organisation og the repository.
   repository            Repository of the issue.
   pullNumber            ID of the pull request.
   commitId              ID of the commit.
   body                  Body of the comment.
   path                  File to comment.
-  position              Position in file [default: "1"]
+  position              Position in file. [default: "1"]
 ```
 
 This will add a comment to the specified position in a pull request. It will delete all deprecated comments to the same 
