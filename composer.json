@@ -41,7 +41,7 @@
     "phpcompatibility/php-compatibility": "^9.1",
     "knplabs/github-api": "^2.11",
     "guzzlehttp/psr7": "^1.4",
-    "foxy/foxy": "^1.0.0",
+    "foxy/foxy": "v1.1.0",
     "mindplay/composer-locator": "^2.1"
   },
   "require-dev": {
@@ -63,6 +63,12 @@
       "Zooroyal\\CodingStandard\\Tests\\": "tests/"
     }
   },
+  "repositories": [
+    {
+      "type":"vcs",
+      "url":"git@github.com:ZooRoyal/foxy.git"
+    }
+  ],
   "bin": [
     "src/bin/coding-standard",
     "src/bin/github"
