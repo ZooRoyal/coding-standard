@@ -2,9 +2,7 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
+use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
 class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
@@ -18,32 +16,29 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     protected $blacklistGlue = ' ';
     /** @var string */
     protected $whitelistGlue = ' ';
+    /** @var bool */
+    private $commandNotFound = false;
 
     /**
-     * PHPCodeSnifferAdapter constructor.
-     *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
-     * @param GenericCommandRunner $genericCommandRunner
+     * {@inheritDoc}
      */
-    public function __construct(
-        Environment $environment,
-        OutputInterface $output,
-        GenericCommandRunner $genericCommandRunner
-    ) {
-        $this->environment = $environment;
-        $this->output = $output;
-        $this->genericCommandRunner = $genericCommandRunner;
+    protected function init()
+    {
+        try {
+            $commandPath = $this->terminalCommandFinder->findTerminalCommand('stylelint');
+        } catch (TerminalCommandNotFoundException $exception) {
+            $this->commandNotFound = true;
+            $commandPath = '';
+        }
 
-        $stylelintConfig = $environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $styleLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
-            . $stylelintConfig . ' %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
-        $styleLintWhitelistCommand = $environment->getNodeModulesDirectory()
-            . '/.bin/stylelint --config=' . $stylelintConfig . ' %1$s';
-        $styleLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
-            . $stylelintConfig . ' --fix %1$s ' . $environment->getRootDirectory() . '/**' . $this->filter;
-        $styleLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/stylelint --config='
-            . $stylelintConfig . ' --fix %1$s';
+        $stylelintConfig = $this->environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
+        $styleLintBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' . $this->filter
+            . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
+        $styleLintWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config=' . $stylelintConfig;
+        $styleLintFixBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' . $this->filter
+            . ' --allow-empty-input --config=' . $stylelintConfig . ' --fix %1$s';
+        $styleLintFixWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config='
+            . $stylelintConfig . ' --fix';
 
         $this->commands = [
             'STYLELINTWL' => $styleLintWhitelistCommand,
@@ -58,6 +53,12 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
      */
     public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): int
     {
+        if ($this->commandNotFound) {
+            $this->output->write('StyleLint could not be found. ' .
+                'To use this sniff please refer to the README.md', true);
+            return 0;
+        }
+
         $tool = 'STYLELINT';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Running full check';
@@ -73,6 +74,12 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
      */
     public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
+        if ($this->commandNotFound) {
+            $this->output->write('StyleLint could not be found. ' .
+                'To use this sniff please refer to the README.md', true);
+            return 0;
+        }
+
         $tool = 'STYLELINTFIX';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Fix all Files';

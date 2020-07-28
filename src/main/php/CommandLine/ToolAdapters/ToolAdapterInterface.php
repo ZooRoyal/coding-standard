@@ -8,7 +8,7 @@ interface ToolAdapterInterface
      * Search for violations by using PHPCS and write finds to screen.
      *
      * @param string|null $targetBranch
-     * @param bool        $processIsolation
+     * @param bool $processIsolation
      *
      * @return int|null
      */

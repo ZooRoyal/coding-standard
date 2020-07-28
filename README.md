@@ -23,6 +23,26 @@ To install this package just run
 composer require --dev "zooroyal/coding-standard"
 ```
 
+## Eslint and StyleLint
+
+In case you want to use eslint and stylelint checks you have to install the packages from the package.json in the root folder of your project.
+
+### Local Installation
+
+You may install the packages locally in your project. For this to happen you need to follow the following  steps:
+
+1. `composer require --dev zooroyal/coding-standard`
+2. `npm install vendor/zooroyal/coding-standard`
+
+### Global Installation
+
+You may have installed eslint and stylelint globally in your system. If you want coding-standard to try to use them
+ just make sure coding-standard is installed properly.
+
+```bash
+composer require --dev zooroyal/coding-standard
+```
+
 # Update
 
 To update this package just run

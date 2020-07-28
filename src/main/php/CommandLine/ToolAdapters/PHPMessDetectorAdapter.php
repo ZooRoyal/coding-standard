@@ -2,10 +2,6 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
-
 class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
@@ -17,25 +13,13 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     /** @var string */
     protected $whitelistGlue = ',';
 
-
     /**
-     * PHPCodeSnifferAdapter constructor.
-     *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
-     * @param GenericCommandRunner $genericCommandRunner
+     * {@inheritDoc}
      */
-    public function __construct(
-        Environment $environment,
-        OutputInterface $output,
-        GenericCommandRunner $genericCommandRunner
-    ) {
-        $this->environment = $environment;
-        $this->output = $output;
-        $this->genericCommandRunner = $genericCommandRunner;
-
-        $phpMessDetectorConfig = $environment->getPackageDirectory() . '/config/phpmd/phpmd.xml';
-        $rootDirectory = $environment->getRootDirectory();
+    protected function init()
+    {
+        $phpMessDetectorConfig = $this->environment->getPackageDirectory() . '/config/phpmd/phpmd.xml';
+        $rootDirectory = $this->environment->getRootDirectory();
 
         $this->commands['PHPMDWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd %1$s' .
             ' text ' . $phpMessDetectorConfig . ' --suffixes php';
