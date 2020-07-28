@@ -2,10 +2,6 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
-
 class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
     /** @var string */
@@ -22,23 +18,12 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     protected $escape = true;
 
     /**
-     * PHPCodeSnifferAdapter constructor.
-     *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
-     * @param GenericCommandRunner $genericCommandRunner
+     * {@inheritDoc}
      */
-    public function __construct(
-        Environment $environment,
-        OutputInterface $output,
-        GenericCommandRunner $genericCommandRunner
-    ) {
-        $this->environment = $environment;
-        $this->output = $output;
-        $this->genericCommandRunner = $genericCommandRunner;
-
-        $phpCodeSnifferConfig = $environment->getPackageDirectory() . '/config/phpcs/ZooRoyal/ruleset.xml';
-        $rootDirectory = $environment->getRootDirectory();
+    protected function init()
+    {
+        $phpCodeSnifferConfig = $this->environment->getPackageDirectory() . '/config/phpcs/ZooRoyal/ruleset.xml';
+        $rootDirectory = $this->environment->getRootDirectory();
 
         $sniffWhitelistCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
             . $phpCodeSnifferConfig . ' %1$s';

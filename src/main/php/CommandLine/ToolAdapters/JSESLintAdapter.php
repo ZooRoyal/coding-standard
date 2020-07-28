@@ -2,47 +2,44 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
+use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
 class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
     /** @var string */
     protected $blacklistToken = '.dontSniffJS';
     /** @var string */
-    protected $filter = '--ext .js';
+    protected $filter = '--ext .js --ext .ts';
     /** @var string */
-    protected $blacklistPrefix = '--ignore-pattern=';
+    protected $blacklistPrefix = '--ignore-pattern ';
     /** @var string */
     protected $blacklistGlue = ' ';
     /** @var string */
     protected $whitelistGlue = ' ';
+    /** @var bool */
+    private $commandNotFound = false;
 
     /**
-     * JSESLintAdapter constructor.
-     *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
-     * @param GenericCommandRunner $genericCommandRunner
+     * {@inheritDoc}
      */
-    public function __construct(
-        Environment $environment,
-        OutputInterface $output,
-        GenericCommandRunner $genericCommandRunner
-    ) {
-        $this->environment = $environment;
-        $this->output = $output;
-        $this->genericCommandRunner = $genericCommandRunner;
+    protected function init()
+    {
+        try {
+            $commandPath = $this->terminalCommandFinder->findTerminalCommand('eslint');
+        } catch (TerminalCommandNotFoundException $exception) {
+            $this->commandNotFound = true;
+            $commandPath = '';
+        }
 
-        $esLintConfig = $environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
-        $esLintBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig
-            . ' ' . $this->filter . ' %1$s ' . $environment->getRootDirectory();
-        $esLintWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig
-            . ' ' . $this->filter . ' %1$s';
-        $esLintFixBlacklistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig . ' '
-            . $this->filter . ' --fix %1$s ' . $environment->getRootDirectory();
-        $esLintFixWhitelistCommand = $environment->getNodeModulesDirectory() . '/.bin/eslint --config=' . $esLintConfig . ' '
+        $esLintConfig = $this->environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
+
+        $esLintBlacklistCommand = $commandPath . ' --config ' . $esLintConfig
+            . ' ' . $this->filter . ' %1$s ' . $this->environment->getRootDirectory();
+        $esLintWhitelistCommand = $commandPath . ' --config ' . $esLintConfig
+            . ' ' . $this->filter;
+        $esLintFixBlacklistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
+            . $this->filter . ' --fix %1$s ' . $this->environment->getRootDirectory();
+        $esLintFixWhitelistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
             . $this->filter . ' --fix %1$s';
 
         $this->commands = [
@@ -58,6 +55,12 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
      */
     public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
+        if ($this->commandNotFound) {
+            $this->output->write('Eslint could not be found. ' .
+                'To use this sniff please refer to the README.md', true);
+            return 0;
+        }
+
         $tool = 'ESLINT';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Running full check';
@@ -79,6 +82,12 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
      */
     public function fixViolations($targetBranch = '', bool $processIsolation = false)
     {
+        if ($this->commandNotFound) {
+            $this->output->write('Eslint could not be found. ' .
+                'To use this sniff please refer to the README.md', true);
+            return 0;
+        }
+
         $tool = 'ESLINTFIX';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Fix all Files';

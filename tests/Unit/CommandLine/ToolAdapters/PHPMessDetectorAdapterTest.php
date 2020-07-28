@@ -10,6 +10,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
+use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
@@ -28,12 +29,15 @@ class PHPMessDetectorAdapterTest extends TestCase
     private $mockedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
+    /** @var MockInterface|TerminalCommandFinder */
+    private $mockedTerminalCommandFinder;
 
     protected function setUp()
     {
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
+        $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
@@ -44,8 +48,13 @@ class PHPMessDetectorAdapterTest extends TestCase
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $this->partialSubject = Mockery::mock(
-            PHPMessDetectorAdapter::class,
-            [$this->mockedEnvironment, $this->mockedOutputInterface, $this->mockedGenericCommandRunner]
+            PHPMessDetectorAdapter::class.'[!init]',
+            [
+                $this->mockedEnvironment,
+                $this->mockedOutputInterface,
+                $this->mockedGenericCommandRunner,
+                $this->mockedTerminalCommandFinder,
+            ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
     }
 
@@ -65,6 +74,7 @@ class PHPMessDetectorAdapterTest extends TestCase
         self::assertSame('', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(',', $this->partialSubject->getBlacklistGlue());
         self::assertSame(',', $this->partialSubject->getWhitelistGlue());
+        self::assertFalse($this->partialSubject->isEscape());
 
         $config = '/config/phpmd/phpmd.xml';
         MatcherAssert::assertThat(
