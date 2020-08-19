@@ -17,6 +17,8 @@ matrix:
   fast_finish: true
 
 before_install:
+  - nvm install v10.19.0
+  - nvm alias default v10.19.0
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
   - composer validate -n
   - >
@@ -30,10 +32,10 @@ install:
 
 script:
   - composer validate -n
-  - src/bin/coding-standard sca:all -t $TRAVIS_BRANCH
+  - src/bin/coding-standard sca:all -t $TARGET_COMMIT
   - php vendor/bin/phpunit --config phpunit.xml
   - >
-    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' && ${COMPOSER_PARAMETER} != '--prefer-lowest' ]]; then
       $(composer config --global home)/$(composer config --global bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
     fi
 

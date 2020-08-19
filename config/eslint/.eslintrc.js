@@ -1,73 +1,62 @@
-const path = require("path");
 module.exports = {
-    "extends": [
+    extends: [
         "eslint:recommended",
         "standard",
         "eslint-config-crockford",
         "plugin:import/errors",
-        "plugin:import/warnings"
+        "plugin:import/warnings",
+        "plugin:@typescript-eslint/recommended", // Uses the recommended rules from the @typescript-eslint/eslint-plugin
+        // "prettier/@typescript-eslint",
+        // "plugin:prettier/recommended",
     ],
-    "plugins": [
-        "m99coder",
-        "standard",
-        "import"
-    ],
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": false,
-            "impliedStrict": true
+    //plugins: ["m99coder", "standard", "import"], // todo m99coder useful?
+    parserOptions: {
+        ecmaVersion: 6,
+        sourceType: "module",
+        ecmaFeatures: {
+            jsx: false,
+            impliedStrict: true,
         },
-        "useJSXTextNode": true
+        useJSXTextNode: true,
     },
-    "root": true,
-    "env": {
-        "browser": true,
-        "jquery": true,
-        "es6": true,
-        "jest": true,
-        "node": true,
-        "builtin": true
+    ignorePatterns: [
+        "**/node_modules/*"
+    ],
+    root: true,
+    env: {
+        browser: true,
+        jquery: true,
+        es6: true,
+        jest: true,
+        node: true,
+        builtin: true,
     },
-    "globals": {
-        "$": false,
-        "jQuery": true,
-        "console": true,
-        "module": true,
-        "window": true,
-        "document": true,
-        "require": true,
-        "_": true
+    globals: {
+        $: false,
+        jQuery: true,
+        console: true,
+        module: true,
+        window: true,
+        document: true,
+        require: true,
+        _: true,
     },
-    "rules": {
+    rules: {
         "new-cap": 2,
         "no-caller": 2,
         "no-eq-null": 2,
-        "indent": [
-            "error",
-            4
-        ],
-        "linebreak-style": [
-            "error",
-            "unix"
-        ],
-        "quotes": [
-            "error",
-            "double"
-        ],
-        "semi": [
-            "error",
-            "always"
-        ],
+        indent: ["error", 4],
+        "linebreak-style": ["error", "unix"],
+        quotes: ["error", "single"],
+        semi: ["error", "always"], // necessary, because we have es5 code
         "one-var": "off",
-        "eqeqeq": ["error", "smart"],
-        "curly": "error",
+        eqeqeq: ["error", "smart"],
+        curly: "error",
         "for-direction": "error",
         "no-tabs": "error",
-        "complexity": ["error", 20], //20 is default
+        complexity: ["error", 20], // 20 is default
         "no-undef": "off",
-        "no-plusplus": ["error", {"allowForLoopAfterthoughts": true}],
+        "no-plusplus": ["error", { allowForLoopAfterthoughts: true }],
         "no-underscore-dangle": "off",
         "wrap-iife": ["error", "inside"],
         "no-alert": "error",
@@ -78,10 +67,10 @@ module.exports = {
         "no-script-url": "error",
         "no-useless-call": "error",
         "vars-on-top": "off",
-        //es6
-        "arrow-spacing": ["error", { "before": true, "after": true }],
-        "no-confusing-arrow": ["error", {"allowParens": false }],
-        "allow-parens": ["as-needed", { "requireForBlockBody": true }],
+        // es6
+        "arrow-spacing": ["error", { before: true, after: true }],
+        "no-confusing-arrow": ["error", { "allowParens": false }],
+        "arrow-parens": ["error", "as-needed", { requireForBlockBody: true }],
         "no-useless-constructor": "error",
         "no-dupe-class-members": "error",
         "no-duplicate-imports": "error",
@@ -90,16 +79,16 @@ module.exports = {
         "operator-linebreak": "error",
         "no-nested-ternary": "error",
         "no-unneeded-ternary": "error",
-        //plugin:standard
-        'standard/object-curly-even-spacing': [2, "either"],
-        'standard/array-bracket-even-spacing': [2, "either"],
-        'standard/computed-property-even-spacing': [2, "even"],
-        'standard/no-callback-literal': [2, ["cb", "callback"]],
-        //plugin:import
-        "import/no-unresolved": [2, {commonjs: true, amd: true}],
+        // plugin:standard
+        "standard/object-curly-even-spacing": [2, "either"],
+        "standard/array-bracket-even-spacing": [2, "either"],
+        "standard/computed-property-even-spacing": [2, "even"],
+        "standard/no-callback-literal": [2, ["cb", "callback"]],
+        // plugin:import
+        "import/no-unresolved": [2, { commonjs: true, amd: true }],
         "import/named": 2,
         "import/namespace": 2,
         "import/default": 2,
-        "import/export": 2
-    }
+        "import/export": 2,
+    },
 };

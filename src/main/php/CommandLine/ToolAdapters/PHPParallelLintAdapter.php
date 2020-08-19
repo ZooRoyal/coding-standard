@@ -2,10 +2,6 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
-
 class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
@@ -20,22 +16,11 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     protected $whitelistGlue = ' ';
 
     /**
-     * PHPParallelLintAdapter constructor.
-     *
-     * @param Environment          $environment
-     * @param OutputInterface      $output
-     * @param GenericCommandRunner $genericCommandRunner
+     * {@inheritDoc}
      */
-    public function __construct(
-        Environment $environment,
-        OutputInterface $output,
-        GenericCommandRunner $genericCommandRunner
-    ) {
-        $this->environment = $environment;
-        $this->output = $output;
-        $this->genericCommandRunner = $genericCommandRunner;
-
-        $rootDirectory = $environment->getRootDirectory();
+    protected function init()
+    {
+        $rootDirectory = $this->environment->getRootDirectory();
 
         $this->commands['PHPPLWL'] = 'php ' . $rootDirectory
             . '/vendor/bin/parallel-lint -j 2 %1$s';

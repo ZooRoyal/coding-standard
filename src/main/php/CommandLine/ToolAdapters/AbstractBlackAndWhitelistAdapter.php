@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
+use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 
 abstract class AbstractBlackAndWhitelistAdapter
 {
@@ -29,15 +30,44 @@ abstract class AbstractBlackAndWhitelistAdapter
     protected $commands = [];
     /** @var bool */
     protected $escape = false;
+    /** @var TerminalCommandFinder */
+    protected $terminalCommandFinder;
 
     /**
-     * Runs ESLint in normal or fix mode according to settings.
+     * Constructor of all ToolAdapters
+     *
+     * @param Environment $environment
+     * @param OutputInterface $output
+     * @param GenericCommandRunner $genericCommandRunner
+     * @param TerminalCommandFinder $terminalCommandFinder
+     */
+    public function __construct(
+        Environment $environment,
+        OutputInterface $output,
+        GenericCommandRunner $genericCommandRunner,
+        TerminalCommandFinder $terminalCommandFinder
+    ) {
+        $this->environment = $environment;
+        $this->output = $output;
+        $this->genericCommandRunner = $genericCommandRunner;
+        $this->terminalCommandFinder = $terminalCommandFinder;
+
+        $this->init();
+    }
+
+    /**
+     * This method is supposed to be used to set the tool up.
+     */
+    abstract protected function init();
+
+    /**
+     * Runs tool in normal or fix mode according to settings.
      *
      * @param string|false|null $targetBranch
-     * @param bool              $processIsolation
-     * @param string            $fullMessage
-     * @param string            $tool
-     * @param string            $diffMessage
+     * @param bool $processIsolation
+     * @param string $fullMessage
+     * @param string $tool
+     * @param string $diffMessage
      *
      * @return int|null
      */
@@ -74,37 +104,37 @@ abstract class AbstractBlackAndWhitelistAdapter
         return $exitCode;
     }
 
-    public function getBlacklistToken() : string
+    public function getBlacklistToken(): string
     {
         return $this->blacklistToken;
     }
 
-    public function getFilter() : string
+    public function getFilter(): string
     {
         return $this->filter;
     }
 
-    public function getBlacklistPrefix() : string
+    public function getBlacklistPrefix(): string
     {
         return $this->blacklistPrefix;
     }
 
-    public function getBlacklistGlue() : string
+    public function getBlacklistGlue(): string
     {
         return $this->blacklistGlue;
     }
 
-    public function getWhitelistGlue() : string
+    public function getWhitelistGlue(): string
     {
         return $this->whitelistGlue;
     }
 
-    public function getCommands() : array
+    public function getCommands(): array
     {
         return $this->commands;
     }
 
-    public function isEscape() : bool
+    public function isEscape(): bool
     {
         return $this->escape;
     }
