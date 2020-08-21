@@ -1,11 +1,11 @@
 {
-  "require": {
+  "require-dev":  {
     "zooroyal/coding-standard": "@dev"
   },
   "repositories": [
     {
-      "type": "vcs",
-      "url": "../../../../../"
+      "type": "path",
+      "url": ""
     }
   ]
 }
