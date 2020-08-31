@@ -10,6 +10,11 @@ use Symfony\Component\Process\Process;
 
 class RunEslintWithConfigTest extends TestCase
 {
+    const EXPECTED_TS_PROBLEMS = '124 problems';
+    const EXPECTED_JS_PROBLEMS = '122 problems';
+    const ESLINT_COMMAND = 'npx --no-install eslint --config ';
+    const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
+
     /** @var string */
     private static $tempDir;
 
@@ -24,7 +29,6 @@ class RunEslintWithConfigTest extends TestCase
         self::$tempDir = sys_get_temp_dir() .DIRECTORY_SEPARATOR . $dirname;
 
         self::$fileSystem->mkdir(self::$tempDir);
-
         $composerPath = dirname(__DIR__, 3);
         $composerTemplateFile = dirname(__DIR__, 1) . '/fixtures/eslint/composer-template.json';
         $composerTemplate = json_decode(file_get_contents($composerTemplateFile), true);
@@ -45,13 +49,9 @@ class RunEslintWithConfigTest extends TestCase
     /**
      * @test
      */
-    public function runEslintInCleanInstall()
+    public function runEslintForJSInCleanInstall()
     {
-        $command = 'npx --no-install eslint --config '
-            . self::$tempDir . DIRECTORY_SEPARATOR
-            . 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js '
-            . self::$tempDir . DIRECTORY_SEPARATOR
-            . 'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js';
+        $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js');
 
         $process = new Process($command, self::$tempDir);
 
@@ -60,9 +60,28 @@ class RunEslintWithConfigTest extends TestCase
         $exitCode = $process->getExitCode();
         $output = $process->getOutput();
 
-        self::assertSame(1, $exitCode);
+        self::assertSame(1, $exitCode, $process->getErrorOutput());
 
-        MatcherAssert::assertThat($output, H::containsString('178 problems'));
+        MatcherAssert::assertThat($output, H::containsString('123 problems'));
+    }
+
+    /**
+     * @test
+     */
+    public function runEslintForTSInCleanInstall()
+    {
+        $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts');
+
+        $process = new Process($command, self::$tempDir);
+
+        $process->run();
+
+        $exitCode = $process->getExitCode();
+        $output = $process->getOutput();
+
+        self::assertSame(1, $exitCode, $process->getErrorOutput());
+
+        MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_TS_PROBLEMS));
     }
 
     /**
@@ -81,4 +100,12 @@ class RunEslintWithConfigTest extends TestCase
         self::assertSame(0, $exitCode);
     }
 
+    private function getEslintCommand($fileToCheck): string
+    {
+        return self::ESLINT_COMMAND
+            .self::$tempDir . DIRECTORY_SEPARATOR
+            .self::ESLINT_CONFIG_FILE
+            .self::$tempDir . DIRECTORY_SEPARATOR
+            .$fileToCheck;
+    }
 }
