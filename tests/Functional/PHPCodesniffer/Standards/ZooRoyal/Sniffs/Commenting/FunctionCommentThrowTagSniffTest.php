@@ -4,6 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooR
 
 use Composer\Autoload\ClassLoader;
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Runner\Version;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
@@ -15,7 +16,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     /** @var array */
     private $commandPrefix;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $reflection = new ReflectionClass(ClassLoader::class);
@@ -24,7 +25,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
         require_once self::$vendorDir . '/squizlabs/php_codesniffer/autoload.php';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commandPrefix = explode(' ', 'vendor/bin/phpcs '
             . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag --standard=ZooRoyal -s ');
@@ -62,7 +63,9 @@ class FunctionCommentThrowTagSniffTest extends TestCase
         $subject->wait();
 
         $output = $subject->getOutput();
-        self::assertRegExp('/at least 2 @throws/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/', $output);
+        $assertRegExpMethodName = version_compare(Version::id(), '9.1', '<') ?
+            'assertRegExp' : 'assertMatchesRegularExpression';
+        self::$assertRegExpMethodName('/at least 2 @throws/', $output);
+        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/', $output);
     }
 }

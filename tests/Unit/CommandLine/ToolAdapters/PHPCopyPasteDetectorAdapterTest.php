@@ -36,7 +36,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     /** @var string */
     private $expectedGlue;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
@@ -63,7 +63,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
@@ -83,8 +83,8 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     public function writeViolationsToOutputWithTargetForBlacklistCheck()
     {
         $mockedTargetBranch = 'targetBranch';
-        $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd -vvv --progress --fuzzy -n ' .
-            '--names-exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
+        $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd --fuzzy ' .
+            '--exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')
             ->with('origin/master')->andReturn(false);

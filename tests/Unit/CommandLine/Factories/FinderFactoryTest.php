@@ -12,7 +12,7 @@ class FinderFactoryTest extends TestCase
     /** @var FinderFactory */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new FinderFactory();
     }

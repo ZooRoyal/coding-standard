@@ -2,6 +2,7 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
+use InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +20,7 @@ class ParentByFileFinderTest extends TestCase
     /** @var string */
     private $mockedRootDirectory = '/my/root/directory';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(ParentByFileFinder::class);
@@ -30,7 +31,7 @@ class ParentByFileFinderTest extends TestCase
             ->andReturn($this->mockedRootDirectory);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
@@ -90,11 +91,11 @@ class ParentByFileFinderTest extends TestCase
 
     /**
      * @test
-     * @expectedException     \InvalidArgumentException
-     * @expectedExceptionCode 1525785151
      */
     public function findParentByFileWithNoFileNameThrowsException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode('1525785151');
         $this->subject->findParentByFile('');
     }
 }

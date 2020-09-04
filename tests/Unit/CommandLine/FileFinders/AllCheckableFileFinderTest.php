@@ -19,7 +19,7 @@ class AllCheckableFileFinderTest extends TestCase
     /** @var AllCheckableFileFinder */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(AllCheckableFileFinder::class);
@@ -27,7 +27,7 @@ class AllCheckableFileFinderTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

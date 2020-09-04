@@ -11,7 +11,7 @@ class BlacklistFactoryTest extends TestCase
     /** @var BlacklistFactory */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         mkdir(__DIR__ . '/Fixtures/gitExclude/.git');
 
@@ -19,7 +19,7 @@ class BlacklistFactoryTest extends TestCase
         $this->subject = $container->get(BlacklistFactory::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         rmdir(__DIR__ . '/Fixtures/gitExclude/.git');
     }

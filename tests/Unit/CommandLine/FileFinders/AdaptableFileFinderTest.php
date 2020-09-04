@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
@@ -20,7 +21,7 @@ class AdaptableFileFinderTest extends TestCase
     /** @var AdaptableFileFinder */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(AdaptableFileFinder::class);
@@ -28,7 +29,7 @@ class AdaptableFileFinderTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
@@ -36,13 +37,11 @@ class AdaptableFileFinderTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
-     *
-     * @expectedExceptionCode 1553766210
      */
     public function findFilesWithInvalidTargetThrowsException()
     {
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode('1553766210');
         $mockedTargetBranchInput = 'blaaaa';
         $this->subjectParameters[GitInputValidator::class]->shouldReceive('isCommitishValid')
             ->with($mockedTargetBranchInput)->andReturn(false);

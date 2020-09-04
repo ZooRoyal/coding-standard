@@ -29,7 +29,7 @@ class BlacklistFactoryTest extends TestCase
     /** @var string[] */
     private $blacklistedDirectories = ['eins', 'weg', 'mag/nicht'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(BlacklistFactory::class);
@@ -40,7 +40,7 @@ class BlacklistFactoryTest extends TestCase
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

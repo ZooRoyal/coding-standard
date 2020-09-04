@@ -25,7 +25,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /** @var PHPStanConfigGenerator */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedNeonAdapter = Mockery::mock(NeonAdapter::class);
         $this->mockedFileWriter = Mockery::mock(FileWriter::class);
@@ -39,7 +39,7 @@ class PHPStanConfigGeneratorTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

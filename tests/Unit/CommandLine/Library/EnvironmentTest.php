@@ -30,7 +30,7 @@ class EnvironmentTest extends TestCase
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);
@@ -38,7 +38,7 @@ class EnvironmentTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

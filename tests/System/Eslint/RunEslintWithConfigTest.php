@@ -16,7 +16,7 @@ class RunEslintWithConfigTest extends TestCase
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
     private $testInstancePath;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $environment = TestEnvironmentInstallation::getInstance();
         if ($environment->isInstalled() === false) {
@@ -27,7 +27,7 @@ class RunEslintWithConfigTest extends TestCase
         }
     }
 
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         TestEnvironmentInstallation::getInstance()->removeInstallation();
     }

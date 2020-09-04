@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
@@ -13,7 +14,7 @@ class ProcessRunnerTest extends TestCase
     /** @var ProcessRunner */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new ProcessRunner();
     }
@@ -24,8 +25,7 @@ class ProcessRunnerTest extends TestCase
     public function runAsProcess()
     {
         $result = $this->subject->runAsProcess('ls');
-
-        self::assertInternalType('string', $result);
+        self::assertIsString($result);
     }
 
     /**
@@ -43,10 +43,10 @@ class ProcessRunnerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function runAsProcessReturningProcessObjectWithArgumentsInjection()
     {
+        $this->expectException(ProcessFailedException::class);
         $this->subject->runAsProcess('git', 'version\'; ls');
     }
 
@@ -63,10 +63,10 @@ class ProcessRunnerTest extends TestCase
 
     /**
      * @test
-     * @expectedException \Symfony\Component\Process\Exception\ProcessFailedException
      */
     public function runProcessWithArgumentsInjection()
     {
+        $this->expectException(ProcessFailedException::class);
         $this->subject->runAsProcess('git', 'version\'; ls');
     }
 }

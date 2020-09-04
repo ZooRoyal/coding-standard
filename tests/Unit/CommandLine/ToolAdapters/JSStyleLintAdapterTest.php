@@ -35,7 +35,7 @@ class JSStyleLintAdapterTest extends TestCase
     /** @var string */
     private $forgedCommandPath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
@@ -64,7 +64,7 @@ class JSStyleLintAdapterTest extends TestCase
         )->shouldAllowMockingProtectedMethods()->makePartial();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
