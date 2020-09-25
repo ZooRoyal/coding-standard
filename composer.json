@@ -51,7 +51,8 @@
     "mockery/mockery": "^1.3.2",
     "symfony/filesystem": "^2.8 || ^3.0 || ^4.0",
     "sebastianknott/hamcrest-object-accessor": "^1.0.2",
-    "php-http/mock-client": "^1.3"
+    "php-http/mock-client": "^1.3",
+    "phpstan/phpstan": "^0.12.44"
   },
   "autoload": {
     "psr-4": {
