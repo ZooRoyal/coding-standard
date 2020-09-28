@@ -3,7 +3,6 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-
 class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
 
@@ -20,12 +19,13 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     {
         $rootDirectory = $this->environment->getRootDirectory();
         $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse -c '. $phpstanConfig. ' '. $rootDirectory;
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse -c '.
+            $phpstanConfig. ' '. $rootDirectory;
         $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse %1$s';
     }
 
     /**
-     * @inheritDoc
+     * {@inheritdoc}
      */
     public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
     {
@@ -35,7 +35,6 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $diffMessage = $prefix . 'Running check on diff';
 
         return $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
-
     }
 
 }

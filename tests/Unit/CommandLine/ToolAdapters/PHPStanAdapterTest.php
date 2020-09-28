@@ -11,7 +11,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 

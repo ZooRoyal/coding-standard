@@ -1,4 +1,0 @@
-parameters:
-	excludes_analyse:
-		- '%currentWorkingDirectory%/vendor/*'
-		- '%currentWorkingDirectory%/node_modules/*'

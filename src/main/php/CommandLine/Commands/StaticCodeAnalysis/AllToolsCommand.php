@@ -37,7 +37,7 @@ class AllToolsCommand extends AbstractFixableToolCommand
         $commands = $this->getApplication()->all('sca');
 
         foreach ($commands as $command) {
-            if ($command->getName() === 'sca:all') {
+            if ($command->getName() === 'sca:all' || $command->getName() === 'sca:stan') {
                 continue;
             }
             $arguments = [];
