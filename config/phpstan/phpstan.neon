@@ -1,0 +1,6 @@
+parameters:
+	excludes_analyse:
+		- '%currentWorkingDirectory%/vendor/*'
+		- '%currentWorkingDirectory%/.git'
+		- '%currentWorkingDirectory%/.idea'
+		- '%currentWorkingDirectory%/node_modules/*'

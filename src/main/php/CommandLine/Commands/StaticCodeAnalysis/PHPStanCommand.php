@@ -65,7 +65,13 @@ class PHPStanCommand extends Command
                         null,
                         InputOption::VALUE_OPTIONAL,
                         'Format in which to print the result of the analysis'
-                    )
+                    ),
+                    new InputOption(
+                        'process-isolation',
+                        'p',
+                        InputOption::VALUE_NONE,
+                        'Runs all checks in separate processes. Slow but not as resource hungry.'
+                    ),
                 ]
             )
         );
@@ -76,9 +82,9 @@ class PHPStanCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output)
     {
-        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target') ? $input->getOption('target') : false;
-        $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch);
-        return $exitCode;
+        $targetBranch = $input->getOption('auto-target') ??  $input->getOption('target');
+        $processIsolationInput = $input->getOption('process-isolation');
+        return $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
     }
 
 

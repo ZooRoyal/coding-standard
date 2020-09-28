@@ -19,7 +19,8 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     protected function init()
     {
         $rootDirectory = $this->environment->getRootDirectory();
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse %1$s';
+        $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse -c '. $phpstanConfig. ' '. $rootDirectory;
         $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse %1$s';
     }
 
@@ -33,9 +34,8 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
+        return $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
 
-        return $exitCode;
     }
 
 }
