@@ -6,14 +6,13 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputOption;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\PHPStanInputOptions;
 
-class PHPStanOptionsTest extends TestCase {
+class PHPStanOptionsTest extends TestCase
+{
 
-    /**
-     * @var array[]
-     */
+    /** @var array[] */
     private $inputOptions;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->inputOptions = [
