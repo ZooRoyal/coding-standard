@@ -30,7 +30,7 @@ class PHPStanCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:stan');
         $this->setDescription('Run PHPStan on PHP files.');
@@ -41,7 +41,7 @@ class PHPStanCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $targetBranch = $input->getOption('auto-target') ??  $input->getOption('target');
         $processIsolationInput = $input->getOption('process-isolation');

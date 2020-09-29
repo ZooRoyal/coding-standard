@@ -80,12 +80,13 @@ class PHPStanAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPStanBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan -q analyse -c '
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse -c '
                     . $this->mockedPackageDirectory . $config . ' '. $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'PHPStanWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan -q analyse %1$s'
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse -c '
+                    . $this->mockedPackageDirectory . $config . ' %1$s'
                 )
             )
         );

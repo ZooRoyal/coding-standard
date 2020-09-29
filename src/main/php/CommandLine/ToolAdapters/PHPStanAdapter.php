@@ -15,19 +15,20 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     /** @var string */
     protected $whitelistGlue = ' ';
 
-    protected function init()
+    protected function init(): void
     {
         $rootDirectory = $this->environment->getRootDirectory();
         $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse -c '.
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse -c '.
             $phpstanConfig. ' '. $rootDirectory;
-        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan -q analyse %1$s';
+        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse -c '
+            .$phpstanConfig. ' %1$s';
     }
 
     /**
      * {@inheritdoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false) : ?int
     {
         $toolShortName = 'PHPStan';
         $prefix = $toolShortName . ' : ';

@@ -25,18 +25,6 @@ class PHPStanInputOptions
                 It tries to find the parent branch by automagic.',
             ],
             [
-                'name' => 'level',
-                'short' => 'l',
-                'option' => InputOption::VALUE_OPTIONAL,
-                'description' => 'Level of rule options 0 to 8 - the higher the stricter',
-            ],
-            [
-                'name' => 'error-format',
-                'short' => null,
-                'option' => InputOption::VALUE_OPTIONAL,
-                'description' => 'Format in which to print the result of the analysis',
-            ],
-            [
                 'name' => 'process-isolation',
                 'short' => 'p',
                 'option' => InputOption::VALUE_NONE,
