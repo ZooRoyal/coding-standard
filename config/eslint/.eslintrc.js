@@ -90,7 +90,7 @@ module.exports = {
         'no-return-assign': 2,
         'no-unused-expressions': 2,
         'no-unused-vars': 2,
-        'radix': 2,
+        radix: 2,
         'no-trailing-spaces': 0,
         // es6
         'arrow-spacing': ['error', { before: true, after: true }],
