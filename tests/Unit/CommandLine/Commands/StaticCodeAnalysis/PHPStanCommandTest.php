@@ -49,8 +49,9 @@ class PHPStanCommandTest extends TestCase
      */
     public function configure()
     {
-        /** @var MockInterface|FindFilesToCheckCommand $localSubject */
-        $localSubject = Mockery::mock(PHPStanCommand::class, $this->subjectParameters)->makePartial();
+
+        $localSubject = Mockery::mock(PHPStanCommand::class, $this->subjectParameters)
+            ->shouldAllowMockingProtectedMethods()->makePartial();
 
         $localSubject->shouldReceive('setName')->once()->with('sca:stan');
         $localSubject->shouldReceive('setDescription')->once()

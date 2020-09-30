@@ -1,0 +1,217 @@
+parameters:
+	ignoreErrors:
+		-
+			message: "#^Method Zooroyal\\\\CodingStandard\\\\CommandLine\\\\Commands\\\\StaticCodeAnalysis\\\\FindFilesToCheckCommand\\:\\:execute\\(\\) should return int but return statement is missing\\.$#"
+			count: 1
+			path: src/main/php/CommandLine/Commands/StaticCodeAnalysis/FindFilesToCheckCommand.php
+
+		-
+			message: "#^Parameter \\#1 \\$command of class Symfony\\\\Component\\\\Process\\\\Process constructor expects array, string given\\.$#"
+			count: 2
+			path: src/main/php/CommandLine/Library/ProcessRunner.php
+
+		-
+			message: "#^Parameter \\#3 \\$issue of method Github\\\\Api\\\\Issue\\\\Comments\\:\\:create\\(\\) expects int, array\\<string\\>\\|string\\|null given\\.$#"
+			count: 1
+			path: src/main/php/Github/Commands/IssueCommentAddCommand.php
+
+		-
+			message: "#^PHPDoc tag @param for parameter \\$login with type string\\|null is not subtype of native type string\\.$#"
+			count: 1
+			path: src/main/php/Github/Library/CommentFilter.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_OPEN_TAG not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Parameter \\$phpcsFile of method Zooroyal\\\\CodingStandard\\\\PHPCodeSniffer\\\\Standards\\\\ZooRoyal\\\\Sniffs\\\\Commenting\\\\DocCommentSniff\\:\\:process\\(\\) has invalid typehint type PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 2
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Call to method getTokens\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Access to property \\$numTokens on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_WHITESPACE not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_STAR not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Call to method findNext\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 4
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Call to method addError\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 8
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Call to method addFixableError\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 8
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Access to property \\$fixer on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 23
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Call to method findPrevious\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 4
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_STRING not found\\.$#"
+			count: 2
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Access to property \\$eolChar on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 4
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Variable \\$pos might not be defined\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_TAG not found\\.$#"
+			count: 2
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Variable \\$commentTokens might not be defined\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+
+		-
+			message: "#^Parameter \\$phpcsFile of method Zooroyal\\\\CodingStandard\\\\PHPCodeSniffer\\\\Standards\\\\ZooRoyal\\\\Sniffs\\\\Commenting\\\\FunctionCommentThrowTagSniff\\:\\:process\\(\\) has invalid typehint type PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 2
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Call to method getTokens\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Access to static property \\$methodPrefixes on an unknown class PHP_CodeSniffer\\\\Util\\\\Tokens\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Call to method findPrevious\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 3
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_CLOSE_TAG not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Call to method findNext\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 4
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Constant T_ANON_CLASS not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Constant T_CLOSURE not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Call to method getTokensAsString\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 2
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Constant T_DOC_COMMENT_STRING not found\\.$#"
+			count: 1
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Call to method addError\\(\\) on an unknown class PHP_CodeSniffer\\\\Files\\\\File\\.$#"
+			count: 3
+			path: src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+
+		-
+			message: "#^Parameter \\#1 \\$command of class Symfony\\\\Component\\\\Process\\\\Process constructor expects array, string given\\.$#"
+			count: 2
+			path: tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniffTest.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$firstParameter\\)\\: Unexpected token \"\\$firstParameter\", expected type at offset 36$#"
+			count: 1
+			path: tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/Fixtures/FixtureCorrectComments.php
+
+		-
+			message: "#^PHPDoc tag @param has invalid value \\(\\$secondParamete\\)\\: Unexpected token \"\\$secondParamete\", expected type at offset 66$#"
+			count: 1
+			path: tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/Fixtures/FixtureCorrectComments.php
+
+		-
+			message: "#^Parameter \\#1 \\$command of class Symfony\\\\Component\\\\Process\\\\Process constructor expects array, string given\\.$#"
+			count: 2
+			path: tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniffTest.php
+
+		-
+			message: "#^Parameter \\#1 \\$command of class Symfony\\\\Component\\\\Process\\\\Process constructor expects array, string given\\.$#"
+			count: 5
+			path: tests/System/Eslint/RunEslintWithConfigTest.php
+
+		-
+			message: "#^Call to protected method configure\\(\\) of class Zooroyal\\\\CodingStandard\\\\CommandLine\\\\Commands\\\\StaticCodeAnalysis\\\\PHPStanCommand\\.$#"
+			count: 1
+			path: tests/Unit/CommandLine/Commands/StaticCodeAnalysis/PHPStanCommandTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$processIsolation of method Zooroyal\\\\CodingStandard\\\\CommandLine\\\\ToolAdapters\\\\JSESLintAdapter\\:\\:writeViolationsToOutput\\(\\) expects bool, string given\\.$#"
+			count: 1
+			path: tests/Unit/CommandLine/ToolAdapters/JSESLintAdapterTest.php
+
+		-
+			message: "#^Parameter \\#2 \\$processIsolation of method Zooroyal\\\\CodingStandard\\\\CommandLine\\\\ToolAdapters\\\\JSStyleLintAdapter\\:\\:writeViolationsToOutput\\(\\) expects bool, string given\\.$#"
+			count: 1
+			path: tests/Unit/CommandLine/ToolAdapters/JSStyleLintAdapterTest.php
+
+		-
+			message: "#^Property Zooroyal\\\\CodingStandard\\\\Tests\\\\Unit\\\\CommandLine\\\\ToolAdapters\\\\PHPCopyPasteDetectorAdapterTest\\:\\:\\$subject \\(Zooroyal\\\\CodingStandard\\\\CommandLine\\\\ToolAdapters\\\\PHPCodeSnifferAdapter\\) does not accept Zooroyal\\\\CodingStandard\\\\CommandLine\\\\ToolAdapters\\\\PHPCopyPasteDetectorAdapter\\.$#"
+			count: 1
+			path: tests/Unit/CommandLine/ToolAdapters/PHPCopyPasteDetectorAdapterTest.php
+
+		-
+			message: "#^Property Zooroyal\\\\CodingStandard\\\\Tests\\\\Unit\\\\Github\\\\Commands\\\\PullCommentRefreshCommandTest\\:\\:\\$mockedArguments \\(array\\<string\\>\\) does not accept default value of type array\\<string, int\\|string\\>\\.$#"
+			count: 1
+			path: tests/Unit/Github/Commands/PullCommentRefreshCommandTest.php
+
+		-
+			message: "#^Property Zooroyal\\\\CodingStandard\\\\Tests\\\\Unit\\\\Github\\\\Commands\\\\PullCommentRefreshCommandTest\\:\\:\\$mockedOwnCurrentComment \\(array\\<string\\>\\) does not accept array\\<string, array\\<string, string\\>\\|int\\|string\\>\\.$#"
+			count: 1
+			path: tests/Unit/Github/Commands/PullCommentRefreshCommandTest.php
+
+		-
+			message: "#^Property Zooroyal\\\\CodingStandard\\\\Tests\\\\Unit\\\\Github\\\\Commands\\\\PullCommentRefreshCommandTest\\:\\:\\$mockedOwnStaleComment \\(array\\<array\\<string\\>\\|string\\>\\) does not accept array\\<string, array\\<string, string\\>\\|int\\|string\\|null\\>\\.$#"
+			count: 1
+			path: tests/Unit/Github/Commands/PullCommentRefreshCommandTest.php
+

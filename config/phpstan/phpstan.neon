@@ -1,7 +1,18 @@
+includes:
+    - ../../phpstan-baseline.neon
+    - ../../vendor/phpstan/phpstan-mockery/extension.neon
+    - ../../vendor/phpstan/phpstan-phpunit/extension.neon
+    - ../../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: max
+    level: 5
     excludes_analyse:
-                   - '*/vendor/*'
-                   - '.git'
-                   - '.idea'
-                   - '*/node_modules/*'
+        - ../../vendor
+        - ../../node_modules
+    parallel:
+        maximumNumberOfProcesses: 4
+    fileExtensions:
+        - php
+    scanFiles:
+        - ../../vendor/mockery/mockery/library/helpers.php
+        - ../../vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php
+        - ../../vendor/sebastianknott/hamcrest-object-accessor/src/functions.php
