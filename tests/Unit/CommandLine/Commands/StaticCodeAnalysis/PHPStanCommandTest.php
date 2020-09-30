@@ -49,7 +49,6 @@ class PHPStanCommandTest extends TestCase
      */
     public function configure()
     {
-
         $localSubject = Mockery::mock(PHPStanCommand::class, $this->subjectParameters)
             ->shouldAllowMockingProtectedMethods()->makePartial();
 
