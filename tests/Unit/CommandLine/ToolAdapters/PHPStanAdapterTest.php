@@ -6,8 +6,11 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
+use PHPStan\DependencyInjection\NeonAdapter;
+use PHPStan\File\FileWriter;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
@@ -24,6 +27,12 @@ class PHPStanAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|PHPStanAdapter */
     private $partialSubject;
+    /** @var MockInterface|BlacklistFactory */
+    private $mockedBlacklistFactory;
+    /** @var MockInterface|NeonAdapter */
+    private $mockedNeonAdapter;
+    /** @var MockInterface|FileWriter */
+    private $mockedFileWriter;
     /** @var string */
     private $mockedPackageDirectory;
     /** @var string */
@@ -37,7 +46,9 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
-
+        $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
+        $this->mockedNeonAdapter = Mockery::mock(NeonAdapter::class);
+        $this->mockedFileWriter = Mockery::mock(FileWriter::class);
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
@@ -46,6 +57,12 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
+        $this->mockedBlacklistFactory->shouldReceive('build')->with('.dontStanPHP')->once()->andReturn(['vendor']);
+        $this->mockedNeonAdapter->shouldReceive('dump')
+            ->with(['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]])
+            ->once()->andReturn('neonfilestring');
+        $this->mockedFileWriter->shouldReceive('write')->once()
+            ->withArgs(['/package/directory/config/phpstan/phpstan.neon.dist', 'neonfilestring']);
         $this->partialSubject = Mockery::mock(
             PHPStanAdapter::class . '[!init]',
             [
@@ -53,6 +70,9 @@ class PHPStanAdapterTest extends TestCase
                 $this->mockedOutputInterface,
                 $this->mockedGenericCommandRunner,
                 $this->mockedTerminalCommandFinder,
+                $this->mockedBlacklistFactory,
+                $this->mockedNeonAdapter,
+                $this->mockedFileWriter,
             ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
     }
@@ -74,14 +94,15 @@ class PHPStanAdapterTest extends TestCase
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
         self::assertFalse($this->partialSubject->isEscape());
+        self::assertFalse($this->partialSubject->isBlackListArgument());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPStanBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
-                    . $this->mockedPackageDirectory . $config . ' '. $this->mockedRootDirectory
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress '.$this->mockedRootDirectory.
+                    ' -c ' . $this->mockedPackageDirectory . $config
                 ),
                 H::hasKeyValuePair(
                     'PHPStanWL',
