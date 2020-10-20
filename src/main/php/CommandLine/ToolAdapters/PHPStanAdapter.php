@@ -3,14 +3,12 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
-use PHPStan\DependencyInjection\NeonAdapter;
-use PHPStan\File\CouldNotWriteFileException;
-use PHPStan\File\FileWriter;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
+use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStandConfigGenerator;
 
 class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
@@ -25,13 +23,10 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     protected $whitelistGlue = ' ';
     /** @var bool */
     protected $blackListArgument = false;
-
     /** @var BlacklistFactory */
     private $blacklistFactory;
-    /** @var NeonAdapter */
-    private $neonAdapter;
-    /** @var FileWriter */
-    private $fileWriter;
+    /** @var PHPStandConfigGenerator */
+    private $phpstanConfigGenerator;
 
     public function __construct(
         Environment $environment,
@@ -39,12 +34,10 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         GenericCommandRunner $genericCommandRunner,
         TerminalCommandFinder $terminalCommandFinder,
         BlacklistFactory $blacklistFactory,
-        NeonAdapter $neonAdapter,
-        FileWriter $fileWriter
+        PHPStandConfigGenerator $phpstanConfigGenerator
     ) {
-        $this->fileWriter = $fileWriter;
+        $this->phpstanConfigGenerator = $phpstanConfigGenerator;
         $this->blacklistFactory = $blacklistFactory;
-        $this->neonAdapter = $neonAdapter;
         parent::__construct($environment, $output, $genericCommandRunner, $terminalCommandFinder);
     }
 
@@ -63,15 +56,11 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
             $diretoryBlackListfiles[] =  $rootDirectory.'/'.$file;
         }
         $configfileData = ['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]];
-        $onTheFlyConfig = $this->neonAdapter->dump($configfileData);
+        $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($configfileData);
+        $this->phpstanConfigGenerator->writeConfig($phpstanConfig.'.dist', $onTheFlyConfig);
 
-        try {
-            $this->fileWriter->write($phpstanConfig.'.dist', $onTheFlyConfig);
-            $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '.
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '.
                 $rootDirectory .' -c '.$phpstanConfig;
-        } catch (CouldNotWriteFileException $exception) {
-            $this->commands['PHPStanBL'] = '';
-        }
 
         $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
             .$phpstanConfig. ' %1$s';
