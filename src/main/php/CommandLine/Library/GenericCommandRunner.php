@@ -86,7 +86,6 @@ class GenericCommandRunner
      * @param string $prefix
      * @param string $glue
      * @param bool   $escape  if true the blacklist entries will be escaped for regexp
-     * @param bool   $blackListArgument if false there no arguments to build for command
      *
      * @return int|null
      */
@@ -95,13 +94,8 @@ class GenericCommandRunner
         string $blacklistToken,
         string $prefix = '',
         string $glue = ',',
-        bool $escape = false,
-        bool $blackListArgument = true
-    ) {
-        if ($blackListArgument === false) {
-            return $this->runAndWriteToOutput($template);
-        }
-
+        bool $escape = false)
+    {
         $argument = $this->concatBlackListArguments($blacklistToken, $escape, $prefix, $glue);
         $command = $this->buildCommand($template, $argument);
         return $this->runAndWriteToOutput($command);

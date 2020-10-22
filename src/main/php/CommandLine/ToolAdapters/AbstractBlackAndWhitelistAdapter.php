@@ -30,8 +30,6 @@ abstract class AbstractBlackAndWhitelistAdapter
     protected $commands = [];
     /** @var bool */
     protected $escape = false;
-    /** @var bool */
-    protected $blackListArgument = true;
     /** @var TerminalCommandFinder */
     protected $terminalCommandFinder;
 
@@ -88,8 +86,7 @@ abstract class AbstractBlackAndWhitelistAdapter
                 $this->blacklistToken,
                 $this->blacklistPrefix,
                 $this->blacklistGlue,
-                $this->escape,
-                $this->blackListArgument
+                $this->escape
             );
         } else {
             $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
@@ -141,9 +138,4 @@ abstract class AbstractBlackAndWhitelistAdapter
     {
         return $this->escape;
     }
-    public function isBlackListArgument() :bool
-    {
-        return $this->blackListArgument;
-    }
-
 }

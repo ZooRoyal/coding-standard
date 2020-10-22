@@ -8,7 +8,9 @@ use PHPStan\DependencyInjection\NeonAdapter;
 use PHPStan\File\CouldNotWriteFileException;
 use PHPStan\File\FileWriter;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStandConfigGenerator;
+use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\ToolConfigGeneratorInterface;
 
 class PHPStanConfigGeneratorTest extends TestCase
@@ -17,22 +19,40 @@ class PHPStanConfigGeneratorTest extends TestCase
     private $mockedNeonAdapter;
     /** @var MockInterface|FileWriter */
     private $mockedFileWriter;
-    /** @var PHPStandConfigGenerator */
+    /** @var MockInterface| BlacklistFactory */
+    private $mockedBlacklistFactory;
+    /** @var MockInterface| Environment  */
+    private $mockedEnvironment;
+    /** @var PHPStanConfigGenerator */
     private $subject;
 
     protected function setUp()
     {
         $this->mockedNeonAdapter = Mockery::mock(NeonAdapter::class);
         $this->mockedFileWriter = Mockery::mock(FileWriter::class);
-        $this->subject = Mockery::mock(PHPStandConfigGenerator::class);
+        $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
+        $this->subject = Mockery::mock(PHPStanConfigGenerator::class);
 
-        $this->subject = new PHPStandConfigGenerator($this->mockedNeonAdapter, $this->mockedFileWriter);
+        $this->subject = new PHPStanConfigGenerator($this->mockedNeonAdapter,
+            $this->mockedFileWriter,
+            $this->mockedBlacklistFactory);
     }
 
     protected function tearDown()
     {
         Mockery::close();
         parent::tearDown();
+    }
+
+    /**
+     * @test
+     */
+    public function testAddConfigParameters()
+    {
+        $expectedParams = ['parameters' => ['excludes_analyse' => ['/vendor']]];
+        $this->mockedBlacklistFactory->shouldReceive('build')->once()->with('.dontStanPHP')->andReturn(['vendor']);
+        $params = $this->subject->addConfigParameters('.dontStanPHP', '');
+        self::assertEquals($params, $expectedParams);
     }
 
     /**

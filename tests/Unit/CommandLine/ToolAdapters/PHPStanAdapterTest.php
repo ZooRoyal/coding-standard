@@ -7,14 +7,14 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use DI\Annotation\Inject;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
-use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStandConfigGenerator;
+use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 
 class PHPStanAdapterTest extends TestCase
 {
@@ -26,9 +26,7 @@ class PHPStanAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|PHPStanAdapter */
     private $partialSubject;
-    /** @var MockInterface|BlacklistFactory */
-    private $mockedBlacklistFactory;
-    /*** @var MockInterface|PHPStandConfigGenerator */
+    /* *@var MockInterface|PHPStanConfigGenerator */
     private $mockedPHPStanConfigGenerator;
     /** @var string */
     private $mockedPackageDirectory;
@@ -43,8 +41,7 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
-        $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
-        $this->mockedPHPStanConfigGenerator = Mockery::mock(PHPStandConfigGenerator::class);
+        $this->mockedPHPStanConfigGenerator = Mockery::mock(PHPStanConfigGenerator::class);
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
@@ -52,12 +49,16 @@ class PHPStanAdapterTest extends TestCase
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
-        $this->mockedBlacklistFactory->shouldReceive('build')->with('.dontStanPHP')->once()->andReturn(['vendor']);
+
+        $parameters = ['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]];
+        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()->with('.dontStanPHP',$this->mockedRootDirectory)->andReturn($parameters);
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
-            ->with(['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]])
+            ->with($parameters)
             ->once()->andReturn('neonfilestring');
         $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()
             ->withArgs(['/package/directory/config/phpstan/phpstan.neon.dist', 'neonfilestring']);
+
+
 
         $this->partialSubject = Mockery::mock(
             PHPStanAdapter::class . '[!init]',
@@ -66,10 +67,12 @@ class PHPStanAdapterTest extends TestCase
                 $this->mockedOutputInterface,
                 $this->mockedGenericCommandRunner,
                 $this->mockedTerminalCommandFinder,
-                $this->mockedBlacklistFactory,
-                $this->mockedPHPStanConfigGenerator,
+                $this->mockedPHPStanConfigGenerator
             ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
+
+
+
     }
 
     protected function tearDown()
@@ -89,7 +92,6 @@ class PHPStanAdapterTest extends TestCase
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
         self::assertFalse($this->partialSubject->isEscape());
-        self::assertFalse($this->partialSubject->isBlackListArgument());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),

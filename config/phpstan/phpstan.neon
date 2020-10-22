@@ -1,11 +1,10 @@
 includes:
     - phpstan.neon.dist
-    - ../../phpstan-baseline.neon
     - ../../vendor/phpstan/phpstan-mockery/extension.neon
     - ../../vendor/phpstan/phpstan-phpunit/extension.neon
     - ../../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: 5
+    level: 2
     parallel:
         maximumNumberOfProcesses: 4
     fileExtensions:
