@@ -9,7 +9,6 @@ use PHPStan\File\CouldNotWriteFileException;
 use PHPStan\File\FileWriter;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\ToolConfigGeneratorInterface;
 
@@ -33,9 +32,11 @@ class PHPStanConfigGeneratorTest extends TestCase
         $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
         $this->subject = Mockery::mock(PHPStanConfigGenerator::class);
 
-        $this->subject = new PHPStanConfigGenerator($this->mockedNeonAdapter,
+        $this->subject = new PHPStanConfigGenerator(
+            $this->mockedNeonAdapter,
             $this->mockedFileWriter,
-            $this->mockedBlacklistFactory);
+            $this->mockedBlacklistFactory
+        );
     }
 
     protected function tearDown()

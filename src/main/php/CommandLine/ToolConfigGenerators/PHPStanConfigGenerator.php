@@ -16,10 +16,11 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
     /** @var BlacklistFactory */
     private $blacklistFactory;
 
-    public function __construct(NeonAdapter $neonAdapter,
+    public function __construct(
+        NeonAdapter $neonAdapter,
         FileWriter $fileWriter,
-        BlacklistFactory $blacklistFactory)
-    {
+        BlacklistFactory $blacklistFactory
+    ) {
         $this->fileWriter = $fileWriter;
         $this->neonAdapter = $neonAdapter;
         $this->blacklistFactory = $blacklistFactory;
@@ -35,7 +36,7 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
             $diretoryBlackListfiles[] = $args[1].'/'.$file;
         }
 
-       return ['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]];
+        return ['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]];
     }
 
     public function generateConfig(array $parameters): string

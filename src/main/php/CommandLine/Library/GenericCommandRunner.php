@@ -94,8 +94,8 @@ class GenericCommandRunner
         string $blacklistToken,
         string $prefix = '',
         string $glue = ',',
-        bool $escape = false)
-    {
+        bool $escape = false
+    ) {
         $argument = $this->concatBlackListArguments($blacklistToken, $escape, $prefix, $glue);
         $command = $this->buildCommand($template, $argument);
         return $this->runAndWriteToOutput($command);

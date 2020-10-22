@@ -56,7 +56,6 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 
         $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
                 . $phpstanConfig . ' %1$s';
-
     }
 
     /**

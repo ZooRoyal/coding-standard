@@ -7,7 +7,6 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use DI\Annotation\Inject;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
@@ -51,14 +50,12 @@ class PHPStanAdapterTest extends TestCase
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $parameters = ['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]];
-        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()->with('.dontStanPHP',$this->mockedRootDirectory)->andReturn($parameters);
+        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()->with('.dontStanPHP', $this->mockedRootDirectory)->andReturn($parameters);
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
             ->with($parameters)
             ->once()->andReturn('neonfilestring');
         $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()
             ->withArgs(['/package/directory/config/phpstan/phpstan.neon.dist', 'neonfilestring']);
-
-
 
         $this->partialSubject = Mockery::mock(
             PHPStanAdapter::class . '[!init]',
@@ -67,12 +64,9 @@ class PHPStanAdapterTest extends TestCase
                 $this->mockedOutputInterface,
                 $this->mockedGenericCommandRunner,
                 $this->mockedTerminalCommandFinder,
-                $this->mockedPHPStanConfigGenerator
+                $this->mockedPHPStanConfigGenerator,
             ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
-
-
-
     }
 
     protected function tearDown()
