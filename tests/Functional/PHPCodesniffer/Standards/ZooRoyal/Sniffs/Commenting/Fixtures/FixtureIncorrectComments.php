@@ -1,20 +1,21 @@
 <?php
 namespace Zooroyal\CodingStandard\Tests\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting\Fixtures;
 
+use RuntimeException;
+
 class FixtureCorrectComments
 {
     /** */
 
-    /**
- * Bla
+    /** Bla
      */
 
     /**
-     Bla
-*/
+     Bla */
 
     /**
      * Bla
+     *
      */
 
     /**
@@ -27,7 +28,6 @@ class FixtureCorrectComments
 
     /**
      * Asdasdasd
-     *
      * @return
      */
 
@@ -44,6 +44,7 @@ class FixtureCorrectComments
      *
      * @param
      * @param
+     *
      *
      * @return
      */
@@ -52,7 +53,7 @@ class FixtureCorrectComments
      * ASD
      *
      * @param asd
-     * @param asdasd
+     * @param  asdasd
      *
      * @return
      */

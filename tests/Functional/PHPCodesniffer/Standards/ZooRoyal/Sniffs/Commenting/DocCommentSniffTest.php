@@ -62,9 +62,16 @@ class DocCommentSniffTest extends TestCase
 
         $output = $subject->getOutput();
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.Empty/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentAfterOpen/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeShort/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentBeforeClose/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfter/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.MissingShort/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ShortNotCapital/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeTags/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.NonParamGroup/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfterTagGroup/', $output);
+        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.TagValueIndent/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ParamNotFirst/', $output);
     }
 }

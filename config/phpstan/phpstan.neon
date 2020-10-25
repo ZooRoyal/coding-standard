@@ -6,8 +6,8 @@ includes:
 parameters:
     level: 5
     excludes_analyse:
-        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
-        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
+        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs
+        - ../../tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/Fixtures/FixtureCorrectComments.php
     parallel:
         maximumNumberOfProcesses: 4
     fileExtensions:

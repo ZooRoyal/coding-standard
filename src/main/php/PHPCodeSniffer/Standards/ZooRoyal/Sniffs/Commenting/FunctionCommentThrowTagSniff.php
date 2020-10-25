@@ -29,14 +29,14 @@ class FunctionCommentThrowTagSniff
     /**
      * Processes this test, when one of its tokens is encountered.
      *
-     * @param File $phpcsFile  The file being scanned.
-     * @param int  $stackPtr  The position of the current token
-     *                        in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token
+     *                                               in the stack passed in $tokens.
      * @SuppressWarnings(PHPMD)
      *
      * @return void
      */
-    public function process(File $phpcsFile, int $stackPtr): void
+    public function process(File $phpcsFile, $stackPtr)
     {
         $tokens = $phpcsFile->getTokens();
 

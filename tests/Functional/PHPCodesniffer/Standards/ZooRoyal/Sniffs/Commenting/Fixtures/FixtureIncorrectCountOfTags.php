@@ -16,7 +16,7 @@ class FixtureIncorrectCountOfTags
      */
     public function blub()
     {
-        if (mt_rand(0, 1) === 1) {
+        if (mt_rand(0, 1) == 1) {
             throw new Exception();
         }
         throw new RuntimeException();
