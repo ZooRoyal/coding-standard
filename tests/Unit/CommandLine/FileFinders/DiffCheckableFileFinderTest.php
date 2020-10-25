@@ -21,10 +21,9 @@ class DiffCheckableFileFinderTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(DiffCheckableFileFinder::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(DiffCheckableFileFinder::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
     }
 
     protected function tearDown()

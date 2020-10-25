@@ -21,10 +21,9 @@ class AllCheckableFileFinderTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(AllCheckableFileFinder::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(AllCheckableFileFinder::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
     }
 
     protected function tearDown()

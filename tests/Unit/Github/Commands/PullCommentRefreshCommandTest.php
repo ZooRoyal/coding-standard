@@ -30,7 +30,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    /** @var array<string> */
+    /** @var array<string, int|string> */
     private $mockedArguments = [
         'token' => 'myToken',
         'user_name' => 'foobar',
@@ -43,13 +43,13 @@ class PullCommentRefreshCommandTest extends TestCase
         'position' => 1,
     ];
 
-    /** @var array<string> */
+    /** @var array<string, array<string, string>|int|string> */
     private $mockedOwnCurrentComment;
 
     /** @var string */
     private $mockedLogin = 'MyLogin';
 
-    /** @var array<string|array<string>> */
+    /** @var array<string, array<string, string>|int|string|null> */
     private $mockedOwnStaleComment;
 
     protected function setUp()
@@ -71,10 +71,9 @@ class PullCommentRefreshCommandTest extends TestCase
             'user' => ['login' => $this->mockedLogin],
         ];
 
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(PullCommentRefreshCommand::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(PullCommentRefreshCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

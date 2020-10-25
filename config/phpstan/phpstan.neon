@@ -4,7 +4,10 @@ includes:
     - ../../vendor/phpstan/phpstan-phpunit/extension.neon
     - ../../vendor/phpstan/phpstan-doctrine/extension.neon
 parameters:
-    level: 2
+    level: 5
+    excludes_analyse:
+        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/DocCommentSniff.php
+        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting/FunctionCommentThrowTagSniff.php
     parallel:
         maximumNumberOfProcesses: 4
     fileExtensions:

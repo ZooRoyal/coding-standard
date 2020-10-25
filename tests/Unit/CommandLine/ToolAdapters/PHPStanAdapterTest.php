@@ -25,7 +25,7 @@ class PHPStanAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|PHPStanAdapter */
     private $partialSubject;
-    /* *@var MockInterface|PHPStanConfigGenerator */
+    /** @var MockInterface|PHPStanConfigGenerator */
     private $mockedPHPStanConfigGenerator;
     /** @var string */
     private $mockedPackageDirectory;
@@ -50,7 +50,8 @@ class PHPStanAdapterTest extends TestCase
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $parameters = ['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]];
-        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()->with('.dontStanPHP', $this->mockedRootDirectory)->andReturn($parameters);
+        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
+            ->with('.dontStanPHP', $this->mockedRootDirectory)->andReturn($parameters);
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
             ->with($parameters)
             ->once()->andReturn('neonfilestring');

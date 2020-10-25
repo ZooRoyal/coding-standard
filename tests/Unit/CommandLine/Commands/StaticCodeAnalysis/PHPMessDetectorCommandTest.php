@@ -11,7 +11,6 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -20,7 +19,7 @@ class PHPMessDetectorCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
-    /** @var FindFilesToCheckCommand */
+    /** @var PHPMessDetectorCommand */
     private $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -29,10 +28,9 @@ class PHPMessDetectorCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(PHPMessDetectorCommand::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(PHPMessDetectorCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -49,9 +47,7 @@ class PHPMessDetectorCommandTest extends TestCase
      */
     public function configure()
     {
-        /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
-
         $localSubject->shouldReceive('setName')->once()->with('sca:mess-detect');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-MD on PHP files.');
@@ -81,7 +77,7 @@ class PHPMessDetectorCommandTest extends TestCase
                     }
                 )
             );
-
+        /** @phpstan-ignore-next-line */
         $localSubject->configure();
     }
 

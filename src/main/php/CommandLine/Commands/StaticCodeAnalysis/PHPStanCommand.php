@@ -15,15 +15,21 @@ class PHPStanCommand extends Command
 {
     /** @var PHPStanAdapter */
     private $toolAdapter;
+    /** @var PHPStanInputOptions */
+    private $phpstanInputOptions;
 
     /**
      * PHPCodeSnifferCommand constructor.
      *
      * @param PHPStanAdapter $toolAdapter
+     * @param PHPStanInputOptions $phpstanInputOptions
      */
-    public function __construct(PHPStanAdapter $toolAdapter)
-    {
+    public function __construct(
+        PHPStanAdapter $toolAdapter,
+        PHPStanInputOptions $phpstanInputOptions
+    ) {
         $this->toolAdapter = $toolAdapter;
+        $this->phpstanInputOptions = $phpstanInputOptions;
         parent::__construct();
     }
 
@@ -51,10 +57,10 @@ class PHPStanCommand extends Command
      /**
       * {@inheritdoc}
       */
-    private function getInputDefinition(): InputDefinition
+    protected function getInputDefinition(): InputDefinition
     {
         $inputDefinition = [];
-        $inputOptions = PHPStanInputOptions::getInputOptions();
+        $inputOptions = $this->phpstanInputOptions->getInputOptions();
         foreach ($inputOptions as $inputOption) {
             $inputDefinition[] = new InputOption(
                 $inputOption['name'],

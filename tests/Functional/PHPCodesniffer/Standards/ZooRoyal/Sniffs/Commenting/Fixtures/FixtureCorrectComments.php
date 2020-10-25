@@ -11,8 +11,8 @@ class FixtureCorrectComments
     /**
      * Asd
      *
-     * @param $firstParameter
-     * @param $secondParamete
+     * @param mixed $firstParameter
+     * @param mixed $secondParameter
      *
      * @return int
      * @throws RuntimeException

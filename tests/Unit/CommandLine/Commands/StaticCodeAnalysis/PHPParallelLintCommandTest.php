@@ -7,7 +7,6 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPParallelLintCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPParallelLintAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -16,7 +15,7 @@ class PHPParallelLintCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
-    /** @var FindFilesToCheckCommand */
+    /** @var PHPParallelLintCommand */
     private $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -25,10 +24,9 @@ class PHPParallelLintCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(PHPParallelLintCommand::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(PHPParallelLintCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -45,9 +43,7 @@ class PHPParallelLintCommandTest extends TestCase
      */
     public function configure()
     {
-        /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPParallelLintCommand::class, $this->subjectParameters)->makePartial();
-
         $localSubject->shouldReceive('setName')->once()->with('sca:parallel-lint');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run Parallel-Lint on PHP files.');
@@ -56,6 +52,7 @@ class PHPParallelLintCommandTest extends TestCase
                 'This tool executes Parallel-Lint on a certain set of PHP files of this project. It '
                 . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.'
             );
+        /** @phpstan-ignore-next-line */
         $localSubject->configure();
     }
 

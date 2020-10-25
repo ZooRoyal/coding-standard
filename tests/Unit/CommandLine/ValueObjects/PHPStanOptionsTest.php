@@ -43,7 +43,8 @@ class PHPStanOptionsTest extends TestCase
      */
     public function compareGettingInputOptions()
     {
-        $inputOptions = PHPStanInputOptions::getInputOptions();
-        self::assertEquals($inputOptions, $this->inputOptions);
+        $inputOptions = new PHPStanInputOptions();
+
+        self::assertEquals($this->inputOptions, $inputOptions->getInputOptions());
     }
 }

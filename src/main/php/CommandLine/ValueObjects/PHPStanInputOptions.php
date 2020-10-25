@@ -6,8 +6,7 @@ use Symfony\Component\Console\Input\InputOption;
 
 class PHPStanInputOptions
 {
-
-    public static function getInputOptions(): array
+    public function getInputOptions(): array
     {
         return [
             [

@@ -20,8 +20,6 @@ class PHPStanConfigGeneratorTest extends TestCase
     private $mockedFileWriter;
     /** @var MockInterface| BlacklistFactory */
     private $mockedBlacklistFactory;
-    /** @var MockInterface| Environment  */
-    private $mockedEnvironment;
     /** @var PHPStanConfigGenerator */
     private $subject;
 

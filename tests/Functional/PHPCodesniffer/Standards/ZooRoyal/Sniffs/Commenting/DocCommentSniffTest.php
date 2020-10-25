@@ -39,7 +39,8 @@ class DocCommentSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectComments.php';
-        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+
+        $subject = Process::fromShellCommandline($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->mustRun();
         $subject->wait();
@@ -54,23 +55,16 @@ class DocCommentSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectComments.php';
-        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+        $subject = Process::fromShellCommandline($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
 
         $subject->run();
         $subject->wait();
 
         $output = $subject->getOutput();
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.Empty/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentAfterOpen/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeShort/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ContentBeforeClose/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfter/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.MissingShort/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ShortNotCapital/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeTags/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.NonParamGroup/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.SpacingAfterTagGroup/', $output);
-        self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.TagValueIndent/', $output);
         self::assertRegExp('/ZooRoyal\.Commenting\.DocComment\.ParamNotFirst/', $output);
     }
 }

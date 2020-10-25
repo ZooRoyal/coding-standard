@@ -39,7 +39,8 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectCountOfTags.php';
-        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+        $commandArray = explode(' ', $this->commandPrefix . $fileToTest);
+        $subject = new Process($commandArray, self::$vendorDir . '/../');
 
         $subject->mustRun();
         $subject->wait();
@@ -54,7 +55,8 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectCountOfTags.php';
-        $subject = new Process($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
+        $commandArray = explode(' ', $this->commandPrefix . $fileToTest);
+        $subject = new Process($commandArray, self::$vendorDir . '/../');
 
         $subject->run();
         $subject->wait();

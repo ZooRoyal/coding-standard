@@ -34,10 +34,9 @@ class EnvironmentTest extends TestCase
     {
         $this->rootDirectory = __DIR__;
 
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(Environment::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(Environment::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
     }
 
     protected function tearDown()

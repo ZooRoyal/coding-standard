@@ -11,16 +11,16 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\PHPStanInputOptions;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class PHPStanCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
-    /** @var FindFilesToCheckCommand */
+    /** @var PHPStanCommand */
     private $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -29,10 +29,11 @@ class PHPStanCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(PHPStanCommand::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(PHPStanCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subjectParameters[PHPStanInputOptions::class]->shouldReceive('getInputOptions')
+            ->once()->withNoArgs()->andReturn([]);
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -59,28 +60,27 @@ class PHPStanCommandTest extends TestCase
             ->with(
                 'This tool executes PHPStan on a certain set of PHP files of this project.'
             );
-        $localSubject->shouldReceive('setDefinition')->once()
-            ->with(
-                Mockery::on(
-                    function ($value) {
-                        MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
-                        /** @var InputDefinition $value */
-                        $options = $value->getOptions();
-                        MatcherAssert::assertThat(
-                            $options,
-                            H::allOf(
-                                H::arrayWithSize(3),
-                                H::everyItem(
-                                    H::anInstanceOf(InputOption::class)
-                                )
-                            )
-                        );
 
-                        return true;
-                    }
-                )
-            );
-
+        $localSubject->shouldReceive('getInputDefinition')->once()->withNoArgs()
+            ->andReturn(new InputDefinition([new InputOption('eins'),new InputOption('zwei'),new InputOption('drei')]));
+        $localSubject->shouldReceive('setDefinition')->once()->with(Mockery::on(
+            function ($value) {
+                MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
+                /** @var InputDefinition $value */
+                $options = $value->getOptions();
+                MatcherAssert::assertThat(
+                    $options,
+                    H::allOf(
+                        H::arrayWithSize(3),
+                        H::everyItem(
+                            H::anInstanceOf(InputOption::class)
+                        )
+                    )
+                );
+                return true;
+            }
+        ));
+        /** @phpstan-ignore-next-line */
         $localSubject->configure();
     }
 
@@ -100,7 +100,6 @@ class PHPStanCommandTest extends TestCase
             ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
-
         self::assertSame($expectedExitCode, $result);
     }
 

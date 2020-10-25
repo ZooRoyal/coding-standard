@@ -31,10 +31,9 @@ class FindFilesToCheckCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(FindFilesToCheckCommand::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $subjectFactory = new SubjectFactory(FindFilesToCheckCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters();
+        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
     }
 
     protected function tearDown()
@@ -76,7 +75,6 @@ class FindFilesToCheckCommandTest extends TestCase
                     }
                 )
             );
-
         $localSubject->configure();
     }
 
