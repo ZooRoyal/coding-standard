@@ -17,6 +17,7 @@ matrix:
   fast_finish: true
 
 before_install:
+  - composer self-update --1
   - nvm install v10.19.0
   - nvm alias default v10.19.0
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
