@@ -36,9 +36,9 @@ class RunEslintWithConfigTest extends TestCase
         $renderedComposerFile = json_encode($composerTemplate);
         file_put_contents(self::$tempDir . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
-        (new Process(['composer install'], self::$tempDir))->mustRun();
+        (new Process(['composer', 'install'], self::$tempDir))->mustRun();
         self::$fileSystem->remove(self::$tempDir . '/vendor/zooroyal/coding-standard/node_modules');
-        (new Process(['npm install vendor/zooroyal/coding-standard'], self::$tempDir))->mustRun();
+        (new Process(['npm','install', 'vendor/zooroyal/coding-standard'], self::$tempDir))->mustRun();
     }
 
     public static function tearDownAfterClass()
