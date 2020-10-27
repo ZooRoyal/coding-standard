@@ -40,14 +40,7 @@ class DocCommentSniffTest extends TestCase
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectComments.php';
 
-        if (method_exists(Process::class, 'fromShellCommandline')) {
-            /** @phpstan-ignore-next-line */
-            $subject = Process::fromShellCommandline($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
-        } else {
-            $subject = new Process([], self::$vendorDir . '/../');
-            $subject->setCommandLine($this->commandPrefix . $fileToTest);
-        }
-
+        $subject = new Process(array_merge(explode(' ', $this->commandPrefix), [$fileToTest]), self::$vendorDir . '/../');
         $subject->mustRun();
         $subject->wait();
 
@@ -61,13 +54,8 @@ class DocCommentSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectComments.php';
-        if (method_exists(Process::class, 'fromShellCommandline')) {
-            /** @phpstan-ignore-next-line */
-            $subject = Process::fromShellCommandline($this->commandPrefix . $fileToTest, self::$vendorDir . '/../');
-        } else {
-            $subject = new Process([], self::$vendorDir . '/../');
-            $subject->setCommandLine($this->commandPrefix . $fileToTest);
-        }
+
+        $subject = new Process(array_merge(explode(' ', $this->commandPrefix), [$fileToTest]), self::$vendorDir . '/../');
         $subject->run();
         $subject->wait();
 
