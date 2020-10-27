@@ -37,6 +37,7 @@ class ProcessRunner
     public function runAsProcessReturningProcessObject(string $command) : Process
     {
         if (method_exists(Process::class, 'fromShellCommandline')) {
+            /** @phpstan-ignore-next-line */
             $process = Process::fromShellCommandline($command);
         } else {
             $process = new Process([]);
