@@ -36,7 +36,12 @@ class ProcessRunner
      */
     public function runAsProcessReturningProcessObject(string $command) : Process
     {
-        $process = Process::fromShellCommandline($command);
+        if (method_exists(Process::class, 'fromShellCommandline')) {
+            $process = Process::fromShellCommandline($command);
+        } else {
+            $process = new Process([]);
+            $process->setCommandLine($command);
+        }
         $process->run();
         $process->setTimeout(null);
         $process->setIdleTimeout(60);
