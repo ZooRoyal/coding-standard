@@ -29,11 +29,12 @@ class PHPStanCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory(PHPStanCommand::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(PHPStanCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
         $this->subjectParameters[PHPStanInputOptions::class]->shouldReceive('getInputOptions')
             ->once()->withNoArgs()->andReturn([]);
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

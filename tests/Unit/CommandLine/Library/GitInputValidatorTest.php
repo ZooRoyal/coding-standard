@@ -19,9 +19,10 @@ class GitInputValidatorTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory(GitInputValidator::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(GitInputValidator::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
     }
 
     /**

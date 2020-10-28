@@ -20,9 +20,10 @@ class TerminalCommandFinderTest extends TestCase
 
     public function setUp()
     {
-        $subjectFactory = new SubjectFactory(TerminalCommandFinder::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(TerminalCommandFinder::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
     }
 
     protected function tearDown()

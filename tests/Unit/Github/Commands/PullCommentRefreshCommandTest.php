@@ -71,9 +71,10 @@ class PullCommentRefreshCommandTest extends TestCase
             'user' => ['login' => $this->mockedLogin],
         ];
 
-        $subjectFactory = new SubjectFactory(PullCommentRefreshCommand::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(PullCommentRefreshCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

@@ -28,9 +28,10 @@ class JSESLintCommandTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory(JSESLintCommand::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(JSESLintCommand::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

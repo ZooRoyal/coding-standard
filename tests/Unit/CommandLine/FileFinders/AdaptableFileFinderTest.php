@@ -22,9 +22,10 @@ class AdaptableFileFinderTest extends TestCase
 
     protected function setUp()
     {
-        $subjectFactory = new SubjectFactory(AdaptableFileFinder::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(AdaptableFileFinder::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
     }
 
     protected function tearDown()

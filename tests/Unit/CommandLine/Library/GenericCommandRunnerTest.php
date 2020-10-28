@@ -28,10 +28,10 @@ class GenericCommandRunnerTest extends TestCase
     protected function setUp()
     {
         $this->mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
-        $subjectFactory = new SubjectFactory(GenericCommandRunner::class);
-        $this->subjectParameters = $subjectFactory->buildParameters();
-        $this->subject = $subjectFactory->buildSubjectInstance($this->subjectParameters);
-
+        $subjectFactory = new SubjectFactory();
+        $reflectSubject = $subjectFactory->buildSubject(GenericCommandRunner::class);
+        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
+        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
         $this->mockedProcess = Mockery::mock(Process::class);
     }
 
