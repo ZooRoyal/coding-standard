@@ -13,7 +13,6 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\PHPStanInputOptions;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class PHPStanCommandTest extends TestCase
@@ -30,11 +29,9 @@ class PHPStanCommandTest extends TestCase
     protected function setUp()
     {
         $subjectFactory = new SubjectFactory();
-        $reflectSubject = $subjectFactory->buildSubject(PHPStanCommand::class);
-        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
-        $this->subjectParameters[PHPStanInputOptions::class]->shouldReceive('getInputOptions')
-            ->once()->withNoArgs()->andReturn([]);
-        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
+        $buildFragments = $subjectFactory->buildSubject(PHPStanCommand::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

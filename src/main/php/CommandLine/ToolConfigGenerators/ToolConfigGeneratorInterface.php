@@ -5,7 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators;
 
 interface ToolConfigGeneratorInterface
 {
-    public function addConfigParameters(...$args): array;
+    public function addConfigParameters(string $blackListToken, string $rootDirectory, array $parameters): array;
 
     public function generateConfig(array $parameters) :string;
 

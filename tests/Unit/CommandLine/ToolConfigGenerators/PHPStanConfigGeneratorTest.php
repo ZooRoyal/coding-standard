@@ -2,6 +2,8 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolConfigGenerators;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPStan\DependencyInjection\NeonAdapter;
@@ -48,10 +50,21 @@ class PHPStanConfigGeneratorTest extends TestCase
      */
     public function testAddConfigParameters()
     {
-        $expectedParams = ['parameters' => ['excludes_analyse' => ['/vendor']]];
         $this->mockedBlacklistFactory->shouldReceive('build')->once()->with('.dontStanPHP')->andReturn(['vendor']);
-        $params = $this->subject->addConfigParameters('.dontStanPHP', '');
-        self::assertEquals($params, $expectedParams);
+        $params = $this->subject->addConfigParameters('.dontStanPHP', '', ['includes' => ['/blala/lalal']]);
+
+        MatcherAssert::assertThat(
+            $params,
+            Matchers::allOf(
+                Matchers::hasKeyValuePair(
+                    'parameters',
+                    Matchers::allOf(
+                        Matchers::hasKeyValuePair('excludes_analyse', Matchers::hasValue('/vendor'))
+                    )
+                ),
+                Matchers::hasKeyValuePair('includes', Matchers::hasValue('/blala/lalal'))
+            )
+        );
     }
 
     /**
@@ -59,7 +72,7 @@ class PHPStanConfigGeneratorTest extends TestCase
      */
     public function testGenerateConfig()
     {
-        $params = ['parameters' => ['excludes_analyse' => ['vendor']]];
+        $params = ['parameters' => ['excludes_analyse' => ['vendor'], ['includes' => '/blala/lalal']]];
         $this->mockedNeonAdapter->shouldReceive('dump')->once()->with($params)->andReturn('neonstring');
         $configString = $this->subject->generateConfig($params);
         self::assertEquals('neonstring', $configString);
@@ -70,8 +83,11 @@ class PHPStanConfigGeneratorTest extends TestCase
      */
     public function testWriteConfig()
     {
-        $this->mockedFileWriter->shouldReceive('write')->withArgs(['config/phpstan/phpstan.neon.dist', 'neonconfig'])->once();
-        $this->subject->writeConfig('config/phpstan/phpstan.neon.dist', 'neonconfig');
+        $this->mockedFileWriter->shouldReceive('write')->withArgs([
+            'config/phpstan/phpstan.neon',
+            'neonconfig',
+        ])->once();
+        $this->subject->writeConfig('config/phpstan/phpstan.neon', 'neonconfig');
     }
 
     /**

@@ -27,11 +27,12 @@ class GitChangeSetFilterTest extends TestCase
     protected function setUp()
     {
         $subjectFactory = new SubjectFactory();
-        $reflectSubject = $subjectFactory->buildSubject(GitChangeSetFilter::class);
-        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
-        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
+        $buildFragments = $subjectFactory->buildSubject(GitChangeSetFilter::class);
+        $this->subjectParameters = $buildFragments['parameters'];
         $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
+
+        $this->subject = $buildFragments['subject'];
     }
 
     protected function tearDown()

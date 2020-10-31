@@ -27,16 +27,16 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
     }
 
 
-    public function addConfigParameters(...$args): array
+    public function addConfigParameters(string $blackListToken, string $rootDirectory, array $parameters): array
     {
-        $blackListfiles = $this->blacklistFactory->build($args[0]);
+        $blackListfiles = $this->blacklistFactory->build($blackListToken);
         $diretoryBlackListfiles = [];
 
         foreach ($blackListfiles as $file) {
-            $diretoryBlackListfiles[] = $args[1].'/'.$file;
+            $diretoryBlackListfiles[] = $rootDirectory.'/'.$file;
         }
 
-        return ['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]];
+        return array_merge_recursive(['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]], $parameters);
     }
 
     public function generateConfig(array $parameters): string

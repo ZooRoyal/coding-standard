@@ -49,17 +49,22 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
-        $parameters = ['parameters' => ['excludes_analyse' => [$this->mockedRootDirectory.'/vendor']]];
         $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
-            ->with('.dontStanPHP', $this->mockedRootDirectory)->andReturn($parameters);
+            ->withArgs([
+                '.dontStanPHP',
+                '/root/directory',
+                ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
+            ])->andReturn(['config']);
+
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
-            ->with($parameters)
-            ->once()->andReturn('neonfilestring');
-        $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()
-            ->withArgs(['/package/directory/config/phpstan/phpstan.neon.dist', 'neonfilestring']);
+            ->once()->with([0 => 'config'])->andReturn('test');
+        $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()->with(
+            '/package/directory/config/phpstan/phpstan.neon',
+            'test'
+        );
 
         $this->partialSubject = Mockery::mock(
-            PHPStanAdapter::class . '[!init]',
+            PHPStanAdapter::class.'[!init]',
             [
                 $this->mockedEnvironment,
                 $this->mockedOutputInterface,

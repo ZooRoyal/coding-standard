@@ -9,27 +9,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\PHPStanInputOptions;
 
 class PHPStanCommand extends Command
 {
     /** @var PHPStanAdapter */
     private $toolAdapter;
-    /** @var PHPStanInputOptions */
-    private $phpstanInputOptions;
 
     /**
      * PHPCodeSnifferCommand constructor.
      *
      * @param PHPStanAdapter $toolAdapter
-     * @param PHPStanInputOptions $phpstanInputOptions
      */
     public function __construct(
-        PHPStanAdapter $toolAdapter,
-        PHPStanInputOptions $phpstanInputOptions
+        PHPStanAdapter $toolAdapter
     ) {
         $this->toolAdapter = $toolAdapter;
-        $this->phpstanInputOptions = $phpstanInputOptions;
         parent::__construct();
     }
 
@@ -59,18 +53,28 @@ class PHPStanCommand extends Command
       */
     protected function getInputDefinition(): InputDefinition
     {
-        $inputDefinition = [];
-        $inputOptions = $this->phpstanInputOptions->getInputOptions();
-        foreach ($inputOptions as $inputOption) {
-            $inputDefinition[] = new InputOption(
-                $inputOption['name'],
-                $inputOption['short'],
-                $inputOption['option'],
-                $inputOption['description']
-            );
-        }
-
-        return new InputDefinition($inputDefinition);
+        return new InputDefinition([
+            new InputOption(
+                'target',
+                't',
+                InputOption::VALUE_REQUIRED,
+                'Finds files which have changed since the current branch parted from the target branch only. 
+                The value has to be a commit-ish.'
+            ),
+            new InputOption(
+                'auto-target',
+                'a',
+                InputOption::VALUE_NONE,
+                'Finds files which have changed since the current branch parted from the parent branch only. 
+                It tries to find the parent branch by automagic.'
+            ),
+            new InputOption(
+                'process-isolation',
+                'p',
+                InputOption::VALUE_NONE,
+                'Runs all checks in separate processes. Slow but not as resource hungry.'
+            ),
+        ]);
     }
 
 

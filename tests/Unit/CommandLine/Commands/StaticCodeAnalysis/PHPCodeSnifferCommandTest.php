@@ -11,6 +11,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCodeSnifferCommand;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -19,7 +20,7 @@ class PHPCodeSnifferCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
-    /** @var PHPCodeSnifferCommand */
+    /** @var FindFilesToCheckCommand */
     private $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -29,9 +30,9 @@ class PHPCodeSnifferCommandTest extends TestCase
     protected function setUp()
     {
         $subjectFactory = new SubjectFactory();
-        $reflectSubject = $subjectFactory->buildSubject(PHPCodeSnifferCommand::class);
-        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
-        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
+        $buildFragments = $subjectFactory->buildSubject(PHPCodeSnifferCommand::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -48,7 +49,9 @@ class PHPCodeSnifferCommandTest extends TestCase
      */
     public function configure()
     {
+        /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPCodeSnifferCommand::class, $this->subjectParameters)->makePartial();
+
         $localSubject->shouldReceive('setName')->once()->with('sca:sniff');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Run PHP-CS on PHP files.');
@@ -78,7 +81,7 @@ class PHPCodeSnifferCommandTest extends TestCase
                     }
                 )
             );
-        /** @phpstan-ignore-next-line */
+
         $localSubject->configure();
     }
 

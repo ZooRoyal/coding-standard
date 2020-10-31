@@ -1,5 +1,4 @@
 includes:
-    - phpstan.neon.dist
     - %rootDir%/../phpstan-mockery/extension.neon
     - %rootDir%/../phpstan-phpunit/extension.neon
 parameters:

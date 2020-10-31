@@ -22,9 +22,9 @@ class ParentByFileFinderTest extends TestCase
     protected function setUp()
     {
         $subjectFactory = new SubjectFactory();
-        $reflectSubject = $subjectFactory->buildSubject(ParentByFileFinder::class);
-        $this->subjectParameters = $subjectFactory->buildParameters($reflectSubject);
-        $this->subject = $subjectFactory->buildSubjectInstance($reflectSubject, $this->subjectParameters);
+        $buildFragments = $subjectFactory->buildSubject(ParentByFileFinder::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
         $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')->withNoArgs()
             ->andReturn($this->mockedRootDirectory);

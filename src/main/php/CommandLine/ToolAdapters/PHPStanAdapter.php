@@ -47,15 +47,19 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $rootDirectory = $this->environment->getRootDirectory();
         $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
 
-        $parameters = $this->phpstanConfigGenerator->addConfigParameters($this->blacklistToken, $rootDirectory);
+        $parameters = $this->phpstanConfigGenerator->addConfigParameters(
+            $this->blacklistToken,
+            $rootDirectory,
+            ['includes' => [$phpstanConfig.'.dist']]
+        );
         $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);
-        $this->phpstanConfigGenerator->writeConfig($phpstanConfig . '.dist', $onTheFlyConfig);
+        $this->phpstanConfigGenerator->writeConfig($phpstanConfig, $onTheFlyConfig);
 
         $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress ' .
                 $rootDirectory . ' -c ' . $phpstanConfig;
 
         $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
-                . $phpstanConfig . ' %1$s';
+                . $phpstanConfig. ' %1$s';
     }
 
     /**

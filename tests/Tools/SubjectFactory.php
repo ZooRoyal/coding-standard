@@ -7,28 +7,23 @@ use ReflectionClass;
 
 class SubjectFactory
 {
-
-    public function buildSubject($className) :ReflectionClass
+    public function buildSubject($className)
     {
-        return new ReflectionClass($className);
-    }
+        $result = ['subject' => null];
+        $parameterInstances = [];
 
+        $reflection = new ReflectionClass($className);
 
-    public function buildParameters(ReflectionClass $reflection): array
-    {
-        $result['parameters'] = [];
         $parameters = $reflection->getConstructor()->getParameters();
+
         foreach ($parameters as $parameter) {
             $type = $parameter->getClass()->getName();
             $result['parameters'][$type] = Mockery::mock($type);
+            $parameterInstances[] = $result['parameters'][$type];
         }
 
-        return $result['parameters'];
-    }
+        $result['subject'] = $reflection->newInstanceArgs($parameterInstances);
 
-    public function buildSubjectInstance(ReflectionClass $reflection, $parameterInstances)
-    {
-        return $reflection->newInstanceArgs($parameterInstances);
+        return $result;
     }
-
 }
