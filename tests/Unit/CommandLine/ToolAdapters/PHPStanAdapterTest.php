@@ -43,19 +43,16 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedPHPStanConfigGenerator = Mockery::mock(PHPStanConfigGenerator::class);
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
-
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
-
         $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
             ->withArgs([
                 '.dontStanPHP',
                 '/root/directory',
                 ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
             ])->andReturn(['config']);
-
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
             ->once()->with([0 => 'config'])->andReturn('test');
         $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()->with(
