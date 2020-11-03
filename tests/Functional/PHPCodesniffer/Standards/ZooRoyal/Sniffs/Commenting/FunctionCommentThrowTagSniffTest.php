@@ -12,7 +12,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     /** @var string */
     private static $vendorDir;
 
-    /** @var string */
+    /** @var array */
     private $commandPrefix;
 
     public static function setUpBeforeClass()
@@ -26,8 +26,8 @@ class FunctionCommentThrowTagSniffTest extends TestCase
 
     protected function setUp()
     {
-        $this->commandPrefix = 'vendor/bin/phpcs '
-            . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag --standard=ZooRoyal -s ';
+        $this->commandPrefix = explode(' ','vendor/bin/phpcs '
+            . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag --standard=ZooRoyal -s ');
     }
 
     /**
@@ -39,8 +39,8 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectCountOfTags.php';
-        $commandArray = explode(' ', $this->commandPrefix . $fileToTest);
-        $subject = new Process($commandArray, self::$vendorDir . '/../');
+        $this->commandPrefix[] = $fileToTest;
+        $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
 
         $subject->mustRun();
         $subject->wait();
@@ -55,8 +55,8 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectCountOfTags.php';
-        $commandArray = explode(' ', $this->commandPrefix . $fileToTest);
-        $subject = new Process($commandArray, self::$vendorDir . '/../');
+        $this->commandPrefix[] = $fileToTest;
+        $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
 
         $subject->run();
         $subject->wait();

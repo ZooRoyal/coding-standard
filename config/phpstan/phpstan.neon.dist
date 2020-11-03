@@ -1,6 +1,6 @@
 includes:
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
+    - ../../vendor/phpstan/phpstan-mockery/extension.neon
+    - ../../vendor/phpstan/phpstan-phpunit/extension.neon
 parameters:
     level: 5
     excludes_analyse:
@@ -11,6 +11,6 @@ parameters:
     fileExtensions:
         - php
     scanFiles:
-        - %rootDir%/../../../vendor/mockery/mockery/library/helpers.php
-        - %rootDir%/../../../vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php
-        - %rootDir%/../../../vendor/sebastianknott/hamcrest-object-accessor/src/functions.php
+        - ../../vendor/mockery/mockery/library/helpers.php
+        - ../../vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php
+        - ../../vendor/sebastianknott/hamcrest-object-accessor/src/functions.php

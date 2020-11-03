@@ -12,7 +12,7 @@ class DocCommentSniffTest extends TestCase
     /** @var string */
     private static $vendorDir;
 
-    /** @var string */
+    /** @var array */
     private $commandPrefix;
 
     public static function setUpBeforeClass()
@@ -26,8 +26,8 @@ class DocCommentSniffTest extends TestCase
 
     protected function setUp()
     {
-        $this->commandPrefix = 'php ' . self::$vendorDir . '/bin/phpcs '
-            . '--sniffs=ZooRoyal.Commenting.DocComment --standard=ZooRoyal -s ';
+        $this->commandPrefix = explode(' ', 'php ' . self::$vendorDir . '/bin/phpcs '
+            . '--sniffs=ZooRoyal.Commenting.DocComment --standard=ZooRoyal -s ');
     }
 
     /**
@@ -40,7 +40,8 @@ class DocCommentSniffTest extends TestCase
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectComments.php';
 
-        $subject = new Process(array_merge(explode(' ', $this->commandPrefix), [$fileToTest]), self::$vendorDir . '/../');
+        $this->commandPrefix[] = $fileToTest;
+        $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->mustRun();
         $subject->wait();
 
@@ -54,8 +55,8 @@ class DocCommentSniffTest extends TestCase
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectComments.php';
-
-        $subject = new Process(array_merge(explode(' ', $this->commandPrefix), [$fileToTest]), self::$vendorDir . '/../');
+        $this->commandPrefix[] = $fileToTest;
+        $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->run();
         $subject->wait();
 

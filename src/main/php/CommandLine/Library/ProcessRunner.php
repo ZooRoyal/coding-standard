@@ -16,7 +16,7 @@ class ProcessRunner
      */
     public function runAsProcess(string $command, ...$arguments) : string
     {
-        $process = new Process(array_merge([$command], $arguments));
+        $process = new Process(array_merge(explode(' ', $command), $arguments));
         $process->mustRun()->wait();
 
         $output = $process->getOutput();
