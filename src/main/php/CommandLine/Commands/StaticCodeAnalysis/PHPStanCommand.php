@@ -43,7 +43,7 @@ class PHPStanCommand extends Command
      */
     public function execute(InputInterface $input, OutputInterface $output): ?int
     {
-        $targetBranch = $input->getOption('auto-target') ??  $input->getOption('target');
+        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
         $processIsolationInput = $input->getOption('process-isolation');
         return $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
     }
