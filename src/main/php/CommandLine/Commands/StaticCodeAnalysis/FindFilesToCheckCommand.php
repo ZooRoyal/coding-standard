@@ -47,7 +47,7 @@ class FindFilesToCheckCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output) : int
     {
         $exclusionListInput = $input->getOption('exclusionList');
         $allowedFileEndings = $input->getOption('allowed-file-endings');
@@ -67,6 +67,7 @@ class FindFilesToCheckCommand extends Command
         }
 
         $output->writeln(implode("\n", array_values($result)));
+        return 0;
     }
 
     /**

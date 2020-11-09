@@ -36,9 +36,9 @@ class RunEslintWithConfigTest extends TestCase
         $renderedComposerFile = json_encode($composerTemplate);
         file_put_contents(self::$tempDir . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
-        (new Process('composer install', self::$tempDir))->mustRun();
+        (new Process(['composer', 'install'], self::$tempDir))->mustRun();
         self::$fileSystem->remove(self::$tempDir . '/vendor/zooroyal/coding-standard/node_modules');
-        (new Process('npm install vendor/zooroyal/coding-standard', self::$tempDir))->mustRun();
+        (new Process(['npm','install', 'vendor/zooroyal/coding-standard'], self::$tempDir))->mustRun();
     }
 
     public static function tearDownAfterClass()
@@ -52,8 +52,8 @@ class RunEslintWithConfigTest extends TestCase
     public function runEslintForJSInCleanInstall()
     {
         $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js');
-
-        $process = new Process($command, self::$tempDir);
+        $commandArray = explode(' ', $command);
+        $process = new Process($commandArray, self::$tempDir);
 
         $process->run();
 
@@ -71,8 +71,8 @@ class RunEslintWithConfigTest extends TestCase
     public function runEslintForTSInCleanInstall()
     {
         $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts');
-
-        $process = new Process($command, self::$tempDir);
+        $commandArray = explode(' ', $command);
+        $process = new Process($commandArray, self::$tempDir);
 
         $process->run();
 
@@ -90,8 +90,8 @@ class RunEslintWithConfigTest extends TestCase
     public function runStylelintInCleanInstall()
     {
         $command = 'vendor/bin/coding-standard sca:stylelint';
-
-        $process = new Process($command, self::$tempDir);
+        $commandArray = explode(' ', $command);
+        $process = new Process($commandArray, self::$tempDir);
 
         $process->run();
 

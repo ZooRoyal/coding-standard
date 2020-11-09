@@ -12,7 +12,7 @@ class FixtureCorrectComments
      * Asd
      *
      * @param $firstParameter
-     * @param $secondParamete
+     * @param $secondParameter
      *
      * @return int
      * @throws RuntimeException

@@ -1,5 +1,6 @@
 .idea
 vendor
+config/phpstan/phpstan.neon
 composer.lock
 node_modules
 package-lock.json

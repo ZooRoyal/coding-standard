@@ -21,6 +21,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToC
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSESLintCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSStyleLintCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCodeSnifferCommand;
+use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPasteDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPParallelLintCommand;
@@ -30,6 +31,7 @@ $container = ContainerFactory::getContainerInstance();
 
 $parallelLint = $container->get(PHPParallelLintCommand::class);
 $phpCodeSnifferCommand = $container->get(PHPCodeSnifferCommand::class);
+$phpStanCommand = $container->get(PHPStanCommand::class);
 $findFilesToCheckCommand = $container->get(FindFilesToCheckCommand::class);
 $messDetectCommand = $container->get(PHPMessDetectorCommand::class);
 $copyPasteDetectorCommand = $container->get(PHPCopyPasteDetectorCommand::class);
@@ -43,6 +45,7 @@ $application = new Application();
 // ... register commands
 $application->add($parallelLint);
 $application->add($phpCodeSnifferCommand);
+$application->add($phpStanCommand);
 $application->add($findFilesToCheckCommand);
 $application->add($messDetectCommand);
 $application->add($copyPasteDetectorCommand);

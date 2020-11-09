@@ -31,7 +31,7 @@ class CommentFilter
      *
      * @param array       $comments
      * @param string      $path
-     * @param string|null $login
+     * @param string      $login
      *
      * @return array
      */

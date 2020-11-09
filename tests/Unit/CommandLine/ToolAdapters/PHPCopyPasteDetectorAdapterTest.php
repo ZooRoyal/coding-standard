@@ -8,13 +8,12 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
-use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCodeSnifferAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
 class PHPCopyPasteDetectorAdapterTest extends TestCase
 {
-    /** @var PHPCodeSnifferAdapter */
+    /** @var PHPCopyPasteDetectorAdapter */
     private $subject;
     /** @var MockInterface|Environment */
     private $mockedEnvironment;

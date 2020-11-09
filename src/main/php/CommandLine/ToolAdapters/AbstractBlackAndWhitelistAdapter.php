@@ -138,5 +138,4 @@ abstract class AbstractBlackAndWhitelistAdapter
     {
         return $this->escape;
     }
-
 }

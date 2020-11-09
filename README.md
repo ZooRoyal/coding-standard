@@ -10,6 +10,7 @@ This repository holds the necessary data to use the ZooRoyal coding standard. It
 * [PHP Mess Detector](https://github.com/phpmd/phpmd) and its configuration
 * [PHP Copy Paste Detector](https://github.com/sebastianbergmann/phpcpd)
 * [PHP-Parallel-Lint](https://github.com/JakubOnderka/PHP-Parallel-Lint)
+* [PHPStan - PHP Static Analysis Tool](https://github.com/phpstan/phpstan)
 * [ES-LINT](https://github.com/eslint/eslint) and its configuration
 * [STYLE-LINT](https://github.com/stylelint/stylelint) and its configuration
 
@@ -72,6 +73,7 @@ Available commands:
   sca:parallel-lint         Run Parallel-Lint on PHP files.
   sca:sniff                 Run PHP-CS on PHP files.
   sca:stylelint             Run StyleLint on Less files.
+  sca:stan                  Run PHPStan on PHP files.
 ```
 
 ## Example `sca:all`
