@@ -26,6 +26,8 @@ class EnvironmentTest extends TestCase
         'node_modules',
         'vendor',
         'bower_components',
+        '.pnpm',
+        '.pnpm-store',
     ];
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
