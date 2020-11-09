@@ -21,6 +21,8 @@ class Environment
         'node_modules',
         'vendor',
         'bower_components',
+        '.pnpm',
+        '.pnpm-store',
     ];
     /** @var ProcessRunner */
     private $processRunner;
