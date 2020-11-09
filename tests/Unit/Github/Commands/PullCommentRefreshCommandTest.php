@@ -30,7 +30,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    /** @var array<string> */
+    /** @var array<string, int|string> */
     private $mockedArguments = [
         'token' => 'myToken',
         'user_name' => 'foobar',
@@ -43,13 +43,13 @@ class PullCommentRefreshCommandTest extends TestCase
         'position' => 1,
     ];
 
-    /** @var array<string> */
+    /** @var array<string, array<string, string>|int|string> */
     private $mockedOwnCurrentComment;
 
     /** @var string */
     private $mockedLogin = 'MyLogin';
 
-    /** @var array<string|array<string>> */
+    /** @var array<string, array<string, string>|int|string|null> */
     private $mockedOwnStaleComment;
 
     protected function setUp()

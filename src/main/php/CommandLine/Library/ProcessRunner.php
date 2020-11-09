@@ -16,8 +16,7 @@ class ProcessRunner
      */
     public function runAsProcess(string $command, ...$arguments) : string
     {
-        $commandParts = implode(' ', array_merge([$command], $arguments));
-        $process = new Process($commandParts);
+        $process = new Process(array_merge(explode(' ', $command), $arguments));
         $process->mustRun()->wait();
 
         $output = $process->getOutput();
@@ -37,7 +36,7 @@ class ProcessRunner
      */
     public function runAsProcessReturningProcessObject(string $command) : Process
     {
-        $process = new Process($command);
+        $process = new Process(explode(' ', $command));
         $process->run();
         $process->setTimeout(null);
         $process->setIdleTimeout(60);

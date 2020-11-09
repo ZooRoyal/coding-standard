@@ -13,6 +13,8 @@ class BlacklistFactory
     private $environment;
     /** @var FinderFactory */
     private $finderFactory;
+    /** @var array<string, mixed> */
+    private $blackListCache = [];
 
     /**
      * BlacklistFactory constructor.
@@ -41,6 +43,10 @@ class BlacklistFactory
      */
     public function build(string $token = '', bool $deDuped = true) : array
     {
+        if (array_key_exists($token, $this->blackListCache)) {
+            return $this->blackListCache[$token];
+        }
+
         $rawExcludePathsByFileByToken = [];
 
         if ($token !== '') {
@@ -56,6 +62,7 @@ class BlacklistFactory
         );
 
         $filteredArray = $deDuped === true ? $this->deDupePaths($rawExcludePaths) : $rawExcludePaths;
+        $this->blackListCache[$token] = $filteredArray;
 
         return $filteredArray;
     }

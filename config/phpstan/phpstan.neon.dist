@@ -1,0 +1,16 @@
+includes:
+    - %rootDir%/../phpstan-mockery/extension.neon
+    - %rootDir%/../phpstan-phpunit/extension.neon
+parameters:
+    level: 5
+    excludes_analyse:
+        - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs
+        - ../../tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/Fixtures/FixtureCorrectComments.php
+    parallel:
+        maximumNumberOfProcesses: 4
+    fileExtensions:
+        - php
+    scanFiles:
+        - %rootDir%/../../../vendor/mockery/mockery/library/helpers.php
+        - %rootDir%/../../../vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php
+        - %rootDir%/../../../vendor/sebastianknott/hamcrest-object-accessor/src/functions.php

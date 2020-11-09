@@ -70,7 +70,7 @@ class IssueCommentAddCommand extends Command
         $token = $input->getArgument('token');
         $organisation = $input->getArgument('organisation');
         $repository = $input->getArgument('repository');
-        $issueId = $input->getArgument('issue_id');
+        $issueId = (int) $input->getArgument('issue_id');
         $username = $input->getArgument('user_name');
         $parameter = ['body' => $input->getArgument('body')];
 

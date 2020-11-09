@@ -220,7 +220,7 @@ class JSESLintAdapterTest extends TestCase
             [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $result = $partialSubject->writeViolationsToOutput('asd', 'qwe');
+        $result = $partialSubject->writeViolationsToOutput('asd', true);
 
         self::assertSame(0, $result);
     }

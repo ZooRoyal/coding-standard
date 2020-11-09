@@ -27,6 +27,5 @@
     "stylelint-order": "4.1.0",
     "typescript": "3.9.7"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }
