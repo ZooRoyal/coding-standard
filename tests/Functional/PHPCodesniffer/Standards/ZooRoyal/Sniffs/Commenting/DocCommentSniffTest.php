@@ -1,6 +1,6 @@
 <?php
 
-namespace Zooroyal\CodingStandard\Tests\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting;
+namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooRoyal\Sniffs\Commenting;
 
 use Composer\Autoload\ClassLoader;
 use PHPUnit\Framework\TestCase;

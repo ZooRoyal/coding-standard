@@ -1,6 +1,6 @@
 <?php
 
-namespace Zooroyal\CodingStandard\Tests\CommandLine\Library\Exceptions;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library\Exceptions;
 
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;

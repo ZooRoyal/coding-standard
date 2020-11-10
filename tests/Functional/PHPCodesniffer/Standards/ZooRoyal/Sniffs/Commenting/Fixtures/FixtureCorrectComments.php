@@ -1,5 +1,5 @@
 <?php
-namespace Zooroyal\CodingStandard\Tests\PHPCodeSniffer\Standards\ZooRoyal\Sniffs\Commenting\Fixtures;
+namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooRoyal\Sniffs\Commenting\Fixtures;
 
 use RuntimeException;
 
