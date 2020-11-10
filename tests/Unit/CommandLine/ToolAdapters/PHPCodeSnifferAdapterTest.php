@@ -75,7 +75,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
         self::assertSame('', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(',', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
-        self::assertTrue($this->partialSubject->isEscape());
+        self::assertFalse($this->partialSubject->isEscape());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),

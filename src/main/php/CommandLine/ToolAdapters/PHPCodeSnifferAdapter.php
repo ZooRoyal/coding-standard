@@ -15,7 +15,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /** @var string */
     protected $whitelistGlue = ' ';
     /** @var bool */
-    protected $escape = true;
+    protected $escape = false;
 
     /**
      * {@inheritDoc}
