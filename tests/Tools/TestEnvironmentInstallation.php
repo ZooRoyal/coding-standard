@@ -2,43 +2,64 @@
 
 namespace Zooroyal\CodingStandard\Tests\Tools;
 
-use http\Exception\RuntimeException;
+use BadMethodCallException;
+use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 
-class TestEnvironmentInstaller
+class TestEnvironmentInstallation
 {
-    /** @var Filesystem */
-    private $filesystem;
+    private static TestEnvironmentInstallation $instance;
+    private Filesystem $filesystem;
+    private string $installationPath;
+    private string $composerJsonPath;
+    private string $composerPath;
+    private bool $isInstalled = false;
 
-    /** @var string */
-    private $tempDir;
-
-    /** @var string */
-    private $composerJsonPath;
-    /** @var string */
-    private $composerPath;
-
-    public function __construct()
+    /**
+     * The Constructor is private because this is a Singleton.
+     */
+    private function __construct()
     {
-        $this->fileSystem = new Filesystem();
+        $this->filesystem = new Filesystem();
 
         $dirname = random_int(74, 93485798397);
-        $this->tempDir = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $dirname;
+        $this->installationPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $dirname;
 
-        $this->composerPath = dirname(__DIR__,);
+        $this->composerPath = dirname(__DIR__, 2);
     }
 
     /**
+     * Add the path of the composer-template.json to build your test environment.
+     *
      * @param string $composerTemplatePath
+     *
+     * @return TestEnvironmentInstallation
+     *
+     * @throws RuntimeException
+     * @throws BadMethodCallException
      */
-    public function addComposerJson(string $composerTemplatePath): void
+    public function addComposerJson(string $composerTemplatePath): TestEnvironmentInstallation
     {
         if (!is_file($composerTemplatePath)) {
             throw new RuntimeException($composerTemplatePath . ' is not a valid path.', 1605083728);
         }
+        if (isset($this->composerJsonPath)) {
+            throw new BadMethodCallException('Composer.json is already set', 1605084542);
+        }
+
         $this->composerJsonPath = $composerTemplatePath;
+
+        return $this;
     }
 
+    /**
+     * Get the path of the current composer-template.json which will be used.
+     *
+     * @return string
+     *
+     * @throws RuntimeException
+     */
     public function getComposerJson(): string
     {
         if (!isset($this->composerJsonPath)) {
@@ -48,17 +69,61 @@ class TestEnvironmentInstaller
         return $this->composerJsonPath;
     }
 
-    public function installComposerInstance():void
+    public function isInstalled(): bool
     {
-        $this->fileSystem->mkdir($this->tempDir);
-        $composerTemplate = json_decode(file_get_contents($this->getComposerJson), true);
+        return $this->isInstalled;
+    }
+
+    public function getInstallationPath(): string
+    {
+        return $this->installationPath;
+    }
+
+    /**
+     * Actually install the test environment.
+     *
+     * @return $this
+     */
+    public function installComposerInstance(): TestEnvironmentInstallation
+    {
+        $this->filesystem->mkdir($this->installationPath);
+        $composerTemplate = json_decode(file_get_contents($this->getComposerJson()), true);
         $composerTemplate['repositories'][0]['url'] = $this->composerPath;
         $renderedComposerFile = json_encode($composerTemplate);
-        file_put_contents($this->tempDir . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
+        file_put_contents($this->installationPath . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
-        (new Process(['composer', 'install'], $this->tempDir))->mustRun();
-        $this->fileSystem->remove($this->tempDir . '/vendor/zooroyal/coding-standard/node_modules');
-        (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->tempDir))->mustRun();
+        (new Process(['composer', 'install'], $this->installationPath))->mustRun();
+        $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
+        (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))->mustRun();
+        $this->isInstalled = true;
+
+        return $this;
+    }
+
+    /**
+     * Removes the test environment completely
+     *
+     * @return $this
+     */
+    public function removeInstallation(): TestEnvironmentInstallation
+    {
+        $this->filesystem->remove($this->installationPath);
+        $this->isInstalled = false;
+
+        return $this;
+    }
+
+    /**
+     * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
+     *
+     * @return TestEnvironmentInstallation
+     */
+    public static function getInstance(): TestEnvironmentInstallation
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new TestEnvironmentInstallation();
+        }
+        return self::$instance;
     }
 
 }

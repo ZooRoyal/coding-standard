@@ -1,6 +1,7 @@
 {
   "require-dev":  {
-    "zooroyal/coding-standard": "@dev"
+    "zooroyal/coding-standard": "@dev",
+    "php-http/mock-client": "*"
   },
   "repositories": [
     {
