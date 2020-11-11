@@ -15,8 +15,6 @@ class EnvironmentTest extends TestCase
 {
     /** @var Environment */
     private $subject;
-    /** @var string */
-    private $rootDirectory;
     /** @var string[] */
     private $blacklistedDirectories = [
         '.eslintrc.js',
@@ -34,8 +32,6 @@ class EnvironmentTest extends TestCase
 
     protected function setUp()
     {
-        $this->rootDirectory = __DIR__;
-
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);
         $this->subject = $buildFragments['subject'];
@@ -50,47 +46,22 @@ class EnvironmentTest extends TestCase
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState  disabled
      */
     public function getRootDirectory()
     {
-        $mockedComposerLocator = Mockery::mock('alias:ComposerLocator');
-        $mockedComposerLocator->shouldReceive('getRootPath')->once()->andReturn($this->rootDirectory);
-
         $result = $this->subject->getRootDirectory();
 
-        self::assertSame($this->rootDirectory, $result);
+        self::assertTrue(is_dir($result));
     }
 
     /**
      * @test
-     * @runInSeparateProcess
-     * @preserveGlobalState  disabled
      */
-    public function getPackageDirectory()
+    public function getPackageDirectory(): void
     {
-        $mockedComposerLocator = Mockery::mock('alias:ComposerLocator');
-        $mockedComposerLocator->shouldReceive('getPath')->once()
-            ->with('zooroyal/coding-standard')->andReturn($this->rootDirectory);
-
         $result = $this->subject->getPackageDirectory();
 
-        self::assertSame($this->rootDirectory, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function getNodeModulesDirectory()
-    {
-        $localSubject = Mockery::mock(Environment::class)->makePartial();
-        $localSubject->shouldReceive('getRootDirectory')->once()
-            ->andReturn($this->rootDirectory);
-
-        $result = $localSubject->getNodeModulesDirectory();
-
-        self::assertSame($this->rootDirectory . '/node_modules', $result);
+        self::assertTrue(is_dir($result));
     }
 
     /**

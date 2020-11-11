@@ -2,6 +2,8 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
+use Composer\Factory;
+use Composer\InstalledVersions;
 use ComposerLocator;
 
 /**
@@ -37,21 +39,26 @@ class Environment
         $this->gitInputValidator = $gitInputValidator;
     }
 
+    /**
+     * Returns the directory of the root composer.json. As the vendor directory can be moved
+     * we can not determine the directory in relativ to our own package.
+     *
+     * @return string
+     */
     public function getRootDirectory() : string
     {
-        return realpath(ComposerLocator::getRootPath());
+        $projectRootPath = Factory::getComposerFile();
+        return realpath(dirname($projectRootPath));
     }
 
+    /**
+     * Returns the directory of out package
+     *
+     * @return string
+     */
     public function getPackageDirectory() : string
     {
-        return realpath(
-            ComposerLocator::getPath('zooroyal/coding-standard')
-        );
-    }
-
-    public function getNodeModulesDirectory()
-    {
-        return $this->getRootDirectory() . '/node_modules';
+        return dirname(__DIR__, 5);
     }
 
     public function getBlacklistedDirectories() : array

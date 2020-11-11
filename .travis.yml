@@ -10,14 +10,14 @@ env:
   global:
     - TARGET_COMMIT=$([[ -z ${TRAVIS_PULL_REQUEST_SHA} ]] && git merge-base HEAD origin/master || echo ${TRAVIS_PULL_REQUEST_SHA})
   matrix:
-    - COMPOSER_PARAMETER=--prefer-lowest
-    - COMPOSER_PARAMETER=
+    - COMPOSER_PARAMETER=--prefer-lowest COMPOSER_VERSION=1
+    - COMPOSER_PARAMETER=  COMPOSER_VERSION=2
 
 matrix:
   fast_finish: true
 
 before_install:
-  - travis_retry composer self-update --1
+  - travis_retry composer self-update --$COMPOSER_VERSION
   - nvm install v10.19.0
   - nvm alias default v10.19.0
   - travis_retry composer config -g github-oauth.github.com $GH_TOKEN
