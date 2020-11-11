@@ -3,8 +3,6 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Composer\Factory;
-use Composer\InstalledVersions;
-use ComposerLocator;
 
 /**
  * This Class supplies information about the environment the script is running in.
