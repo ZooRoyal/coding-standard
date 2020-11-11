@@ -12,6 +12,8 @@ class TerminalCommandNotFoundExceptionTest extends TestCase
      */
     public function shouldBeInstantiatable()
     {
-        new TerminalCommandNotFoundException();
+        $result = new TerminalCommandNotFoundException();
+        self::assertInstanceOf(TerminalCommandNotFoundException::class, $result);
+
     }
 }

@@ -57,6 +57,7 @@ class PHPStanCommandTest extends TestCase
         $localSubject->shouldReceive('setHelp')->once()
             ->with(
                 'This tool executes PHPStan on a certain set of PHP files of this project.'
+                . 'It ignores files which are in directories with a .dontStanPHP file. Subdirectories are ignored too.'
             );
 
         $localSubject->shouldReceive('getInputDefinition')->once()->withNoArgs()
