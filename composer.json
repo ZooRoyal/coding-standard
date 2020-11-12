@@ -34,7 +34,7 @@
     "symfony/console": "^3.4 || ^4.2",
     "symfony/finder": "^3.4 || ^4.2",
     "php-di/php-di": "^5.4.0 || ^6.0",
-    "doctrine/annotations": "^1.2",
+    "doctrine/annotations": "^1.11",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
     "slevomat/coding-standard": "^6.4.0",
     "phpcompatibility/php-compatibility": "^9.1",
