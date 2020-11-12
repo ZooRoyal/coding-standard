@@ -1,0 +1,76 @@
+---
+name: Continuous Integration
+
+on: pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        composer_version: [1,2]
+        composer_parameters: ['--prefer-lowest', ' ']
+    steps:
+      - name: Cache node modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-node-modules-${{ matrix.composer_version }}-${{ matrix.composer_parameters }}
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Cache Composer Packages
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer-${{ matrix.composer_version }}-${{ matrix.composer_parameters }}
+        with:
+          path: ~/.composer
+          key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+
+      - name: Setup PHP and Composer
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '7.4'
+          tools: composer:${{ matrix.composer_version }}
+        env:
+          fail-fast: true
+
+      - name: Install npm and Node
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.19.0'
+
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Validate composer.json
+        run: |
+          composer validate -n
+
+      - name: Install composer dependencies
+        env:
+          COMPOSER_PARAMETERS: ${{ matrix.composer_parameters }}
+        run: |
+          composer update -n --no-progress ${COMPOSER_PARAMETERS}
+          composer show -i
+
+      - name: Check Coding-Standard
+        run : |
+          src/bin/coding-standard sca:all
+
+      - name: Check PHPUnit
+        run : |
+          $(composer config bin-dir)/phpunit
+
+      - name: Check infections
+        run : |
+          $(composer config bin-dir)/infection -n --min-msi=81 --min-covered-msi=82 --threads=4
+

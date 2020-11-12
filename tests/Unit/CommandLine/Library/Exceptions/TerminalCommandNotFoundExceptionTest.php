@@ -14,6 +14,5 @@ class TerminalCommandNotFoundExceptionTest extends TestCase
     {
         $result = new TerminalCommandNotFoundException();
         self::assertInstanceOf(TerminalCommandNotFoundException::class, $result);
-
     }
 }
