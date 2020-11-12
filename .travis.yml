@@ -31,10 +31,10 @@ install:
 script:
   - composer validate -n
   - src/bin/coding-standard sca:all -t $TARGET_COMMIT
-  - php vendor/bin/phpunit --config phpunit.xml
+  - php $(composer config bin-dir)/phpunit --config phpunit.xml
   - >
     if [[ ${COMPOSER_PARAMETER} != '--prefer-lowest' ]]; then
-      $(composer config --global home)/$(composer config --global bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
+      $(composer config bin-dir)/infection --min-msi=78 --min-covered-msi=80 --threads=4
     fi
 
 # allow builds for all branches
