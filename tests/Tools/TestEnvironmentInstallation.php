@@ -88,7 +88,7 @@ class TestEnvironmentInstallation
     {
         $this->filesystem->mkdir($this->installationPath);
         $composerTemplate = json_decode(file_get_contents($this->getComposerJson()), true);
-        $composerTemplate['repositories'][0]['url'] = $this->composerPath;
+        $composerTemplate['repositories']['localRepo']['url'] = $this->composerPath;
         $renderedComposerFile = json_encode($composerTemplate);
         file_put_contents($this->installationPath . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
