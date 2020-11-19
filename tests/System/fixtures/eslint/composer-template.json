@@ -1,11 +1,12 @@
 {
   "require-dev":  {
-    "zooroyal/coding-standard": "@dev"
+    "zooroyal/coding-standard": "@dev",
+    "php-http/mock-client": "*"
   },
-  "repositories": [
-    {
+  "repositories":{
+    "localRepo":{
       "type": "path",
       "url": ""
     }
-  ]
+  }
 }

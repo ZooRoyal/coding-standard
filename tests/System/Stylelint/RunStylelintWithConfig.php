@@ -1,6 +1,6 @@
 <?php
 
-namespace Zooroyal\CodingStandard\Tests\System\Eslint;
+namespace Zooroyal\CodingStandard\Tests\System\Stylelint;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;

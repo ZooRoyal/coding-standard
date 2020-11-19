@@ -34,7 +34,8 @@ class PHPStanCommand extends Command
     {
         $this->setName('sca:stan');
         $this->setDescription('Run PHPStan on PHP files.');
-        $this->setHelp('This tool executes PHPStan on a certain set of PHP files of this project.');
+        $this->setHelp('This tool executes PHPStan on a certain set of PHP files of this project.'
+                       . 'It ignores files which are in directories with a .dontStanPHP file. Subdirectories are ignored too.');
         $this->setDefinition($this->getInputDefinition());
     }
 
