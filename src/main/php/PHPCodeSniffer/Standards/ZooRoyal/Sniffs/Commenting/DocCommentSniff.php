@@ -349,7 +349,11 @@ class DocCommentSniff
 
             // Now check paddings.
             foreach ($paddings as $tag => $padding) {
-                $required = ($maxLength - strlen($tokens[$tag]['content']) + 1);
+                $tagName = $tokens[$tag]['content'];
+                if (strtolower(substr($tagName, 0, 6)) === '@route') {
+                    continue;
+                }
+                $required = ($maxLength - strlen($tagName) + 1);
 
                 if ($padding !== $required) {
                     $error = 'Tag value indented incorrectly; expected %s spaces but found %s';
@@ -381,7 +385,7 @@ class DocCommentSniff
         $foundTags = [];
         foreach ($tokens[$stackPtr]['comment_tags'] as $pos => $tag) {
             $tagName = $tokens[$tag]['content'];
-            if (isset($foundTags[$tagName]) === true) {
+            if (strtolower(substr($tagName, 0, 3)) !== "@oa" && isset($foundTags[$tagName]) === true) {
                 $lastTag = $tokens[$stackPtr]['comment_tags'][($pos - 1)];
                 if ($tokens[$lastTag]['content'] !== $tagName) {
                     $error = 'Tags must be grouped together in a doc comment';
