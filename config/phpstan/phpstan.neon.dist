@@ -10,7 +10,3 @@ parameters:
         maximumNumberOfProcesses: 4
     fileExtensions:
         - php
-    scanFiles:
-        - %rootDir%/../../../vendor/mockery/mockery/library/helpers.php
-        - %rootDir%/../../../vendor/hamcrest/hamcrest-php/hamcrest/Hamcrest.php
-        - %rootDir%/../../../vendor/sebastianknott/hamcrest-object-accessor/src/functions.php
