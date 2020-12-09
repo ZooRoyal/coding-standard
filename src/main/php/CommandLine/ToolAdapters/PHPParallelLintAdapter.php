@@ -6,8 +6,8 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
 {
     /** @var string */
     protected $blacklistToken = '.dontLintPHP';
-    /** @var string */
-    protected $filter = '.php';
+    /** @var string[] */
+    protected $allowedFileEndings = ['.php'];
     /** @var string */
     protected $blacklistPrefix = '--exclude ';
     /** @var string */

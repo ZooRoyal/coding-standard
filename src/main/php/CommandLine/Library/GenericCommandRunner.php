@@ -46,7 +46,7 @@ class GenericCommandRunner
      * @param string      $template
      * @param string|null $targetBranch
      * @param string      $blacklistToken
-     * @param string      $filter
+     * @param string[]    $allowedFileEndings
      * @param bool        $processIsolation
      * @param string      $glue
      *
@@ -56,7 +56,7 @@ class GenericCommandRunner
         string $template,
         $targetBranch,
         string $blacklistToken,
-        string $filter,
+        array $allowedFileEndings,
         bool $processIsolation = false,
         string $glue = ','
     ) : int {
@@ -64,7 +64,7 @@ class GenericCommandRunner
         $whitelistArguments = $this->buildWhitelistArguments(
             $targetBranch,
             $blacklistToken,
-            $filter,
+            $allowedFileEndings,
             $processIsolation,
             $glue
         );
@@ -117,7 +117,7 @@ class GenericCommandRunner
      *
      * @param string|null $targetBranch
      * @param string      $blacklistToken
-     * @param string      $filter
+     * @param string      $allowedFileEndings
      * @param bool        $processIsolation
      * @param string      $glue
      *
@@ -126,11 +126,11 @@ class GenericCommandRunner
     private function buildWhitelistArguments(
         $targetBranch,
         string $blacklistToken,
-        string $filter,
+        array $allowedFileEndings,
         bool $processIsolation,
         string $glue = ','
     ) : array {
-        $gitChangeSet = $this->adaptableFileFinder->findFiles($filter, $blacklistToken, '', $targetBranch);
+        $gitChangeSet = $this->adaptableFileFinder->findFiles($allowedFileEndings, $blacklistToken, '', $targetBranch);
         $changedFiles = $gitChangeSet->getFiles();
 
         $whitelistArguments = empty($changedFiles) || $processIsolation

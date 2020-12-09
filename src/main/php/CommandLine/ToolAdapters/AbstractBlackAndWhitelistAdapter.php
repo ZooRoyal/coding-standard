@@ -18,8 +18,8 @@ abstract class AbstractBlackAndWhitelistAdapter
 
     /** @var string */
     protected $blacklistToken = '';
-    /** @var string */
-    protected $filter = '';
+    /** @var string[] */
+    protected $allowedFileEndings = [];
     /** @var string */
     protected $blacklistPrefix = '';
     /** @var string */
@@ -95,7 +95,7 @@ abstract class AbstractBlackAndWhitelistAdapter
                 $template,
                 $targetBranch,
                 $this->blacklistToken,
-                $this->filter,
+                $this->allowedFileEndings,
                 $processIsolation,
                 $this->whitelistGlue
             );
@@ -109,9 +109,9 @@ abstract class AbstractBlackAndWhitelistAdapter
         return $this->blacklistToken;
     }
 
-    public function getFilter(): string
+    public function getAllowedFileEndings(): array
     {
-        return $this->filter;
+        return $this->allowedFileEndings;
     }
 
     public function getBlacklistPrefix(): string

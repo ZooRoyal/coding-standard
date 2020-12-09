@@ -36,7 +36,7 @@ class JSESLintAdapterTest extends TestCase
     /** @var string */
     private $forgedCommandPath;
     /** @var string */
-    private $filter = '--ext .js --ext .ts';
+    private $allowedFileEndings = ['js', 'ts'];
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
 
@@ -83,7 +83,7 @@ class JSESLintAdapterTest extends TestCase
         $configFile = '/config/eslint/.eslintrc.js';
 
         self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
-        self::assertSame($this->filter, $this->partialSubject->getFilter());
+        self::assertSame($this->allowedFileEndings, $this->partialSubject->getAllowedFileEndings());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
         self::assertFalse($this->partialSubject->isEscape());
@@ -94,22 +94,22 @@ class JSESLintAdapterTest extends TestCase
                 H::hasKeyValuePair(
                     'ESLINTBL',
                     $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $this->filter . ' %1$s ' . $this->mockedRootDirectory
+                    . '--ext .js --ext .ts' . ' %1$s ' . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTWL',
                     $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $this->filter
+                    . '--ext .js --ext .ts' . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXBL',
                     $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $this->filter . ' --fix %1$s ' . $this->mockedRootDirectory
+                    . '--ext .js --ext .ts' . ' --fix %1$s ' . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'ESLINTFIXWL',
                     $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $this->filter . ' --fix %1$s'
+                    . '--ext .js --ext .ts' . ' --fix %1$s'
                 )
             )
         );

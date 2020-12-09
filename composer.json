@@ -68,7 +68,7 @@
     "src/bin/github"
   ],
   "scripts": {
-    "post-update-cmd": "npm update",
+    "post-update-cmd": "npm install",
     "post-install-cmd": "npm install"
   },
   "config": {
