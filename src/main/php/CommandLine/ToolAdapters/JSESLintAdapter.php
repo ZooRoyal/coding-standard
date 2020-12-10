@@ -9,7 +9,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /** @var string */
     protected $blacklistToken = '.dontSniffJS';
     /** @var string[] */
-    protected $allowedFileEndings = ['js', 'ts'];
+    protected $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
     /** @var string */
     protected $blacklistPrefix = '--ignore-pattern ';
     /** @var string */
@@ -32,7 +32,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         }
 
         $esLintConfig = $this->environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
-        $esLintFilterFlags = '--ext .js --ext .ts';
+        $esLintFilterFlags = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
 
         $esLintBlacklistCommand = $commandPath . ' --config ' . $esLintConfig
             . ' ' . $esLintFilterFlags . ' %1$s ' . $this->environment->getRootDirectory();
