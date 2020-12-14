@@ -48,7 +48,7 @@ class AdaptableFileFinder implements FileFinderInterface
      * @throws InvalidArgumentException
      */
     public function findFiles(
-        string $filter = '',
+        array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
         $targetBranch = ''
@@ -66,7 +66,7 @@ class AdaptableFileFinder implements FileFinderInterface
 
         $actualTargetBranch = $targetBranch ?? $this->environment->guessParentBranchAsCommitHash();
 
-        $result = $finder->findFiles($filter, $blacklistToken, $whitelistToken, $actualTargetBranch);
+        $result = $finder->findFiles($allowedFileEndings, $blacklistToken, $whitelistToken, $actualTargetBranch);
 
         return $result;
     }

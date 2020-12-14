@@ -20,10 +20,10 @@ class GenericCommandRunner
     /**
      * AbstractToolAdapter constructor.
      *
-     * @param OutputInterface     $output
-     * @param ProcessRunner       $processRunner
+     * @param OutputInterface $output
+     * @param ProcessRunner $processRunner
      * @param AdaptableFileFinder $adaptableFileFinder
-     * @param BlacklistFactory    $blacklistFactory
+     * @param BlacklistFactory $blacklistFactory
      *
      * @inject
      */
@@ -43,12 +43,12 @@ class GenericCommandRunner
     /**
      * Builds a CLI-Command by inserting a whitelist of file paths in the command template and executes it.
      *
-     * @param string      $template
+     * @param string $template
      * @param string|null $targetBranch
-     * @param string      $blacklistToken
-     * @param string      $filter
-     * @param bool        $processIsolation
-     * @param string      $glue
+     * @param string $blacklistToken
+     * @param string[] $allowedFileEndings
+     * @param bool $processIsolation
+     * @param string $glue
      *
      * @return int
      */
@@ -56,15 +56,15 @@ class GenericCommandRunner
         string $template,
         $targetBranch,
         string $blacklistToken,
-        string $filter,
+        array $allowedFileEndings,
         bool $processIsolation = false,
         string $glue = ','
-    ) : int {
+    ): int {
         $exitCode = 0;
         $whitelistArguments = $this->buildWhitelistArguments(
             $targetBranch,
             $blacklistToken,
-            $filter,
+            $allowedFileEndings,
             $processIsolation,
             $glue
         );
@@ -85,7 +85,7 @@ class GenericCommandRunner
      * @param string $blacklistToken
      * @param string $prefix
      * @param string $glue
-     * @param bool   $escape if true the blacklist entries will be escaped for regexp
+     * @param bool $escape if true the blacklist entries will be escaped for regexp
      *
      * @return int|null
      */
@@ -116,21 +116,21 @@ class GenericCommandRunner
      * Builds a list of arguments for insertion into the template.
      *
      * @param string|null $targetBranch
-     * @param string      $blacklistToken
-     * @param string      $filter
-     * @param bool        $processIsolation
-     * @param string      $glue
+     * @param string $blacklistToken
+     * @param string[] $allowedFileEndings
+     * @param bool $processIsolation
+     * @param string $glue
      *
      * @return string[]
      */
     private function buildWhitelistArguments(
         $targetBranch,
         string $blacklistToken,
-        string $filter,
+        array $allowedFileEndings,
         bool $processIsolation,
         string $glue = ','
-    ) : array {
-        $gitChangeSet = $this->adaptableFileFinder->findFiles($filter, $blacklistToken, '', $targetBranch);
+    ): array {
+        $gitChangeSet = $this->adaptableFileFinder->findFiles($allowedFileEndings, $blacklistToken, '', $targetBranch);
         $changedFiles = $gitChangeSet->getFiles();
 
         $whitelistArguments = empty($changedFiles) || $processIsolation

@@ -17,6 +17,11 @@ matrix:
   fast_finish: true
 
 before_install:
+  - >
+    if [[ ${TRAVIS_PHP_VERSION} != '7.0' ]]; then
+    # I hate this so much but as of https://bugs.xdebug.org/view.php?id=1574 we need to ignore this
+        pecl install -f xdebug-2.9.8 || true
+    fi
   - nvm install v10.19.0
   - nvm alias default v10.19.0
   - travis_retry composer self-update --1

@@ -2,6 +2,7 @@
 vendor
 composer.lock
 node_modules
+package-lock.json
 infection.log
 tests/Functional/Plugin/Fixtures/ComposerTest/package.json
 tests/Functional/Plugin/Fixtures/ComposerTest/package-lock.json

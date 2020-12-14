@@ -83,7 +83,7 @@ class ForbiddenChangesCommand extends Command
         $output->writeln('Checking diff to ' . $targetBranch . ' for forbidden changes.');
 
         $wrongfullyChangedFiles = $this->diffCheckableFileFinder
-            ->findFiles('', $this->whitelistToken, $this->blacklistToken, $targetBranch)->getFiles();
+            ->findFiles([], $this->whitelistToken, $this->blacklistToken, $targetBranch)->getFiles();
 
         $this->publishFindingsToUser($output, $wrongfullyChangedFiles);
 

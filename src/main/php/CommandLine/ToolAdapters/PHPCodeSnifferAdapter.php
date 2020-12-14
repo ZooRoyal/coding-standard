@@ -6,8 +6,8 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
 {
     /** @var string */
     protected $blacklistToken = '.dontSniffPHP';
-    /** @var string */
-    protected $filter = '.php';
+    /** @var string[] */
+    protected $allowedFileEndings = ['.php'];
     /** @var string */
     protected $blacklistPrefix = '';
     /** @var string */

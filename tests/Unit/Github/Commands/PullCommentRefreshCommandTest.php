@@ -48,7 +48,7 @@ class PullCommentRefreshCommandTest extends TestCase
             'position' => 1,
         ];
 
-        $this->mockedOwnCurrentComment = $mockedOwnCurrentComment = [
+        $this->mockedOwnCurrentComment = [
             'id' => 25,
             'position' => $this->mockedArguments['position'],
             'original_position' => $this->mockedArguments['position'],
@@ -56,7 +56,7 @@ class PullCommentRefreshCommandTest extends TestCase
             'path' => $this->mockedArguments['path'],
             'user' => ['login' => $this->mockedLogin],
         ];
-        $this->mockedOwnStaleComment = $mockedOwnCurrentComment = [
+        $this->mockedOwnStaleComment = [
             'id' => 36,
             'position' => null,
             'original_position' => $this->mockedArguments['position'],

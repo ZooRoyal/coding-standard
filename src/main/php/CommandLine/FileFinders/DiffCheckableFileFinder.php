@@ -37,7 +37,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string       $filter
+     * @param string[]     $allowedFileEndings
      * @param string       $blacklistToken
      * @param string       $whitelistToken
      * @param string|false $targetBranch
@@ -47,7 +47,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      * @throws InvalidArgumentException
      */
     public function findFiles(
-        string $filter = '',
+        array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
         $targetBranch = ''
@@ -60,7 +60,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         }
 
         $rawDiff = $this->findFilesInDiffToTarget($targetBranch);
-        $this->fileFilter->filter($rawDiff, $filter, $blacklistToken, $whitelistToken);
+        $this->fileFilter->filter($rawDiff, $allowedFileEndings, $blacklistToken, $whitelistToken);
 
         return $rawDiff;
     }

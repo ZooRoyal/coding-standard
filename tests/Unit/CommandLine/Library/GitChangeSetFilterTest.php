@@ -66,7 +66,7 @@ class GitChangeSetFilterTest extends TestCase
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
             ->once()->with($whitelistToken)->andReturn([$whitelistedDirectory]);
 
-        $this->subject->filter($mockedFileList, '', $blacklistToken, $whitelistToken);
+        $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
 
         MatcherAssert::assertThat(
             $mockedFileList->getFiles(),
@@ -89,7 +89,7 @@ class GitChangeSetFilterTest extends TestCase
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
             ->once()->with($blackListToken, true)->andReturn([$this->blacklistedDirectory]);
 
-        $this->subject->filter($mockedFileList, '', $blackListToken);
+        $this->subject->filter($mockedFileList, [], $blackListToken);
         MatcherAssert::assertThat(
             $mockedFileList->getFiles(),
             Matchers::arrayContainingInAnyOrder(...$expectedResult)
@@ -101,9 +101,17 @@ class GitChangeSetFilterTest extends TestCase
      */
     public function filterByBlacklistAndFilterStringWithFilter()
     {
-        $mockedFilter = 'wahwah';
-        $mockedFileList = new GitChangeSet([$this->blacklistedDirectory . '/mussWeg', $mockedFilter, 'bla'], 'asdaqwe212123');
-        $expectedResult = [$mockedFilter];
+        $mockedFilter = ['wahwah', 'wubwub'];
+        $mockedFileList = new GitChangeSet(
+            [
+                $this->blacklistedDirectory . '/mussWeg',
+                'asd' . $mockedFilter[0],
+                'qweqweq' . $mockedFilter[1],
+                $mockedFilter[1] . 'FalsePositive',
+            ],
+            'asdaqwe212123'
+        );
+        $expectedResult = ['asd' . $mockedFilter[0], 'qweqweq' . $mockedFilter[1]];
 
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
             ->once()->with('', true)->andReturn([$this->blacklistedDirectory]);
@@ -134,6 +142,6 @@ class GitChangeSetFilterTest extends TestCase
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
             ->once()->with($whitelistToken)->andReturn(['hallo']);
 
-        $this->subject->filter($mockedFileList, '', $blacklistToken, $whitelistToken);
+        $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
     }
 }

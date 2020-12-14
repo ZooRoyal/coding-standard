@@ -47,7 +47,7 @@ class AdaptableFileFinderTest extends TestCase
         $this->subjectParameters[GitInputValidator::class]->shouldReceive('isCommitishValid')
             ->with($mockedTargetBranchInput)->andReturn(false);
 
-        $this->subject->findFiles('', '', '', $mockedTargetBranchInput);
+        $this->subject->findFiles([], '', '', $mockedTargetBranchInput);
     }
 
     /**
@@ -55,13 +55,29 @@ class AdaptableFileFinderTest extends TestCase
      *
      * @return array
      */
-    public function findFilesCallsAllCheckableFileFinderDataProvider() : array
+    public function findFilesCallsAllCheckableFileFinderDataProvider(): array
     {
         return [
-            'targetBranch' => ['targetBranchInput' => false, 'isLocalBranch' => false, 'finder' => AllCheckableFileFinder::class],
-            'isLocalBranch' => ['targetBranchInput' => true, 'isLocalBranch' => true, 'finder' => AllCheckableFileFinder::class],
-            'both' => ['targetBranchInput' => false, 'isLocalBranch' => true, 'finder' => AllCheckableFileFinder::class],
-            'none' => ['targetBranchInput' => true, 'isLocalBranch' => false, 'finder' => DiffCheckableFileFinder::class],
+            'targetBranch' => [
+                'targetBranchInput' => false,
+                'isLocalBranch' => false,
+                'finder' => AllCheckableFileFinder::class,
+            ],
+            'isLocalBranch' => [
+                'targetBranchInput' => true,
+                'isLocalBranch' => true,
+                'finder' => AllCheckableFileFinder::class,
+            ],
+            'both' => [
+                'targetBranchInput' => false,
+                'isLocalBranch' => true,
+                'finder' => AllCheckableFileFinder::class,
+            ],
+            'none' => [
+                'targetBranchInput' => true,
+                'isLocalBranch' => false,
+                'finder' => DiffCheckableFileFinder::class,
+            ],
         ];
     }
 
@@ -70,8 +86,8 @@ class AdaptableFileFinderTest extends TestCase
      *
      * @dataProvider findFilesCallsAllCheckableFileFinderDataProvider
      *
-     * @param bool   $targetBranchInput
-     * @param bool   $isLocalBranch
+     * @param bool $targetBranchInput
+     * @param bool $isLocalBranch
      * @param string $finder
      */
     public function findFilesCallsAllCheckableFileFinder(
@@ -79,7 +95,7 @@ class AdaptableFileFinderTest extends TestCase
         bool $isLocalBranch,
         string $finder
     ) {
-        $mockedFilter = 'asdqwe';
+        $mockedAllowedFileEndings = ['asdqwe'];
         $mockedBlacklistToken = 'qwegfasdfqwe';
         $mockedWhitelistToken = '12123sdfasdf123123';
         $expectedResult = Mockery::mock(GitChangeSet::class);
@@ -91,10 +107,15 @@ class AdaptableFileFinderTest extends TestCase
             ->with($targetBranchInput)->andReturn($isLocalBranch);
 
         $this->subjectParameters[$finder]->shouldReceive('findFiles')
-            ->with($mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken, $targetBranchInput)
+            ->with($mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $targetBranchInput)
             ->andReturn($expectedResult);
 
-        $result = $this->subject->findFiles($mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken, $targetBranchInput);
+        $result = $this->subject->findFiles(
+            $mockedAllowedFileEndings,
+            $mockedBlacklistToken,
+            $mockedWhitelistToken,
+            $targetBranchInput
+        );
 
         self::assertSame($expectedResult, $result);
     }
