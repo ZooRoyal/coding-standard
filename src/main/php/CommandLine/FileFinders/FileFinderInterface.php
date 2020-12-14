@@ -9,7 +9,7 @@ interface FileFinderInterface
     /**
      * This method searches for files by using Git as indexing service.
      *
-     * @param string      $filter
+     * @param string[]    $allowedFileEndings
      * @param string      $blacklistToken
      * @param string      $whitelistToken
      * @param string|bool $targetBranch
@@ -17,7 +17,7 @@ interface FileFinderInterface
      * @return GitChangeSet
      */
     public function findFiles(
-        string $filter = '',
+        array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
         $targetBranch = ''

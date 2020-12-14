@@ -169,7 +169,7 @@ class ForbiddenChangesCommandTest extends TestCase
             ->with('Checking diff to ' . ($mockedTargetBranch ?? $mockedTargetGuess) . ' for forbidden changes.');
 
         $this->subjectParameters[DiffCheckableFileFinder::class]->shouldReceive('findFiles')
-            ->with('', '.doChangeFiles', '.dontChangeFiles', $mockedTargetBranch ?? $mockedTargetGuess)
+            ->with([], '.doChangeFiles', '.dontChangeFiles', $mockedTargetBranch ?? $mockedTargetGuess)
             ->andReturn(new GitChangeSet($expectedWrongfullyChangesFiles));
 
         $mockedOutputInterface->shouldReceive('writeln')->once()

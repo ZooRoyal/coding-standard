@@ -8,8 +8,8 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
 {
     /** @var string */
     protected $blacklistToken = '.dontSniffLESS';
-    /** @var string */
-    protected $filter = '.less';
+    /** @var string[] */
+    protected $allowedFileEndings = ['.less'];
     /** @var string */
     protected $blacklistPrefix = '--ignore-pattern=';
     /** @var string */
@@ -32,11 +32,11 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         }
 
         $stylelintConfig = $this->environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $styleLintBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' . $this->filter
-            . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
+        $styleLintBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+            $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
         $styleLintWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config=' . $stylelintConfig;
-        $styleLintFixBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' . $this->filter
-            . ' --allow-empty-input --config=' . $stylelintConfig . ' --fix %1$s';
+        $styleLintFixBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+            $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' --fix %1$s';
         $styleLintFixWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config='
             . $stylelintConfig . ' --fix';
 

@@ -78,7 +78,7 @@ class JSStyleLintAdapterTest extends TestCase
         $expectedFilter = '.less';
         $config = '/config/stylelint/.stylelintrc';
         self::assertSame('.dontSniffLESS', $this->partialSubject->getBlacklistToken());
-        self::assertSame($expectedFilter, $this->partialSubject->getFilter());
+        self::assertSame([$expectedFilter], $this->partialSubject->getAllowedFileEndings());
         self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());

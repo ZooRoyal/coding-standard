@@ -20,7 +20,7 @@ class FindFilesToCheckCommand extends Command
     /**
      * FindFilesToCheckCommand constructor.
      *
-     * @param BlacklistFactory    $blacklistFactory
+     * @param BlacklistFactory $blacklistFactory
      * @param AdaptableFileFinder $adaptableFileFinder
      */
     public function __construct(
@@ -50,7 +50,7 @@ class FindFilesToCheckCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output) : int
     {
         $exclusionListInput = $input->getOption('exclusionList');
-        $filterInput = $input->getOption('filter');
+        $allowedFileEndings = $input->getOption('allowed-file-endings');
         $blacklistTokenInput = $input->getOption('blacklist-token');
         $whitelistTokenInput = $input->getOption('whitelist-token');
         $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
@@ -59,7 +59,7 @@ class FindFilesToCheckCommand extends Command
             $result = $this->blacklistFactory->build($blacklistTokenInput);
         } else {
             $result = $this->adaptableFileFinder->findFiles(
-                $filterInput,
+                $allowedFileEndings,
                 $blacklistTokenInput,
                 $whitelistTokenInput,
                 $targetBranch
@@ -77,7 +77,7 @@ class FindFilesToCheckCommand extends Command
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    private function buildInputDefinition() : InputDefinition
+    private function buildInputDefinition(): InputDefinition
     {
         return new InputDefinition(
             [
@@ -111,11 +111,12 @@ class FindFilesToCheckCommand extends Command
                     ''
                 ),
                 new InputOption(
-                    'filter',
+                    'allowed-file-endings',
                     'f',
-                    InputOption::VALUE_REQUIRED,
-                    'Filters the Filename. For example .php for PHP-Files',
-                    ''
+                    InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
+                    'Only list files with appropriate file endings. For example .php for PHP-Files. '
+                    . 'You may give multiple',
+                    []
                 ),
                 new InputOption(
                     'exclusionList',

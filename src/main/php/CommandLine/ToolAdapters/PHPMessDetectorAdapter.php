@@ -6,8 +6,8 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
 {
     /** @var string */
     protected $blacklistToken = '.dontMessDetectPHP';
-    /** @var string */
-    protected $filter = '.php';
+    /** @var string[] */
+    protected $allowedFileEndings = ['.php'];
     /** @var string */
     protected $blacklistGlue = ',';
     /** @var string */

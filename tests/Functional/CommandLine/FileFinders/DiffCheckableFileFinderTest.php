@@ -47,7 +47,7 @@ class DiffCheckableFileFinderTest extends TestCase
         $subject = $container->get(DiffCheckableFileFinder::class);
 
         $result = $subject->findFiles(
-            '',
+            [],
             '.dontChangeFiles',
             '.doChangeFiles',
             $targetBranch

@@ -71,7 +71,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
     {
         $config = '/config/phpcs/ZooRoyal/ruleset.xml';
         self::assertSame('.dontSniffPHP', $this->partialSubject->getBlacklistToken());
-        self::assertSame('.php', $this->partialSubject->getFilter());
+        self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
         self::assertSame('', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(',', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());

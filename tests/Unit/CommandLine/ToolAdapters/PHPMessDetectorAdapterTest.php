@@ -70,7 +70,7 @@ class PHPMessDetectorAdapterTest extends TestCase
     public function constructSetsUpSubjectCorrectly()
     {
         self::assertSame('.dontMessDetectPHP', $this->partialSubject->getBlacklistToken());
-        self::assertSame('.php', $this->partialSubject->getFilter());
+        self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
         self::assertSame('', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(',', $this->partialSubject->getBlacklistGlue());
         self::assertSame(',', $this->partialSubject->getWhitelistGlue());

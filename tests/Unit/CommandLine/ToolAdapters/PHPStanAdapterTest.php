@@ -85,7 +85,7 @@ class PHPStanAdapterTest extends TestCase
     {
         $config = '/config/phpstan/phpstan.neon';
         self::assertSame('.dontStanPHP', $this->partialSubject->getBlacklistToken());
-        self::assertSame('.php', $this->partialSubject->getFilter());
+        self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
         self::assertFalse($this->partialSubject->isEscape());

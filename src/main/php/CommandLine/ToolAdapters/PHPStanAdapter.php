@@ -13,8 +13,8 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 {
     /** @var string */
     protected $blacklistToken = '.dontStanPHP';
-    /** @var string */
-    protected $filter = '.php';
+    /** @var string[] */
+    protected $allowedFileEndings = ['.php'];
     /** @var string */
     protected $blacklistGlue = ' ';
     /** @var string */
