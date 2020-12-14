@@ -38,7 +38,7 @@ class AllCheckableFileFinderTest extends TestCase
      */
     public function findAll()
     {
-        $expectedFilter = 'asd';
+        $mockedAllowedFileEndings = ['asd'];
         $expectedBlacklistToken = 'StopMeNow';
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
@@ -49,9 +49,9 @@ class AllCheckableFileFinderTest extends TestCase
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
 
         $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
-            ->with($mockedGitChangeSet, $expectedFilter, $expectedBlacklistToken);
+            ->with($mockedGitChangeSet, $mockedAllowedFileEndings, $expectedBlacklistToken);
 
-        $result = $this->subject->findFiles($expectedFilter, $expectedBlacklistToken);
+        $result = $this->subject->findFiles($mockedAllowedFileEndings, $expectedBlacklistToken);
 
         self::assertSame($mockedGitChangeSet, $result);
     }
@@ -70,7 +70,7 @@ class AllCheckableFileFinderTest extends TestCase
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
 
         $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
-            ->with($mockedGitChangeSet, '', '');
+            ->with($mockedGitChangeSet, [], '');
 
         $result = $this->subject->findFiles();
 

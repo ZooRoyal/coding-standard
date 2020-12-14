@@ -85,7 +85,7 @@ class FindFilesToCheckCommandTest extends TestCase
      */
     public function executeInExclusionMode()
     {
-        $mockedFilter = 'myFilter';
+        $mockedAllowedFileEndings = ['myFilter'];
         $mockedBlacklistToken = 'myStopword';
         $mockedWhitelistToken = 'myGoword';
         $mockedTargetBranch = 'mockedTarget';
@@ -102,7 +102,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInputInterface,
             $mockedBlacklistToken,
             $mockedWhitelistToken,
-            $mockedFilter,
+            $mockedAllowedFileEndings,
             $mockedTargetBranch,
             $mockedExclusiveFlag
         );
@@ -121,7 +121,7 @@ class FindFilesToCheckCommandTest extends TestCase
      */
     public function executeTriggeringAllFiles()
     {
-        $mockedFilter = 'myFilter';
+        $allowedFileEndings = ['myFilter'];
         $mockedBlacklistToken = 'myStopword';
         $mockedWhitelistToken = 'myGoword';
         $mockedTargetBranch = '';
@@ -139,13 +139,13 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInputInterface,
             $mockedBlacklistToken,
             $mockedWhitelistToken,
-            $mockedFilter,
+            $allowedFileEndings,
             $mockedTargetBranch,
             $mockedExclusiveFlag
         );
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch)
+            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch)
             ->andReturn($mockedGitChangeSet);
 
         $mockedGitChangeSet->shouldReceive('getFiles')->andReturn($expectedArray);
@@ -162,7 +162,7 @@ class FindFilesToCheckCommandTest extends TestCase
      * @param MockInterface $mockedInputInterface
      * @param string $mockedBlacklistToken
      * @param string $mockedWhitelistToken
-     * @param string $mockedFilter
+     * @param string[] $allowedFileEndings
      * @param string $mockedTargetBranch
      * @param bool $mockedExclusiveFlag
      */
@@ -170,7 +170,7 @@ class FindFilesToCheckCommandTest extends TestCase
         MockInterface $mockedInputInterface,
         string $mockedBlacklistToken,
         string $mockedWhitelistToken,
-        string $mockedFilter,
+        array $allowedFileEndings,
         string $mockedTargetBranch,
         bool $mockedExclusiveFlag
     ) {
@@ -179,7 +179,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('whitelist-token')->andReturn($mockedWhitelistToken);
         $mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('filter')->andReturn($mockedFilter);
+            ->with('allowed-file-endings')->andReturn($allowedFileEndings);
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
         $mockedInputInterface->shouldReceive('getOption')->once()

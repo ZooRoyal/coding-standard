@@ -62,14 +62,14 @@ class GenericCommandRunnerTest extends TestCase
         $mockedTemplate = 'My Template %1$s';
         $mockedTargetBranch = 'MyTarget';
         $mockedStopword = 'HALT';
-        $mockedFilter = 'Morty';
+        $mockedAllowedFileEndings = ['Morty'];
         $mockedProcessIsolation = true;
         $glue = 'juhu';
         $mockedChangedFiles = ['mocked', 'files'];
         $mockedOutput = 'Das hab ich zu sagen.';
         $mockedErrorOutput = 'ROOOOOOOOOOORERROR!';
 
-        $this->prepareMocksForFindFiles($mockedFilter, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
+        $this->prepareMocksForFindFiles($mockedAllowedFileEndings, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
         $this->prepareMocksForRunAndWriteToOutputProcessIsolation(
             $mockedChangedFiles,
             $mockedTemplate,
@@ -87,7 +87,7 @@ class GenericCommandRunnerTest extends TestCase
             $mockedTemplate,
             $mockedTargetBranch,
             $mockedStopword,
-            $mockedFilter,
+            $mockedAllowedFileEndings,
             $mockedProcessIsolation,
             $glue
         );
@@ -114,14 +114,14 @@ class GenericCommandRunnerTest extends TestCase
         $mockedTemplate = 'My Template %1$s';
         $mockedTargetBranch = 'MyTarget';
         $mockedStopword = 'HALT';
-        $mockedFilter = 'Morty';
+        $mockedAllowedFileEndings = ['Morty'];
         $mockedProcessIsolation = false;
         $mockedGlue = 'juhu';
         $mockedChangedFiles = ['mocked', 'files'];
         $mockedOutput = 'Das hab ich zu sagen.';
         $mockedErrorOutput = 'ERROR ERRRRRRRRRROR';
 
-        $this->prepareMocksForFindFiles($mockedFilter, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
+        $this->prepareMocksForFindFiles($mockedAllowedFileEndings, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
         $this->prepareMocksForRunAndWriteToOutput(
             $mockedChangedFiles,
             $mockedTemplate,
@@ -140,7 +140,7 @@ class GenericCommandRunnerTest extends TestCase
             $mockedTemplate,
             $mockedTargetBranch,
             $mockedStopword,
-            $mockedFilter,
+            $mockedAllowedFileEndings,
             $mockedProcessIsolation,
             $mockedGlue
         );
@@ -294,13 +294,13 @@ class GenericCommandRunnerTest extends TestCase
     /**
      * Prepare mocks for call to findFiles.
      *
-     * @param string   $mockedFilter
+     * @param string[] $mockedAllowedFileEndings
      * @param string   $mockedStopword
      * @param string   $mockedTargetBranch
      * @param string[] $mockedChangedFiles
      */
     private function prepareMocksForFindFiles(
-        string $mockedFilter,
+        array $mockedAllowedFileEndings,
         string $mockedStopword,
         string $mockedTargetBranch,
         array $mockedChangedFiles
@@ -309,7 +309,7 @@ class GenericCommandRunnerTest extends TestCase
         $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedFilter, $mockedStopword, '', $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
+            ->with($mockedAllowedFileEndings, $mockedStopword, '', $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
 
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with(

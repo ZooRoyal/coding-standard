@@ -39,7 +39,7 @@ class DiffCheckableFileFinderTest extends TestCase
      */
     public function findFilesWithoutTargetBranchMakesNoSense()
     {
-        $this->subject->findFiles('', '', '', '');
+        $this->subject->findFiles([], '', '', '');
     }
 
     /**
@@ -48,7 +48,7 @@ class DiffCheckableFileFinderTest extends TestCase
     public function findDiffByGitDiff()
     {
         $mockedTargetBranch = 'blaBranch';
-        $mockedFilter = 'blaFilter';
+        $mockedAllowedFileEndings = ['blaFilter'];
         $mockedBlacklistToken = 'blaStopword';
         $mockedWhitelistToken = 'blaGO';
         $mockedMergeBase = 'alsdkfujh178290346';
@@ -67,9 +67,9 @@ class DiffCheckableFileFinderTest extends TestCase
             ->with($mockedFiles, $mockedMergeBase)->andReturn($mockedChangeSet);
 
         $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
-            ->with($mockedChangeSet, $mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken)
+            ->with($mockedChangeSet, $mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken)
             ->andReturn($mockedFileDiff);
 
-        $this->subject->findFiles($mockedFilter, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch);
+        $this->subject->findFiles($mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch);
     }
 }

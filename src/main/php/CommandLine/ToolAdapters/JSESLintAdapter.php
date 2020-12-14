@@ -8,8 +8,8 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
 {
     /** @var string */
     protected $blacklistToken = '.dontSniffJS';
-    /** @var string */
-    protected $filter = '--ext .js --ext .ts';
+    /** @var string[] */
+    protected $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
     /** @var string */
     protected $blacklistPrefix = '--ignore-pattern ';
     /** @var string */
@@ -32,15 +32,16 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         }
 
         $esLintConfig = $this->environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
+        $esLintFilterFlags = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
 
         $esLintBlacklistCommand = $commandPath . ' --config ' . $esLintConfig
-            . ' ' . $this->filter . ' %1$s ' . $this->environment->getRootDirectory();
+            . ' ' . $esLintFilterFlags . ' %1$s ' . $this->environment->getRootDirectory();
         $esLintWhitelistCommand = $commandPath . ' --config ' . $esLintConfig
-            . ' ' . $this->filter;
+            . ' ' . $esLintFilterFlags . ' %1$s';
         $esLintFixBlacklistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
-            . $this->filter . ' --fix %1$s ' . $this->environment->getRootDirectory();
+            . $esLintFilterFlags . ' --fix %1$s ' . $this->environment->getRootDirectory();
         $esLintFixWhitelistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
-            . $this->filter . ' --fix %1$s';
+            . $esLintFilterFlags . ' --fix %1$s';
 
         $this->commands = [
             'ESLINTBL' => $esLintBlacklistCommand,
