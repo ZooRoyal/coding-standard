@@ -7,13 +7,17 @@
 module.exports = {
     extends: [
         'eslint:recommended',
-        'standard'
+        'standard',
+        'plugin:jest/recommended',
+        'plugin:jest/style'
     ],
     parserOptions: {
-        ecmaVersion: 2015,
+        ecmaVersion: 2016,
         sourceType: 'module'
     },
-
+    plugins: [
+        'jest'
+    ],
     overrides: [
         {
             files: '*.ts',
@@ -31,7 +35,8 @@ module.exports = {
     root: true,
     env: {
         browser: true,
-        jquery: true
+        jquery: true,
+        'jest/globals': true
     },
     globals: {
         $: false,
@@ -107,6 +112,12 @@ module.exports = {
         'standard/object-curly-even-spacing': [2, 'either'],
         'standard/array-bracket-even-spacing': [2, 'either'],
         'standard/computed-property-even-spacing': [2, 'even'],
-        'standard/no-callback-literal': [2, ['cb', 'callback']]
+        'standard/no-callback-literal': [2, ['cb', 'callback']],
+        // jest
+        'jest/no-disabled-tests': 'warn',
+        'jest/no-focused-tests': 'error',
+        'jest/no-identical-title': 'error',
+        'jest/prefer-to-have-length': 'warn',
+        'jest/valid-expect': 'error'
     }
 };

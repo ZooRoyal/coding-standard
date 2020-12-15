@@ -10,8 +10,8 @@ use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 
 class RunEslintWithConfigTest extends TestCase
 {
-    private const EXPECTED_TS_PROBLEMS = '124 problems';
-    private const EXPECTED_JS_PROBLEMS = '123 problems';
+    private const EXPECTED_TS_PROBLEMS = '127 problems';
+    private const EXPECTED_JS_PROBLEMS = '126 problems';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
     private $testInstancePath;
