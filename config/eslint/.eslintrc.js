@@ -115,6 +115,7 @@ module.exports = {
         'standard/no-callback-literal': [2, ['cb', 'callback']],
         // jest
         'jest/no-disabled-tests': 'warn',
+        'jest/no-if': 'error',
         'jest/no-focused-tests': 'error',
         'jest/no-identical-title': 'error',
         'jest/prefer-to-have-length': 'warn',
