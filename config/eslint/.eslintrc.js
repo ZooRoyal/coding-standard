@@ -110,8 +110,8 @@ module.exports = {
         'comma-dangle': ['error', {
             arrays: 'always-multiline',
             objects: 'always',
-            imports: 'always',
-            exports: 'always',
+            imports: 'never',
+            exports: 'never',
             functions: 'never',
         }],
         // es6
