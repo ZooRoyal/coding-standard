@@ -10,8 +10,8 @@ use Symfony\Component\Process\Process;
 
 class RunEslintWithConfigTest extends TestCase
 {
-    const EXPECTED_TS_PROBLEMS = '124 problems';
-    const EXPECTED_JS_PROBLEMS = '122 problems';
+    const EXPECTED_TS_PROBLEMS = '179 problems';
+    const EXPECTED_JS_PROBLEMS = '178 problems';
     const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
 
@@ -62,7 +62,7 @@ class RunEslintWithConfigTest extends TestCase
 
         self::assertSame(1, $exitCode, $process->getErrorOutput());
 
-        MatcherAssert::assertThat($output, H::containsString('123 problems'));
+        MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_JS_PROBLEMS));
     }
 
     /**

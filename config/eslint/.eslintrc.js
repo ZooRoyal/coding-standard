@@ -1,37 +1,43 @@
 /**
- * eslint config
+ * Eslint config.
  *
- * @licence REWE Digital GmbH
+ * @license REWE Digital GmbH
  */
 
 module.exports = {
     extends: [
         'eslint:recommended',
-        'standard'
+        'standard',
+        'plugin:jest/recommended',
+        'plugin:jest/style',
     ],
     parserOptions: {
-        ecmaVersion: 2015,
-        sourceType: 'module'
+        ecmaVersion: 2016,
+        sourceType: 'module',
     },
-
+    plugins: [
+        'jest',
+        'jsdoc',
+    ],
     overrides: [
         {
             files: '*.ts',
             plugins: [
-                '@typescript-eslint'
+                '@typescript-eslint',
             ],
             extends: [
-                'plugin:@typescript-eslint/recommended'
+                'plugin:@typescript-eslint/recommended',
             ],
             rules: {
-                '@typescript-eslint/no-unused-vars': 2
-            }
-        }
+                '@typescript-eslint/no-unused-vars': 2,
+            },
+        },
     ],
     root: true,
     env: {
         browser: true,
-        jquery: true
+        jquery: true,
+        'jest/globals': true,
     },
     globals: {
         $: false,
@@ -43,12 +49,12 @@ module.exports = {
         require: true,
         _: true,
         pageData: true, // tracking object for CMP
-        _satellite: true // Adobe tracking function
+        _satellite: true, // Adobe tracking function
     },
     /**
      * 0 = turned off
      * 1 = warning
-     * 2 = error
+     * 2 = error.
      */
     rules: {
         'new-cap': 1,
@@ -56,15 +62,15 @@ module.exports = {
         'no-eq-null': 2,
         indent: [
             'error',
-            4
+            4,
         ],
         'linebreak-style': [
             'error',
-            'unix'
+            'unix',
         ],
         quotes: [
             'error',
-            'single'
+            'single',
         ],
         semi: 0,
         'one-var': 0,
@@ -92,10 +98,26 @@ module.exports = {
         'no-unused-vars': 2,
         radix: 2,
         'no-trailing-spaces': 0,
+        'require-jsdoc': ['error', {
+            require: {
+                FunctionDeclaration: true,
+                MethodDefinition: true,
+                ClassDeclaration: true,
+                ArrowFunctionExpression: true,
+                FunctionExpression: true,
+            },
+        }],
+        'comma-dangle': ['error', {
+            arrays: 'always-multiline',
+            objects: 'always',
+            imports: 'always',
+            exports: 'always',
+            functions: 'never',
+        }],
         // es6
-        'arrow-spacing': ['error', { before: true, after: true }],
-        'no-confusing-arrow': ['error', { allowParens: false }],
-        'arrow-parens': ['error', 'as-needed', { requireForBlockBody: true }],
+        'arrow-spacing': ['error', { before: true, after: true, }],
+        'no-confusing-arrow': ['error', { allowParens: false, }],
+        'arrow-parens': ['error', 'as-needed', { requireForBlockBody: true, }],
         'no-useless-constructor': 2,
         'no-dupe-class-members': 2,
         'no-duplicate-imports': 2,
@@ -107,6 +129,52 @@ module.exports = {
         'standard/object-curly-even-spacing': [2, 'either'],
         'standard/array-bracket-even-spacing': [2, 'either'],
         'standard/computed-property-even-spacing': [2, 'even'],
-        'standard/no-callback-literal': [2, ['cb', 'callback']]
-    }
+        'standard/no-callback-literal': [2, ['cb', 'callback']],
+        // jest
+        'jest/no-disabled-tests': 'warn',
+        'jest/no-if': 'error',
+        'jest/no-focused-tests': 'error',
+        'jest/no-identical-title': 'error',
+        'jest/prefer-to-have-length': 'warn',
+        'jest/valid-expect': 'error',
+        // jsdoc,
+        'jsdoc/check-access': 0,
+        'jsdoc/check-alignment': 2,
+        'jsdoc/check-examples': 2,
+        'jsdoc/check-indentation': 2,
+        'jsdoc/check-line-alignment': 2,
+        'jsdoc/check-param-names': 2,
+        'jsdoc/check-property-names': 2,
+        'jsdoc/check-syntax': 2,
+        'jsdoc/check-tag-names': 2,
+        'jsdoc/check-types': 2,
+        'jsdoc/check-values': 0,
+        'jsdoc/empty-tags': 2,
+        'jsdoc/implements-on-classes': 2,
+        'jsdoc/match-description': 0,
+        'jsdoc/newline-after-description': 2,
+        'jsdoc/no-bad-blocks': 0,
+        'jsdoc/no-defaults': 0,
+        'jsdoc/no-types': 0,
+        'jsdoc/no-undefined-types': 0,
+        'jsdoc/require-description': 2,
+        'jsdoc/require-description-complete-sentence': 2,
+        'jsdoc/require-example': 0,
+        'jsdoc/require-file-overview': 0,
+        'jsdoc/require-hyphen-before-param-description': 0,
+        'jsdoc/require-jsdoc': 2,
+        'jsdoc/require-param': 2,
+        'jsdoc/require-param-description': 0,
+        'jsdoc/require-param-name': 2,
+        'jsdoc/require-param-type': 2,
+        'jsdoc/require-property': 0,
+        'jsdoc/require-property-description': 0,
+        'jsdoc/require-property-name': 0,
+        'jsdoc/require-property-type': 0,
+        'jsdoc/require-returns': 2,
+        'jsdoc/require-returns-check': 2,
+        'jsdoc/require-returns-description': 2,
+        'jsdoc/require-returns-type': 2,
+        'jsdoc/valid-types': 2,
+    },
 };
