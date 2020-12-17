@@ -40,6 +40,7 @@ jobs:
         with:
           php-version: '7.4'
           tools: composer:${{ matrix.composer_version }}
+          extensions: xdebug-2.9.8
         env:
           fail-fast: true
 
