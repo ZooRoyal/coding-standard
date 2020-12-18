@@ -23,7 +23,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(PHPCopyPasteDetectorCommand::class);
@@ -34,7 +34,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

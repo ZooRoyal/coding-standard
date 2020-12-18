@@ -25,7 +25,7 @@ class GenericCommandRunnerTest extends TestCase
     /** @var MockInterface|GitChangeSet */
     private $mockedGitChangeSet;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
@@ -37,7 +37,7 @@ class GenericCommandRunnerTest extends TestCase
         $this->mockedProcess = Mockery::mock(Process::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

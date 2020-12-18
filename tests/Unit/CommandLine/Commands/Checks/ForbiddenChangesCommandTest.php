@@ -35,7 +35,7 @@ class ForbiddenChangesCommandTest extends TestCase
     /** @var string */
     private $whitelistToken = '.doChangeFiles';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(ForbiddenChangesCommand::class);
@@ -43,7 +43,7 @@ class ForbiddenChangesCommandTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

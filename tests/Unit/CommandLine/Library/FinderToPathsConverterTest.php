@@ -13,7 +13,7 @@ class FinderToPathsConverterTest extends TestCase
     /** @var FinderToPathsConverter */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new FinderToPathsConverter();
     }

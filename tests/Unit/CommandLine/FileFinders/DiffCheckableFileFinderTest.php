@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
@@ -19,7 +20,7 @@ class DiffCheckableFileFinderTest extends TestCase
     /** @var DiffCheckableFileFinder */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(DiffCheckableFileFinder::class);
@@ -27,7 +28,7 @@ class DiffCheckableFileFinderTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
@@ -35,10 +36,10 @@ class DiffCheckableFileFinderTest extends TestCase
 
     /**
      * @test
-     * @expectedException Symfony\Component\Console\Exception\InvalidArgumentException
      */
     public function findFilesWithoutTargetBranchMakesNoSense()
     {
+        $this->expectException(InvalidArgumentException::class);
         $this->subject->findFiles([], '', '', '');
     }
 

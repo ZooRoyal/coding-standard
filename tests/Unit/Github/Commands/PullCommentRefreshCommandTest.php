@@ -52,7 +52,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var array<string, array<string, string>|int|string|null> */
     private $mockedOwnStaleComment;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedOwnCurrentComment = [
             'id' => 25,
@@ -80,7 +80,7 @@ class PullCommentRefreshCommandTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

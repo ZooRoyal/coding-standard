@@ -11,12 +11,12 @@ class CommentFilterTest extends TestCase
     /** @var CommentFilter */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->subject = new CommentFilter();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

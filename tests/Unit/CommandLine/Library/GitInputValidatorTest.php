@@ -17,7 +17,7 @@ class GitInputValidatorTest extends TestCase
     /** @var GitInputValidator */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitInputValidator::class);

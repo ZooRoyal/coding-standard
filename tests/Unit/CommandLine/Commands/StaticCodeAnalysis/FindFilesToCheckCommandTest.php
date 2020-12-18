@@ -29,7 +29,7 @@ class FindFilesToCheckCommandTest extends TestCase
     /** @var FindFilesToCheckCommand */
     private $subject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(FindFilesToCheckCommand::class);
@@ -37,7 +37,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

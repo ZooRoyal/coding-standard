@@ -7,6 +7,7 @@ use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
@@ -24,7 +25,7 @@ class GitChangeSetFilterTest extends TestCase
     /** @var string */
     private $mockedRootDirectory = '/my/root/directory';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitChangeSetFilter::class);
@@ -35,7 +36,7 @@ class GitChangeSetFilterTest extends TestCase
         $this->subject = $buildFragments['subject'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
@@ -125,13 +126,12 @@ class GitChangeSetFilterTest extends TestCase
 
     /**
      * @test
-     *
-     * @expectedException \Symfony\Component\Console\Exception\LogicException
-     *
-     * @expectedExceptionCode 1553780055
      */
     public function filterThrowsExceptionIfBlackAndWhitelisted()
     {
+        $this->expectException(LogicException::class);
+        $this->expectExceptionCode('1553780055');
+
         /** @var MockInterface|GitChangeSet $mockedFileList */
         $mockedFileList = Mockery::mock(GitChangeSet::class);
         $blacklistToken = 'stopMe';

@@ -32,7 +32,7 @@ class PHPParallelLintAdapterTest extends TestCase
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
@@ -58,7 +58,7 @@ class PHPParallelLintAdapterTest extends TestCase
         )->makePartial()->shouldAllowMockingProtectedMethods();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();

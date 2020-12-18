@@ -18,7 +18,7 @@ class TerminalCommandFinderTest extends TestCase
     /** @var MockInterface[] */
     private $subjectParameters;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(TerminalCommandFinder::class);
@@ -26,7 +26,7 @@ class TerminalCommandFinderTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         Mockery::close();
         parent::tearDown();
