@@ -30,18 +30,20 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
             $this->commandNotFound = true;
             $commandPath = '';
         }
+        $esLintConfigPath = $this->environment->getPackageDirectory() . '/config/eslint/';
 
-        $esLintConfig = $this->environment->getPackageDirectory() . '/config/eslint/.eslintrc.js';
-        $esLintFilterFlags = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
+        $esLintCliOptions = [
+            'ignoreFile' => '--ignore-path ' . $esLintConfigPath . '.eslintignore',
+            'noErrorOnUnmatchedPattern' => '--no-error-on-unmatched-pattern',
+            'configFile' => '--config ' . $esLintConfigPath . '.eslintrc.js',
+            'filterFlags' => '--ext ' . implode(' --ext ', $this->allowedFileEndings),
+        ];
+        $baseCommand = $commandPath . ' ' . implode(' ', $esLintCliOptions);
 
-        $esLintBlacklistCommand = $commandPath . ' --config ' . $esLintConfig
-            . ' ' . $esLintFilterFlags . ' %1$s ' . $this->environment->getRootDirectory();
-        $esLintWhitelistCommand = $commandPath . ' --config ' . $esLintConfig
-            . ' ' . $esLintFilterFlags . ' %1$s';
-        $esLintFixBlacklistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
-            . $esLintFilterFlags . ' --fix %1$s ' . $this->environment->getRootDirectory();
-        $esLintFixWhitelistCommand = $commandPath . ' --config ' . $esLintConfig . ' '
-            . $esLintFilterFlags . ' --fix %1$s';
+        $esLintBlacklistCommand = implode(' ', [$baseCommand, '%1$s', $this->environment->getRootDirectory()]);
+        $esLintWhitelistCommand = implode(' ', [$baseCommand, '%1$s']);
+        $esLintFixBlacklistCommand = implode(' ', [$baseCommand, '--fix %1$s', $this->environment->getRootDirectory()]);
+        $esLintFixWhitelistCommand =  implode(' ', [$baseCommand, '--fix %1$s']);
 
         $this->commands = [
             'ESLINTBL' => $esLintBlacklistCommand,
@@ -69,11 +71,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
-        // This is because of the god damn stupid behavior change of eslint if no files to lint were found
-        if ($exitCode === 2) {
-            $exitCode = 0;
-            $this->output->write('We ignore this for now!', true);
-        }
+        // https://eslint.org/docs/user-guide/command-line-interface#exit-codes
 
         return $exitCode;
     }
