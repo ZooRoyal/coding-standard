@@ -189,7 +189,7 @@ class GenericCommandRunner
      * @param string $prefix
      * @param string $glue
      */
-    public function concatBlackListArguments(string $blacklistToken, bool $escape, string $prefix, string $glue): string
+    protected function concatBlackListArguments(string $blacklistToken, bool $escape, string $prefix, string $glue): string
     {
         $blackList = $this->blacklistFactory->build($blacklistToken);
         if ($escape) {
