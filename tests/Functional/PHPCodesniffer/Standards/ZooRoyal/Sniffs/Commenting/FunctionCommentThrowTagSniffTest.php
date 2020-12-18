@@ -4,7 +4,6 @@ namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooR
 
 use Composer\Autoload\ClassLoader;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\Version;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
@@ -63,9 +62,10 @@ class FunctionCommentThrowTagSniffTest extends TestCase
         $subject->wait();
 
         $output = $subject->getOutput();
-        $assertRegExpMethodName = version_compare(Version::id(), '9.1', '<') ?
-            'assertRegExp' : 'assertMatchesRegularExpression';
-        self::$assertRegExpMethodName('/at least 2 @throws/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/', $output);
+        self::assertMatchesRegularExpression('/at least 2 @throws/', $output);
+        self::assertMatchesRegularExpression(
+            '/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/',
+            $output
+        );
     }
 }

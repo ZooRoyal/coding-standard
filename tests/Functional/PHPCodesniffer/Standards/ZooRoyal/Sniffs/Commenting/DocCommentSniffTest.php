@@ -4,7 +4,6 @@ namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooR
 
 use Composer\Autoload\ClassLoader;
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\Version;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
@@ -62,20 +61,17 @@ class DocCommentSniffTest extends TestCase
         $subject->wait();
 
         $output = $subject->getOutput();
-        $assertRegExpMethodName = version_compare(Version::id(), '9.1', '<') ?
-            'assertRegExp' : 'assertMatchesRegularExpression';
-
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.Empty/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.ContentAfterOpen/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeShort/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.ContentBeforeClose/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.SpacingAfter/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.MissingShort/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.ShortNotCapital/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeTags/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.NonParamGroup/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.SpacingAfterTagGroup/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.TagValueIndent/', $output);
-        self::$assertRegExpMethodName('/ZooRoyal\.Commenting\.DocComment\.ParamNotFirst/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.Empty/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.ContentAfterOpen/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeShort/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.ContentBeforeClose/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.SpacingAfter/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.MissingShort/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.ShortNotCapital/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.SpacingBeforeTags/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.NonParamGroup/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.SpacingAfterTagGroup/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.TagValueIndent/', $output);
+        self::assertMatchesRegularExpression('/ZooRoyal\.Commenting\.DocComment\.ParamNotFirst/', $output);
     }
 }
