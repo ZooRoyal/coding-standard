@@ -78,9 +78,16 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function commandsGetBuiltCorrectly()
     {
         $configFile = '/config/eslint/.eslintrc.js';
+        $ignoreFile = '/config/eslint/.eslintignore';
+        $ignorePattern = ' --no-error-on-unmatched-pattern ';
+
+        $commandOptions = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
+
+        $expectedBaseCommand =  $this->forgedCommandPath . ' --ignore-path ' . $this->mockedPackageDirectory
+            . $ignoreFile . $ignorePattern . '--config ' . $this->mockedPackageDirectory . $configFile . ' ' . $commandOptions;
 
         self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
         self::assertSame($this->allowedFileEndings, $this->partialSubject->getAllowedFileEndings());
@@ -88,30 +95,13 @@ class JSESLintAdapterTest extends TestCase
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
         self::assertFalse($this->partialSubject->isEscape());
 
-        $commandOptions = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
             H::allOf(
-                H::hasKeyValuePair(
-                    'ESLINTBL',
-                    $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $commandOptions . ' %1$s ' . $this->mockedRootDirectory
-                ),
-                H::hasKeyValuePair(
-                    'ESLINTWL',
-                    $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $commandOptions . ' %1$s'
-                ),
-                H::hasKeyValuePair(
-                    'ESLINTFIXBL',
-                    $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $commandOptions . ' --fix %1$s ' . $this->mockedRootDirectory
-                ),
-                H::hasKeyValuePair(
-                    'ESLINTFIXWL',
-                    $this->forgedCommandPath . ' --config ' . $this->mockedPackageDirectory . $configFile . ' '
-                    . $commandOptions . ' --fix %1$s'
-                )
+                H::hasKeyValuePair('ESLINTBL', $expectedBaseCommand. ' %1$s ' . $this->mockedRootDirectory),
+                H::hasKeyValuePair('ESLINTWL', $expectedBaseCommand. ' %1$s'),
+                H::hasKeyValuePair('ESLINTFIXBL', $expectedBaseCommand . ' --fix %1$s ' . $this->mockedRootDirectory),
+                H::hasKeyValuePair('ESLINTFIXWL', $expectedBaseCommand . ' --fix %1$s')
             )
         );
     }
@@ -145,7 +135,7 @@ class JSESLintAdapterTest extends TestCase
                 'fullMessage' => 'ESLINT : Running full check',
                 'diffMessage' => 'ESLINT : Running check on diff',
                 'method' => 'writeViolationsToOutput',
-                'toolResult' => 2,
+                'toolResult' => 0,
                 'expectedResult' => 0,
             ],
             'fix Violations  without files to lint' => [
@@ -153,7 +143,7 @@ class JSESLintAdapterTest extends TestCase
                 'fullMessage' => 'ESLINTFIX : Fix all Files',
                 'diffMessage' => 'ESLINTFIX : Fix Files in diff',
                 'method' => 'fixViolations',
-                'toolResult' => 2,
+                'toolResult' => 0,
                 'expectedResult' => 0,
             ],
         ];

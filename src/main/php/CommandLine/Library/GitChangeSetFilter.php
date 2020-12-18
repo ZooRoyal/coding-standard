@@ -65,7 +65,7 @@ class GitChangeSetFilter
      *
      * @return array
      */
-    protected function applyFilters(array $allowedFileEndings, array $files, array $list): array
+    private function applyFilters(array $allowedFileEndings, array $files, array $list): array
     {
         $result = $files;
         $this->filterByAllowedFileEndings($result, $allowedFileEndings);
@@ -104,7 +104,7 @@ class GitChangeSetFilter
      * @param array $result
      * @param array $allowedFileEndings
      */
-    protected function filterByAllowedFileEndings(array &$result, array $allowedFileEndings)
+    private function filterByAllowedFileEndings(array &$result, array $allowedFileEndings)
     {
         if (!empty($allowedFileEndings)) {
             $result = array_filter(
@@ -127,7 +127,7 @@ class GitChangeSetFilter
      * @param array $result
      * @param array $list
      */
-    protected function filterByList(array &$result, array $list)
+    private function filterByList(array &$result, array $list)
     {
         $rootDirectory = $this->environment->getRootDirectory();
         $result = array_filter(
