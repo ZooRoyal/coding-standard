@@ -44,7 +44,7 @@
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
     <rule ref="Generic.Classes.DuplicateClassName"/>
     <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
-    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedCATCH">
+    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedCatch">
         <severity>0</severity>
     </rule>
     <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
