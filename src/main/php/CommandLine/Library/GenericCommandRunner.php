@@ -96,17 +96,7 @@ class GenericCommandRunner
         string $glue = ',',
         bool $escape = false
     ) {
-        $blackList = $this->blacklistFactory->build($blacklistToken);
-        if ($escape) {
-            $blackList = array_map(
-                function ($value) {
-                    return preg_quote(preg_quote($value, '/'), '/');
-                },
-                $blackList
-            );
-        }
-        $argument = $prefix . implode($glue . $prefix, $blackList);
-
+        $argument = $this->concatBlackListArguments($blacklistToken, $escape, $prefix, $glue);
         $command = $this->buildCommand($template, $argument);
 
         return $this->runAndWriteToOutput($command);
@@ -190,5 +180,27 @@ class GenericCommandRunner
         );
 
         return $command;
+    }
+
+    /**
+     * Concats Balcklist result with glue and prefix
+     *
+     * @param string $blacklistToken
+     * @param bool $escape
+     * @param string $prefix
+     * @param string $glue
+     */
+    public function concatBlackListArguments(string $blacklistToken, bool $escape, string $prefix, string $glue): string
+    {
+        $blackList = $this->blacklistFactory->build($blacklistToken);
+        if ($escape) {
+            $blackList = array_map(
+                function ($value) {
+                    return preg_quote(preg_quote($value, '/'), '/');
+                },
+                $blackList
+            );
+        }
+        return $prefix . implode($glue . $prefix, $blackList);
     }
 }
