@@ -4,6 +4,9 @@
         This ruleset is used in the CI-Build of this project. Not compliant code will result in a failing build.
     </description>
 
+    <arg name="report" value="full"/>
+    <arg name="report-checkstyle" value="/tmp/checkstyle"/>
+
     <!-- Referenced Rulesets -->
     <rule ref="PSR2">
         <exclude name="PSR2.Classes.ClassDeclaration"/>
