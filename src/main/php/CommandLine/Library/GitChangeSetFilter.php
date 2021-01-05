@@ -133,7 +133,7 @@ class GitChangeSetFilter
         $result = array_filter(
             $result,
             function ($filePath) use ($rootDirectory, $list) {
-                $directory = dirname($filePath);
+                $directory = dirname($filePath) . '/';
                 $lastDirectoryPath = $filePath;
                 while (!in_array($directory, [$rootDirectory, '', $lastDirectoryPath], true)
                 ) {

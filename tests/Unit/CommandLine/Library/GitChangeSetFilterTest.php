@@ -21,7 +21,7 @@ class GitChangeSetFilterTest extends TestCase
     /** @var MockInterface[] */
     private $subjectParameters;
     /** @var string */
-    private $blacklistedDirectory = 'blub';
+    private $blacklistedDirectory = 'blub/';
     /** @var string */
     private $mockedRootDirectory = '/my/root/directory';
 
@@ -47,11 +47,11 @@ class GitChangeSetFilterTest extends TestCase
      */
     public function filterByBlacklistAndWhitelistWithoutFilter()
     {
-        $whitelistedDirectory = $this->blacklistedDirectory . '/wumpe';
+        $whitelistedDirectory = $this->blacklistedDirectory . 'wumpe';
         $whitelistedFile = $whitelistedDirectory . '/binNochDa';
         $mockedFileList = new GitChangeSet(
             [
-                $this->blacklistedDirectory . '/sowas',
+                $this->blacklistedDirectory . 'sowas',
                 $whitelistedFile,
                 'wahwah',
                 'bla',

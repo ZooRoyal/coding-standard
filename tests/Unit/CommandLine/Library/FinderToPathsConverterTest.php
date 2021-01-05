@@ -28,7 +28,8 @@ class FinderToPathsConverterTest extends TestCase
 
         $result = $this->subject->finderToArrayOfPaths($forgedFinder);
 
-        MatcherAssert::assertThat($result, H::hasValue('FinderToPathsConverterTest.php'));
+        MatcherAssert::assertThat($result, H::hasValue('./'));
+        MatcherAssert::assertThat($result, H::hasValue('Exceptions/'));
     }
 
 }

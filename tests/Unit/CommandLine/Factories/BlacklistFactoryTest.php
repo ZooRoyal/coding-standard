@@ -2,6 +2,8 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -27,7 +29,9 @@ class BlacklistFactoryTest extends TestCase
     /** @var string */
     private $mockedRootDirectory = '/my/root';
     /** @var string[] */
-    private $blacklistedDirectories = ['eins', 'weg', 'mag/nicht'];
+    private $blacklistedDirectories = ['eins/', 'weg/', 'mag/nicht/'];
+    /** @var string  */
+    private $stopWordDirectoryPath ='wubwubwub/MitStopwordDrin/blabla/';
 
     protected function setUp(): void
     {
@@ -51,7 +55,7 @@ class BlacklistFactoryTest extends TestCase
      */
     public function getBlacklistWithNoStopword()
     {
-        $expctedResult = ['/gna/gnarz', '/bra/brarz', dirname(__DIR__)];
+        $expctedResult = ['/gna/gnarz/', '/bra/brarz/', dirname(__DIR__) . '/'];
 
         $this->prepareFindersForBlacklistWithoutStopword();
 
@@ -65,14 +69,13 @@ class BlacklistFactoryTest extends TestCase
      */
     public function getBlacklistWithStopword()
     {
-        $expctedResult = ['/gna/gnarz', '/bra/brarz', dirname(__DIR__), dirname(__DIR__)];
+        $expctedResult = ['/gna/gnarz/', '/bra/brarz/', dirname(__DIR__) . '/', $this->stopWordDirectoryPath ];
         $foregedStopword = 'stopHere';
 
         $this->prepareFindersForBlacklistWithStopword($foregedStopword);
 
         $result = $this->subject->build($foregedStopword);
-
-        self::assertSame($expctedResult, $result);
+        MatcherAssert::assertThat($result, Matchers::arrayContainingInAnyOrder($expctedResult));
     }
 
     public function findStopwordDirectoriesUsesCacheOnMultipleCalls()
@@ -104,7 +107,7 @@ class BlacklistFactoryTest extends TestCase
             ->with($foregedStopword)->andReturnSelf();
 
         $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedStopwordFinder)->andReturn([__DIR__]);
+            ->with($this->mockedStopwordFinder)->andReturn([$this->stopWordDirectoryPath]);
 
         return $foregedStopword;
     }
@@ -138,7 +141,7 @@ class BlacklistFactoryTest extends TestCase
         }
 
         $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedBlacklistFinder)->andReturn(['/gna/gnarz', '/gna/gnarz/gnub', '/bra/brarz']);
+            ->with($this->mockedBlacklistFinder)->andReturn(['/gna/gnarz/', '/gna/gnarz/gnub/', '/bra/brarz/']);
     }
 
     private function addPathToFinder($parameter)

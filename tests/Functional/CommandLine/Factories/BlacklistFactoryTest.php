@@ -2,6 +2,8 @@
 
 namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 
+use Hamcrest\MatcherAssert;
+use Hamcrest\Matchers as H;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
@@ -13,7 +15,10 @@ class BlacklistFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        mkdir(__DIR__ . '/Fixtures/gitExclude/.git');
+        $forgedGitPath = __DIR__ . '/Fixtures/gitExclude/.git';
+        if (!is_dir($forgedGitPath)) {
+            mkdir($forgedGitPath);
+        }
 
         $container = ContainerFactory::getUnboundContainerInstance();
         $this->subject = $container->get(BlacklistFactory::class);
@@ -33,8 +38,13 @@ class BlacklistFactoryTest extends TestCase
         $forgedStopword = '.stopword';
         $result = $this->subject->build($forgedStopword);
 
-        self::assertContains('tests/Functional/CommandLine/Factories/Fixtures/gitExclude', $result);
-        self::assertContains('tests/Functional/CommandLine/Factories/Fixtures/StopWordTest', $result);
-        self::assertContains('vendor', $result);
+        MatcherAssert::assertThat(
+            $result,
+            H::allOf(
+                H::hasItem('tests/Functional/CommandLine/Factories/Fixtures/gitExclude/'),
+                H::hasItem('tests/Functional/CommandLine/Factories/Fixtures/StopWordTest/'),
+                H::hasItem('vendor/')
+            )
+        );
     }
 }
