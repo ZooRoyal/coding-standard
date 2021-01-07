@@ -95,12 +95,12 @@ class PHPStanAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPStanBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress '.$this->mockedRootDirectory.
-                    ' -c ' . $this->mockedPackageDirectory . $config
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress --error-format=github '
+                    . $this->mockedRootDirectory . ' -c ' . $this->mockedPackageDirectory . $config
                 ),
                 H::hasKeyValuePair(
                     'PHPStanWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
+                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress --error-format=github -c '
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 )
             )

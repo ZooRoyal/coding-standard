@@ -55,11 +55,11 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);
         $this->phpstanConfigGenerator->writeConfig($phpstanConfig, $onTheFlyConfig);
 
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress ' .
-                $rootDirectory . ' -c ' . $phpstanConfig;
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+            . '--error-format=github ' . $rootDirectory . ' -c ' . $phpstanConfig;
 
-        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress -c '
-                . $phpstanConfig. ' %1$s';
+        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+            . '--error-format=github ' . '-c ' . $phpstanConfig . ' %1$s';
     }
 
     /**
