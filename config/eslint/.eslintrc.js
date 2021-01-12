@@ -74,12 +74,12 @@ module.exports = {
         ],
         'max-len': [
             'error', {
-                'code': 130,
-                'ignoreTemplateLiterals': true,
-                'ignoreUrls': true,
-                'ignoreTrailingComments': true,
-                'ignoreRegExpLiterals': true
-            }
+                code: 130,
+                ignoreTemplateLiterals: true,
+                ignoreUrls: true,
+                ignoreTrailingComments: true,
+                ignoreRegExpLiterals: true,
+            },
         ],
         semi: 0,
         'one-var': 0,
