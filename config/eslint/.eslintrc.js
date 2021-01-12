@@ -72,6 +72,15 @@ module.exports = {
             'error',
             'single',
         ],
+        'max-len': [
+            'error', {
+                'code': 130,
+                'ignoreTemplateLiterals': true,
+                'ignoreUrls': true,
+                'ignoreTrailingComments': true,
+                'ignoreRegExpLiterals': true
+            }
+        ],
         semi: 0,
         'one-var': 0,
         eqeqeq: ['error', 'smart'],
