@@ -34,6 +34,7 @@ class DocCommentSniffTest extends TestCase
      * Hallos
      *
      * @test
+     * @medium
      */
     public function processApprovesCorrectCount()
     {
@@ -50,6 +51,7 @@ class DocCommentSniffTest extends TestCase
 
     /**
      * @test
+     * @medium
      */
     public function processRejectsIncorrectCount()
     {

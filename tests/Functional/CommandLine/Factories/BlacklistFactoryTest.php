@@ -26,6 +26,7 @@ class BlacklistFactoryTest extends TestCase
 
     /**
      * @test
+     * @medium
      */
     public function buildContainsGitBlacklistAndStopword()
     {
