@@ -1,29 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" executionOrder="random" resolveDependencies="true" beStrictAboutTestsThatDoNotTestAnything="false" colors="true" bootstrap="vendor/autoload.php" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
-  <coverage processUncoveredFiles="true">
-    <include>
-      <directory suffix=".php">./src</directory>
-    </include>
-    <exclude>
-      <file>./src/config</file>
-      <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
-    </exclude>
-    <report>
-      <text outputFile="php://stdout"/>
-    </report>
-  </coverage>
-  <testsuites>
-    <testsuite name="AllUnitTests">
-      <directory>./tests/Unit/</directory>
-      <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
-    </testsuite>
-    <testsuite name="AllFunctionalTests">
-      <directory>./tests/Functional/</directory>
-      <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
-    </testsuite>
-    <testsuite name="AllSystemTests">
-      <directory>./tests/System/</directory>
-    </testsuite>
-  </testsuites>
-  <logging/>
+<phpunit
+        beStrictAboutTestsThatDoNotTestAnything="false"
+        colors="true" bootstrap="vendor/autoload.php"
+        enforceTimeLimit="true"
+        executionOrder="random"
+        resolveDependencies="true"
+        stopOnRisky="true"
+        timeoutForSmallTests="2"
+        timeoutForLargeTests="180"
+        verbose="false"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
+    <coverage processUncoveredFiles="true">
+        <include>
+            <directory suffix=".php">./src</directory>
+        </include>
+        <exclude>
+            <file>./src/config</file>
+            <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
+        </exclude>
+        <report>
+            <text outputFile="php://stdout"/>
+        </report>
+    </coverage>
+    <testsuites>
+        <testsuite name="AllUnitTests">
+            <directory>./tests/Unit/</directory>
+            <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
+        </testsuite>
+        <testsuite name="AllFunctionalTests">
+            <directory>./tests/Functional/</directory>
+            <exclude>./tests/Functional/Plugin/Fixtures/ComposerTest/vendor*</exclude>
+        </testsuite>
+        <testsuite name="AllSystemTests">
+            <directory>./tests/System/</directory>
+        </testsuite>
+    </testsuites>
+    <logging/>
 </phpunit>
