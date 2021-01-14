@@ -6,6 +6,7 @@
         executionOrder="random"
         resolveDependencies="true"
         stopOnRisky="true"
+        timeoutForSmallTests="2"
         timeoutForLargeTests="180"
         verbose="false"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
