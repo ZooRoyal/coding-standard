@@ -11,6 +11,7 @@ class RunStylelintWithConfig extends TestCase
 {
     /**
      * @test
+     * @large
      */
     public function findViolationsByEslint()
     {

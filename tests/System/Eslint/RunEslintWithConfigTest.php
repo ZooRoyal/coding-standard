@@ -14,37 +14,26 @@ class RunEslintWithConfigTest extends TestCase
     private const EXPECTED_JS_PROBLEMS = '178 problems';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
-    private $testInstancePath;
-
-    public static function setUpBeforeClass(): void
-    {
-        $environment = TestEnvironmentInstallation::getInstance();
-        if ($environment->isInstalled() === false) {
-            $environment->addComposerJson(
-                dirname(__DIR__)
-                . '/fixtures/eslint/composer-template.json'
-            )->installComposerInstance();
-        }
-    }
 
     public static function tearDownAfterClass(): void
     {
         TestEnvironmentInstallation::getInstance()->removeInstallation();
     }
 
-    public function setUp(): void
-    {
-        $this->testInstancePath = TestEnvironmentInstallation::getInstance()->getInstallationPath();
-    }
-
     /**
      * @test
+     * @large
      */
     public function runEslintForJSInCleanInstall()
     {
-        $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js');
+        $testInstancePath = $this->prepareInstallationDirectory();
+
+        $command = $this->getEslintCommand(
+            'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js',
+            $testInstancePath
+        );
         $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $this->testInstancePath);
+        $process = new Process($commandArray, $testInstancePath);
 
         $process->run();
 
@@ -57,13 +46,45 @@ class RunEslintWithConfigTest extends TestCase
     }
 
     /**
+     * Provides an composer environment to run tests on.
+     *
+     * @return string
+     */
+    private function prepareInstallationDirectory(): string
+    {
+        $environment = TestEnvironmentInstallation::getInstance();
+        if ($environment->isInstalled() === false) {
+            $environment->addComposerJson(
+                dirname(__DIR__)
+                . '/fixtures/eslint/composer-template.json'
+            )->installComposerInstance();
+        }
+        return $environment->getInstallationPath();
+    }
+
+    private function getEslintCommand($fileToCheck, $testInstancePath): string
+    {
+        return self::ESLINT_COMMAND
+            . $testInstancePath . DIRECTORY_SEPARATOR
+            . self::ESLINT_CONFIG_FILE
+            . $testInstancePath . DIRECTORY_SEPARATOR
+            . $fileToCheck;
+    }
+
+    /**
      * @test
+     * @large
      */
     public function runEslintForTSInCleanInstall()
     {
-        $command = $this->getEslintCommand('vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts');
+        $testInstancePath = $this->prepareInstallationDirectory();
+
+        $command = $this->getEslintCommand(
+            'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts',
+            $testInstancePath
+        );
         $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $this->testInstancePath);
+        $process = new Process($commandArray, $testInstancePath);
 
         $process->run();
 
@@ -77,26 +98,20 @@ class RunEslintWithConfigTest extends TestCase
 
     /**
      * @test
+     * @large
      */
     public function runStylelintInCleanInstall()
     {
+        $testInstancePath = $this->prepareInstallationDirectory();
+
         $command = 'vendor/bin/coding-standard sca:stylelint';
         $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $this->testInstancePath);
+        $process = new Process($commandArray, $testInstancePath);
 
         $process->run();
 
         $exitCode = $process->getExitCode();
 
         self::assertSame(0, $exitCode);
-    }
-
-    private function getEslintCommand($fileToCheck): string
-    {
-        return self::ESLINT_COMMAND
-            . $this->testInstancePath . DIRECTORY_SEPARATOR
-            . self::ESLINT_CONFIG_FILE
-            . $this->testInstancePath . DIRECTORY_SEPARATOR
-            . $fileToCheck;
     }
 }
