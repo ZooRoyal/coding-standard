@@ -65,7 +65,7 @@ class Environment
     }
 
     /**
-     * Compare if the HEAD of $targetBrnach equals the HEAD of the local branch.
+     * Compare if the HEAD of $target Branch equals the HEAD of the local branch.
      *
      * @param string|null $targetBranch
      *
