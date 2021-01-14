@@ -7,6 +7,7 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 
@@ -41,33 +42,6 @@ class FindFilesToCheckCommand extends Command
         $this->setDescription('Finds files for code style checks.');
         $this->setHelp('This tool finds files, which should be considered for code style checks.');
         $this->setDefinition($this->buildInputDefinition());
-    }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function execute(InputInterface $input, OutputInterface $output) : int
-    {
-        $exclusionListInput = $input->getOption('exclusionList');
-        $allowedFileEndings = $input->getOption('allowed-file-endings');
-        $blacklistTokenInput = $input->getOption('blacklist-token');
-        $whitelistTokenInput = $input->getOption('whitelist-token');
-        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
-
-        if ($exclusionListInput === true) {
-            $result = $this->blacklistFactory->build($blacklistTokenInput);
-        } else {
-            $result = $this->adaptableFileFinder->findFiles(
-                $allowedFileEndings,
-                $blacklistTokenInput,
-                $whitelistTokenInput,
-                $targetBranch
-            )->getFiles();
-        }
-
-        $output->writeln(implode("\n", array_values($result)));
-        return 0;
     }
 
     /**
@@ -126,5 +100,33 @@ class FindFilesToCheckCommand extends Command
                 ),
             ]
         );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(InputInterface $input, OutputInterface $output): int
+    {
+        $exclusionListInput = $input->getOption('exclusionList');
+        $allowedFileEndings = $input->getOption('allowed-file-endings');
+        $blacklistTokenInput = $input->getOption('blacklist-token');
+        $whitelistTokenInput = $input->getOption('whitelist-token');
+        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
+
+        if ($exclusionListInput === true) {
+            $blacklist = $this->blacklistFactory->build($blacklistTokenInput);
+            $result = array_map(static fn(SmartFileInfo $file) => $file->getRelativePathname() . '/', $blacklist);
+        } else {
+            $foundFiles = $this->adaptableFileFinder->findFiles(
+                $allowedFileEndings,
+                $blacklistTokenInput,
+                $whitelistTokenInput,
+                $targetBranch
+            )->getFiles();
+            $result = array_map(static fn(SmartFileInfo $file) => $file->getRelativePathname(), $foundFiles);
+        }
+
+        $output->writeln(implode("\n", $result));
+        return 0;
     }
 }

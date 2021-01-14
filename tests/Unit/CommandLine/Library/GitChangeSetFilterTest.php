@@ -8,30 +8,24 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\LogicException;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitChangeSetFilterTest extends TestCase
 {
-    /** @var GitChangeSetFilter */
-    private $subject;
+    private GitChangeSetFilter $subject;
     /** @var MockInterface[] */
-    private $subjectParameters;
-    /** @var string */
-    private $blacklistedDirectory = 'blub/';
-    /** @var string */
-    private $mockedRootDirectory = '/my/root/directory';
+    private array $subjectParameters;
+    private string $blacklistedDirectory = 'tests';
 
     protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitChangeSetFilter::class);
         $this->subjectParameters = $buildFragments['parameters'];
-        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $this->subject = $buildFragments['subject'];
     }
@@ -45,32 +39,33 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterByBlacklistAndWhitelistWithoutFilter()
+    public function filterByBlacklistAndWhitelistWithoutFilter(): void
     {
-        $whitelistedDirectory = $this->blacklistedDirectory . 'wumpe';
-        $whitelistedFile = $whitelistedDirectory . '/binNochDa';
-        $mockedFileList = new GitChangeSet(
+        $forgedWhitelistedDirectory = new SmartFileInfo('vendor');
+        $forgedSrc = new SmartFileInfo('src');
+        $forgedConfig = new SmartFileInfo('config');
+        $forgedGitChangeSet = new GitChangeSet(
             [
-                $this->blacklistedDirectory . 'sowas',
-                $whitelistedFile,
-                'wahwah',
-                'bla',
+                new SmartFileInfo($this->blacklistedDirectory . '/Unit'),
+                $forgedWhitelistedDirectory,
+                $forgedSrc,
+                $forgedConfig,
             ],
             'asdaqwe212123'
         );
-        $expectedResult = ['wahwah', 'bla', $whitelistedFile];
+        $expectedResult = [$forgedWhitelistedDirectory, $forgedSrc, $forgedConfig,];
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
 
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
-            ->once()->with($blacklistToken, false)->andReturn([$this->blacklistedDirectory]);
+            ->once()->with($blacklistToken, false)->andReturn([new SmartFileInfo($this->blacklistedDirectory)]);
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
-            ->once()->with($whitelistToken)->andReturn([$whitelistedDirectory]);
+            ->once()->with($whitelistToken)->andReturn([$forgedWhitelistedDirectory]);
 
-        $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
+        $this->subject->filter($forgedGitChangeSet, [], $blacklistToken, $whitelistToken);
 
         MatcherAssert::assertThat(
-            $mockedFileList->getFiles(),
+            $forgedGitChangeSet->getFiles(),
             Matchers::arrayContainingInAnyOrder(...$expectedResult)
         );
     }
@@ -78,48 +73,27 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterByBlacklistAndFilterStringWithoutFilter()
+    public function filterByBlacklistAndFilterStringWithoutFilter(): void
     {
-        $mockedFileList = new GitChangeSet(
-            [$this->blacklistedDirectory . '/sowas', 'wahwah', 'bla'],
-            'asdaqwe212123'
-        );
-        $expectedResult = ['wahwah', 'bla'];
-        $blackListToken = 'stopMe';
-
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
-            ->once()->with($blackListToken, true)->andReturn([$this->blacklistedDirectory]);
-
-        $this->subject->filter($mockedFileList, [], $blackListToken);
-        MatcherAssert::assertThat(
-            $mockedFileList->getFiles(),
-            Matchers::arrayContainingInAnyOrder(...$expectedResult)
-        );
-    }
-
-    /**
-     * @test
-     */
-    public function filterByBlacklistAndFilterStringWithFilter()
-    {
-        $mockedFilter = ['wahwah', 'wubwub'];
-        $mockedFileList = new GitChangeSet(
+        $forgedSrc = new SmartFileInfo('src');
+        $forgedConfig = new SmartFileInfo('config');
+        $forgedGitChangeSet = new GitChangeSet(
             [
-                $this->blacklistedDirectory . '/mussWeg',
-                'asd' . $mockedFilter[0],
-                'qweqweq' . $mockedFilter[1],
-                $mockedFilter[1] . 'FalsePositive',
+                new SmartFileInfo($this->blacklistedDirectory . '/Unit'),
+                $forgedSrc,
+                $forgedConfig,
             ],
             'asdaqwe212123'
         );
-        $expectedResult = ['asd' . $mockedFilter[0], 'qweqweq' . $mockedFilter[1]];
+        $expectedResult = [$forgedSrc, $forgedConfig];
+        $blackListToken = 'stopMe';
 
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
-            ->once()->with('', true)->andReturn([$this->blacklistedDirectory]);
+            ->once()->with($blackListToken, true)->andReturn([new SmartFileInfo($this->blacklistedDirectory)]);
 
-        $this->subject->filter($mockedFileList, $mockedFilter);
+        $this->subject->filter($forgedGitChangeSet, [], $blackListToken);
         MatcherAssert::assertThat(
-            $mockedFileList->getFiles(),
+            $forgedGitChangeSet->getFiles(),
             Matchers::arrayContainingInAnyOrder(...$expectedResult)
         );
     }
@@ -127,13 +101,40 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterThrowsExceptionIfBlackAndWhitelisted()
+    public function filterByBlacklistAndFilterStringWithFilter(): void
+    {
+        $mockedFilter = ['php', 'xml'];
+        $forgedPhpFile = new SmartFileInfo(__FILE__);
+        $forgedXMLFile = new SmartFileInfo('phpunit.xml');
+        $forgedFileToBeFiltered = new SmartFileInfo('composer.json');
+
+        $forgedGitChangeSet = new GitChangeSet(
+            [$forgedPhpFile, $forgedXMLFile, $forgedFileToBeFiltered],
+            'asdaqwe212123'
+        );
+
+        $expectedResult = [$forgedPhpFile, $forgedXMLFile];
+
+        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
+            ->once()->with('', true)->andReturn([]);
+
+        $this->subject->filter($forgedGitChangeSet, $mockedFilter);
+        MatcherAssert::assertThat(
+            $forgedGitChangeSet->getFiles(),
+            Matchers::arrayContainingInAnyOrder(...$expectedResult)
+        );
+    }
+
+    /**
+     * @test
+     */
+    public function filterThrowsExceptionIfBlackAndWhitelisted(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionCode('1553780055');
 
-        /** @var MockInterface|GitChangeSet $mockedFileList */
-        $mockedFileList = Mockery::mock(GitChangeSet::class);
+        /** @var MockInterface|GitChangeSet $mockedGitChangeSet */
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
 
@@ -142,6 +143,6 @@ class GitChangeSetFilterTest extends TestCase
         $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
             ->once()->with($whitelistToken)->andReturn(['hallo']);
 
-        $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
+        $this->subject->filter($mockedGitChangeSet, [], $blacklistToken, $whitelistToken);
     }
 }

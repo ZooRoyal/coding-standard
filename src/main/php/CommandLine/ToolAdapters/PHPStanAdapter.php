@@ -3,24 +3,26 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 
+/**
+ * Class PHPStanAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontStanPHP';
+    protected string $blacklistToken = '.dontStanPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var PHPStanConfigGenerator */
-    private $phpstanConfigGenerator;
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private PHPStanConfigGenerator $phpstanConfigGenerator;
 
     /**
      * PHPStanAdapter constructor.
@@ -42,30 +44,10 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         parent::__construct($environment, $output, $genericCommandRunner, $terminalCommandFinder);
     }
 
-    protected function init()
-    {
-        $rootDirectory = $this->environment->getRootDirectory();
-        $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
-
-        $parameters = $this->phpstanConfigGenerator->addConfigParameters(
-            $this->blacklistToken,
-            $rootDirectory,
-            ['includes' => [$phpstanConfig.'.dist']]
-        );
-        $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);
-        $this->phpstanConfigGenerator->writeConfig($phpstanConfig, $onTheFlyConfig);
-
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
-            . '--error-format=github ' . $rootDirectory . ' -c ' . $phpstanConfig;
-
-        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
-            . '--error-format=github ' . '-c ' . $phpstanConfig . ' %1$s';
-    }
-
     /**
      * {@inheritdoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false) : ?int
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int
     {
         $toolShortName = 'PHPStan';
         $prefix = $toolShortName . ' : ';
@@ -73,5 +55,26 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $diffMessage = $prefix . 'Running check on diff';
 
         return $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
+    }
+
+    protected function init(): void
+    {
+        $phpstanConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
+
+        $parameters = $this->phpstanConfigGenerator->addConfigParameters(
+            $this->blacklistToken,
+            $this->environment->getRootDirectory(),
+            ['includes' => [$phpstanConfig . '.dist']]
+        );
+        $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);
+        $this->phpstanConfigGenerator->writeConfig($phpstanConfig, $onTheFlyConfig);
+
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
+
+        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+            . '--error-format=github ' . $rootDirectory . ' -c ' . $phpstanConfig;
+
+        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+            . '--error-format=github ' . '-c ' . $phpstanConfig . ' %1$s';
     }
 }

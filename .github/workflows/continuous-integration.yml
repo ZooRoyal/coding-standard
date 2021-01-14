@@ -125,5 +125,5 @@ jobs:
 
       - name: Check infections
         run : |
-          $(composer config bin-dir)/infection -n --min-msi=81 --min-covered-msi=82 --threads=4
+          $(composer config bin-dir)/infection -n --min-msi=82 --min-covered-msi=84 --threads=4
 

@@ -6,6 +6,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
@@ -40,6 +41,7 @@ class DiffCheckableFileFinderTest extends TestCase
     public function findFilesWithoutTargetBranchMakesNoSense()
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(1553857649);
         $this->subject->findFiles([], '', '', '');
     }
 
@@ -53,8 +55,8 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedBlacklistToken = 'blaStopword';
         $mockedWhitelistToken = 'blaGO';
         $mockedMergeBase = 'alsdkfujh178290346';
-        $mockedFileDiff = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
-        $mockedFiles = ['dir1/file1', 'dir2/file2'];
+        $mockedFileDiff = 'composer.json' . "\n" . 'package.json' . "\n";
+        $mockedFiles = [new SmartFileInfo('composer.json'), new SmartFileInfo('package.json')];
         $mockedChangeSet = new GitChangeSet($mockedFiles, $mockedMergeBase);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')

@@ -3,6 +3,7 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 
@@ -72,7 +73,92 @@ class GenericCommandRunner
         foreach ($whitelistArguments as $argument) {
             $commandWithParameters = $this->buildCommand($template, $argument);
 
-            $exitCode = $this->runAndWriteToOutput($commandWithParameters);
+            $runAndWriteToOutputExitCode = $this->runAndWriteToOutput($commandWithParameters);
+            $exitCode = $exitCode === 0
+                ? $runAndWriteToOutputExitCode
+                : $exitCode;
+        }
+
+        return $exitCode;
+    }
+
+    /**
+     * Builds a list of arguments for insertion into the template.
+     *
+     * @param string|null $targetBranch
+     * @param string $blacklistToken
+     * @param string[] $allowedFileEndings
+     * @param bool $processIsolation
+     * @param string $glue
+     *
+     * @return string[]
+     */
+    private function buildWhitelistArguments(
+        $targetBranch,
+        string $blacklistToken,
+        array $allowedFileEndings,
+        bool $processIsolation,
+        string $glue = ','
+    ): array {
+        $gitChangeSet = $this->adaptableFileFinder->findFiles($allowedFileEndings, $blacklistToken, '', $targetBranch);
+        $changedFiles = array_map(
+            static fn(SmartFileInfo $file) => $file->getRelativePathname(),
+            $gitChangeSet->getFiles()
+        );
+
+        $whitelistArguments = empty($changedFiles) || $processIsolation
+            ? $changedFiles
+            : [implode($glue, $changedFiles)];
+
+        $this->output->writeln(
+            'Checking diff to ' . $gitChangeSet->getCommitHash(),
+            OutputInterface::OUTPUT_NORMAL
+        );
+
+        $this->output->writeln(
+            'Files to handle:' . "\n" . implode("\n", $changedFiles) . "\n",
+            OutputInterface::VERBOSITY_VERBOSE
+        );
+
+        return $whitelistArguments;
+    }
+
+    /**
+     * Builds a command from themplate and argument.
+     *
+     * @param string $command
+     * @param string $argument
+     *
+     * @return string
+     */
+    private function buildCommand($command, $argument)
+    {
+        $command = sprintf($command, $argument);
+        $this->output->writeln(
+            'Calling following command:' . "\n" . $command,
+            OutputInterface::VERBOSITY_DEBUG
+        );
+
+        return $command;
+    }
+
+    /**
+     * Runs a command and prints the output to the screen if the command couldn't be executed without errors.
+     *
+     * @param string $commandWithParameters
+     *
+     * @return int
+     */
+    private function runAndWriteToOutput($commandWithParameters): int
+    {
+        $exitCode = 0;
+        $process = $this->processRunner->runAsProcessReturningProcessObject(
+            $commandWithParameters
+        );
+        if ($process->getExitCode() !== 0) {
+            $exitCode = $process->getExitCode();
+            $this->output->writeln($process->getOutput(), OutputInterface::OUTPUT_NORMAL);
+            $this->output->writeln($process->getErrorOutput(), OutputInterface::VERBOSITY_NORMAL);
         }
 
         return $exitCode;
@@ -102,86 +188,6 @@ class GenericCommandRunner
     }
 
     /**
-     * Builds a list of arguments for insertion into the template.
-     *
-     * @param string|null $targetBranch
-     * @param string $blacklistToken
-     * @param string[] $allowedFileEndings
-     * @param bool $processIsolation
-     * @param string $glue
-     *
-     * @return string[]
-     */
-    private function buildWhitelistArguments(
-        $targetBranch,
-        string $blacklistToken,
-        array $allowedFileEndings,
-        bool $processIsolation,
-        string $glue = ','
-    ): array {
-        $gitChangeSet = $this->adaptableFileFinder->findFiles($allowedFileEndings, $blacklistToken, '', $targetBranch);
-        $changedFiles = $gitChangeSet->getFiles();
-
-        $whitelistArguments = empty($changedFiles) || $processIsolation
-            ? $changedFiles
-            : [implode($glue, $changedFiles)];
-
-        $this->output->writeln(
-            'Checking diff to ' . $gitChangeSet->getCommitHash(),
-            OutputInterface::OUTPUT_NORMAL
-        );
-
-        $this->output->writeln(
-            'Files to handle:' . "\n" . implode("\n", $changedFiles) . "\n",
-            OutputInterface::VERBOSITY_VERBOSE
-        );
-
-        return $whitelistArguments;
-    }
-
-
-    /**
-     * Runs a command and prints the output to the screen if the command couldn't be executed without errors.
-     *
-     * @param string $commandWithParameters
-     *
-     * @return int
-     */
-    private function runAndWriteToOutput($commandWithParameters)
-    {
-        $exitCode = 0;
-        $process = $this->processRunner->runAsProcessReturningProcessObject(
-            $commandWithParameters
-        );
-        if ($process->getExitCode() !== 0) {
-            $exitCode = $process->getExitCode();
-            $this->output->writeln($process->getOutput(), OutputInterface::OUTPUT_NORMAL);
-            $this->output->writeln($process->getErrorOutput(), OutputInterface::VERBOSITY_NORMAL);
-        }
-
-        return $exitCode;
-    }
-
-    /**
-     * Builds a command from themplate and argument.
-     *
-     * @param string $command
-     * @param string $argument
-     *
-     * @return string
-     */
-    private function buildCommand($command, $argument)
-    {
-        $command = sprintf($command, $argument);
-        $this->output->writeln(
-            'Calling following command:' . "\n" . $command,
-            OutputInterface::VERBOSITY_DEBUG
-        );
-
-        return $command;
-    }
-
-    /**
      * Concats Balcklist result with glue and prefix
      *
      * @param string $blacklistToken
@@ -189,17 +195,17 @@ class GenericCommandRunner
      * @param string $prefix
      * @param string $glue
      */
-    protected function concatBlackListArguments(string $blacklistToken, bool $escape, string $prefix, string $glue): string
-    {
-        $blackList = $this->blacklistFactory->build($blacklistToken);
-        if ($escape) {
-            $blackList = array_map(
-                function ($value) {
-                    return preg_quote(preg_quote($value, '/'), '/');
-                },
-                $blackList
-            );
-        }
+    protected function concatBlackListArguments(
+        string $blacklistToken,
+        bool $escape,
+        string $prefix,
+        string $glue
+    ): string {
+        $blackList = array_map(
+            static fn(SmartFileInfo $file) => $file->getRelativePathname() . '/',
+            $this->blacklistFactory->build($blacklistToken)
+        );
+
         return $prefix . implode($glue . $prefix, $blackList);
     }
 }

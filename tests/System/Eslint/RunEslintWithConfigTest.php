@@ -95,23 +95,4 @@ class RunEslintWithConfigTest extends TestCase
 
         MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_TS_PROBLEMS));
     }
-
-    /**
-     * @test
-     * @large
-     */
-    public function runStylelintInCleanInstall()
-    {
-        $testInstancePath = $this->prepareInstallationDirectory();
-
-        $command = 'vendor/bin/coding-standard sca:stylelint';
-        $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $testInstancePath);
-
-        $process->run();
-
-        $exitCode = $process->getExitCode();
-
-        self::assertSame(0, $exitCode);
-    }
 }

@@ -2,27 +2,24 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
+use SplObjectStorage;
 use Symfony\Component\Console\Exception\LogicException;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class GitChangeSetFilter
 {
-    /** @var BlacklistFactory */
-    private $blacklistFactory;
-    /** @var Environment */
-    private $environment;
+    private BlacklistFactory $blacklistFactory;
 
     /**
      * FileFilter constructor.
      *
      * @param BlacklistFactory $blacklistFactory
-     * @param Environment $environment
      */
-    public function __construct(BlacklistFactory $blacklistFactory, Environment $environment)
+    public function __construct(BlacklistFactory $blacklistFactory)
     {
         $this->blacklistFactory = $blacklistFactory;
-        $this->environment = $environment;
     }
 
     /**
@@ -38,7 +35,7 @@ class GitChangeSetFilter
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = ''
-    ) {
+    ): void {
         $whitelist = [];
         $deDuped = true;
 
@@ -57,15 +54,44 @@ class GitChangeSetFilter
     }
 
     /**
+     * Generate merged list.
+     *
+     * @param array<SmartFileInfo> $blacklist
+     * @param array<SmartFileInfo> $whitelist
+     *
+     * @return SplObjectStorage
+     *
+     * @throws LogicException
+     */
+    private function mergeLists(
+        array $blacklist,
+        array $whitelist
+    ): SplObjectStorage {
+        if (count(array_intersect($blacklist, $whitelist)) !== 0) {
+            throw new LogicException('Directories can\'t be black- and whitelisted at the same time', 1553780055);
+        }
+        $result = new SplObjectStorage();
+
+        foreach ($blacklist as $blacklistItem) {
+            $result->attach($blacklistItem, false);
+        }
+        foreach ($whitelist as $whitelistItem) {
+            $result->attach($whitelistItem, true);
+        }
+
+        return $result;
+    }
+
+    /**
      * Iterates over the files and returns files as configured in list and filter.
      *
      * @param string[] $allowedFileEndings
-     * @param string[] $files
-     * @param bool[] $list
+     * @param array<SmartFileInfo> $files
+     * @param SplObjectStorage $list
      *
      * @return array
      */
-    private function applyFilters(array $allowedFileEndings, array $files, array $list): array
+    private function applyFilters(array $allowedFileEndings, array $files, SplObjectStorage $list): array
     {
         $result = $files;
         $this->filterByAllowedFileEndings($result, $allowedFileEndings);
@@ -75,43 +101,19 @@ class GitChangeSetFilter
     }
 
     /**
-     * Generate merged list.
-     *
-     * @param string[] $blacklist
-     * @param string[] $whitelist
-     *
-     * @return array
-     *
-     * @throws LogicException
-     */
-    private function mergeLists(
-        array $blacklist,
-        array $whitelist
-    ): array {
-        if (count(array_intersect($blacklist, $whitelist)) !== 0) {
-            throw new LogicException('Directories can\'t be black- and whitelisted at the same time', 1553780055);
-        }
-
-        return array_merge(
-            array_fill_keys($blacklist, false),
-            array_fill_keys($whitelist, true)
-        );
-    }
-
-    /**
      * If only certain file endings are allowed remove every other file from result.
      *
-     * @param array $result
-     * @param array $allowedFileEndings
+     * @param array<SmartFileInfo> $result
+     * @param array<string> $allowedFileEndings
      */
-    private function filterByAllowedFileEndings(array &$result, array $allowedFileEndings)
+    private function filterByAllowedFileEndings(array &$result, array $allowedFileEndings): void
     {
         if (!empty($allowedFileEndings)) {
             $result = array_filter(
                 $result,
-                static function ($filePath) use ($allowedFileEndings) {
+                static function ($file) use ($allowedFileEndings) {
                     foreach ($allowedFileEndings as $allowedFileEnding) {
-                        if ($allowedFileEnding !== '' && substr($filePath, -strlen($allowedFileEnding)) === $allowedFileEnding) {
+                        if ($file->endsWith($allowedFileEnding)) {
                             return true;
                         }
                     }
@@ -124,26 +126,26 @@ class GitChangeSetFilter
     /**
      * Filter result by a true/false list of their respective directories and parent directories.
      *
-     * @param array $result
-     * @param array $list
+     * @param array<SmartFileInfo> $result
+     * @param SplObjectStorage $list
      */
-    private function filterByList(array &$result, array $list)
+    private function filterByList(array &$result, SplObjectStorage $list): void
     {
-        $rootDirectory = $this->environment->getRootDirectory();
         $result = array_filter(
             $result,
-            function ($filePath) use ($rootDirectory, $list) {
-                $directory = dirname($filePath) . '/';
-                $lastDirectoryPath = $filePath;
-                while (!in_array($directory, [$rootDirectory, '', $lastDirectoryPath], true)
-                ) {
-                    if (array_key_exists($directory, $list)) {
-                        return $list[$directory] === true;
+            static function ($file) use ($list) {
+                $priority = 0;
+                $result = true;
+                foreach ($list as $directoryPattern) {
+                    /** @var SmartFileInfo $directoryPattern */
+                    $allowanceRule = $list[$directoryPattern];
+                    $path = $directoryPattern->getRealPath();
+                    if ($file->startsWith($path . '/') && $priority < strlen($path)) {
+                        $priority = strlen($path);
+                        $result = $allowanceRule;
                     }
-                    $lastDirectoryPath = $directory;
-                    $directory = dirname($directory);
                 }
-                return true;
+                return $result;
             }
         );
     }

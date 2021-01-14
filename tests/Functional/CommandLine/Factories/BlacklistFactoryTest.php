@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use PHPUnit\Framework\TestCase;
+use SebastianKnott\HamcrestObjectAccessor\HasProperty;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
@@ -33,17 +34,26 @@ class BlacklistFactoryTest extends TestCase
      * @test
      * @medium
      */
-    public function buildContainsGitBlacklistAndStopword()
+    public function buildContainsGitBlacklistAndStopword(): void
     {
         $forgedStopword = '.stopword';
         $result = $this->subject->build($forgedStopword);
 
         MatcherAssert::assertThat(
             $result,
-            H::allOf(
-                H::hasItem('tests/Functional/CommandLine/Factories/Fixtures/gitExclude/'),
-                H::hasItem('tests/Functional/CommandLine/Factories/Fixtures/StopWordTest/'),
-                H::hasItem('vendor/')
+            H::hasItems(
+                HasProperty::hasProperty(
+                    'getRelativePathname',
+                    'tests/Functional/CommandLine/Factories/Fixtures/gitExclude'
+                ),
+                HasProperty::hasProperty(
+                    'getRelativePathname',
+                    'tests/Functional/CommandLine/Factories/Fixtures/StopWordTest'
+                ),
+                HasProperty::hasProperty(
+                    'getRelativePathname',
+                    'vendor'
+                )
             )
         );
     }

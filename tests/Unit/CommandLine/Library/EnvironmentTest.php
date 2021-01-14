@@ -6,17 +6,17 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Factories\SmartFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
-use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class EnvironmentTest extends TestCase
 {
-    /** @var Environment */
-    private $subject;
+    private Environment $subject;
     /** @var string[] */
-    private $blacklistedDirectories = [
+    private array $blacklistedDirectories = [
         '.eslintrc.js',
         '.git',
         '.idea',
@@ -27,15 +27,31 @@ class EnvironmentTest extends TestCase
         '.pnpm',
         '.pnpm-store',
     ];
-    /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
+    /** @var array<MockInterface|ProcessRunner|GitInputValidator|SmartFileInfoFactory> */
+    private array $subjectParameters;
+    private SmartFileInfo $forgedSmartFileInfo;
+    /** @var Mockery\LegacyMockInterface|MockInterface|SmartFileInfo */
+    private $mockedSmartFileInfo;
 
     protected function setUp(): void
     {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(Environment::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
+        $this->subjectParameters[ProcessRunner::class] = Mockery::mock(ProcessRunner::class);
+        $this->subjectParameters[GitInputValidator::class] = Mockery::mock(GitInputValidator::class);
+        $this->subjectParameters[SmartFileInfoFactory::class] = Mockery::mock(SmartFileInfoFactory::class);
+
+        $this->forgedSmartFileInfo = new SmartFileInfo(__DIR__);
+        $this->mockedSmartFileInfo = Mockery::mock($this->forgedSmartFileInfo);
+        $this->mockedSmartFileInfo->shouldReceive('getRelativePathname')
+            ->withNoArgs()->andReturn(__DIR__);
+
+        $this->subjectParameters[SmartFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')->once()
+            ->with($this->blacklistedDirectories)->andReturn([$this->mockedSmartFileInfo]);
+
+        $this->subject = new Environment(
+            $this->subjectParameters[ProcessRunner::class],
+            $this->subjectParameters[GitInputValidator::class],
+            $this->subjectParameters[SmartFileInfoFactory::class]
+        );
     }
 
     protected function tearDown(): void
@@ -47,11 +63,16 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function getRootDirectory()
+    public function getRootDirectory(): void
     {
+        $forgedSmartFileInfo = new SmartFileInfo(__FILE__);
+
+        $this->subjectParameters[SmartFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
+            ->with(H::stringValue())->andReturn($forgedSmartFileInfo);
+
         $result = $this->subject->getRootDirectory();
 
-        self::assertTrue(is_dir($result));
+        self::assertSame($result->getRealPath(), __FILE__);
     }
 
     /**
@@ -59,25 +80,30 @@ class EnvironmentTest extends TestCase
      */
     public function getPackageDirectory(): void
     {
+        $forgedSmartFileInfo = new SmartFileInfo(__FILE__);
+
+        $this->subjectParameters[SmartFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
+            ->with((dirname(__DIR__, 4)))->andReturn($forgedSmartFileInfo);
+
         $result = $this->subject->getPackageDirectory();
 
-        self::assertTrue(is_dir($result));
+        self::assertSame($result, $forgedSmartFileInfo);
     }
 
     /**
      * @test
      */
-    public function getBlacklistedDirectories()
+    public function getBlacklistedDirectories(): void
     {
         $result = $this->subject->getBlacklistedDirectories();
 
-        self::assertSame($this->blacklistedDirectories, $result);
+        self::assertSame([$this->mockedSmartFileInfo], $result);
     }
 
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsTrueIfCommitHashesAreEqual()
+    public function isLocalBranchEqualToReturnsTrueIfCommitHashesAreEqual(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -97,7 +123,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal()
+    public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -118,7 +144,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToCachesLocalHeadHash()
+    public function isLocalBranchEqualToCachesLocalHeadHash(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -140,7 +166,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsFalseIfParameterNoBranch()
+    public function isLocalBranchEqualToReturnsFalseIfParameterNoBranch(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedLocalCommitHash = '0ewq321';
@@ -160,7 +186,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToWithNull()
+    public function isLocalBranchEqualToWithNull(): void
     {
         $mockedBranchName = null;
 
@@ -179,7 +205,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function guessParentBranchAsCommitHashFindParent()
+    public function guessParentBranchAsCommitHashFindParent(): void
     {
         $mockedBranch = 'myBranch';
         $expectedHash = 'asdasqweqwe12312323234';
@@ -203,7 +229,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function guessParentBranchAsCommitHashFindNoParent()
+    public function guessParentBranchAsCommitHashFindNoParent(): void
     {
         $mockedBranch = 'myBranch';
         $expectedHash = 'asdasqweqwe12312323234';

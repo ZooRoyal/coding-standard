@@ -8,6 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
@@ -25,10 +26,10 @@ class PHPMessDetectorAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|PHPMessDetectorAdapter */
     private $partialSubject;
-    /** @var string */
-    private $mockedPackageDirectory;
-    /** @var string */
-    private $mockedRootDirectory;
+    private string $mockedPackageDirectory;
+    private SmartFileInfo $forgedPackageDirectory;
+    private string $mockedRootDirectory;
+    private SmartFileInfo $forgedRootDirectory;
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
 
@@ -39,13 +40,15 @@ class PHPMessDetectorAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
+        $this->mockedRootDirectory = realpath(__DIR__ . '/../../../..');
+        $this->forgedRootDirectory = new SmartFileInfo($this->mockedRootDirectory);
+        $this->mockedPackageDirectory = realpath($this->mockedRootDirectory . '/src');
+        $this->forgedPackageDirectory = new SmartFileInfo($this->mockedPackageDirectory);
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
+            ->withNoArgs()->andReturn($this->forgedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
+            ->withNoArgs()->andReturn($this->forgedRootDirectory);
 
         $this->partialSubject = Mockery::mock(
             PHPMessDetectorAdapter::class.'[!init]',
@@ -67,7 +70,7 @@ class PHPMessDetectorAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         self::assertSame('.dontMessDetectPHP', $this->partialSubject->getBlacklistToken());
         self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
@@ -100,7 +103,7 @@ class PHPMessDetectorAdapterTest extends TestCase
      *
      * @return array
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider(): array
     {
         return [
             'find Violations' => [
@@ -126,7 +129,7 @@ class PHPMessDetectorAdapterTest extends TestCase
         string $fullMessage,
         string $diffMessage,
         string $method
-    ) {
+    ): void {
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
@@ -143,7 +146,7 @@ class PHPMessDetectorAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertNotInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

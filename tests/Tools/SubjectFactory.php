@@ -7,7 +7,7 @@ use ReflectionClass;
 
 class SubjectFactory
 {
-    public function buildSubject($className)
+    public function buildSubject($className): array
     {
         $result = ['subject' => null];
         $parameterInstances = [];

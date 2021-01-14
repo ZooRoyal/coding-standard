@@ -3,6 +3,7 @@
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ValueObjects;
 
 use PHPUnit\Framework\TestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class GitChangeSetTest extends TestCase
@@ -10,9 +11,9 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycle()
+    public function readWriteCycle(): void
     {
-        $expectedFiles = ['asd', 'qwe'];
+        $expectedFiles = [new SmartFileInfo('config'), new SmartFileInfo('tests')];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($expectedFiles, $expectedCommitHash);
@@ -27,10 +28,11 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycleWithSetter()
+    public function readWriteCycleWithSetter(): void
     {
-        $forgedFiles = ['asd'];
-        $expectedFiles = ['asd', 'qwe'];
+        $smartFileInfo = new SmartFileInfo('config');
+        $forgedFiles = [$smartFileInfo];
+        $expectedFiles = [$smartFileInfo, new SmartFileInfo('tests')];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($forgedFiles, $expectedCommitHash);

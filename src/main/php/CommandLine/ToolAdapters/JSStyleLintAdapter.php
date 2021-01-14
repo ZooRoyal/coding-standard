@@ -2,27 +2,28 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
+/**
+ * Class PHPStanAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontSniffLESS';
+    protected string $blacklistToken = '.dontSniffLESS';
     /** @var string[] */
-    protected $allowedFileEndings = ['.less'];
-    /** @var string */
-    protected $blacklistPrefix = '--ignore-pattern=';
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var bool */
-    private $commandNotFound = false;
+    protected array $allowedFileEndings = ['.less'];
+    protected string $blacklistPrefix = '--ignore-pattern=';
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private bool $commandNotFound = false;
 
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
         try {
             $commandPath = $this->terminalCommandFinder->findTerminalCommand('stylelint');
@@ -31,11 +32,11 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
             $commandPath = '';
         }
 
-        $stylelintConfig = $this->environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $styleLintBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+        $stylelintConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/stylelint/.stylelintrc';
+        $styleLintBlacklistCommand = $commandPath . ' **' .
             $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
         $styleLintWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config=' . $stylelintConfig;
-        $styleLintFixBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+        $styleLintFixBlacklistCommand = $commandPath . ' **' .
             $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' --fix %1$s';
         $styleLintFixWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config='
             . $stylelintConfig . ' --fix';
@@ -51,7 +52,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): int
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .
@@ -72,7 +73,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .

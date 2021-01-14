@@ -12,5 +12,5 @@ interface FixerSupportInterface
      *
      * @return int|null
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false);
+    public function fixViolations($targetBranch = '', bool $processIsolation = false): ?int;
 }

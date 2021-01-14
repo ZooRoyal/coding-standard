@@ -2,28 +2,30 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
+
+/**
+ * Class PHPCodeSnifferAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontSniffPHP';
+    protected string $blacklistToken = '.dontSniffPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = ',';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var bool */
-    protected $escape = false;
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistPrefix = '';
+    protected string $blacklistGlue = ',';
+    protected string $whitelistGlue = ' ';
+    protected bool $escape = false;
 
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
-        $phpCodeSnifferConfig = $this->environment->getPackageDirectory() . '/config/phpcs/ZooRoyal/ruleset.xml';
-        $rootDirectory = $this->environment->getRootDirectory();
+        $phpCodeSnifferConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/phpcs/ZooRoyal/ruleset.xml';
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $sniffWhitelistCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
             . $phpCodeSnifferConfig . ' %1$s';
@@ -45,7 +47,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int
     {
         $tool = 'PHPCS';
         $prefix = $tool . ' : ';
@@ -60,7 +62,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false): ?int
     {
         $tool = 'PHPCBF';
         $prefix = $tool . ' : ';

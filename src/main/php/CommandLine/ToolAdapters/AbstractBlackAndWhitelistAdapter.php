@@ -9,29 +9,20 @@ use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 
 abstract class AbstractBlackAndWhitelistAdapter
 {
-    /** @var OutputInterface */
-    protected $output;
-    /** @var Environment */
-    protected $environment;
-    /** @var GenericCommandRunner */
-    protected $genericCommandRunner;
+    protected OutputInterface $output;
+    protected Environment $environment;
+    protected GenericCommandRunner $genericCommandRunner;
 
-    /** @var string */
-    protected $blacklistToken = '';
+    protected string $blacklistToken = '';
     /** @var string[] */
-    protected $allowedFileEndings = [];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = '';
-    /** @var string */
-    protected $whitelistGlue = '';
+    protected array $allowedFileEndings = [];
+    protected string $blacklistPrefix = '';
+    protected string $blacklistGlue = '';
+    protected string $whitelistGlue = '';
     /** @var string[] */
-    protected $commands = [];
-    /** @var bool */
-    protected $escape = false;
-    /** @var TerminalCommandFinder */
-    protected $terminalCommandFinder;
+    protected array $commands = [];
+    protected bool $escape = false;
+    protected TerminalCommandFinder $terminalCommandFinder;
 
     /**
      * Constructor of all ToolAdapters
@@ -58,7 +49,7 @@ abstract class AbstractBlackAndWhitelistAdapter
     /**
      * This method is supposed to be used to set the tool up.
      */
-    abstract protected function init();
+    abstract protected function init(): void;
 
     /**
      * Runs tool in normal or fix mode according to settings.

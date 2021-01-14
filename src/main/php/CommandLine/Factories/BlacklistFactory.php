@@ -2,19 +2,18 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\FinderToPathsConverter;
 
 class BlacklistFactory
 {
-    /** @var FinderToPathsConverter */
-    private $finderToRealPathConverter;
-    /** @var Environment */
-    private $environment;
-    /** @var FinderFactory */
-    private $finderFactory;
+    private FinderToPathsConverter $finderToRealPathConverter;
+
+    private Environment $environment;
+    private FinderFactory $finderFactory;
     /** @var array<string, mixed> */
-    private $blackListCache = [];
+    private array $blackListCache = [];
 
     /**
      * BlacklistFactory constructor.
@@ -39,7 +38,7 @@ class BlacklistFactory
      * @param string $token
      * @param bool $deDuped
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
     public function build(string $token = '', bool $deDuped = true): array
     {
@@ -72,32 +71,31 @@ class BlacklistFactory
      *
      * @param string $token
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
     public function findTokenDirectories(string $token): array
     {
         $tokenFinder = $this->finderFactory->build();
-        $tokenFinder->in($this->environment->getRootDirectory())->files()->name($token);
-        $rawExcludePathsByToken = $this->finderToRealPathConverter->finderToArrayOfPaths($tokenFinder);
+        $tokenFinder->in($this->environment->getRootDirectory()->getRealPath())->files()->name($token);
+
+        $rawExcludePathsByToken = $this->finderToRealPathConverter->finderToArrayOfDirectories($tokenFinder);
+
         return $rawExcludePathsByToken;
     }
 
     /**
      * Finds submodules of in the project directory.
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
     private function findGitDirectories(): array
     {
         $finderGit = $this->finderFactory->build();
-        $finderGit->in($this->environment->getRootDirectory())->depth('> 0')->path('/.git$/');
-        $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
-        return array_map(
-            static function ($value) {
-                return dirname($value) . '/';
-            },
-            $rawExcludePathsByFileByGit
-        );
+        $finderGit->in($this->environment->getRootDirectory()->getRealPath())->depth('> 0')->path('/.git$/');
+
+        $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfDirectories($finderGit);
+
+        return $rawExcludePathsByFileByGit;
     }
 
     /**
@@ -105,28 +103,32 @@ class BlacklistFactory
      *
      * @param Environment $environment
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
     private function findDirectoriesFromEnvironment(Environment $environment): array
     {
-        $finderBlacklist = $this->finderFactory->build();
-        $finderBlacklist->in($environment->getRootDirectory())->directories();
-        foreach ($environment->getBlacklistedDirectories() as $blacklistedDirectory) {
-            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory, '/') . '$/')
-                ->notPath('/' . preg_quote($blacklistedDirectory, '/') . './');
+        $blacklistedDirectories = $environment->getBlacklistedDirectories();
+        if (empty($blacklistedDirectories)) {
+            return [];
         }
-        $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArrayOfPaths($finderBlacklist);
+        $finderBlacklist = $this->finderFactory->build();
+        $finderBlacklist->in($environment->getRootDirectory()->getRealPath())->directories();
+        foreach ($blacklistedDirectories as $blacklistedDirectory) {
+            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory->getRelativePathname(), '/') . '$/')
+                ->notPath('/' . preg_quote($blacklistedDirectory->getRelativePathname(), '/') . './');
+        }
+        $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArray($finderBlacklist);
         return $rawExcludePathsByBlacklist;
     }
 
     /**
      * This method filters subpaths of paths already existing in $rawExcludePaths
      *
-     * @param string[] $rawExcludePaths
+     * @param array<SmartFileInfo> $rawExcludePaths
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
-    private function deDupePaths(array $rawExcludePaths)
+    private function deDupePaths(array $rawExcludePaths): array
     {
         $filteredArray = $rawExcludePaths;
         $count = count($filteredArray);
@@ -137,8 +139,8 @@ class BlacklistFactory
             $item = $filteredArray[$i];
             $filteredArray = array_filter(
                 $filteredArray,
-                function ($value) use ($item) {
-                    return !(strlen($value) !== strlen($item) && strpos($value, $item) === 0);
+                static function (SmartFileInfo $value) use ($item) {
+                    return !($value !== $item && $value->startsWith($item->getRealPath() . '/'));
                 }
             );
         }
@@ -146,4 +148,5 @@ class BlacklistFactory
 
         return $filteredArray;
     }
+
 }

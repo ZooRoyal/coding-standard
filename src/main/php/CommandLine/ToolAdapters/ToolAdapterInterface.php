@@ -12,5 +12,5 @@ interface ToolAdapterInterface
      *
      * @return int|null
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false);
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int;
 }

@@ -2,12 +2,14 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ValueObjects;
 
+use Symplify\SmartFileSystem\SmartFileInfo;
+
 /**
  * This class holds a set of files, which changed since a certain commit.
  */
 class GitChangeSet
 {
-    /** @var string[] */
+    /** @var array<SmartFileInfo> */
     private $files;
 
     /** @var string */
@@ -16,8 +18,8 @@ class GitChangeSet
     /**
      * GitChangeSet constructor.
      *
-     * @param string[] $files
-     * @param string   $commitHash
+     * @param array<SmartFileInfo> $files
+     * @param string $commitHash
      */
     public function __construct(array $files, $commitHash = '')
     {
@@ -28,11 +30,21 @@ class GitChangeSet
     /**
      * Returns changed files since commit.
      *
-     * @return string[]
+     * @return array<SmartFileInfo>
      */
     public function getFiles()
     {
         return $this->files;
+    }
+
+    /**
+     * Overwrite changed files.
+     *
+     * @param array<SmartFileInfo> $files
+     */
+    public function setFiles(array $files)
+    {
+        $this->files = $files;
     }
 
     /**
@@ -43,15 +55,5 @@ class GitChangeSet
     public function getCommitHash()
     {
         return $this->commitHash;
-    }
-
-    /**
-     * Overwrite changed files.
-     *
-     * @param string[] $files
-     */
-    public function setFiles($files)
-    {
-        $this->files = $files;
     }
 }

@@ -2,27 +2,28 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
+/**
+ * Class JSESLintAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontSniffJS';
+    protected string $blacklistToken = '.dontSniffJS';
     /** @var string[] */
-    protected $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
-    /** @var string */
-    protected $blacklistPrefix = '--ignore-pattern ';
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var bool */
-    private $commandNotFound = false;
+    protected array $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
+    protected string $blacklistPrefix = '--ignore-pattern ';
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private bool $commandNotFound = false;
 
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
         try {
             $commandPath = $this->terminalCommandFinder->findTerminalCommand('eslint');
@@ -30,7 +31,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
             $this->commandNotFound = true;
             $commandPath = '';
         }
-        $esLintConfigPath = $this->environment->getPackageDirectory() . '/config/eslint/';
+        $esLintConfigPath = $this->environment->getPackageDirectory()->getRealPath() . '/config/eslint/';
 
         $esLintCliOptions = [
             'ignoreFile' => '--ignore-path ' . $esLintConfigPath . '.eslintignore',
@@ -40,9 +41,15 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         ];
         $baseCommand = $commandPath . ' ' . implode(' ', $esLintCliOptions);
 
-        $esLintBlacklistCommand = implode(' ', [$baseCommand, '%1$s', $this->environment->getRootDirectory()]);
+        $esLintBlacklistCommand = implode(
+            ' ',
+            [$baseCommand, '%1$s', $this->environment->getRootDirectory()->getRealPath()]
+        );
         $esLintWhitelistCommand = implode(' ', [$baseCommand, '%1$s']);
-        $esLintFixBlacklistCommand = implode(' ', [$baseCommand, '--fix %1$s', $this->environment->getRootDirectory()]);
+        $esLintFixBlacklistCommand = implode(
+            ' ',
+            [$baseCommand, '--fix %1$s', $this->environment->getRootDirectory()->getRealPath()]
+        );
         $esLintFixWhitelistCommand =  implode(' ', [$baseCommand, '--fix %1$s']);
 
         $this->commands = [
@@ -56,7 +63,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .
@@ -71,15 +78,13 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
-        // https://eslint.org/docs/user-guide/command-line-interface#exit-codes
-
         return $exitCode;
     }
 
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false)
+    public function fixViolations($targetBranch = '', bool $processIsolation = false): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .

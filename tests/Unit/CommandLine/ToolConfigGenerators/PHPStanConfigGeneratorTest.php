@@ -3,13 +3,14 @@
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolConfigGenerators;
 
 use Hamcrest\MatcherAssert;
-use Hamcrest\Matchers;
+use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPStan\DependencyInjection\NeonAdapter;
 use PHPStan\File\CouldNotWriteFileException;
 use PHPStan\File\FileWriter;
 use PHPUnit\Framework\TestCase;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\ToolConfigGeneratorInterface;
@@ -50,19 +51,31 @@ class PHPStanConfigGeneratorTest extends TestCase
      */
     public function testAddConfigParameters()
     {
-        $this->mockedBlacklistFactory->shouldReceive('build')->once()->with('.dontStanPHP')->andReturn(['vendor']);
-        $params = $this->subject->addConfigParameters('.dontStanPHP', '', ['includes' => ['/blala/lalal']]);
+        $forgedRootDirectory = new SmartFileInfo(__DIR__);
+        $forgedBlacklistedDirectory = new SmartFileInfo('vendor');
+
+        $this->mockedBlacklistFactory->shouldReceive('build')->once()
+            ->with('.dontStanPHP')->andReturn([$forgedBlacklistedDirectory]);
+
+        $result = $this->subject->addConfigParameters(
+            '.dontStanPHP',
+            $forgedRootDirectory,
+            ['includes' => ['/blala/lalal']]
+        );
 
         MatcherAssert::assertThat(
-            $params,
-            Matchers::allOf(
-                Matchers::hasKeyValuePair(
+            $result,
+            H::allOf(
+                H::hasKeyValuePair(
                     'parameters',
-                    Matchers::allOf(
-                        Matchers::hasKeyValuePair('excludes_analyse', Matchers::hasValue('/vendor'))
+                    H::hasKeyValuePair(
+                        'excludes_analyse',
+                        H::hasItem(
+                            $forgedBlacklistedDirectory->getRealPath()
+                        )
                     )
                 ),
-                Matchers::hasKeyValuePair('includes', Matchers::hasValue('/blala/lalal'))
+                H::hasKeyValuePair('includes', H::hasValue('/blala/lalal'))
             )
         );
     }
@@ -83,10 +96,13 @@ class PHPStanConfigGeneratorTest extends TestCase
      */
     public function testWriteConfig()
     {
-        $this->mockedFileWriter->shouldReceive('write')->withArgs([
-            'config/phpstan/phpstan.neon',
-            'neonconfig',
-        ])->once();
+        $this->mockedFileWriter->shouldReceive('write')
+            ->withArgs(
+                [
+                    'config/phpstan/phpstan.neon',
+                    'neonconfig',
+                ]
+            )->once();
         $this->subject->writeConfig('config/phpstan/phpstan.neon', 'neonconfig');
     }
 

@@ -8,6 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
@@ -27,8 +28,11 @@ class PHPCodeSnifferAdapterTest extends TestCase
     private $partialSubject;
     /** @var string */
     private $mockedPackageDirectory;
+    private SmartFileInfo $forgedPackageDirectory;
     /** @var string */
     private $mockedRootDirectory;
+    private SmartFileInfo $forgedRootDirectory;
+
     /** @var Mockery\LegacyMockInterface|MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
 
@@ -39,13 +43,15 @@ class PHPCodeSnifferAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
+        $this->mockedRootDirectory = realpath(__DIR__ . '/../../../..');
+        $this->forgedRootDirectory = new SmartFileInfo($this->mockedRootDirectory);
+        $this->mockedPackageDirectory = realpath($this->mockedRootDirectory . '/src');
+        $this->forgedPackageDirectory = new SmartFileInfo($this->mockedPackageDirectory);
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
+            ->withNoArgs()->andReturn($this->forgedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
+            ->withNoArgs()->andReturn($this->forgedRootDirectory);
 
         $this->partialSubject = Mockery::mock(
             PHPCodeSnifferAdapter::class . '[!init]',

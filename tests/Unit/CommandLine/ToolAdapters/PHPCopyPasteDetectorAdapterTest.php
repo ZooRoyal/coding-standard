@@ -6,6 +6,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symplify\SmartFileSystem\SmartFileInfo;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
@@ -13,28 +14,22 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
 class PHPCopyPasteDetectorAdapterTest extends TestCase
 {
-    /** @var PHPCopyPasteDetectorAdapter */
-    private $subject;
+    private PHPCopyPasteDetectorAdapter $subject;
     /** @var MockInterface|Environment */
     private $mockedEnvironment;
     /** @var MockInterface|GenericCommandRunner */
     private $mockedGenericCommandRunner;
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
-    /** @var string */
-    private $mockedPackageDirectory;
-    /** @var string */
-    private $mockedRootDirectory;
-    /** @var string */
-    private $expectedStopword;
-    /** @var int */
-    private $expectedExitCode;
-    /** @var bool */
-    private $mockedProcessisolation;
-    /** @var string */
-    private $expectedPrefix;
-    /** @var string */
-    private $expectedGlue;
+    private string $mockedPackageDirectory;
+    private SmartFileInfo $forgedPackageDirectory;
+    private string $mockedRootDirectory;
+    private SmartFileInfo $forgedRootDirectory;
+    private string $expectedStopword;
+    private int $expectedExitCode;
+    private bool $mockedProcessisolation;
+    private string $expectedPrefix;
+    private string $expectedGlue;
 
     protected function setUp(): void
     {
@@ -42,8 +37,10 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
 
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
+        $this->mockedRootDirectory = realpath(__DIR__ . '/../../../..');
+        $this->forgedRootDirectory = new SmartFileInfo($this->mockedRootDirectory);
+        $this->mockedPackageDirectory = realpath($this->mockedRootDirectory . '/src');
+        $this->forgedPackageDirectory = new SmartFileInfo($this->mockedPackageDirectory);
 
         $this->mockedProcessisolation = true;
         $this->expectedExitCode = 0;
@@ -52,9 +49,9 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->expectedGlue = ' ';
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
+            ->withNoArgs()->andReturn($this->forgedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
+            ->withNoArgs()->andReturn($this->forgedRootDirectory);
 
         $this->subject = new PHPCopyPasteDetectorAdapter(
             $this->mockedEnvironment,
@@ -80,7 +77,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck()
+    public function writeViolationsToOutputWithTargetForBlacklistCheck(): void
     {
         $mockedTargetBranch = 'targetBranch';
         $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd --fuzzy ' .
