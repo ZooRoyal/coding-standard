@@ -5,7 +5,7 @@ on: pull_request
 
 jobs:
   codestyle:
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
