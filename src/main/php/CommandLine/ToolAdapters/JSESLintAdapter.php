@@ -99,12 +99,6 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
 
         $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
 
-        // This is because of the god damn stupid behavior change of eslint if no files to lint were found
-        if ($exitCode === 2) {
-            $exitCode = 0;
-            $this->output->write('We ignore this for now!', true);
-        }
-
         return $exitCode;
     }
 }
