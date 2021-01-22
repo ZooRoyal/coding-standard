@@ -93,6 +93,7 @@ class TestEnvironmentInstallation
         file_put_contents($this->installationPath . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
         (new Process(['composer', 'install'], $this->installationPath))->mustRun();
+        $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
         (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))->mustRun();
         $this->isInstalled = true;
 
