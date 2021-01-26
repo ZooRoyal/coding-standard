@@ -12,7 +12,7 @@ class TestEnvironmentInstallation
     private static TestEnvironmentInstallation $instance;
     private Filesystem $filesystem;
     private string $installationPath;
-    private string $composerJsonPath;
+    private string $composerJsonPath = '';
     private string $composerPath;
     private bool $isInstalled = false;
 
@@ -44,7 +44,7 @@ class TestEnvironmentInstallation
         if (!is_file($composerTemplatePath)) {
             throw new RuntimeException($composerTemplatePath . ' is not a valid path.', 1605083728);
         }
-        if (isset($this->composerJsonPath)) {
+        if ($this->composerJsonPath !== '') {
             throw new BadMethodCallException('Composer.json is already set', 1605084542);
         }
 
@@ -92,7 +92,8 @@ class TestEnvironmentInstallation
         $renderedComposerFile = json_encode($composerTemplate);
         file_put_contents($this->installationPath . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
-        (new Process(['composer', 'install'], $this->installationPath))->mustRun();
+        (new Process(['composer', 'install'], $this->installationPath))
+            ->setIdleTimeout(30)->setTimeout(120)->mustRun();
         $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
         (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))->mustRun();
         $this->isInstalled = true;
@@ -109,6 +110,7 @@ class TestEnvironmentInstallation
     {
         $this->filesystem->remove($this->installationPath);
         $this->isInstalled = false;
+        $this->composerJsonPath = '';
 
         return $this;
     }

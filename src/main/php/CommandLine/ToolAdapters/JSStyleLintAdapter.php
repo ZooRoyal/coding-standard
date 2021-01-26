@@ -32,10 +32,10 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         }
 
         $stylelintConfig = $this->environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
-        $styleLintBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+        $styleLintBlacklistCommand = $commandPath . ' **' .
             $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
         $styleLintWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config=' . $stylelintConfig;
-        $styleLintFixBlacklistCommand = $commandPath . ' ' . $this->environment->getRootDirectory() . '/**' .
+        $styleLintFixBlacklistCommand = $commandPath . ' **' .
             $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' --fix %1$s';
         $styleLintFixWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config='
             . $stylelintConfig . ' --fix';
