@@ -119,11 +119,7 @@ jobs:
           composer update -n --no-progress --no-suggest ${COMPOSER_PARAMETERS}
           composer show -i
 
-      - name: Check PHPUnit
-        run : |
-          $(composer config bin-dir)/phpunit
-
       - name: Check infections
         run : |
-          $(composer config bin-dir)/infection -n --min-msi=83 --min-covered-msi=84 --threads=4
+          composer infection
 
