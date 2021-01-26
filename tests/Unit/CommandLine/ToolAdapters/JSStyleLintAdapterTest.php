@@ -99,12 +99,12 @@ class JSStyleLintAdapterTest extends TestCase
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTBL',
-                    $this->forgedCommandPath . ' ' . $this->mockedRootDirectory . '/**' . $expectedFilter
+                    $this->forgedCommandPath . ' **' . $expectedFilter
                     . ' --allow-empty-input --config=' . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'STYLELINTFIXBL',
-                    $this->forgedCommandPath . ' ' . $this->mockedRootDirectory . '/**' . $expectedFilter
+                    $this->forgedCommandPath . ' **' . $expectedFilter
                     . ' --allow-empty-input --config=' . $this->mockedPackageDirectory . $config . ' --fix %1$s'
                 )
             )

@@ -103,6 +103,15 @@ class PHPStanCommandTest extends TestCase
     }
 
     /**
+     * @test
+     */
+    public function checkIfCommandGetsConfigured(): void
+    {
+        $result = $this->subject->getDefinition()->getOptions();
+        self::assertNotEmpty($result);
+    }
+
+    /**
      * This method prepares the InputInterface mocks.
      *
      * @param string $mockedTargetBranch

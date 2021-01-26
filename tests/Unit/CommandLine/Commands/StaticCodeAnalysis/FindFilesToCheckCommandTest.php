@@ -153,7 +153,18 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedOutputInterface->shouldReceive('writeln')->once()
             ->with(implode("\n", array_values($expectedArray)));
 
-        $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
+        $result = $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
+
+        self::assertSame(0, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function checkIfCommandGetsConfigured(): void
+    {
+        $result = $this->subject->getDefinition()->getOptions();
+        self::assertNotEmpty($result);
     }
 
     /**
@@ -166,7 +177,7 @@ class FindFilesToCheckCommandTest extends TestCase
      * @param string $mockedTargetBranch
      * @param bool $mockedExclusiveFlag
      */
-    protected function prepareMockedInputInterface(
+    private function prepareMockedInputInterface(
         MockInterface $mockedInputInterface,
         string $mockedBlacklistToken,
         string $mockedWhitelistToken,
