@@ -2,7 +2,7 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
-use Composer\Factory;
+use ComposerLocator;
 
 /**
  * This Class supplies information about the environment the script is running in.
@@ -45,8 +45,8 @@ class Environment
      */
     public function getRootDirectory() : string
     {
-        $projectRootPath = Factory::getComposerFile();
-        return realpath(dirname($projectRootPath));
+        $projectRootPath = ComposerLocator::getRootPath();
+        return realpath($projectRootPath);
     }
 
     /**
