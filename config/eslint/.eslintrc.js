@@ -150,7 +150,7 @@ module.exports = {
         'jsdoc/check-access': 0,
         'jsdoc/check-alignment': 2,
         'jsdoc/check-examples': 2,
-        'jsdoc/check-indentation': 2,
+        'jsdoc/check-indentation': 0,
         'jsdoc/check-line-alignment': 2,
         'jsdoc/check-param-names': 2,
         'jsdoc/check-property-names': 2,
