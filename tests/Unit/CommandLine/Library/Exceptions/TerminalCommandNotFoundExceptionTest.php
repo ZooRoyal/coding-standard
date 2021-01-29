@@ -2,10 +2,10 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library\Exceptions;
 
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
-class TerminalCommandNotFoundExceptionTest extends AsyncTestCase
+class TerminalCommandNotFoundExceptionTest extends TestCase
 {
     /**
      * @test

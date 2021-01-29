@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
@@ -16,7 +16,7 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\FixerSupportInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\JSStyleLintAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 
-class JSStyleLintAdapterTest extends AsyncTestCase
+class JSStyleLintAdapterTest extends TestCase
 {
     /** @var MockInterface|Environment */
     private $mockedEnvironment;
@@ -37,7 +37,6 @@ class JSStyleLintAdapterTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

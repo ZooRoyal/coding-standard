@@ -3,11 +3,11 @@
 namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooRoyal\Sniffs\Commenting;
 
 use Composer\Autoload\ClassLoader;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
-class FunctionCommentThrowTagSniffTest extends AsyncTestCase
+class FunctionCommentThrowTagSniffTest extends TestCase
 {
     /** @var string */
     private static $vendorDir;
@@ -26,7 +26,6 @@ class FunctionCommentThrowTagSniffTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->commandPrefix = explode(' ', 'vendor/bin/phpcs '
             . '--sniffs=ZooRoyal.Commenting.FunctionCommentThrowTag --standard=ZooRoyal -s ');
     }

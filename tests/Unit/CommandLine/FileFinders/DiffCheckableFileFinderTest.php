@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
@@ -13,7 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class DiffCheckableFileFinderTest extends AsyncTestCase
+class DiffCheckableFileFinderTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -22,7 +22,6 @@ class DiffCheckableFileFinderTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(DiffCheckableFileFinder::class);
         $this->subject = $buildFragments['subject'];

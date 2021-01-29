@@ -6,7 +6,7 @@ use Github\Client;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty as HP;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -16,7 +16,7 @@ use Zooroyal\CodingStandard\Github\Commands\PullCommentRefreshCommand;
 use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PullCommentRefreshCommandTest extends AsyncTestCase
+class PullCommentRefreshCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -54,7 +54,6 @@ class PullCommentRefreshCommandTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->mockedOwnCurrentComment = [
             'id' => 25,
             'position' => $this->mockedArguments['position'],

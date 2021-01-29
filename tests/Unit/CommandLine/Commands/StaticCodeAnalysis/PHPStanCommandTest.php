@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -15,7 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanComma
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPStanCommandTest extends AsyncTestCase
+class PHPStanCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -28,7 +28,6 @@ class PHPStanCommandTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(PHPStanCommand::class);
         $this->subject = $buildFragments['subject'];

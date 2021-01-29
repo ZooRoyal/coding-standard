@@ -4,13 +4,13 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class GitInputValidatorTest extends AsyncTestCase
+class GitInputValidatorTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -19,7 +19,6 @@ class GitInputValidatorTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitInputValidator::class);
         $this->subject = $buildFragments['subject'];

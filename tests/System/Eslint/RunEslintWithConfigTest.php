@@ -2,13 +2,13 @@
 
 namespace Zooroyal\CodingStandard\Tests\System\Eslint;
 
-use Amp\Success;
+use Amp\PHPUnit\AsyncTestCase;
+use Amp\Process\Process;
+use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use Amp\PHPUnit\AsyncTestCase;
-use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
-use function Amp\call;
+use function Amp\ByteStream\buffer;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
@@ -26,7 +26,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @test
      * @large
      */
-    public function runEslintForJSInCleanInstall()
+    public function runEslintForJSInCleanInstall(): ?Generator
     {
         $testInstancePath = $this->prepareInstallationDirectory();
 
@@ -37,14 +37,60 @@ class RunEslintWithConfigTest extends AsyncTestCase
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
 
-        yield call([$process, 'run']);
+        yield $process->start();
 
-        $exitCode = $process->getExitCode();
-        $output = $process->getOutput();
+        $output = yield buffer($process->getStdout());
+        $errorOutput = yield buffer($process->getStdout());
+        $exitCode = yield $process->join();
 
-        self::assertSame(1, $exitCode, $process->getErrorOutput());
+        self::assertSame(1, $exitCode, $errorOutput);
 
         MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_JS_PROBLEMS));
+    }
+
+    /**
+     * @test
+     * @large
+     */
+    public function runEslintForTSInCleanInstall(): ?Generator
+    {
+        $testInstancePath = $this->prepareInstallationDirectory();
+
+        $command = $this->getEslintCommand(
+            'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts',
+            $testInstancePath
+        );
+        $commandArray = explode(' ', $command);
+        $process = new Process($commandArray, $testInstancePath);
+
+        yield $process->start();
+
+        $output = yield buffer($process->getStdout());
+        $errorOutput = yield buffer($process->getStdout());
+        $exitCode = yield $process->join();
+
+        self::assertSame(1, $exitCode, $errorOutput);
+
+        MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_TS_PROBLEMS));
+    }
+
+    /**
+     * @test
+     * @large
+     */
+    public function runStylelintInCleanInstall(): ?Generator
+    {
+        $testInstancePath = $this->prepareInstallationDirectory();
+
+        $command = 'vendor/bin/coding-standard sca:stylelint';
+        $commandArray = explode(' ', $command);
+        $process = new Process($commandArray, $testInstancePath);
+
+        yield $process->start();
+
+        $exitCode = yield $process->join();
+
+        self::assertSame(0, $exitCode);
     }
 
     /**
@@ -71,49 +117,5 @@ class RunEslintWithConfigTest extends AsyncTestCase
             . self::ESLINT_CONFIG_FILE
             . $testInstancePath . DIRECTORY_SEPARATOR
             . $fileToCheck;
-    }
-
-    /**
-     * @test
-     * @large
-     */
-    public function runEslintForTSInCleanInstall()
-    {
-        $testInstancePath = $this->prepareInstallationDirectory();
-
-        $command = $this->getEslintCommand(
-            'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts',
-            $testInstancePath
-        );
-        $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $testInstancePath);
-
-        yield call([$process, 'run']);
-
-        $exitCode = $process->getExitCode();
-        $output = $process->getOutput();
-
-        self::assertSame(1, $exitCode, $process->getErrorOutput());
-
-        MatcherAssert::assertThat($output, H::containsString(self::EXPECTED_TS_PROBLEMS));
-    }
-
-    /**
-     * @test
-     * @large
-     */
-    public function runStylelintInCleanInstall()
-    {
-        $testInstancePath = $this->prepareInstallationDirectory();
-
-        $command = 'vendor/bin/coding-standard sca:stylelint';
-        $commandArray = explode(' ', $command);
-        $process = new Process($commandArray, $testInstancePath);
-
-        yield call([$process, 'run']);
-
-        $exitCode = $process->getExitCode();
-
-        self::assertSame(0, $exitCode);
     }
 }

@@ -4,18 +4,17 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Zooroyal\CodingStandard\CommandLine\Library\FinderToPathsConverter;
 
-class FinderToPathsConverterTest extends AsyncTestCase
+class FinderToPathsConverterTest extends TestCase
 {
     /** @var FinderToPathsConverter */
     private $subject;
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->subject = new FinderToPathsConverter();
     }
 

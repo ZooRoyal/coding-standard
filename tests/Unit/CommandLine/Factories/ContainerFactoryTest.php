@@ -6,12 +6,12 @@ use DI\Container;
 use DI\ContainerBuilder;
 use Hamcrest\Matchers;
 use Mockery;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
-class ContainerFactoryTest extends AsyncTestCase
+class ContainerFactoryTest extends TestCase
 {
     /**
      * @test

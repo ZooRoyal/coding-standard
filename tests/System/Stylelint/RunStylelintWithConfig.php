@@ -2,10 +2,12 @@
 
 namespace Zooroyal\CodingStandard\Tests\System\Stylelint;
 
+use Amp\PHPUnit\AsyncTestCase;
+use Amp\Process\Process;
+use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use Amp\PHPUnit\AsyncTestCase;
-use Symfony\Component\Process\Process;
+use function Amp\ByteStream\buffer;
 
 class RunStylelintWithConfig extends AsyncTestCase
 {
@@ -13,7 +15,7 @@ class RunStylelintWithConfig extends AsyncTestCase
      * @test
      * @large
      */
-    public function findViolationsByEslint()
+    public function findViolationsByEslint(): ?Generator
     {
         $process = new Process(
             [
@@ -22,13 +24,11 @@ class RunStylelintWithConfig extends AsyncTestCase
                 __DIR__ . '/../fixtures/stylelint/BadCode.less',
             ]
         );
+        yield $process->start();
+        $output = yield buffer($process->getStdout());
+        $exitCode = yield $process->join();
 
-        $process->run();
-        $process->wait();
-        $errorCode = $process->getExitCode();
-        $output = $process->getOutput();
-
-        self::assertSame(2, $errorCode);
+        self::assertSame(2, $exitCode);
         MatcherAssert::assertThat($output, H::containsString('Expected no more than 1 empty line'));
     }
 }

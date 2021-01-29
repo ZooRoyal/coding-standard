@@ -2,10 +2,10 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 
-class GitChangeSetFactoryTest extends AsyncTestCase
+class GitChangeSetFactoryTest extends TestCase
 {
     /**
      * @test

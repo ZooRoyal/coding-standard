@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
@@ -15,7 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\ToolAdapterInterface;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 
-class PHPStanAdapterTest extends AsyncTestCase
+class PHPStanAdapterTest extends TestCase
 {
     /** @var MockInterface|Environment */
     private $mockedEnvironment;
@@ -36,7 +36,6 @@ class PHPStanAdapterTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->mockedEnvironment = Mockery::mock(Environment::class);
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);

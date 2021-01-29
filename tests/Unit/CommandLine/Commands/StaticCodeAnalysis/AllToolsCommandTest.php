@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -16,7 +16,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\AllToolsCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 
-class AllToolsCommandTest extends AsyncTestCase
+class AllToolsCommandTest extends TestCase
 {
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -25,7 +25,6 @@ class AllToolsCommandTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->mockedInputInterface = Mockery::mock(InputInterface::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
     }

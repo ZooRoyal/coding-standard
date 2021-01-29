@@ -4,14 +4,14 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class TerminalCommandFinderTest extends AsyncTestCase
+class TerminalCommandFinderTest extends TestCase
 {
     /** @var TerminalCommandFinder */
     private $subject;
@@ -20,7 +20,6 @@ class TerminalCommandFinderTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(TerminalCommandFinder::class);
         $this->subject = $buildFragments['subject'];

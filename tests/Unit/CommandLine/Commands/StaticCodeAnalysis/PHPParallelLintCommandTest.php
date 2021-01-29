@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnal
 
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
@@ -12,7 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPParallelL
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPParallelLintAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPParallelLintCommandTest extends AsyncTestCase
+class PHPParallelLintCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -25,7 +25,6 @@ class PHPParallelLintCommandTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(PHPParallelLintCommand::class);
         $this->subject = $buildFragments['subject'];

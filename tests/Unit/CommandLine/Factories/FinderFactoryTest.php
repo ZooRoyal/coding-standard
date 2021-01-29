@@ -2,11 +2,11 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Finder\Finder;
 use Zooroyal\CodingStandard\CommandLine\Factories\FinderFactory;
 
-class FinderFactoryTest extends AsyncTestCase
+class FinderFactoryTest extends TestCase
 {
 
     /** @var FinderFactory */
@@ -14,7 +14,6 @@ class FinderFactoryTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->subject = new FinderFactory();
     }
 

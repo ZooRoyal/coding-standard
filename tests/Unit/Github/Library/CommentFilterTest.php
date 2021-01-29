@@ -3,17 +3,16 @@
 namespace Zooroyal\CodingStandard\Tests\Unit\Github\Library;
 
 use Mockery;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 
-class CommentFilterTest extends AsyncTestCase
+class CommentFilterTest extends TestCase
 {
     /** @var CommentFilter */
     private $subject;
 
     protected function setUp(): void
     {
-        parent::setUp();
         $this->subject = new CommentFilter();
     }
 

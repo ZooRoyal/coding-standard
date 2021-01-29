@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use Amp\PHPUnit\AsyncTestCase;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -16,7 +16,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetec
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPMessDetectorCommandTest extends AsyncTestCase
+class PHPMessDetectorCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -29,7 +29,6 @@ class PHPMessDetectorCommandTest extends AsyncTestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(PHPMessDetectorCommand::class);
         $this->subject = $buildFragments['subject'];

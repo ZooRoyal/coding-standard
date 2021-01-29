@@ -32,7 +32,7 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @large
      */
-    public function runCodingStandardToFindErrors()
+    public function runCodingStandardToFindErrors(): ?Generator
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
 
@@ -73,7 +73,7 @@ class GlobalSystemTest extends AsyncTestCase
      * @large
      * @depends runCodingStandardToFindErrors
      */
-    public function dontFilesMakeAllGood()
+    public function dontFilesMakeAllGood(): ?Generator
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
@@ -123,6 +123,7 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @return Generator|array<int|null>
      */
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
     private function runTools(string $environmentDirectory)
     {
         $tools = [
@@ -141,6 +142,7 @@ class GlobalSystemTest extends AsyncTestCase
 
         $exitCodes = yield $promisses;
 
+        $result = [];
         foreach ($exitCodes as $tool => $ExitCode) {
             $result[$tool] = $ExitCode;
         }
@@ -156,9 +158,9 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @return Generator|int
      */
+    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
     private function runAndGetExitCode(string $environmentDirectory, string $command)
     {
-        /** @var Process $process */
         $process = new Process(
             [$environmentDirectory . '/vendor/bin/coding-standard', $command],
             $environmentDirectory
