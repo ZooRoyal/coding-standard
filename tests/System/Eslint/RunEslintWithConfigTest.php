@@ -2,13 +2,15 @@
 
 namespace Zooroyal\CodingStandard\Tests\System\Eslint;
 
+use Amp\Success;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
+use function Amp\call;
 
-class RunEslintWithConfigTest extends TestCase
+class RunEslintWithConfigTest extends AsyncTestCase
 {
     private const EXPECTED_TS_PROBLEMS = '179 problems';
     private const EXPECTED_JS_PROBLEMS = '178 problems';
@@ -35,7 +37,7 @@ class RunEslintWithConfigTest extends TestCase
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
 
-        $process->run();
+        yield call([$process, 'run']);
 
         $exitCode = $process->getExitCode();
         $output = $process->getOutput();
@@ -86,7 +88,7 @@ class RunEslintWithConfigTest extends TestCase
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
 
-        $process->run();
+        yield call([$process, 'run']);
 
         $exitCode = $process->getExitCode();
         $output = $process->getOutput();
@@ -108,7 +110,7 @@ class RunEslintWithConfigTest extends TestCase
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
 
-        $process->run();
+        yield call([$process, 'run']);
 
         $exitCode = $process->getExitCode();
 

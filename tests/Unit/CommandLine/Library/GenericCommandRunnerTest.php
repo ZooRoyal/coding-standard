@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class GenericCommandRunnerTest extends TestCase
+class GenericCommandRunnerTest extends AsyncTestCase
 {
     /** @var GenericCommandRunner */
     private $subject;
@@ -27,6 +27,7 @@ class GenericCommandRunnerTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $subjectFactory = new SubjectFactory();

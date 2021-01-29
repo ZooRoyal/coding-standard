@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class AdaptableFileFinderTest extends TestCase
+class AdaptableFileFinderTest extends AsyncTestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -23,6 +23,7 @@ class AdaptableFileFinderTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(AdaptableFileFinder::class);
         $this->subject = $buildFragments['subject'];

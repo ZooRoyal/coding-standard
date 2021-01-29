@@ -5,13 +5,13 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 use InvalidArgumentException;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\ParentByFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class ParentByFileFinderTest extends TestCase
+class ParentByFileFinderTest extends AsyncTestCase
 {
     /** @var ParentByFileFinder */
     private $subject;
@@ -22,6 +22,7 @@ class ParentByFileFinderTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(ParentByFileFinder::class);
         $this->subject = $buildFragments['subject'];

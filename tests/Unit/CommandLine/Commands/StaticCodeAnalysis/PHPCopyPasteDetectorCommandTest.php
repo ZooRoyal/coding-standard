@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Commands\StaticCodeAnal
 
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
@@ -12,7 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPaste
 use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPCopyPasteDetectorAdapter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class PHPCopyPasteDetectorCommandTest extends TestCase
+class PHPCopyPasteDetectorCommandTest extends AsyncTestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -25,6 +25,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(PHPCopyPasteDetectorCommand::class);
         $this->subject = $buildFragments['subject'];

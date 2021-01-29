@@ -2,19 +2,23 @@
 
 namespace Zooroyal\CodingStandard\Tests\System\Complete;
 
+use Amp\PHPUnit\AsyncTestCase;
+use Amp\Process\Process;
+use Closure;
+use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
+use function Amp\call;
 
-class GlobalSystemTest extends TestCase
+class GlobalSystemTest extends AsyncTestCase
 {
     private Filesystem $filesystem;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
+        parent::setUp();
         $this->filesystem = new Filesystem();
     }
 
@@ -28,7 +32,7 @@ class GlobalSystemTest extends TestCase
      *
      * @large
      */
-    public function runCodingStandardToFindErrors(): void
+    public function runCodingStandardToFindErrors()
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
 
@@ -39,20 +43,26 @@ class GlobalSystemTest extends TestCase
             . 'Fixtures/FixtureIncorrectComments.php';
 
         $this->filesystem->mkdir($badCodeDirectory);
-        $this->filesystem->copy($fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/GoodPhp.php');
-        $this->filesystem->copy($fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts');
-        $this->filesystem->copy($fixtureDirectory . '/stylelint/BadCode.less', $badCodeDirectory . '/BadCode.less');
-        $this->filesystem->copy($badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php');
-        $this->filesystem->copy(__FILE__, $badCodeDirectory . '/BadCopyPasteDetect1.php');
-        $this->filesystem->copy(__FILE__, $badCodeDirectory . '/BadCopyPasteDetect2.php');
-        $this->filesystem->copy($fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php');
-        $this->filesystem->copy($fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php');
-        $this->filesystem->copy(
-            $fixtureDirectory . '/complete/BadMessDectect.php',
-            $badCodeDirectory . '/BadMessDetect.php'
-        );
 
-        $result = $this->runTools($environmentDirectory);
+        $copyFiles = [
+            [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/GoodPhp.php'],
+            [$fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts'],
+            [$fixtureDirectory . '/stylelint/BadCode.less', $badCodeDirectory . '/BadCode.less'],
+            [$badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php'],
+            [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect1.php'],
+            [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect2.php'],
+            [$fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php'],
+            [$fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php'],
+            [$fixtureDirectory . '/complete/BadMessDectect.php', $badCodeDirectory . '/BadMessDetect.php'],
+        ];
+
+        foreach ($copyFiles as $copyFile) {
+            $copyPromises[] = call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
+        }
+
+        yield $copyPromises;
+
+        $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
 
         MatcherAssert::assertThat('All tools are not satisfied', $result, H::not(H::hasItems(0)));
     }
@@ -63,20 +73,28 @@ class GlobalSystemTest extends TestCase
      * @large
      * @depends runCodingStandardToFindErrors
      */
-    public function dontFilesMakeAllGood(): void
+    public function dontFilesMakeAllGood()
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
 
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontSniffPHP', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontMessDetectPHP', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontCopyPasteDetectPHP', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontLintPHP', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontSniffLESS', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontSniffJS', '');
-        $this->filesystem->dumpFile($badCodeDirectory . DIRECTORY_SEPARATOR . '.dontStanPHP', '');
+        $dotFiles = [
+            '.dontSniffPHP',
+            '.dontMessDetectPHP',
+            '.dontCopyPasteDetectPHP',
+            '.dontLintPHP',
+            '.dontSniffLESS',
+            '.dontSniffJS',
+            '.dontStanPHP',
+        ];
 
-        $result = $this->runTools($environmentDirectory);
+        foreach ($dotFiles as $dotFile) {
+            $promisses = call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
+        }
+
+        yield $promisses;
+
+        $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
 
         MatcherAssert::assertThat('All Tools are satisfied', $result, H::everyItem(H::is(0)));
     }
@@ -103,26 +121,31 @@ class GlobalSystemTest extends TestCase
      *
      * @param string $environmentDirectory
      *
-     * @return array<int|null>
+     * @return Generator|array<int|null>
      */
-    private function runTools(string $environmentDirectory): array
+    private function runTools(string $environmentDirectory)
     {
-        $phpCsExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:sniff');
-        $phpMdExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:mess');
-        $phpLintExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:para');
-        $phpCpdExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:copy');
-        $phpStanExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:stan');
-        $lessStyleExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:style');
-        $jsEsLintExitCode = $this->runAndGetExitCode($environmentDirectory, 'sca:eslint');
-        return [
-            'phpcs' => $phpCsExitCode,
-            'phpmd' => $phpMdExitCode,
-            'phpcpd' => $phpCpdExitCode,
-            'phpstan' => $phpStanExitCode,
-            'phplint' => $phpLintExitCode,
-            'stylelint' => $lessStyleExitCode,
-            'eslint' => $jsEsLintExitCode,
+        $tools = [
+            'sca:sniff',
+            'sca:mess',
+            'sca:para',
+            'sca:copy',
+            'sca:stan',
+            'sca:style',
+            'sca:eslint',
         ];
+
+        foreach ($tools as $tool) {
+            $promisses[$tool] = call(Closure::fromCallable([$this, 'runAndGetExitCode']), $environmentDirectory, $tool);
+        }
+
+        $exitCodes = yield $promisses;
+
+        foreach ($exitCodes as $tool => $ExitCode) {
+            $result[$tool] = $ExitCode;
+        }
+
+        return $result;
     }
 
     /**
@@ -131,17 +154,17 @@ class GlobalSystemTest extends TestCase
      * @param string $environmentDirectory
      * @param string $command
      *
-     * @return int
+     * @return Generator|int
      */
-    private function runAndGetExitCode(string $environmentDirectory, string $command): int
+    private function runAndGetExitCode(string $environmentDirectory, string $command)
     {
+        /** @var Process $process */
         $process = new Process(
             [$environmentDirectory . '/vendor/bin/coding-standard', $command],
             $environmentDirectory
         );
-        $phpCsExitCode = $process->setTimeout(120)
-            ->setIdleTimeout(60)
-            ->run();
-        return $phpCsExitCode;
+        yield $process->start();
+
+        return yield $process->join();
     }
 }

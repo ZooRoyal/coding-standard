@@ -2,17 +2,18 @@
 
 namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
-class BlacklistFactoryTest extends TestCase
+class BlacklistFactoryTest extends AsyncTestCase
 {
     /** @var BlacklistFactory */
     private $subject;
 
     protected function setUp(): void
     {
+        parent::setUp();
         mkdir(__DIR__ . '/Fixtures/gitExclude/.git');
 
         $container = ContainerFactory::getUnboundContainerInstance();

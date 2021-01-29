@@ -3,11 +3,11 @@
 namespace Zooroyal\CodingStandard\Tests\Functional\PHPCodesniffer\Standards\ZooRoyal\Sniffs\Commenting;
 
 use Composer\Autoload\ClassLoader;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use ReflectionClass;
 use Symfony\Component\Process\Process;
 
-class DocCommentSniffTest extends TestCase
+class DocCommentSniffTest extends AsyncTestCase
 {
     /** @var string */
     private static $vendorDir;
@@ -26,6 +26,7 @@ class DocCommentSniffTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->commandPrefix = explode(' ', 'php ' . self::$vendorDir . '/bin/phpcs '
             . '--sniffs=ZooRoyal.Commenting.DocComment --standard=ZooRoyal -s ');
     }

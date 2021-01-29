@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Finder\Finder;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\FinderFactory;
@@ -12,7 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\FinderToPathsConverter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class BlacklistFactoryTest extends TestCase
+class BlacklistFactoryTest extends AsyncTestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -31,6 +31,7 @@ class BlacklistFactoryTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(BlacklistFactory::class);
         $this->subject = $buildFragments['subject'];

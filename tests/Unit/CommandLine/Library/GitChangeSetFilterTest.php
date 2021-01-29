@@ -6,7 +6,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class GitChangeSetFilterTest extends TestCase
+class GitChangeSetFilterTest extends AsyncTestCase
 {
     /** @var GitChangeSetFilter */
     private $subject;
@@ -27,6 +27,7 @@ class GitChangeSetFilterTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitChangeSetFilter::class);
         $this->subjectParameters = $buildFragments['parameters'];

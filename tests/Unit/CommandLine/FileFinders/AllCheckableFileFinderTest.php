@@ -4,7 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
@@ -12,7 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class AllCheckableFileFinderTest extends TestCase
+class AllCheckableFileFinderTest extends AsyncTestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -21,6 +21,7 @@ class AllCheckableFileFinderTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(AllCheckableFileFinder::class);
         $this->subject = $buildFragments['subject'];

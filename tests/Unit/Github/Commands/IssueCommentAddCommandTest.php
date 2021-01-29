@@ -6,7 +6,7 @@ use Github\Client;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty as HP;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
@@ -15,7 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToC
 use Zooroyal\CodingStandard\Github\Commands\IssueCommentAddCommand;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class IssueCommentAddCommandTest extends TestCase
+class IssueCommentAddCommandTest extends AsyncTestCase
 {
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
@@ -28,6 +28,7 @@ class IssueCommentAddCommandTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(IssueCommentAddCommand::class);
         $this->subject = $buildFragments['subject'];

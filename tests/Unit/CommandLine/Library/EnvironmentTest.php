@@ -5,13 +5,13 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class EnvironmentTest extends TestCase
+class EnvironmentTest extends AsyncTestCase
 {
     /** @var Environment */
     private $subject;
@@ -32,6 +32,7 @@ class EnvironmentTest extends TestCase
 
     protected function setUp(): void
     {
+        parent::setUp();
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);
         $this->subject = $buildFragments['subject'];

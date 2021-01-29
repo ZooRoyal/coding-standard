@@ -2,10 +2,10 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ValueObjects;
 
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
-class GitChangeSetTest extends TestCase
+class GitChangeSetTest extends AsyncTestCase
 {
     /**
      * @test

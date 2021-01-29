@@ -4,10 +4,10 @@ namespace Zooroyal\CodingStandard\Tests\System\Stylelint;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Process\Process;
 
-class RunStylelintWithConfig extends TestCase
+class RunStylelintWithConfig extends AsyncTestCase
 {
     /**
      * @test

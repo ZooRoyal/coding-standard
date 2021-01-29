@@ -6,7 +6,7 @@ use DI\Container;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
-class DiffCheckableFileFinderTest extends TestCase
+class DiffCheckableFileFinderTest extends AsyncTestCase
 {
     protected function tearDown(): void
     {

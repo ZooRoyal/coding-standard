@@ -6,18 +6,19 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers;
 use Mockery;
 use PackageVersions\Versions;
-use PHPUnit\Framework\TestCase;
+use Amp\PHPUnit\AsyncTestCase;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
-class ProcessRunnerTest extends TestCase
+class ProcessRunnerTest extends AsyncTestCase
 {
     /** @var ProcessRunner */
     private $subject;
 
     protected function setUp(): void
     {
+        parent::setUp();
         $this->subject = new ProcessRunner();
     }
 
