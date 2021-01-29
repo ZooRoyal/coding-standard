@@ -10,6 +10,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --strict"
+
+      - name: "Determine composer cache directory"
+        id: "determine-composer-cache-directory"
+        run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+
+      - name: Cache Composer Packages
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer
+        with:
+          path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+          key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-codestyle-${{ env.cache-name }}-
+            ${{ runner.os }}-codestyle-
+            ${{ runner.os }}-
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -17,18 +36,6 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-codestyle-${{ env.cache-name }}-
-            ${{ runner.os }}-codestyle-
-            ${{ runner.os }}-
-
-      - name: Cache Composer Packages
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-composer
-        with:
-          path: ~/.composer
-          key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
             ${{ runner.os }}-codestyle-
@@ -74,6 +81,25 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      - name: "Validate composer.json and composer.lock"
+        run: "composer validate --strict"
+
+      - name: "Determine composer cache directory"
+        id: "determine-composer-cache-directory"
+        run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
+
+      - name: Cache Composer Packages
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-composer
+        with:
+          path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+          key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-codestyle-${{ env.cache-name }}-
+            ${{ runner.os }}-codestyle-
+            ${{ runner.os }}-
+
       - name: Cache node modules
         uses: actions/cache@v2
         env:
@@ -81,18 +107,6 @@ jobs:
         with:
           path: ~/.npm
           key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
-          restore-keys: |
-            ${{ runner.os }}-tests-${{ env.cache-name }}-
-            ${{ runner.os }}-tests-
-            ${{ runner.os }}-
-
-      - name: Cache Composer Packages
-        uses: actions/cache@v2
-        env:
-          cache-name: cache-composer-${{ matrix.composer_version }}-${{ matrix.composer_parameters }}
-        with:
-          path: ~/.composer
-          key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-tests-${{ env.cache-name }}-
             ${{ runner.os }}-tests-
