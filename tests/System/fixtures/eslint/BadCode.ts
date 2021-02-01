@@ -169,7 +169,7 @@ Object.keys(object); // []
 Object.getOwnPropertyNames(object); // []
 Object.getOwnPropertySymbols(object); // [ foo, bar ]
 
-//Promisses
+//Promises
 function msgAfterTimeout (msg, who, timeout) {
     return new Promise((resolve, reject) => {
         setTimeout(() => resolve(`${msg} Hello ${who}!`), timeout)
