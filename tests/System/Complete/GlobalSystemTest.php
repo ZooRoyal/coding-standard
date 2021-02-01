@@ -89,10 +89,10 @@ class GlobalSystemTest extends AsyncTestCase
         ];
 
         foreach ($dotFiles as $dotFile) {
-            $promisses = call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
+            $promises = call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
         }
 
-        yield $promisses;
+        yield $promises;
 
         $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
 
@@ -137,10 +137,10 @@ class GlobalSystemTest extends AsyncTestCase
         ];
 
         foreach ($tools as $tool) {
-            $promisses[$tool] = call(Closure::fromCallable([$this, 'runAndGetExitCode']), $environmentDirectory, $tool);
+            $promises[$tool] = call(Closure::fromCallable([$this, 'runAndGetExitCode']), $environmentDirectory, $tool);
         }
 
-        $exitCodes = yield $promisses;
+        $exitCodes = yield $promises;
 
         $result = [];
         foreach ($exitCodes as $tool => $ExitCode) {
