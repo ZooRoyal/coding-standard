@@ -76,8 +76,8 @@
     "post-install-cmd": "npm install",
     "test": "phpunit",
     "infection": [
-      "@test",
-      "infection -n --min-msi=84 --min-covered-msi=84 --threads=4 --only-covered --coverage=/tmp/phpunit --no-progress"
+      "@test ",
+      "infection -n --threads=4 --only-covered --coverage=/tmp/phpunit --no-progress"
     ]
   },
   "config": {
