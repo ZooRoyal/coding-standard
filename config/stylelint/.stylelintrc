@@ -5,7 +5,8 @@
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
-    "no-descending-specificity": null
+    "no-descending-specificity": null,
+    "function-calc-no-invalid": false
   },
   "plugins": [
     "stylelint-order"
