@@ -2,8 +2,14 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
 
+/**
+ * Class JSESLintAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
     /** @var string */

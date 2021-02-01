@@ -2,6 +2,13 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
+
+/**
+ * Class PHPMessDetectorAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
