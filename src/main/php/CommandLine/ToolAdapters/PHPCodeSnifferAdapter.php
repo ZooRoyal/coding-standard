@@ -2,6 +2,13 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
+
+/**
+ * Class PHPCodeSnifferAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
     /** @var string */

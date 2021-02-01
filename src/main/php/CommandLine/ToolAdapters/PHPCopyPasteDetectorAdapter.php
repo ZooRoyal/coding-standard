@@ -2,10 +2,16 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 
+/**
+ * Class PHPCopyPasteDetectorAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
 {
     /** @var string */

@@ -2,6 +2,13 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\ToolAdapters;
 
+use DI\Annotation\Injectable;
+
+/**
+ * Class PHPParallelLintAdapter
+ *
+ * @Injectable(lazy=true)
+ */
 class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     /** @var string */
