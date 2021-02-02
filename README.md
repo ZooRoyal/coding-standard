@@ -54,6 +54,9 @@ composer update "zooroyal/coding-standard"
 
 # Usage coding-standard
 
+**Please keep in mind, that coding-standard can only run from inside a git 
+repository.**
+
 Run the command to get usage instructions. 
 ```bash
 php vendor/bin/coding-standard

@@ -31,6 +31,8 @@ class PHPCodeSnifferAdapterTest extends TestCase
     private $mockedRootDirectory;
     /** @var Mockery\LegacyMockInterface|MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
+    /** @var string */
+    private $mockedVendorDirectory;
 
     protected function setUp(): void
     {
@@ -39,9 +41,12 @@ class PHPCodeSnifferAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
+        $this->mockedVendorDirectory = '/I/Am/The/Vendor';
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
+        $this->mockedEnvironment->shouldReceive('getVendorPath')
+            ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
@@ -82,22 +87,22 @@ class PHPCodeSnifferAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPCSWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpcs -s --extensions=php --standard='
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpcbf --extensions=php --standard='
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 ),
                 H::hasKeyValuePair(
                     'PHPCSBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpcs -s --extensions=php --standard='
                     . $this->mockedPackageDirectory . $config . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 ),
                 H::hasKeyValuePair(
                     'PHPCBFBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpcbf --extensions=php --standard='
                     . $this->mockedPackageDirectory . $config . ' --ignore=%1$s ' . $this->mockedRootDirectory
                 )
             )

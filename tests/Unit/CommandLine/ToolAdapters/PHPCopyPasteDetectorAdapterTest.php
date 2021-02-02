@@ -35,6 +35,8 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     private $expectedPrefix;
     /** @var string */
     private $expectedGlue;
+    /** @var string  */
+    private $mockedVendorDirectory;
 
     protected function setUp(): void
     {
@@ -42,6 +44,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
 
+        $this->mockedVendorDirectory = '/I/Am/The/Vendor';
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
@@ -51,6 +54,8 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->expectedPrefix = '--exclude ';
         $this->expectedGlue = ' ';
 
+        $this->mockedEnvironment->shouldReceive('getVendorPath')
+            ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
@@ -83,7 +88,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     public function writeViolationsToOutputWithTargetForBlacklistCheck()
     {
         $mockedTargetBranch = 'targetBranch';
-        $expectedCommand = 'php ' . $this->mockedRootDirectory . '/vendor/bin/phpcpd --fuzzy ' .
+        $expectedCommand = 'php ' . $this->mockedVendorDirectory . '/bin/phpcpd --fuzzy ' .
             '--exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s ' . $this->mockedRootDirectory;
 
         $this->mockedEnvironment->shouldReceive('isLocalBranchEqualTo')

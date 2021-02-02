@@ -45,8 +45,18 @@ class Environment
      */
     public function getRootDirectory() : string
     {
-        $projectRootPath = ComposerLocator::getRootPath();
-        return realpath($projectRootPath);
+        $projectRootPath = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
+        return $projectRootPath;
+    }
+
+    /**
+     * Returns vendor path where coding-standard is installed.
+     *
+     * @return string
+     */
+    public function getVendorPath(): string
+    {
+        return ComposerLocator::getRootPath() . '/vendor';
     }
 
     /**

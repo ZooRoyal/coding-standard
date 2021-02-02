@@ -26,11 +26,13 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     protected function init()
     {
         $phpMessDetectorConfig = $this->environment->getPackageDirectory() . '/config/phpmd/phpmd.xml';
+
+        $vendorPath = $this->environment->getVendorPath();
         $rootDirectory = $this->environment->getRootDirectory();
 
-        $this->commands['PHPMDWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd %1$s' .
+        $this->commands['PHPMDWL'] = 'php ' . $vendorPath . '/bin/phpmd %1$s' .
             ' text ' . $phpMessDetectorConfig . ' --suffixes php';
-        $this->commands['PHPMDBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpmd '
+        $this->commands['PHPMDBL'] = 'php ' . $vendorPath . '/bin/phpmd '
             . $rootDirectory . ' text ' . $phpMessDetectorConfig . ' --suffixes php --exclude %1$s';
     }
 
