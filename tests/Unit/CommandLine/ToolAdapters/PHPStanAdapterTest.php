@@ -2,11 +2,13 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ToolAdapters;
 
+use ComposerLocator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
@@ -35,6 +37,13 @@ class PHPStanAdapterTest extends TestCase
     private $mockedTerminalCommandFinder;
     /** @var string */
     private $mockedVendorDirectory;
+    /** @var array<string,string> */
+    private array $toolFunctionsFileMapping
+        = [
+            'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
+            'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
+            'mockery/mockery' => '/library/helpers.php',
+        ];
 
     protected function setUp(): void
     {
@@ -43,20 +52,7 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
         $this->mockedPHPStanConfigGenerator = Mockery::mock(PHPStanConfigGenerator::class);
-        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
-            ->withArgs(
-                [
-                    '.dontStanPHP',
-                    '/root/directory',
-                    ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
-                ]
-            )->andReturn(['config']);
-        $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
-            ->once()->with([0 => 'config'])->andReturn('test');
-        $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()->with(
-            '/package/directory/config/phpstan/phpstan.neon',
-            'test'
-        );
+
         $this->partialSubject = Mockery::mock(
             PHPStanAdapter::class . '[!init]',
             [
@@ -78,7 +74,7 @@ class PHPStanAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         $config = '/config/phpstan/phpstan.neon';
         self::assertSame('.dontStanPHP', $this->partialSubject->getBlacklistToken());
@@ -106,40 +102,37 @@ class PHPStanAdapterTest extends TestCase
     }
 
     /**
-     * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
-     *
-     * @return mixed[]
-     */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
-    {
-        return [
-            'find Violations' => [
-                'tool' => 'PHPStan',
-                'fullMessage' => 'PHPStan : Running full check',
-                'diffMessage' => 'PHPStan : Running check on diff',
-                'method' => 'writeViolationsToOutput',
-            ],
-        ];
-    }
-
-    /**
      * @test
-     * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
-     * @param string $tool
-     * @param string $fullMessage
-     * @param string $diffMessage
-     * @param string $method
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResult(
-        string $tool,
-        string $fullMessage,
-        string $diffMessage,
-        string $method
-    ) {
+    public function callMethodsWithParametersCallsRunToolAndReturnsResult(): void
+    {
+        $this->prepareComposerLocator();
+
         $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
+        $tool = 'PHPStan';
+        $fullMessage = 'PHPStan : Running full check';
+        $diffMessage = 'PHPStan : Running check on diff';
+        $method = 'writeViolationsToOutput';
+
+        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
+            ->withArgs(
+                [
+                    '.dontStanPHP',
+                    '/root/directory',
+                    ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
+                ]
+            )->andReturn(['config']);
+        $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
+            ->once()->with([0 => 'config'])->andReturn('test');
+        $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()->with(
+            '/package/directory/config/phpstan/phpstan.neon',
+            'test'
+        );
 
         $this->partialSubject->shouldReceive('runTool')->once()
             ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
@@ -152,10 +145,58 @@ class PHPStanAdapterTest extends TestCase
 
     /**
      * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function writeConfigFileAddsCorrectTools(): void
+    {
+        $mockedProcessIsolation = true;
+        $mockedTargetBranch = 'myTargetBranch';
+        $expectedResult = 123123123;
+        $expectedRootPath = 'blabla/';
+        $mockedConfig = ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']];
+
+        $mockedComposerLocator = Mockery::mock('overload:' . ComposerLocator::class);
+
+        foreach ($this->toolFunctionsFileMapping as $toolName => $functionsFile) {
+            $mockedComposerLocator->shouldReceive('getPath')
+                ->with($toolName)->andReturn($expectedRootPath . $toolName);
+            $mockedConfig['parameters']['bootstrapFiles'][] = $expectedRootPath . $toolName . $functionsFile;
+        }
+        $this->mockedPHPStanConfigGenerator->shouldIgnoreMissing();
+
+        $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
+            ->with('.dontStanPHP', '/root/directory', $mockedConfig)->andReturn(['config']);
+
+        $this->partialSubject->shouldReceive('runTool')->once()->andReturn($expectedResult);
+
+        $result = $this->partialSubject->writeViolationsToOutput($mockedTargetBranch, $mockedProcessIsolation);
+
+        self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);
+    }
+
+    private function prepareComposerLocator(): void
+    {
+        $mockedComposerLocator = Mockery::mock('overload:' . ComposerLocator::class);
+
+        foreach ($this->toolFunctionsFileMapping as $toolName => $functionsFile) {
+            $mockedComposerLocator->shouldReceive('getPath')
+                ->with($toolName)->andThrow(new RuntimeException());
+            $this->mockedOutputInterface->shouldReceive('writeln')
+                ->with(
+                    '<info>' . $toolName . ' not found. Skip loading ' . $functionsFile . '</info>',
+                    OutputInterface::VERBOSITY_VERBOSE
+                );
+        }
     }
 
     /**
