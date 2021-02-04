@@ -31,6 +31,8 @@ class PHPMessDetectorAdapterTest extends TestCase
     private $mockedRootDirectory;
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
+    /** @var string */
+    private $mockedVendorDirectory;
 
     protected function setUp(): void
     {
@@ -39,9 +41,12 @@ class PHPMessDetectorAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
+        $this->mockedVendorDirectory = '/I/Am/The/Vendor';
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
+        $this->mockedEnvironment->shouldReceive('getVendorPath')
+            ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
         $this->mockedEnvironment->shouldReceive('getPackageDirectory')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
         $this->mockedEnvironment->shouldReceive('getRootDirectory')
@@ -82,12 +87,13 @@ class PHPMessDetectorAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPMDWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd %1$s text ' . $this->mockedPackageDirectory
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpmd %1$s text ' .
+                    $this->mockedPackageDirectory
                     . $config . ' --suffixes php'
                 ),
                 H::hasKeyValuePair(
                     'PHPMDBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpmd ' . $this->mockedRootDirectory
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpmd ' . $this->mockedRootDirectory
                     . ' text ' . $this->mockedPackageDirectory
                     . $config . ' --suffixes php --exclude %1$s'
                 )

@@ -50,6 +50,7 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 
     protected function init()
     {
+        $vendorPath = $this->environment->getVendorPath();
         $rootDirectory = $this->environment->getRootDirectory();
         $phpstanConfig = $this->environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
 
@@ -61,10 +62,10 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);
         $this->phpstanConfigGenerator->writeConfig($phpstanConfig, $onTheFlyConfig);
 
-        $this->commands['PHPStanBL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+        $this->commands['PHPStanBL'] = 'php ' . $vendorPath . '/bin/phpstan analyse --no-progress '
             . '--error-format=github ' . $rootDirectory . ' -c ' . $phpstanConfig;
 
-        $this->commands['PHPStanWL'] = 'php ' . $rootDirectory . '/vendor/bin/phpstan analyse --no-progress '
+        $this->commands['PHPStanWL'] = 'php ' . $vendorPath . '/bin/phpstan analyse --no-progress '
             . '--error-format=github ' . '-c ' . $phpstanConfig . ' %1$s';
     }
 

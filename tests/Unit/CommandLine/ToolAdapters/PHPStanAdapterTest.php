@@ -33,35 +33,32 @@ class PHPStanAdapterTest extends TestCase
     private $mockedRootDirectory;
     /** @var Mockery\LegacyMockInterface|MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
+    /** @var string */
+    private $mockedVendorDirectory;
 
     protected function setUp(): void
     {
-        $this->mockedEnvironment = Mockery::mock(Environment::class);
+        $this->prepareMockedEnvironment();
         $this->mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
         $this->mockedPHPStanConfigGenerator = Mockery::mock(PHPStanConfigGenerator::class);
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
         $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
-            ->withArgs([
-                '.dontStanPHP',
-                '/root/directory',
-                ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
-            ])->andReturn(['config']);
+            ->withArgs(
+                [
+                    '.dontStanPHP',
+                    '/root/directory',
+                    ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
+                ]
+            )->andReturn(['config']);
         $this->mockedPHPStanConfigGenerator->shouldReceive('generateConfig')
             ->once()->with([0 => 'config'])->andReturn('test');
         $this->mockedPHPStanConfigGenerator->shouldReceive('writeConfig')->once()->with(
             '/package/directory/config/phpstan/phpstan.neon',
             'test'
         );
-
         $this->partialSubject = Mockery::mock(
-            PHPStanAdapter::class.'[!init]',
+            PHPStanAdapter::class . '[!init]',
             [
                 $this->mockedEnvironment,
                 $this->mockedOutputInterface,
@@ -95,12 +92,13 @@ class PHPStanAdapterTest extends TestCase
             H::allOf(
                 H::hasKeyValuePair(
                     'PHPStanBL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress --error-format=github '
+                    'php ' . $this->mockedVendorDirectory . '/bin/phpstan analyse --no-progress --error-format=github '
                     . $this->mockedRootDirectory . ' -c ' . $this->mockedPackageDirectory . $config
                 ),
                 H::hasKeyValuePair(
                     'PHPStanWL',
-                    'php ' . $this->mockedRootDirectory . '/vendor/bin/phpstan analyse --no-progress --error-format=github -c '
+                    'php ' . $this->mockedVendorDirectory
+                    . '/bin/phpstan analyse --no-progress --error-format=github -c '
                     . $this->mockedPackageDirectory . $config . ' %1$s'
                 )
             )
@@ -158,5 +156,26 @@ class PHPStanAdapterTest extends TestCase
     public function phpCodeSnifferAdapterimplementsInterface()
     {
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);
+    }
+
+    /**
+     * Instantiates mock object for environment dependency with default behavior.
+     *
+     * @return void
+     */
+    private function prepareMockedEnvironment(): void
+    {
+        $this->mockedEnvironment = Mockery::mock(Environment::class);
+
+        $this->mockedVendorDirectory = '/I/Am/The/Vendor';
+        $this->mockedPackageDirectory = '/package/directory';
+        $this->mockedRootDirectory = '/root/directory';
+
+        $this->mockedEnvironment->shouldReceive('getVendorPath')
+            ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
+        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
+            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
+        $this->mockedEnvironment->shouldReceive('getRootDirectory')
+            ->withNoArgs()->andReturn($this->mockedRootDirectory);
     }
 }

@@ -30,16 +30,17 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     protected function init()
     {
         $phpCodeSnifferConfig = $this->environment->getPackageDirectory() . '/config/phpcs/ZooRoyal/ruleset.xml';
+        $vendorPath = $this->environment->getVendorPath();
         $rootDirectory = $this->environment->getRootDirectory();
 
-        $sniffWhitelistCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcs -s --extensions=php --standard='
+        $sniffWhitelistCommand = 'php ' . $vendorPath . '/bin/phpcs -s --extensions=php --standard='
             . $phpCodeSnifferConfig . ' %1$s';
-        $cbfWhitelistCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcbf --extensions=php --standard='
+        $cbfWhitelistCommand = 'php ' . $vendorPath . '/bin/phpcbf --extensions=php --standard='
             . $phpCodeSnifferConfig . ' %1$s';
-        $sniffBlacklistCommand = 'php ' . $rootDirectory
-            . '/vendor/bin/phpcs -s --extensions=php --standard=' . $phpCodeSnifferConfig . ' --ignore=%1$s ' . $rootDirectory;
-        $cbfBlacklistCommand = 'php ' . $rootDirectory
-            . '/vendor/bin/phpcbf --extensions=php --standard=' . $phpCodeSnifferConfig . ' --ignore=%1$s ' . $rootDirectory;
+        $sniffBlacklistCommand = 'php ' . $vendorPath
+            . '/bin/phpcs -s --extensions=php --standard=' . $phpCodeSnifferConfig . ' --ignore=%1$s ' . $rootDirectory;
+        $cbfBlacklistCommand = 'php ' . $vendorPath
+            . '/bin/phpcbf --extensions=php --standard=' . $phpCodeSnifferConfig . ' --ignore=%1$s ' . $rootDirectory;
 
         $this->commands = [
             'PHPCSWL' => $sniffWhitelistCommand,

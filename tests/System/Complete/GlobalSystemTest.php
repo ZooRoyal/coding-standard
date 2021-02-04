@@ -96,7 +96,7 @@ class GlobalSystemTest extends AsyncTestCase
 
         $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
 
-        MatcherAssert::assertThat('All Tools are satisfied', $result, H::everyItem(H::is(0)));
+        MatcherAssert::assertThat('All Tools are satisfied.', $result, H::not(H::hasItems(H::greaterThan(0))));
     }
 
     /**

@@ -16,7 +16,7 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     /** @var string[] */
     protected $allowedFileEndings = ['.php'];
     /** @var string */
-    protected $blacklistPrefix = '--exclude ';
+    protected $blacklistPrefix = '';
     /** @var string */
     protected $blacklistGlue = ' ';
     /** @var string */
@@ -27,12 +27,12 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
      */
     protected function init()
     {
+        $vendorPath = $this->environment->getVendorPath();
         $rootDirectory = $this->environment->getRootDirectory();
 
-        $this->commands['PHPPLWL'] = 'php ' . $rootDirectory
-            . '/vendor/bin/parallel-lint -j 2 %1$s';
-        $this->commands['PHPPLBL'] = 'php ' . $rootDirectory
-            . '/vendor/bin/parallel-lint -j 2 %1$s ./';
+        $this->blacklistPrefix = '--exclude ' . $rootDirectory . '/';
+        $this->commands['PHPPLWL'] = 'php ' . $vendorPath . '/bin/parallel-lint -j 2 %1$s';
+        $this->commands['PHPPLBL'] = 'php ' . $vendorPath . '/bin/parallel-lint -j 2 %1$s ' . $rootDirectory;
     }
 
 

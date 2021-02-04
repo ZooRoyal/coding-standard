@@ -39,9 +39,11 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
         $this->genericCommandRunner = $genericCommandRunner;
 
         $this->stopword = '.dontCopyPasteDetectPHP';
+
+        $vendorPath = $environment->getVendorPath();
         $rootDirectory = $environment->getRootDirectory();
 
-        $this->copyPasteDetectCommand = 'php ' . $rootDirectory . '/vendor/bin/phpcpd '
+        $this->copyPasteDetectCommand = 'php ' . $vendorPath . '/bin/phpcpd '
             . '--fuzzy --exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s '
             . $rootDirectory;
     }

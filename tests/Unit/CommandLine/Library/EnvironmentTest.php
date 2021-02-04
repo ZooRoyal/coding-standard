@@ -49,9 +49,24 @@ class EnvironmentTest extends TestCase
      */
     public function getRootDirectory()
     {
+        $expectedPath = 'wurbel scwurbel';
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
+            ->with('git', 'rev-parse', '--show-toplevel')->andReturn($expectedPath);
+
         $result = $this->subject->getRootDirectory();
 
+        self::assertSame($expectedPath, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getVendorPath()
+    {
+        $result = $this->subject->getVendorPath();
+
         self::assertTrue(is_dir($result));
+        self::assertStringEndsWith('vendor', $result);
     }
 
     /**

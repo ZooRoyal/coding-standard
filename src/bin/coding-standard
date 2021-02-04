@@ -1,6 +1,11 @@
 #!/usr/bin/env php
 <?php
 
+use Symfony\Component\Console\Application;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
+
 $autoloadFiles = [
     __DIR__ . '/../../vendor/autoload.php',
     __DIR__ . '/../../../../autoload.php',
@@ -9,51 +14,13 @@ $autoloadFiles = [
 foreach ($autoloadFiles as $autoloadFile) {
     if (file_exists($autoloadFile)) {
         require_once $autoloadFile;
+        break;
     }
 }
 
-use Symfony\Component\Console\Application;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\Checks\ForbiddenChangesCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\AllToolsCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSESLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSStyleLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCodeSnifferCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPasteDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPParallelLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
-
 $container = ContainerFactory::getContainerInstance();
 
-$parallelLint = $container->get(PHPParallelLintCommand::class);
-$phpCodeSnifferCommand = $container->get(PHPCodeSnifferCommand::class);
-$phpStanCommand = $container->get(PHPStanCommand::class);
-$findFilesToCheckCommand = $container->get(FindFilesToCheckCommand::class);
-$messDetectCommand = $container->get(PHPMessDetectorCommand::class);
-$copyPasteDetectorCommand = $container->get(PHPCopyPasteDetectorCommand::class);
-$esLintCommand = $container->get(JSESLintCommand::class);
-$styleLintCommand = $container->get(JSStyleLintCommand::class);
-$allToolsCommand = $container->get(AllToolsCommand::class);
-$forbiddenChangesCommand = $container->get(ForbiddenChangesCommand::class);
-
-$application = new Application();
-
-// ... register commands
-$application->add($parallelLint);
-$application->add($phpCodeSnifferCommand);
-$application->add($phpStanCommand);
-$application->add($findFilesToCheckCommand);
-$application->add($messDetectCommand);
-$application->add($copyPasteDetectorCommand);
-$application->add($esLintCommand);
-$application->add($styleLintCommand);
-$application->add($allToolsCommand);
-$application->add($forbiddenChangesCommand);
-
-$container->call([$application, 'run'],
+$container->call(
+    [$container->get(Application::class), 'run'],
     [$container->get(InputInterface::class), $container->get(OutputInterface::class)]
 );
