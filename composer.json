@@ -24,12 +24,12 @@
     "source": "https://github.com/ZooRoyal/coding-standard"
   },
   "require": {
-    "php": "^7.4",
+    "php": "^7.4 || ^8.0.0",
     "composer/package-versions-deprecated": "^1.8",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
     "doctrine/annotations": "^1.10",
     "guzzlehttp/psr7": "^1.4",
-    "knplabs/github-api": "^2.11",
+    "knplabs/github-api": "^2.11 || ^3.0",
     "mindplay/composer-locator": "^2.1.4",
     "ocramius/proxy-manager": " >= 2.2.3 < 3",
     "php-di/php-di": "^5.4.0 || ^6.0",

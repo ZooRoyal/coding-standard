@@ -73,10 +73,18 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - codestyle
+    continue-on-error: ${{ matrix.experimental }}
     strategy:
       matrix:
+        php_version: ['7.4']
         composer_version: [1,2]
         composer_parameters: ['--prefer-lowest', ' ']
+        experimental: [false]
+        include:
+          - php_version: '8.0'
+            composer_version: 2
+            composer_parameters: ' '
+            experimental: true
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -115,9 +123,9 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: ${{ matrix.php_version }}
           tools:  composer:${{ matrix.composer_version }}
-          extensions: xdebug-2.9.8
+          extensions: xdebug
         env:
           fail-fast: true
 
