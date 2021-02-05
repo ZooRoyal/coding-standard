@@ -6,6 +6,7 @@
     "at-rule-no-unknown": null,
     "block-no-empty": true,
     "no-descending-specificity": null,
-    "function-calc-no-invalid": true
+    "function-calc-no-invalid": true,
+    "indentation": 4
   }
 }
