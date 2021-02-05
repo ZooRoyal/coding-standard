@@ -37,9 +37,12 @@
     "php-parallel-lint/php-parallel-lint": "^1.2",
     "phpcompatibility/php-compatibility": "^9.3 >=9.3.5",
     "phpmd/phpmd": "^2.9.1",
+    "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^0.12.71",
-    "phpstan/phpstan-mockery": "^0.12.7",
-    "phpstan/phpstan-phpunit": "^0.12.16",
+    "phpstan/phpstan-doctrine": "^0.12.13",
+    "phpstan/phpstan-mockery": "^0.12.12",
+    "phpstan/phpstan-phpunit": "^0.12.17",
+    "phpstan/phpstan-symfony": "^0.12.16",
     "sebastian/phpcpd": "^3.0.1 || ^4.1 || ^6.0.2",
     "slevomat/coding-standard": "^6.4.1",
     "squizlabs/php_codesniffer": "^3.5",
@@ -82,7 +85,7 @@
     "test": "phpunit",
     "infection": [
       "@test",
-      "infection -n --threads=4 --only-covered --coverage=/tmp/phpunit --no-progress"
+      "infection -n --threads=$(nproc) --only-covered --coverage=/tmp/phpunit --no-progress"
     ]
   },
   "config": {

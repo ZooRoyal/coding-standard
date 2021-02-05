@@ -1,6 +1,3 @@
-includes:
-    - %rootDir%/../phpstan-mockery/extension.neon
-    - %rootDir%/../phpstan-phpunit/extension.neon
 parameters:
     level: 5
     excludes_analyse:

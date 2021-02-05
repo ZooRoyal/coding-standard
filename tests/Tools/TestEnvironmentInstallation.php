@@ -96,7 +96,8 @@ class TestEnvironmentInstallation
         (new Process(['composer', 'install'], $this->installationPath))
             ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
-        (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))->mustRun();
+        (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))
+            ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->isInstalled = true;
 
         return $this;
