@@ -6,6 +6,6 @@
     "at-rule-no-unknown": null,
     "block-no-empty": true,
     "no-descending-specificity": null,
-    "function-calc-no-invalid": false
+    "function-calc-no-invalid": true
   }
 }
