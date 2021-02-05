@@ -24,10 +24,8 @@
     "eslint-plugin-standard": "4.0.1",
     "jest": "26.6.3",
     "stylelint": "13.6.1",
-    "stylelint-config-rational-order": "0.1.2",
     "stylelint-config-recommended": "3.0.0",
     "stylelint-config-standard": "20.0.0",
-    "stylelint-order": "4.1.0",
     "typescript": "3.9.7"
   },
   "devDependencies": {}

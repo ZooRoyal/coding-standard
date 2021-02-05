@@ -7,8 +7,5 @@
     "block-no-empty": true,
     "no-descending-specificity": null,
     "function-calc-no-invalid": false
-  },
-  "plugins": [
-    "stylelint-order"
-  ]
+  }
 }
