@@ -5,6 +5,8 @@ namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
+use function Safe\mkdir;
+use function Safe\rmdir;
 
 class BlacklistFactoryTest extends TestCase
 {

@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Library;
 use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use function Safe\substr;
 
 class GitChangeSetFilter
 {
@@ -17,7 +18,7 @@ class GitChangeSetFilter
      * FileFilter constructor.
      *
      * @param BlacklistFactory $blacklistFactory
-     * @param Environment $environment
+     * @param Environment      $environment
      */
     public function __construct(BlacklistFactory $blacklistFactory, Environment $environment)
     {
@@ -29,9 +30,9 @@ class GitChangeSetFilter
      * Filters file paths by filter and global Blacklist.
      *
      * @param GitChangeSet $gitChangeSet
-     * @param string[] $allowedFileEndings
-     * @param string $blacklistToken
-     * @param string $whitelistToken
+     * @param string[]     $allowedFileEndings
+     * @param string       $blacklistToken
+     * @param string       $whitelistToken
      */
     public function filter(
         GitChangeSet $gitChangeSet,
@@ -61,7 +62,7 @@ class GitChangeSetFilter
      *
      * @param string[] $allowedFileEndings
      * @param string[] $files
-     * @param bool[] $list
+     * @param bool[]   $list
      *
      * @return array
      */
@@ -111,7 +112,8 @@ class GitChangeSetFilter
                 $result,
                 static function ($filePath) use ($allowedFileEndings) {
                     foreach ($allowedFileEndings as $allowedFileEnding) {
-                        if ($allowedFileEnding !== '' && substr($filePath, -strlen($allowedFileEnding)) === $allowedFileEnding) {
+                        if ($allowedFileEnding !== ''
+                            && substr($filePath, -strlen($allowedFileEnding)) === $allowedFileEnding) {
                             return true;
                         }
                     }
