@@ -1,6 +1,16 @@
 # Files/Directories to be ignored by StyleLint
-.idea
-vendor/
-node_modules/
-tests/
-coverage/
+# Legacy ignore file will be deleted in next release
+# assets/components/**/
+# assets/dist/**/
+# themes/Backend/**/
+# themes/Frontend/Bare/**/
+# themes/Frontend/Responsive/**/
+# assets/src/less/theme/fancybox.less
+# assets/src/less/theme/flexbox.less
+# assets/src/less/theme/glyphicons.less
+# assets/src/less/theme/glyphicons-filetypes.less
+# assets/src/less/theme/glyphicons-halflings.less
+# assets/src/less/theme/glyphicons-social.less
+# assets/src/less/theme/print.less
+# themes
+# themes/**/
