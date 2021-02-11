@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Library;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use function Safe\sprintf;
 
 class GenericCommandRunner
 {

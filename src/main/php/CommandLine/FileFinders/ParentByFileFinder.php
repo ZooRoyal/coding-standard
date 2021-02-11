@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 use InvalidArgumentException;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use function Safe\getcwd;
 
 class ParentByFileFinder
 {

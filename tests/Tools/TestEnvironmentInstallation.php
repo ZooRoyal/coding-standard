@@ -6,6 +6,10 @@ use BadMethodCallException;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+use function Safe\file_get_contents;
+use function Safe\file_put_contents;
+use function Safe\json_decode;
+use function Safe\json_encode;
 
 class TestEnvironmentInstallation
 {
@@ -27,6 +31,19 @@ class TestEnvironmentInstallation
         $this->installationPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $dirname;
 
         $this->composerPath = dirname(__DIR__, 2);
+    }
+
+    /**
+     * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
+     *
+     * @return TestEnvironmentInstallation
+     */
+    public static function getInstance(): TestEnvironmentInstallation
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new TestEnvironmentInstallation();
+        }
+        return self::$instance;
     }
 
     /**
@@ -116,18 +133,4 @@ class TestEnvironmentInstallation
 
         return $this;
     }
-
-    /**
-     * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
-     *
-     * @return TestEnvironmentInstallation
-     */
-    public static function getInstance(): TestEnvironmentInstallation
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new TestEnvironmentInstallation();
-        }
-        return self::$instance;
-    }
-
 }

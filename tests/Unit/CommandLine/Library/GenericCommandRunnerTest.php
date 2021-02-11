@@ -13,6 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
+use function Safe\sprintf;
 
 class GenericCommandRunnerTest extends TestCase
 {
@@ -187,7 +188,6 @@ class GenericCommandRunnerTest extends TestCase
         self::assertSame($mockedExitCode, $result);
     }
 
-
     /**
      * @test
      */
@@ -265,7 +265,7 @@ class GenericCommandRunnerTest extends TestCase
     /**
      * Prepares mocks for calls of private buildCommand
      *
-     * @param array  $mockedChangedFiles
+     * @param array $mockedChangedFiles
      * @param string $mockedTemplate
      * @param string $mockedOutput
      * @param string $mockedErrorOutput
@@ -309,7 +309,9 @@ class GenericCommandRunnerTest extends TestCase
         $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($mockedAllowedFileEndings, $mockedStopword, '', $mockedTargetBranch)->andReturn($this->mockedGitChangeSet);
+            ->with($mockedAllowedFileEndings, $mockedStopword, '', $mockedTargetBranch)->andReturn(
+                $this->mockedGitChangeSet
+            );
 
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with(
