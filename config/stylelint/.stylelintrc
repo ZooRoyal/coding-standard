@@ -14,6 +14,7 @@
     "number-leading-zero": "never",
     "max-empty-lines": 2,
     "selector-list-comma-newline-after": null,
-    "declaration-empty-line-before": null
+    "declaration-empty-line-before": null,
+    "max-nesting-depth": 3
   }
 }
