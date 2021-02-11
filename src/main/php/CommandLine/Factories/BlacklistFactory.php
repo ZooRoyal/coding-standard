@@ -76,14 +76,14 @@ class BlacklistFactory
             'find ' . $rootDirectory . ' -name ' . $token
         );
 
-        $rawExcludePathsByToken = explode(PHP_EOL, $finderResult);
+        $rawExcludePathsByToken = explode(PHP_EOL, trim($finderResult));
 
         $directories = array_map('dirname', $rawExcludePathsByToken);
         $relativeDirectories = array_map(
             fn($value) => substr($value, strlen($rootDirectory) + 1),
             $directories
         );
-        return array_filter($relativeDirectories);
+        return $relativeDirectories;
     }
 
     /**
@@ -134,14 +134,14 @@ class BlacklistFactory
             return [];
         }
 
-        $rawExcludePathsByFileByGit = explode(PHP_EOL, $finderResult);
+        $rawExcludePathsByFileByGit = explode(PHP_EOL, trim($finderResult));
 
         $relativeDirectories = array_map(
             static fn($value) => substr(dirname($value), strlen($rootDirectory) + 1),
             $rawExcludePathsByFileByGit
         );
 
-        return array_filter($relativeDirectories);
+        return $relativeDirectories;
     }
 
     /**

@@ -76,7 +76,7 @@ class EnvironmentTest extends TestCase
     {
         $result = $this->subject->getPackageDirectory();
 
-        self::assertTrue(is_dir($result));
+        self::assertSame(dirname(__DIR__, 4), $result);
     }
 
     /**

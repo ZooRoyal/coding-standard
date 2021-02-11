@@ -191,7 +191,7 @@ class PHPStanAdapterTest extends TestCase
         foreach ($this->toolFunctionsFileMapping as $toolName => $functionsFile) {
             $mockedComposerLocator->shouldReceive('getPath')
                 ->with($toolName)->andThrow(new RuntimeException());
-            $this->mockedOutputInterface->shouldReceive('writeln')
+            $this->mockedOutputInterface->shouldReceive('writeln')->once()
                 ->with(
                     '<info>' . $toolName . ' not found. Skip loading ' . $functionsFile . '</info>',
                     OutputInterface::VERBOSITY_VERBOSE

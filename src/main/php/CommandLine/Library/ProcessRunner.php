@@ -45,7 +45,7 @@ class ProcessRunner
     public function runAsProcessReturningProcessObject(string $command): Process
     {
         $version = Versions::getVersion('symfony/process');
-        if ((int) $version[1] <= 3) {
+        if ($version[1] <= 3) {
             /** @phpstan-ignore-next-line */
             $process = new Process($command);
         } else {
@@ -54,7 +54,6 @@ class ProcessRunner
         $process->setTimeout(null);
         $process->setIdleTimeout(60);
         $process->run();
-        $process->wait();
 
         return $process;
     }

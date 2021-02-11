@@ -65,7 +65,7 @@ class BlacklistFactoryTest extends TestCase
 
         $this->prepareFindersForBlacklistWithStopword($foregedStopword);
 
-        $result = $this->subject->build($foregedStopword);
+         $result = $this->subject->build($foregedStopword);
 
         self::assertSame($expctedResult, $result);
     }
@@ -90,7 +90,7 @@ class BlacklistFactoryTest extends TestCase
     {
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('find ' . $this->mockedRootDirectory . ' -name ' . $foregedStopword)
-            ->andReturn(__DIR__ . DIRECTORY_SEPARATOR . $foregedStopword);
+            ->andReturn(__DIR__ . DIRECTORY_SEPARATOR . $foregedStopword . PHP_EOL . ' ');
 
         return $foregedStopword;
     }
