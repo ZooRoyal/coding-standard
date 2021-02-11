@@ -5,11 +5,9 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Finder\Finder;
 use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\FinderFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\FinderToPathsConverter;
+use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class BlacklistFactoryTest extends TestCase
@@ -18,19 +16,16 @@ class BlacklistFactoryTest extends TestCase
     private $subjectParameters;
     /** @var BlacklistFactory */
     private $subject;
-    /** @var MockInterface|Finder */
-    private $mockedBlacklistFinder;
-    /** @var MockInterface|Finder */
-    private $mockedGitFinder;
-    /** @var MockInterface|Finder */
-    private $mockedStopwordFinder;
     /** @var string */
-    private $mockedRootDirectory = '/my/root';
+    private string $mockedRootDirectory;
     /** @var string[] */
-    private $blacklistedDirectories = ['eins', 'weg', 'mag/nicht'];
+    private array $blacklistedDirectories;
 
     protected function setUp(): void
     {
+        $this->mockedRootDirectory = dirname(__DIR__, 4);
+        $this->blacklistedDirectories = ['eins', 'weg', 'mag/nicht', 'tests/System'];
+
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(BlacklistFactory::class);
         $this->subject = $buildFragments['subject'];
@@ -49,9 +44,9 @@ class BlacklistFactoryTest extends TestCase
     /**
      * @test
      */
-    public function getBlacklistWithNoStopword()
+    public function getBlacklistWithNoStopword(): void
     {
-        $expctedResult = ['/gna/gnarz', '/bra/brarz', dirname(__DIR__)];
+        $expctedResult = [$this->blacklistedDirectories[3], 'tests/Functional'];
 
         $this->prepareFindersForBlacklistWithoutStopword();
 
@@ -63,9 +58,9 @@ class BlacklistFactoryTest extends TestCase
     /**
      * @test
      */
-    public function getBlacklistWithStopword()
+    public function getBlacklistWithStopword(): void
     {
-        $expctedResult = ['/gna/gnarz', '/bra/brarz', dirname(__DIR__), dirname(__DIR__)];
+        $expctedResult = [$this->blacklistedDirectories[3], 'tests/Unit/CommandLine/Factories', 'tests/Functional'];
         $foregedStopword = 'stopHere';
 
         $this->prepareFindersForBlacklistWithStopword($foregedStopword);
@@ -75,7 +70,7 @@ class BlacklistFactoryTest extends TestCase
         self::assertSame($expctedResult, $result);
     }
 
-    public function findStopwordDirectoriesUsesCacheOnMultipleCalls()
+    public function findStopwordDirectoriesUsesCacheOnMultipleCalls(): void
     {
         $forgedStopword = 'asd';
         $this->prepareStopwordFinder($forgedStopword);
@@ -84,7 +79,6 @@ class BlacklistFactoryTest extends TestCase
         $this->subject->findTokenDirectories($forgedStopword);
     }
 
-
     /**
      * Prepares Stopword Finder Mock for successfull test.
      *
@@ -92,83 +86,35 @@ class BlacklistFactoryTest extends TestCase
      *
      * @return string
      */
-    private function prepareStopwordFinder($foregedStopword)
+    private function prepareStopwordFinder(string $foregedStopword): string
     {
-        $this->mockedStopwordFinder = Mockery::mock(Finder::class);
-
-        $this->mockedStopwordFinder->shouldReceive('in')->once()
-            ->with($this->mockedRootDirectory)->andReturnSelf();
-        $this->mockedStopwordFinder->shouldReceive('files')->once()
-            ->withNoArgs()->andReturnSelf();
-        $this->mockedStopwordFinder->shouldReceive('name')->once()
-            ->with($foregedStopword)->andReturnSelf();
-
-        $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedStopwordFinder)->andReturn([__DIR__]);
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
+            ->with('find ' . $this->mockedRootDirectory . ' -name ' . $foregedStopword)
+            ->andReturn(__DIR__ . DIRECTORY_SEPARATOR . $foregedStopword);
 
         return $foregedStopword;
     }
 
-    private function prepareMockedGitFinder()
+    private function prepareMockedGitFinder(): void
     {
-        $this->mockedGitFinder = Mockery::mock(Finder::class);
-
-        $this->mockedGitFinder->shouldReceive('in')->once()
-            ->with($this->mockedRootDirectory)->andReturnSelf();
-        $this->mockedGitFinder->shouldReceive('depth')->once()
-            ->with('> 0')->andReturnSelf();
-        $this->mockedGitFinder->shouldReceive('path')->once()
-            ->with('/.git$/')->andReturnSelf();
-
-        $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedGitFinder)->andReturn([__DIR__]);
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
+            ->with('find ' . $this->mockedRootDirectory . ' -type d -mindepth 2 -name .git')
+            ->andReturn(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'Functional'. DIRECTORY_SEPARATOR . '.git');
     }
 
-    private function prepareBlacklistFinder()
-    {
-        $this->mockedBlacklistFinder = Mockery::mock(Finder::class);
-
-        $this->mockedBlacklistFinder->shouldReceive('in')->once()
-            ->with($this->mockedRootDirectory)->andReturnSelf();
-        $this->mockedBlacklistFinder->shouldReceive('directories')->once()
-            ->withNoArgs()->andReturnSelf();
-
-        foreach ($this->blacklistedDirectories as $item) {
-            $this->addPathToFinder($item);
-        }
-
-        $this->subjectParameters[FinderToPathsConverter::class]->shouldReceive('finderToArrayOfPaths')
-            ->with($this->mockedBlacklistFinder)->andReturn(['/gna/gnarz', '/gna/gnarz/gnub', '/bra/brarz']);
-    }
-
-    private function addPathToFinder($parameter)
-    {
-        $this->mockedBlacklistFinder->shouldReceive('path')->once()
-            ->with('/' . preg_quote($parameter, '/') . '$/')->andReturnSelf();
-        $this->mockedBlacklistFinder->shouldReceive('notPath')->once()
-            ->with('/' . preg_quote($parameter, '/') . './')->andReturnSelf();
-    }
-
-    private function prepareFindersForBlacklistWithoutStopword()
+    private function prepareFindersForBlacklistWithoutStopword(): void
     {
         $this->prepareMockedGitFinder();
-        $this->prepareBlacklistFinder();
 
         $this->subjectParameters[Environment::class]->shouldReceive('getBlacklistedDirectories')
             ->withNoArgs()->andReturn($this->blacklistedDirectories);
-        $this->subjectParameters[FinderFactory::class]->shouldReceive('build')
-            ->withNoArgs()->andReturn($this->mockedGitFinder, $this->mockedBlacklistFinder);
     }
 
-    private function prepareFindersForBlacklistWithStopword($foregedStopword)
+    private function prepareFindersForBlacklistWithStopword($foregedStopword): void
     {
         $this->prepareStopwordFinder($foregedStopword);
         $this->prepareMockedGitFinder();
-        $this->prepareBlacklistFinder();
         $this->subjectParameters[Environment::class]->shouldReceive('getBlacklistedDirectories')
             ->withNoArgs()->andReturn($this->blacklistedDirectories);
-        $this->subjectParameters[FinderFactory::class]->shouldReceive('build')
-            ->withNoArgs()
-            ->andReturn($this->mockedStopwordFinder, $this->mockedGitFinder, $this->mockedBlacklistFinder);
     }
 }

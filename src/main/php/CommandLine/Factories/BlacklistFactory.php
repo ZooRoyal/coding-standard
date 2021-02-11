@@ -3,34 +3,28 @@
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\FinderToPathsConverter;
+use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
 class BlacklistFactory
 {
-    /** @var FinderToPathsConverter */
-    private $finderToRealPathConverter;
     /** @var Environment */
     private $environment;
-    /** @var FinderFactory */
-    private $finderFactory;
     /** @var array<string, mixed> */
     private $blackListCache = [];
+    private ProcessRunner $processRunner;
 
     /**
      * BlacklistFactory constructor.
      *
-     * @param FinderToPathsConverter $finderToRealPathConverter
-     * @param Environment            $environment
-     * @param FinderFactory          $finderFactory
+     * @param Environment   $environment
+     * @param ProcessRunner $processRunner
      */
     public function __construct(
-        FinderToPathsConverter $finderToRealPathConverter,
         Environment $environment,
-        FinderFactory $finderFactory
+        ProcessRunner $processRunner
     ) {
-        $this->finderToRealPathConverter = $finderToRealPathConverter;
         $this->environment = $environment;
-        $this->finderFactory = $finderFactory;
+        $this->processRunner = $processRunner;
     }
 
     /**
@@ -41,7 +35,7 @@ class BlacklistFactory
      *
      * @return string[]
      */
-    public function build(string $token = '', bool $deDuped = true) : array
+    public function build(string $token = '', bool $deDuped = true): array
     {
         if (array_key_exists($token, $this->blackListCache)) {
             return $this->blackListCache[$token];
@@ -68,6 +62,31 @@ class BlacklistFactory
     }
 
     /**
+     * Searches for directories containing stopword files.
+     *
+     * @param string $token
+     *
+     * @return string[]
+     */
+    public function findTokenDirectories(string $token): array
+    {
+        $rootDirectory = $this->environment->getRootDirectory();
+
+        $finderResult = $this->processRunner->runAsProcess(
+            'find ' . $rootDirectory . ' -name ' . $token
+        );
+
+        $rawExcludePathsByToken = explode(PHP_EOL, $finderResult);
+
+        $directories = array_map('dirname', $rawExcludePathsByToken);
+        $relativeDirectories = array_map(
+            fn($value) => substr($value, strlen($rootDirectory) + 1),
+            $directories
+        );
+        return array_filter($relativeDirectories);
+    }
+
+    /**
      * This method filters subpaths of paths already existing in $rawExcludePaths
      *
      * @param string[] $rawExcludePaths
@@ -85,9 +104,13 @@ class BlacklistFactory
             $item = $filteredArray[$i];
             $filteredArray = array_filter(
                 $filteredArray,
-                function ($value) use ($item) {
-                    return !(strlen($value) !== strlen($item) && strpos($value, $item) === 0);
-                }
+                function ($value, $key) use ($item, $i) {
+                    if ($key === $i) {
+                        return true;
+                    }
+                    return strpos($value, $item) !== 0;
+                },
+                ARRAY_FILTER_USE_BOTH
             );
         }
         $filteredArray = array_values($filteredArray);
@@ -96,32 +119,29 @@ class BlacklistFactory
     }
 
     /**
-     * Searches for directories containing stopword files.
-     *
-     * @param string $token
-     *
-     * @return string[]
-     */
-    public function findTokenDirectories(string $token) : array
-    {
-        $tokenFinder = $this->finderFactory->build();
-        $tokenFinder->in($this->environment->getRootDirectory())->files()->name($token);
-        $rawExcludePathsByToken = $this->finderToRealPathConverter
-            ->finderToArrayOfPaths($tokenFinder);
-        return array_map('dirname', $rawExcludePathsByToken);
-    }
-
-    /**
      * Finds submodules of in the project directory.
      *
      * @return string[]
      */
-    private function findGitDirectories() : array
+    private function findGitDirectories(): array
     {
-        $finderGit = $this->finderFactory->build();
-        $finderGit->in($this->environment->getRootDirectory())->depth('> 0')->path('/.git$/');
-        $rawExcludePathsByFileByGit = $this->finderToRealPathConverter->finderToArrayOfPaths($finderGit);
-        return array_map('dirname', $rawExcludePathsByFileByGit);
+        $rootDirectory = $this->environment->getRootDirectory();
+        $finderResult = $this->processRunner->runAsProcess(
+            'find ' . $rootDirectory . ' -type d -mindepth 2 -name .git'
+        );
+
+        if (empty($finderResult)) {
+            return [];
+        }
+
+        $rawExcludePathsByFileByGit = explode(PHP_EOL, $finderResult);
+
+        $relativeDirectories = array_map(
+            static fn($value) => substr(dirname($value), strlen($rootDirectory) + 1),
+            $rawExcludePathsByFileByGit
+        );
+
+        return array_filter($relativeDirectories);
     }
 
     /**
@@ -131,15 +151,18 @@ class BlacklistFactory
      *
      * @return string[]
      */
-    private function findDirectoriesFromEnvironment(Environment $environment) : array
+    private function findDirectoriesFromEnvironment(Environment $environment): array
     {
-        $finderBlacklist = $this->finderFactory->build();
-        $finderBlacklist->in($environment->getRootDirectory())->directories();
-        foreach ($environment->getBlacklistedDirectories() as $blacklistedDirectory) {
-            $finderBlacklist->path('/' . preg_quote($blacklistedDirectory, '/') . '$/')
-                ->notPath('/' . preg_quote($blacklistedDirectory, '/') . './');
-        }
-        $rawExcludePathsByBlacklist = $this->finderToRealPathConverter->finderToArrayOfPaths($finderBlacklist);
-        return $rawExcludePathsByBlacklist;
+        $directories = $environment->getBlacklistedDirectories();
+        $rootDirectory = $environment->getRootDirectory();
+
+        $filteredDirectories = array_filter(
+            $directories,
+            static function ($value) use ($rootDirectory) {
+                return is_dir($rootDirectory . DIRECTORY_SEPARATOR . $value);
+            }
+        );
+
+        return $filteredDirectories;
     }
 }
