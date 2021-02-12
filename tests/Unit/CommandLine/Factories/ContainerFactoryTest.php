@@ -13,6 +13,13 @@ use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
 class ContainerFactoryTest extends TestCase
 {
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
     /**
      * @test
      */

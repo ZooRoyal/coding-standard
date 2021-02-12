@@ -37,8 +37,8 @@ class EventDispatcherFactory
     {
         $eventDispatcher = new EventDispatcher();
 
-        foreach ($this->subscribers as $listener) {
-            $eventDispatcher->addSubscriber($this->container->get($listener));
+        foreach ($this->subscribers as $subscriber) {
+            $eventDispatcher->addSubscriber($this->container->get($subscriber));
         }
 
         return $eventDispatcher;

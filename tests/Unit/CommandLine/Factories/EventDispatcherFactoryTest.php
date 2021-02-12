@@ -28,6 +28,12 @@ class EventDispatcherFactoryTest extends TestCase
         $this->subjectParameters = $buildFragments['parameters'];
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
     /**
      * @test
      * @runInSeparateProcess

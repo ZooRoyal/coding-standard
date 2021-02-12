@@ -24,13 +24,16 @@ class ProcessRunner
         } else {
             $process = new Process(array_merge(explode(' ', $command), $arguments));
         }
+        $process->setTimeout(null);
+        $process->setIdleTimeout(60);
         $process->mustRun();
-        $process->wait();
 
         $output = $process->getOutput();
-        $result = empty($process->getErrorOutput())
+        $errorOutput = $process->getErrorOutput();
+
+        $result = empty($errorOutput)
             ? $output
-            : $output . PHP_EOL . $process->getErrorOutput();
+            : $output . PHP_EOL . $errorOutput;
 
         return trim($result);
     }

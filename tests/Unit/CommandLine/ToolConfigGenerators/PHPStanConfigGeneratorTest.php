@@ -30,7 +30,6 @@ class PHPStanConfigGeneratorTest extends TestCase
         $this->mockedNeonAdapter = Mockery::mock(NeonAdapter::class);
         $this->mockedFileWriter = Mockery::mock(FileWriter::class);
         $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
-        $this->subject = Mockery::mock(PHPStanConfigGenerator::class);
 
         $this->subject = new PHPStanConfigGenerator(
             $this->mockedNeonAdapter,
