@@ -4,7 +4,8 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use DI\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\CommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
 
 /**
  * Class EventDispatcherFactory
@@ -15,7 +16,7 @@ class EventDispatcherFactory
 {
     private Container $container;
     /** @var array<string> */
-    private array $subscribers = [CommandPreconditionChecker::class];
+    private array $subscribers = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
 
     /**
      * EventDispatcherFactory constructor.

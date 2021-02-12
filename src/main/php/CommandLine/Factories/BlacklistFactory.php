@@ -4,13 +4,12 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use function Safe\substr;
 
 class BlacklistFactory
 {
-    /** @var Environment */
-    private $environment;
-    /** @var array<string, mixed> */
-    private $blackListCache = [];
+    private Environment $environment;
+    private array $blackListCache = [];
     private ProcessRunner $processRunner;
 
     /**
@@ -80,7 +79,7 @@ class BlacklistFactory
 
         $directories = array_map('dirname', $rawExcludePathsByToken);
         $relativeDirectories = array_map(
-            fn($value) => substr($value, strlen($rootDirectory) + 1),
+            static fn($value) => substr($value, strlen($rootDirectory) + 1),
             $directories
         );
         return $relativeDirectories;
@@ -104,7 +103,7 @@ class BlacklistFactory
             $item = $filteredArray[$i];
             $filteredArray = array_filter(
                 $filteredArray,
-                function ($value, $key) use ($item, $i) {
+                static function ($value, $key) use ($item, $i) {
                     if ($key === $i) {
                         return true;
                     }

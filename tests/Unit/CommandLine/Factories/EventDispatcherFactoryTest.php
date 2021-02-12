@@ -7,7 +7,8 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\CommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\Factories\EventDispatcherFactory;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -16,6 +17,8 @@ class EventDispatcherFactoryTest extends TestCase
     private EventDispatcherFactory $subject;
     /** @var array<MockInterface> */
     private array $subjectParameters;
+    /** @var array<string> */
+    private array $subscribers = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
 
     public function setUp(): void
     {
@@ -33,12 +36,14 @@ class EventDispatcherFactoryTest extends TestCase
     public function build()
     {
         $mockedEventDispatcher = Mockery::mock('overload:' . EventDispatcher::class);
-        $mockedCommandPreconditionChecker = Mockery::mock(CommandPreconditionChecker::class);
 
-        $this->subjectParameters[Container::class]->shouldReceive('get')
-            ->with(CommandPreconditionChecker::class)->andReturn($mockedCommandPreconditionChecker);
-        $mockedEventDispatcher->shouldReceive('addSubscriber')->once()
-            ->with($mockedCommandPreconditionChecker);
+        foreach ($this->subscribers as $subscriber) {
+            $mockedSubscriber = Mockery::mock($subscriber);
+            $this->subjectParameters[Container::class]->shouldReceive('get')->once()
+                ->with($subscriber)->andReturn($mockedSubscriber);
+            $mockedEventDispatcher->shouldReceive('addSubscriber')->once()
+                ->with($mockedSubscriber);
+        }
 
         $result = $this->subject->build();
 

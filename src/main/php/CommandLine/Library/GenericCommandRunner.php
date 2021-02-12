@@ -195,8 +195,7 @@ class GenericCommandRunner
         bool $escape,
         string $prefix,
         string $glue
-    ): string
-    {
+    ): string {
         $blackList = $this->blacklistFactory->build($blacklistToken);
         if ($escape) {
             $blackList = array_map(
