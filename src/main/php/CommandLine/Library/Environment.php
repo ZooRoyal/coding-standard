@@ -12,18 +12,6 @@ class Environment
     /** @var string */
     private $localHeadHash;
 
-    /** @var string[] */
-    private $blacklistedDirectories = [
-        '.eslintrc.js',
-        '.git',
-        '.idea',
-        '.vagrant',
-        'node_modules',
-        'vendor',
-        'bower_components',
-        '.pnpm',
-        '.pnpm-store',
-    ];
     /** @var ProcessRunner */
     private $processRunner;
     /** @var GitInputValidator */
@@ -67,11 +55,6 @@ class Environment
     public function getPackageDirectory() : string
     {
         return dirname(__DIR__, 5);
-    }
-
-    public function getBlacklistedDirectories() : array
-    {
-        return $this->blacklistedDirectories;
     }
 
     /**

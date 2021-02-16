@@ -31,6 +31,7 @@ class GlobalSystemTest extends AsyncTestCase
      * @test
      *
      * @large
+     * @coversNothing
      */
     public function runCodingStandardToFindErrors(): ?Generator
     {
@@ -72,6 +73,8 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @large
      * @depends runCodingStandardToFindErrors
+     *
+     * @coversNothing
      */
     public function dontFilesMakeAllGood(): ?Generator
     {

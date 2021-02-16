@@ -5,7 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators;
 
 use PHPStan\DependencyInjection\NeonAdapter;
 use PHPStan\File\FileWriter;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 
 class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
 {
@@ -13,13 +13,13 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
     private $neonAdapter;
     /** @var FileWriter */
     private $fileWriter;
-    /** @var BlacklistFactory */
+    /** @var ExclusionListFactory */
     private $blacklistFactory;
 
     public function __construct(
         NeonAdapter $neonAdapter,
         FileWriter $fileWriter,
-        BlacklistFactory $blacklistFactory
+        ExclusionListFactory $blacklistFactory
     ) {
         $this->fileWriter = $fileWriter;
         $this->neonAdapter = $neonAdapter;

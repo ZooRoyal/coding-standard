@@ -3,14 +3,14 @@
 namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use function Safe\mkdir;
 use function Safe\rmdir;
 
 class BlacklistFactoryTest extends TestCase
 {
-    /** @var BlacklistFactory */
+    /** @var ExclusionListFactory */
     private $subject;
 
     protected function setUp(): void
@@ -18,7 +18,7 @@ class BlacklistFactoryTest extends TestCase
         mkdir(__DIR__ . '/Fixtures/gitExclude/.git');
 
         $container = ContainerFactory::getUnboundContainerInstance();
-        $this->subject = $container->get(BlacklistFactory::class);
+        $this->subject = $container->get(ExclusionListFactory::class);
     }
 
     protected function tearDown(): void

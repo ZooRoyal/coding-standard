@@ -3,7 +3,7 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use function Safe\sprintf;
 
@@ -15,16 +15,16 @@ class GenericCommandRunner
     private $processRunner;
     /** @var AdaptableFileFinder */
     private $adaptableFileFinder;
-    /** @var BlacklistFactory */
+    /** @var ExclusionListFactory */
     private $blacklistFactory;
 
     /**
      * AbstractToolAdapter constructor.
      *
-     * @param OutputInterface $output
-     * @param ProcessRunner $processRunner
-     * @param AdaptableFileFinder $adaptableFileFinder
-     * @param BlacklistFactory $blacklistFactory
+     * @param OutputInterface      $output
+     * @param ProcessRunner        $processRunner
+     * @param AdaptableFileFinder  $adaptableFileFinder
+     * @param ExclusionListFactory $blacklistFactory
      *
      * @inject
      */
@@ -32,7 +32,7 @@ class GenericCommandRunner
         OutputInterface $output,
         ProcessRunner $processRunner,
         AdaptableFileFinder $adaptableFileFinder,
-        BlacklistFactory $blacklistFactory
+        ExclusionListFactory $blacklistFactory
     ) {
         $this->output = $output;
         $this->processRunner = $processRunner;

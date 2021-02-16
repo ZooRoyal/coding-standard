@@ -10,7 +10,7 @@ use PHPStan\DependencyInjection\NeonAdapter;
 use PHPStan\File\CouldNotWriteFileException;
 use PHPStan\File\FileWriter;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenerator;
 use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\ToolConfigGeneratorInterface;
 
@@ -20,7 +20,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     private $mockedNeonAdapter;
     /** @var MockInterface|FileWriter */
     private $mockedFileWriter;
-    /** @var MockInterface| BlacklistFactory */
+    /** @var MockInterface| ExclusionListFactory */
     private $mockedBlacklistFactory;
     /** @var PHPStanConfigGenerator */
     private $subject;
@@ -29,7 +29,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     {
         $this->mockedNeonAdapter = Mockery::mock(NeonAdapter::class);
         $this->mockedFileWriter = Mockery::mock(FileWriter::class);
-        $this->mockedBlacklistFactory = Mockery::mock(BlacklistFactory::class);
+        $this->mockedBlacklistFactory = Mockery::mock(ExclusionListFactory::class);
 
         $this->subject = new PHPStanConfigGenerator(
             $this->mockedNeonAdapter,

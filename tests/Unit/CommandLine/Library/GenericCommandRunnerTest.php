@@ -7,7 +7,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Process\Process;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
@@ -171,7 +171,7 @@ class GenericCommandRunnerTest extends TestCase
             $mockedGlue,
             $mockedPrefix
         );
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')->once()
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
             ->with($mockedStopword)->andReturn($mockedBlacklist);
 
         $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
@@ -211,7 +211,7 @@ class GenericCommandRunnerTest extends TestCase
             $mockedGlue,
             $mockedPrefix
         );
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')->once()
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
             ->with($mockedStopword)->andReturn($mockedBlacklist);
 
         $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
