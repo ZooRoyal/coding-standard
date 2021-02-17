@@ -89,7 +89,7 @@ class RunEslintWithConfigTest extends TestCase
      */
     public function runStylelintInCleanInstall()
     {
-        $command = 'vendor/bin/coding-standard sca:stylelint -vvv';
+        $command = 'vendor/bin/coding-standard sca:stylelint';
 
         $process = new Process($command, self::$tempDir);
 
