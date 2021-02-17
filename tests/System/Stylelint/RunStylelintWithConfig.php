@@ -10,10 +10,11 @@ use Symfony\Component\Process\Process;
 class RunStylelintWithConfig extends TestCase
 {
 
-    protected function setUp(){
+    protected function setUp()
+    {
         $process = new Process([
             'npm',
-            'install'
+            'install',
         ]);
 
         $process->mustRun();
