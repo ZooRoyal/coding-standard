@@ -3,26 +3,31 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Console\Exception\LogicException;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use function Safe\substr;
 
 class GitChangeSetFilter
 {
-    /** @var BlacklistFactory */
-    private $blacklistFactory;
-    /** @var Environment */
-    private $environment;
+    private ExclusionListFactory $exclusionListFactory;
+    private TokenExcluder $tokenExcluder;
+    private Environment $environment;
 
     /**
      * FileFilter constructor.
      *
-     * @param BlacklistFactory $blacklistFactory
-     * @param Environment      $environment
+     * @param ExclusionListFactory $exclusionListFactory
+     * @param TokenExcluder        $tokenExcluder
+     * @param Environment          $environment
      */
-    public function __construct(BlacklistFactory $blacklistFactory, Environment $environment)
-    {
-        $this->blacklistFactory = $blacklistFactory;
+    public function __construct(
+        ExclusionListFactory $exclusionListFactory,
+        TokenExcluder $tokenExcluder,
+        Environment $environment
+    ) {
+        $this->exclusionListFactory = $exclusionListFactory;
+        $this->tokenExcluder = $tokenExcluder;
         $this->environment = $environment;
     }
 
@@ -45,9 +50,9 @@ class GitChangeSetFilter
 
         if ($whitelistToken !== '') {
             $deDuped = false;
-            $whitelist = $this->blacklistFactory->findTokenDirectories($whitelistToken);
+            $whitelist = $this->tokenExcluder->getPathsToExclude([], ['token' => $whitelistToken]);
         }
-        $blacklist = $this->blacklistFactory->build($blacklistToken, $deDuped);
+        $blacklist = $this->exclusionListFactory->build($blacklistToken, $deDuped);
 
         $list = $this->mergeLists($blacklist, $whitelist);
         $files = $gitChangeSet->getFiles();

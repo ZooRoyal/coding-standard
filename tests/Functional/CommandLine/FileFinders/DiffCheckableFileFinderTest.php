@@ -85,7 +85,7 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedEnvironment->shouldReceive('getBlacklistedDirectories')
             ->withNoArgs()->andReturn(['.eslintrc.js', '.git', '.idea', '.vagrant', 'vendor']);
 
-        $mockedProcessRunner = Mockery::mock(ProcessRunner::class);
+        $mockedProcessRunner = Mockery::mock(ProcessRunner::class)->makePartial();
         $mockedProcessRunner->shouldReceive('runAsProcess')->once()
             ->with('git', 'merge-base', 'HEAD', $targetBranch)->andReturn($targetMergeBase);
         $mockedProcessRunner->shouldReceive('runAsProcess')->once()

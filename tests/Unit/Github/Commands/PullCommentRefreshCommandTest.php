@@ -40,7 +40,7 @@ class PullCommentRefreshCommandTest extends TestCase
         'body' => 'myBody',
         'commitId' => 'myCommitId',
         'path' => 'myPath',
-        'position' => 1,
+        'position' => '1',
     ];
 
     /** @var array<string, array<string, string>|int|string> */

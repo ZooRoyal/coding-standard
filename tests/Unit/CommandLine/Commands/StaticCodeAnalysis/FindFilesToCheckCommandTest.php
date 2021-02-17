@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -107,7 +107,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedExclusiveFlag
         );
 
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')->once()
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
             ->with($mockedBlacklistToken)->andReturn($expectedArray);
 
         $mockedOutputInterface->shouldReceive('writeln')->once()

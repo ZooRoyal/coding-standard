@@ -8,7 +8,8 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\LogicException;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
@@ -62,10 +63,10 @@ class GitChangeSetFilterTest extends TestCase
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
 
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($blacklistToken, false)->andReturn([$this->blacklistedDirectory]);
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
-            ->once()->with($whitelistToken)->andReturn([$whitelistedDirectory]);
+        $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
+            ->once()->with([], ['token' => $whitelistToken])->andReturn([$whitelistedDirectory]);
 
         $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
 
@@ -87,7 +88,7 @@ class GitChangeSetFilterTest extends TestCase
         $expectedResult = ['wahwah', 'bla'];
         $blackListToken = 'stopMe';
 
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($blackListToken, true)->andReturn([$this->blacklistedDirectory]);
 
         $this->subject->filter($mockedFileList, [], $blackListToken);
@@ -114,7 +115,7 @@ class GitChangeSetFilterTest extends TestCase
         );
         $expectedResult = ['asd' . $mockedFilter[0], 'qweqweq' . $mockedFilter[1]];
 
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with('', true)->andReturn([$this->blacklistedDirectory]);
 
         $this->subject->filter($mockedFileList, $mockedFilter);
@@ -137,10 +138,10 @@ class GitChangeSetFilterTest extends TestCase
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
 
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('build')
+        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($blacklistToken, false)->andReturn(['hallo']);
-        $this->subjectParameters[BlacklistFactory::class]->shouldReceive('findTokenDirectories')
-            ->once()->with($whitelistToken)->andReturn(['hallo']);
+        $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
+            ->once()->with([], ['token' => $whitelistToken])->andReturn(['hallo']);
 
         $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
     }

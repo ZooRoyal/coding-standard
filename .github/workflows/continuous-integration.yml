@@ -133,7 +133,13 @@ jobs:
           composer update -n --no-progress --no-suggest ${COMPOSER_PARAMETERS}
           composer show -i
 
+      - name: Check PHPUnit
+        if: ${{ matrix.composer_parameters == '--prefer-lowest' }}
+        run : |
+          composer test
+
       - name: Check infections
+        if: ${{ matrix.composer_parameters == ' ' }}
         run : |
           composer infection
 

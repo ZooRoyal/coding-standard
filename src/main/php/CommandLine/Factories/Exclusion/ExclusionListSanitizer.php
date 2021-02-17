@@ -1,0 +1,45 @@
+<?php
+
+namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
+
+class ExclusionListSanitizer
+{
+    /**
+     * This method deletes entries from exclusionList which would have no effect.
+     *
+     * @param array<string> $rawExcludePaths
+     *
+     * @return array
+     *
+     * @example
+     *         Input: ['./a', './a/b', './a/b/c']
+     *         Output: ['./a']
+     *         Explanation: As the second and the third directories are children of the first it would make
+     *         no sense to exclude them "again". As the parent is excluded they are automatically
+     *         excluded too.
+     */
+    public function sanitizeExclusionList(array $rawExcludePaths)
+    {
+        $filteredArray = $rawExcludePaths;
+        $count = count($filteredArray);
+        for ($i = 0; $count > $i; $i++) {
+            if (!isset($filteredArray[$i])) {
+                continue;
+            }
+            $item = $filteredArray[$i];
+            $filteredArray = array_filter(
+                $filteredArray,
+                static function ($value, $key) use ($item, $i) {
+                    if ($key === $i) {
+                        return true;
+                    }
+                    return strpos($value, $item) !== 0;
+                },
+                ARRAY_FILTER_USE_BOTH
+            );
+        }
+        $filteredArray = array_values($filteredArray);
+
+        return $filteredArray;
+    }
+}

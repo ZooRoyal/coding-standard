@@ -14,6 +14,7 @@ class RunStylelintWithConfig extends AsyncTestCase
     /**
      * @test
      * @large
+     * @coversNothing
      */
     public function findViolationsByEslint(): ?Generator
     {

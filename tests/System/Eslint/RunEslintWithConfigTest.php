@@ -25,6 +25,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
     /**
      * @test
      * @large
+     * @coversNothing
      */
     public function runEslintForJSInCleanInstall(): ?Generator
     {
@@ -51,6 +52,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
     /**
      * @test
      * @large
+     * @coversNothing
      */
     public function runEslintForTSInCleanInstall(): ?Generator
     {
@@ -77,6 +79,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
     /**
      * @test
      * @large
+     * @coversNothing
      */
     public function runStylelintInCleanInstall(): ?Generator
     {

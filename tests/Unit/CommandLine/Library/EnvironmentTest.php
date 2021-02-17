@@ -15,18 +15,6 @@ class EnvironmentTest extends TestCase
 {
     /** @var Environment */
     private $subject;
-    /** @var string[] */
-    private $blacklistedDirectories = [
-        '.eslintrc.js',
-        '.git',
-        '.idea',
-        '.vagrant',
-        'node_modules',
-        'vendor',
-        'bower_components',
-        '.pnpm',
-        '.pnpm-store',
-    ];
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
 
@@ -76,17 +64,7 @@ class EnvironmentTest extends TestCase
     {
         $result = $this->subject->getPackageDirectory();
 
-        self::assertTrue(is_dir($result));
-    }
-
-    /**
-     * @test
-     */
-    public function getBlacklistedDirectories()
-    {
-        $result = $this->subject->getBlacklistedDirectories();
-
-        self::assertSame($this->blacklistedDirectories, $result);
+        self::assertSame(dirname(__DIR__, 4), $result);
     }
 
     /**

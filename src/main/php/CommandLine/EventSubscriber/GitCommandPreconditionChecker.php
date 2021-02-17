@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
  * subscribes to the event just before the first command is run and makes sure, that the command is run from inside a
  * git directory.
  */
-class CommandPreconditionChecker implements EventSubscriberInterface
+class GitCommandPreconditionChecker implements EventSubscriberInterface
 {
     private ProcessRunner $processRunner;
     private ?int $exitCode = null;
@@ -33,11 +33,11 @@ class CommandPreconditionChecker implements EventSubscriberInterface
     /**
      * Returns the command event to be subscribed to.
      *
-     * @return string[]
+     * @return array<string, array<int, int|string>>
      */
     public static function getSubscribedEvents(): array
     {
-        return [ConsoleEvents::COMMAND => 'checkForGit'];
+        return [ConsoleEvents::COMMAND => ['checkForGit', 50]];
     }
 
     /**

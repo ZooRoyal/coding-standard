@@ -7,12 +7,12 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\BlacklistFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 
 class FindFilesToCheckCommand extends Command
 {
-    /** @var BlacklistFactory */
+    /** @var ExclusionListFactory */
     private $blacklistFactory;
     /** @var AdaptableFileFinder */
     private $adaptableFileFinder;
@@ -20,11 +20,11 @@ class FindFilesToCheckCommand extends Command
     /**
      * FindFilesToCheckCommand constructor.
      *
-     * @param BlacklistFactory $blacklistFactory
-     * @param AdaptableFileFinder $adaptableFileFinder
+     * @param ExclusionListFactory $blacklistFactory
+     * @param AdaptableFileFinder  $adaptableFileFinder
      */
     public function __construct(
-        BlacklistFactory $blacklistFactory,
+        ExclusionListFactory $blacklistFactory,
         AdaptableFileFinder $adaptableFileFinder
     ) {
         $this->blacklistFactory = $blacklistFactory;

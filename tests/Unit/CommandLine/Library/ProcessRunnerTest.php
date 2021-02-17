@@ -21,6 +21,12 @@ class ProcessRunnerTest extends TestCase
         $this->subject = new ProcessRunner();
     }
 
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
+    }
+
     /**
      * @test
      */
@@ -89,7 +95,7 @@ class ProcessRunnerTest extends TestCase
      *
      * @param string $versionString
      * @param string $commandInput
-     * @param mixed $commandOutput
+     * @param mixed  $commandOutput
      */
     public function runAsProcessReturningProcessObjectIsVersionStable(
         string $versionString,
@@ -99,17 +105,13 @@ class ProcessRunnerTest extends TestCase
         $overwrittenVersions = Mockery::mock('overload:' . Versions::class);
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
-        $overwrittenProcess->shouldReceive('setTimeout')->once()
-            ->with(null);
-        $overwrittenProcess->shouldReceive('setIdleTimeout')->once()
-            ->with(60);
+        $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
+        $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(60);
         $overwrittenProcess->shouldReceive('run')->once();
-        $overwrittenProcess->shouldReceive('wait')->once();
 
         $overwrittenVersions->shouldReceive('getVersion')->once()
             ->with('symfony/process')->andReturn($versionString);
-        $overwrittenProcess->shouldReceive('__construct')->once()
-            ->with($commandOutput);
+        $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
 
         $result = $this->subject->runAsProcessReturningProcessObject($commandInput);
 
@@ -135,7 +137,7 @@ class ProcessRunnerTest extends TestCase
      * @param string $commandInput
      * @param string $commandArgument1
      * @param string $commandArgument2
-     * @param mixed $commandOutput
+     * @param mixed  $commandOutput
      */
     public function runAsProcessIsVersionStable(
         string $versionString,
@@ -154,8 +156,8 @@ class ProcessRunnerTest extends TestCase
 
         $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
         $overwrittenProcess->shouldReceive('mustRun')->once()->withNoArgs();
+        $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(60);
         $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
-        $overwrittenProcess->shouldReceive('wait')->once()->withNoArgs();
         $overwrittenProcess->shouldReceive('getOutput')->once()->withNoArgs()->andReturn($expectedOutput);
         $overwrittenProcess->shouldReceive('getErrorOutput')->once()->withNoArgs()->andReturn($expectedError);
 

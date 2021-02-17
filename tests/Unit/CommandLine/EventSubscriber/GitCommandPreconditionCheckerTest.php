@@ -10,22 +10,28 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\CommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
-class CommandPreconditionCheckerTest extends TestCase
+class GitCommandPreconditionCheckerTest extends TestCase
 {
-    private CommandPreconditionChecker $subject;
+    private GitCommandPreconditionChecker $subject;
     /** @var array<MockInterface> */
     private array $subjectParameters;
 
     public function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(CommandPreconditionChecker::class);
+        $buildFragments = $subjectFactory->buildSubject(GitCommandPreconditionChecker::class);
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 
     /**
@@ -35,7 +41,7 @@ class CommandPreconditionCheckerTest extends TestCase
     {
         $events = $this->subject::getSubscribedEvents();
 
-        MatcherAssert::assertThat($events, H::hasKeyValuePair(ConsoleEvents::COMMAND, 'checkForGit'));
+        MatcherAssert::assertThat($events, H::hasKeyValuePair(ConsoleEvents::COMMAND, ['checkForGit', 50]));
     }
 
     /**

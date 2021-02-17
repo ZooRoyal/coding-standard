@@ -18,6 +18,7 @@ class ShopwareCompatibilityTest extends TestCase
      *
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
+     * @coversNothing
      */
     public function installingCodingStandardInShopwareContext(): void
     {
