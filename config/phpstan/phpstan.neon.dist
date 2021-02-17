@@ -7,3 +7,6 @@ parameters:
         maximumNumberOfProcesses: 4
     fileExtensions:
         - php
+    reportUnmatchedIgnoredErrors: false
+    ignoreErrors:
+        - '#Function \S+ invoked with [0-9]+ parameters?, [0-9]+ required.#'
