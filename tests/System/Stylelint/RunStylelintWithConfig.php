@@ -62,4 +62,48 @@ class RunStylelintWithConfig extends TestCase
         self::assertSame(2, $errorCode);
         MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 3'));
     }
+
+    /**
+     * @test
+     */
+    public function findViolationsByEslintInSass()
+    {
+        $process = new Process(
+            [
+                __DIR__ . '/../../../node_modules/.bin/stylelint',
+                '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
+                __DIR__ . '/../fixtures/stylelint/BadCode.sass',
+            ]
+        );
+
+        $process->run();
+        $process->wait();
+        $errorCode = $process->getExitCode();
+        $output = $process->getOutput();
+
+        self::assertSame(2, $errorCode);
+        MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 3'));
+    }
+
+    /**
+     * @test
+     */
+    public function findViolationsByEslintInCss()
+    {
+        $process = new Process(
+            [
+                __DIR__ . '/../../../node_modules/.bin/stylelint',
+                '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
+                __DIR__ . '/../fixtures/stylelint/BadCssCode.css',
+            ]
+        );
+
+        $process->run();
+        $process->wait();
+        $errorCode = $process->getExitCode();
+        $output = $process->getOutput();
+
+        self::assertSame(2, $errorCode);
+        MatcherAssert::assertThat($output, H::containsString('Unexpected empty block'));
+    }
 }
