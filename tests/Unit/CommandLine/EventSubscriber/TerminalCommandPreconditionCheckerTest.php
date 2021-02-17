@@ -42,7 +42,16 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
     {
         $events = $this->subject::getSubscribedEvents();
 
-        MatcherAssert::assertThat($events, H::hasKeyValuePair(ConsoleEvents::COMMAND, 'checkForTerminalCommands'));
+        MatcherAssert::assertThat(
+            $events,
+            H::hasKeyValuePair(
+                ConsoleEvents::COMMAND,
+                [
+                    'checkForTerminalCommands',
+                    100,
+                ]
+            )
+        );
     }
 
     /**

@@ -41,7 +41,7 @@ class GitCommandPreconditionCheckerTest extends TestCase
     {
         $events = $this->subject::getSubscribedEvents();
 
-        MatcherAssert::assertThat($events, H::hasKeyValuePair(ConsoleEvents::COMMAND, 'checkForGit'));
+        MatcherAssert::assertThat($events, H::hasKeyValuePair(ConsoleEvents::COMMAND, ['checkForGit', 50]));
     }
 
     /**

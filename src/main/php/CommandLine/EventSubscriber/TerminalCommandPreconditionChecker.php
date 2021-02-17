@@ -35,11 +35,11 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
     /**
      * Returns the command event to be subscribed to.
      *
-     * @return string[]
+     * @return array<string, array<int, int|string>>
      */
     public static function getSubscribedEvents(): array
     {
-        return [ConsoleEvents::COMMAND => 'checkForTerminalCommands'];
+        return [ConsoleEvents::COMMAND => ['checkForTerminalCommands', 100]];
     }
 
     /**
