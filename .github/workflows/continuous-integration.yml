@@ -1,7 +1,14 @@
 ---
 name: Continuous Integration
 
-on: pull_request
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+  schedule:
+    - cron: '0 0 * * 0'
+  workflow_dispatch:
 
 jobs:
   codestyle:
