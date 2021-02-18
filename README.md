@@ -1,6 +1,7 @@
 
-[![Build Status](https://img.shields.io/travis/ZooRoyal/coding-standard/master.svg?longCache=true&style=for-the-badge)](https://travis-ci.org/ZooRoyal/coding-standard) ![Packagist Pre Release](https://img.shields.io/packagist/v/ZooRoyal/coding-standard.svg?longCache=true&style=for-the-badge)
- [![Packagist](https://img.shields.io/packagist/l/ZooRoyal/coding-standard.svg?longCache=true&style=for-the-badge)]()
+![Build Status](https://github.com/ZooRoyal/coding-standard/workflows/Continuous%20Integration/badge.svg?branch=master)
+[![Packagist Release](https://img.shields.io/packagist/v/ZooRoyal/coding-standard.svg?longCache=true)](https://packagist.org/packages/zooroyal/coding-standard)
+[![License](https://img.shields.io/packagist/l/ZooRoyal/coding-standard.svg?longCache=true)](/blob/master/LICENSE)
 
 
 # ZooRoyal Coding Standard
