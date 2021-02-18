@@ -11,18 +11,6 @@ use function Amp\ByteStream\buffer;
 
 class RunStylelintWithConfig extends AsyncTestCase
 {
-
-    protected function setUp(): void
-    {
-        $process = new Process([
-            'npm',
-            'install',
-        ]);
-
-        $process->start();
-        $process->join();
-    }
-
     /**
      * @test
      * @large
