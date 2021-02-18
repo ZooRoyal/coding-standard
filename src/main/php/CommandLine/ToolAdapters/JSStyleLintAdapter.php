@@ -9,7 +9,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /** @var string */
     protected $blacklistToken = '.dontSniffLESS';
     /** @var string[] */
-    protected $allowedFileEndings = ['.less'];
+    protected $allowedFileEndings = ['/*.{css,scss,sass,less}'];
     /** @var string */
     protected $blacklistPrefix = '--ignore-pattern=';
     /** @var string */

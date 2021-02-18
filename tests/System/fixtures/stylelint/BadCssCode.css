@@ -3,7 +3,10 @@ div::before {
 }
 
 .inline {
-  color: green;
+
+}
+div > div.test div div.container div div#content {
+  outline: solid 1px red;
 }
 
 div::placeholder {
@@ -19,10 +22,4 @@ div::placeholder {
   font-size: 20px;
   background: red;
   border: 1px solid red;
-  -moz-transition: all 0.5s;
-  -ms-transition: all 0.5s;
-  -webkit-transition: all 0.5s;
-  -o-transition: all 0.5s;
-  transition: all 0.5s;
-  &:extend(.inline);
 }

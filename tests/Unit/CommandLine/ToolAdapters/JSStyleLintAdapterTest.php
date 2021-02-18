@@ -75,7 +75,7 @@ class JSStyleLintAdapterTest extends TestCase
      */
     public function constructSetsUpSubjectCorrectly()
     {
-        $expectedFilter = '.less';
+        $expectedFilter = '/*.{css,scss,sass,less}';
         $config = '/config/stylelint/.stylelintrc';
         self::assertSame('.dontSniffLESS', $this->partialSubject->getBlacklistToken());
         self::assertSame([$expectedFilter], $this->partialSubject->getAllowedFileEndings());
