@@ -2,13 +2,19 @@
   "extends": [
     "stylelint-config-standard"
   ],
+  "plugins": [
+    "stylelint-scss"
+  ],
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
     "no-descending-specificity": null,
-    "function-calc-no-invalid": false
-  },
-  "plugins": [
-    "stylelint-order"
-  ]
+    "function-calc-no-invalid": true,
+    "indentation": 4,
+    "number-leading-zero": "never",
+    "max-empty-lines": 2,
+    "selector-list-comma-newline-after": null,
+    "declaration-empty-line-before": null,
+    "max-nesting-depth": 3
+  }
 }
