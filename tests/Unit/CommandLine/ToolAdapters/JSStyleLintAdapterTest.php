@@ -82,7 +82,6 @@ class JSStyleLintAdapterTest extends TestCase
         self::assertSame('--ignore-pattern=', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
-        self::assertFalse($this->partialSubject->isEscape());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
@@ -149,15 +148,14 @@ class JSStyleLintAdapterTest extends TestCase
         string $diffMessage,
         string $method
     ) {
-        $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
         $this->partialSubject->shouldReceive('runTool')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->with($mockedTargetBranch, $fullMessage, $tool, $diffMessage)
             ->andReturn($expectedResult);
 
-        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
+        $result = $this->partialSubject->$method($mockedTargetBranch);
 
         self::assertSame($expectedResult, $result);
     }
@@ -190,7 +188,7 @@ class JSStyleLintAdapterTest extends TestCase
             [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $result = $partialSubject->writeViolationsToOutput('asd', true);
+        $result = $partialSubject->writeViolationsToOutput('asd');
 
         self::assertSame(0, $result);
     }
@@ -223,7 +221,7 @@ class JSStyleLintAdapterTest extends TestCase
             [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $result = $partialSubject->fixViolations('asd', true);
+        $result = $partialSubject->fixViolations('asd');
 
         self::assertSame(0, $result);
     }

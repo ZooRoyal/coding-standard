@@ -29,8 +29,6 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     private $expectedStopword;
     /** @var int */
     private $expectedExitCode;
-    /** @var bool */
-    private $mockedProcessisolation;
     /** @var string */
     private $expectedPrefix;
     /** @var string */
@@ -48,7 +46,6 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
-        $this->mockedProcessisolation = true;
         $this->expectedExitCode = 0;
         $this->expectedStopword = '.dontCopyPasteDetectPHP';
         $this->expectedPrefix = '--exclude ';
@@ -101,7 +98,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
             ->with($expectedCommand, $this->expectedStopword, $this->expectedPrefix, $this->expectedGlue)
             ->andReturn($this->expectedExitCode);
 
-        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch, $this->mockedProcessisolation);
+        $result = $this->subject->writeViolationsToOutput($mockedTargetBranch);
 
         self::assertSame($this->expectedExitCode, $result);
     }

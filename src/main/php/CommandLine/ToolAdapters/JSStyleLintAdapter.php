@@ -57,7 +57,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .
@@ -70,7 +70,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, $tool, $diffMessage);
 
         return $exitCode;
     }
@@ -78,7 +78,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false)
+    public function fixViolations($targetBranch = '')
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .
@@ -91,7 +91,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
         $fullMessage = $prefix . 'Fix all Files';
         $diffMessage = $prefix . 'Fix Files in diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, $tool, $diffMessage);
 
         return $exitCode;
     }

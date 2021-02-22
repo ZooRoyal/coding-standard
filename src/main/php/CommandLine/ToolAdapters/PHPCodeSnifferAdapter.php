@@ -21,8 +21,6 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     protected $blacklistGlue = ',';
     /** @var string */
     protected $whitelistGlue = ' ';
-    /** @var bool */
-    protected $escape = false;
 
     /**
      * {@inheritDoc}
@@ -53,14 +51,14 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '')
     {
         $tool = 'PHPCS';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, $tool, $diffMessage);
 
         return $exitCode;
     }
@@ -68,14 +66,14 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false)
+    public function fixViolations($targetBranch = '')
     {
         $tool = 'PHPCBF';
         $prefix = $tool . ' : ';
         $fullMessage = $prefix . 'Fix all Files';
         $diffMessage = $prefix . 'Fix Files in diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $tool, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, $tool, $diffMessage);
 
         return $exitCode;
     }

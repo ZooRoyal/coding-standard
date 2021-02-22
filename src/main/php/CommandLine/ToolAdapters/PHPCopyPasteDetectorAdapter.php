@@ -51,7 +51,7 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '')
     {
         $fullMessage = 'PHPCPD : Running full check';
 

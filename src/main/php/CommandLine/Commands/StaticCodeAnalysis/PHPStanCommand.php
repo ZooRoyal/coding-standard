@@ -45,8 +45,8 @@ class PHPStanCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
-        $processIsolationInput = $input->getOption('process-isolation');
-        return $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
+
+        return $this->toolAdapter->writeViolationsToOutput($targetBranch);
     }
 
      /**
@@ -69,12 +69,6 @@ class PHPStanCommand extends Command
                 InputOption::VALUE_NONE,
                 'Finds files which have changed since the current branch parted from the parent branch only. 
                 It tries to find the parent branch by automagic.'
-            ),
-            new InputOption(
-                'process-isolation',
-                'p',
-                InputOption::VALUE_NONE,
-                'Runs all checks in separate processes. Slow but not as resource hungry.'
             ),
         ]);
     }

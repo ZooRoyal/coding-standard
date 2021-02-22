@@ -8,9 +8,8 @@ interface FixerSupportInterface
      * Tries to fix violations.
      *
      * @param string|null $targetBranch
-     * @param bool        $processIsolation
      *
      * @return int|null
      */
-    public function fixViolations($targetBranch = '', bool $processIsolation = false);
+    public function fixViolations($targetBranch = '');
 }

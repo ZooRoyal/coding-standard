@@ -81,7 +81,6 @@ class PHPStanAdapterTest extends TestCase
         self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
-        self::assertFalse($this->partialSubject->isEscape());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
@@ -111,7 +110,6 @@ class PHPStanAdapterTest extends TestCase
     {
         $this->prepareComposerLocator();
 
-        $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
         $tool = 'PHPStan';
@@ -135,10 +133,10 @@ class PHPStanAdapterTest extends TestCase
         );
 
         $this->partialSubject->shouldReceive('runTool')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->with($mockedTargetBranch, $fullMessage, $tool, $diffMessage)
             ->andReturn($expectedResult);
 
-        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
+        $result = $this->partialSubject->$method($mockedTargetBranch);
 
         self::assertSame($expectedResult, $result);
     }
@@ -151,7 +149,6 @@ class PHPStanAdapterTest extends TestCase
      */
     public function writeConfigFileAddsCorrectTools(): void
     {
-        $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
         $expectedRootPath = 'blabla/';
@@ -171,7 +168,7 @@ class PHPStanAdapterTest extends TestCase
 
         $this->partialSubject->shouldReceive('runTool')->once()->andReturn($expectedResult);
 
-        $result = $this->partialSubject->writeViolationsToOutput($mockedTargetBranch, $mockedProcessIsolation);
+        $result = $this->partialSubject->writeViolationsToOutput($mockedTargetBranch);
 
         self::assertSame($expectedResult, $result);
     }
