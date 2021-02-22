@@ -21,14 +21,13 @@ abstract class AbstractFixableToolCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
-        $processIsolationInput = $input->getOption('process-isolation');
         $fixMode = $input->getOption('fix');
 
         if ($fixMode) {
-            $this->toolAdapter->fixViolations($targetBranch, $processIsolationInput);
+            $this->toolAdapter->fixViolations($targetBranch);
         }
 
-        $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch, $processIsolationInput);
+        $exitCode = $this->toolAdapter->writeViolationsToOutput($targetBranch);
 
         return $exitCode;
     }
@@ -62,12 +61,6 @@ abstract class AbstractFixableToolCommand extends Command
                     'f',
                     InputOption::VALUE_NONE,
                     'Runs tool to try to fix violations automagically.'
-                ),
-                new InputOption(
-                    'process-isolation',
-                    'p',
-                    InputOption::VALUE_NONE,
-                    'Runs all checks in separate processes. Slow but not as resource hungry.'
                 ),
             ]
         );

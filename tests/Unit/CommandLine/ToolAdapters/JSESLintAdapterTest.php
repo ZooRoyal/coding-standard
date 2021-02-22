@@ -86,20 +86,20 @@ class JSESLintAdapterTest extends TestCase
 
         $commandOptions = '--ext ' . implode(' --ext ', $this->allowedFileEndings);
 
-        $expectedBaseCommand =  $this->forgedCommandPath . ' --ignore-path ' . $this->mockedPackageDirectory
-            . $ignoreFile . $ignorePattern . '--config ' . $this->mockedPackageDirectory . $configFile . ' ' . $commandOptions;
+        $expectedBaseCommand = $this->forgedCommandPath . ' --ignore-path ' . $this->mockedPackageDirectory
+            . $ignoreFile . $ignorePattern . '--config ' . $this->mockedPackageDirectory . $configFile . ' '
+            . $commandOptions;
 
         self::assertSame('.dontSniffJS', $this->partialSubject->getBlacklistToken());
         self::assertSame($this->allowedFileEndings, $this->partialSubject->getAllowedFileEndings());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
-        self::assertFalse($this->partialSubject->isEscape());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
             H::allOf(
-                H::hasKeyValuePair('ESLINTBL', $expectedBaseCommand. ' %1$s ' . $this->mockedRootDirectory),
-                H::hasKeyValuePair('ESLINTWL', $expectedBaseCommand. ' %1$s'),
+                H::hasKeyValuePair('ESLINTBL', $expectedBaseCommand . ' %1$s ' . $this->mockedRootDirectory),
+                H::hasKeyValuePair('ESLINTWL', $expectedBaseCommand . ' %1$s'),
                 H::hasKeyValuePair('ESLINTFIXBL', $expectedBaseCommand . ' --fix %1$s ' . $this->mockedRootDirectory),
                 H::hasKeyValuePair('ESLINTFIXWL', $expectedBaseCommand . ' --fix %1$s')
             )
@@ -157,8 +157,8 @@ class JSESLintAdapterTest extends TestCase
      * @param string $fullMessage
      * @param string $diffMessage
      * @param string $method
-     * @param int $toolResult
-     * @param int $expectedResult
+     * @param int    $toolResult
+     * @param int    $expectedResult
      */
     public function callMethodsWithParametersCallsRunToolAndReturnsResult(
         string $tool,
@@ -168,16 +168,15 @@ class JSESLintAdapterTest extends TestCase
         int $toolResult,
         int $expectedResult
     ) {
-        $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
 
         $this->partialSubject->shouldReceive('runTool')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->with($mockedTargetBranch, $fullMessage, $tool, $diffMessage)
             ->andReturn($toolResult);
         $this->mockedOutputInterface->shouldReceive('write')
             ->with(H::containsString('ignore this'), true);
 
-        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
+        $result = $this->partialSubject->$method($mockedTargetBranch);
 
         self::assertSame($expectedResult, $result);
     }
@@ -211,7 +210,7 @@ class JSESLintAdapterTest extends TestCase
             [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
-        $result = $partialSubject->writeViolationsToOutput('asd', true);
+        $result = $partialSubject->writeViolationsToOutput('asd');
 
         self::assertSame(0, $result);
     }
@@ -245,7 +244,7 @@ class JSESLintAdapterTest extends TestCase
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
         /** @var MockInterface|JSESLintAdapter $partialSubject */
-        $result = $partialSubject->fixViolations('asd', true);
+        $result = $partialSubject->fixViolations('asd');
 
         self::assertSame(0, $result);
     }

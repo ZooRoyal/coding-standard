@@ -44,59 +44,7 @@ class GenericCommandRunnerTest extends TestCase
         parent::tearDown();
     }
 
-    public function runWhitelistCommandWithAllParametersDataProvider()
-    {
-        return [
-            'success propagation' => [0],
-            'failure propagation' => [2],
-        ];
-    }
-
-    /**
-     * @test
-     * @dataProvider runWhitelistCommandWithAllParametersDataProvider
-     *
-     * @param int $mockedExitCode
-     */
-    public function runWhitelistCommandWithAllParameters(int $mockedExitCode)
-    {
-        $mockedTemplate = 'My Template %1$s';
-        $mockedTargetBranch = 'MyTarget';
-        $mockedStopword = 'HALT';
-        $mockedAllowedFileEndings = ['Morty'];
-        $mockedProcessIsolation = true;
-        $glue = 'juhu';
-        $mockedChangedFiles = ['mocked', 'files'];
-        $mockedOutput = 'Das hab ich zu sagen.';
-        $mockedErrorOutput = 'ROOOOOOOOOOORERROR!';
-
-        $this->prepareMocksForFindFiles($mockedAllowedFileEndings, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
-        $this->prepareMocksForRunAndWriteToOutputProcessIsolation(
-            $mockedChangedFiles,
-            $mockedTemplate,
-            $mockedOutput,
-            $mockedErrorOutput
-        );
-
-        $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
-        $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->times($mockedExitCode)
-            ->with($mockedOutput, OutputInterface::OUTPUT_NORMAL);
-        $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->times($mockedExitCode)
-            ->with($mockedErrorOutput, OutputInterface::VERBOSITY_NORMAL);
-
-        $result = $this->subject->runWhitelistCommand(
-            $mockedTemplate,
-            $mockedTargetBranch,
-            $mockedStopword,
-            $mockedAllowedFileEndings,
-            $mockedProcessIsolation,
-            $glue
-        );
-
-        self::assertSame($mockedExitCode, $result);
-    }
-
-    public function runWhitelistCommandWithNoProcessIsolationDataProvider()
+    public function runWhitelistCommandWithAllParametersDataProvider(): array
     {
         return [
             'success propagation' => [0],
@@ -106,21 +54,20 @@ class GenericCommandRunnerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider runWhitelistCommandWithNoProcessIsolationDataProvider
+     * @dataProvider runWhitelistCommandWithAllParametersDataProvider
      *
      * @param int $mockedExitCode
      */
-    public function runWhitelistCommandWithNoProcessIsolation($mockedExitCode)
+    public function runWhitelistCommandWithAllParameters(int $mockedExitCode): void
     {
         $mockedTemplate = 'My Template %1$s';
         $mockedTargetBranch = 'MyTarget';
         $mockedStopword = 'HALT';
         $mockedAllowedFileEndings = ['Morty'];
-        $mockedProcessIsolation = false;
         $mockedGlue = 'juhu';
         $mockedChangedFiles = ['mocked', 'files'];
         $mockedOutput = 'Das hab ich zu sagen.';
-        $mockedErrorOutput = 'ERROR ERRRRRRRRRROR';
+        $mockedErrorOutput = 'ROOOOOOOOOOORERROR!';
 
         $this->prepareMocksForFindFiles($mockedAllowedFileEndings, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
         $this->prepareMocksForRunAndWriteToOutput(
@@ -142,17 +89,24 @@ class GenericCommandRunnerTest extends TestCase
             $mockedTargetBranch,
             $mockedStopword,
             $mockedAllowedFileEndings,
-            $mockedProcessIsolation,
             $mockedGlue
         );
 
         self::assertSame($mockedExitCode, $result);
     }
 
+    public function runWhitelistCommandWithNoProcessIsolationDataProvider(): array
+    {
+        return [
+            'success propagation' => [0],
+            'failure propagation' => [1],
+        ];
+    }
+
     /**
      * @test
      */
-    public function runBlacklistCommand()
+    public function runBlacklistCommand(): void
     {
         $mockedTemplate = 'My Template %1$s';
         $mockedStopword = 'HALT';
@@ -189,63 +143,23 @@ class GenericCommandRunnerTest extends TestCase
     }
 
     /**
-     * @test
-     */
-    public function runBlacklistCommandEscaped()
-    {
-        $mockedTemplate = 'My Template %1$s';
-        $mockedStopword = 'HALT';
-        $mockedPrefix = 'teil mich!';
-        $mockedGlue = 'juhu';
-        $mockedBlacklist = ['mocked', '.files'];
-        $mockedEscapedBlacklist = ['mocked', '\\\\\.files'];
-        $mockedOutput = 'Das hab ich zu sagen.';
-        $mockedErrorOutput = 'ERRRRRRRRRRRRROROROROROR';
-        $mockedExitCode = 0;
-
-        $this->prepareMocksForRunAndWriteToOutput(
-            $mockedEscapedBlacklist,
-            $mockedTemplate,
-            $mockedOutput,
-            $mockedErrorOutput,
-            $mockedGlue,
-            $mockedPrefix
-        );
-        $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
-            ->with($mockedStopword)->andReturn($mockedBlacklist);
-
-        $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
-        $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->times($mockedExitCode)
-            ->with($mockedOutput, OutputInterface::OUTPUT_NORMAL);
-
-        $result = $this->subject->runBlacklistCommand(
-            $mockedTemplate,
-            $mockedStopword,
-            $mockedPrefix,
-            $mockedGlue,
-            true
-        );
-
-        self::assertSame($mockedExitCode, $result);
-    }
-
-    /**
      * Prepares mocks for calls of private buildCommand with no ProcessIsolation
      *
      * @param string[] $mockedChangedFiles
      * @param string   $mockedTemplate
      * @param string   $mockedOutput
+     * @param string   $mockedErrorOutput
      * @param string   $mockedGlue
      * @param string   $mockedPrefix
      */
     private function prepareMocksForRunAndWriteToOutput(
-        $mockedChangedFiles,
-        $mockedTemplate,
-        $mockedOutput,
-        $mockedErrorOutput,
-        $mockedGlue,
-        $mockedPrefix = ''
-    ) {
+        array $mockedChangedFiles,
+        string $mockedTemplate,
+        string $mockedOutput,
+        string $mockedErrorOutput,
+        string $mockedGlue,
+        string $mockedPrefix = ''
+    ): void {
         $mockedCommand = sprintf(
             $mockedTemplate,
             $mockedPrefix . implode($mockedGlue . $mockedPrefix, $mockedChangedFiles)
@@ -257,35 +171,6 @@ class GenericCommandRunnerTest extends TestCase
             ->with('Calling following command:' . "\n" . $mockedCommand, OutputInterface::VERBOSITY_DEBUG);
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcessReturningProcessObject')
             ->once()->with($mockedCommand)->andReturn($this->mockedProcess);
-
-        $this->mockedProcess->shouldReceive('getOutput')->withNoArgs()->andReturn($mockedOutput);
-        $this->mockedProcess->shouldReceive('getErrorOutput')->withNoArgs()->andReturn($mockedErrorOutput);
-    }
-
-    /**
-     * Prepares mocks for calls of private buildCommand
-     *
-     * @param array $mockedChangedFiles
-     * @param string $mockedTemplate
-     * @param string $mockedOutput
-     * @param string $mockedErrorOutput
-     */
-    private function prepareMocksForRunAndWriteToOutputProcessIsolation(
-        array $mockedChangedFiles,
-        string $mockedTemplate,
-        string $mockedOutput,
-        string $mockedErrorOutput
-    ) {
-        foreach ($mockedChangedFiles as $mockedChangedFile) {
-            $mockedCommand = sprintf($mockedTemplate, $mockedChangedFile);
-
-            $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')
-                ->with('Checking diff to asd', OutputInterface::OUTPUT_NORMAL);
-            $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
-                ->with('Calling following command:' . "\n" . $mockedCommand, OutputInterface::VERBOSITY_DEBUG);
-            $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcessReturningProcessObject')
-                ->once()->with($mockedCommand)->andReturn($this->mockedProcess);
-        }
 
         $this->mockedProcess->shouldReceive('getOutput')->withNoArgs()->andReturn($mockedOutput);
         $this->mockedProcess->shouldReceive('getErrorOutput')->withNoArgs()->andReturn($mockedErrorOutput);
@@ -304,7 +189,7 @@ class GenericCommandRunnerTest extends TestCase
         string $mockedStopword,
         string $mockedTargetBranch,
         array $mockedChangedFiles
-    ) {
+    ): void {
         $this->mockedGitChangeSet->shouldReceive('getCommitHash')->andReturn('asd');
         $this->mockedGitChangeSet->shouldReceive('getFiles')->andReturn($mockedChangedFiles);
 

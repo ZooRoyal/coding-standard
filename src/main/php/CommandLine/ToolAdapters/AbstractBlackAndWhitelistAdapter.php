@@ -28,8 +28,6 @@ abstract class AbstractBlackAndWhitelistAdapter
     protected $whitelistGlue = '';
     /** @var string[] */
     protected $commands = [];
-    /** @var bool */
-    protected $escape = false;
     /** @var TerminalCommandFinder */
     protected $terminalCommandFinder;
 
@@ -64,7 +62,6 @@ abstract class AbstractBlackAndWhitelistAdapter
      * Runs tool in normal or fix mode according to settings.
      *
      * @param string|false|null $targetBranch
-     * @param bool $processIsolation
      * @param string $fullMessage
      * @param string $tool
      * @param string $diffMessage
@@ -73,7 +70,6 @@ abstract class AbstractBlackAndWhitelistAdapter
      */
     protected function runTool(
         $targetBranch,
-        bool $processIsolation,
         string $fullMessage,
         string $tool,
         string $diffMessage
@@ -85,8 +81,7 @@ abstract class AbstractBlackAndWhitelistAdapter
                 $template,
                 $this->blacklistToken,
                 $this->blacklistPrefix,
-                $this->blacklistGlue,
-                $this->escape
+                $this->blacklistGlue
             );
         } else {
             $this->output->writeln($diffMessage, OutputInterface::VERBOSITY_NORMAL);
@@ -96,7 +91,6 @@ abstract class AbstractBlackAndWhitelistAdapter
                 $targetBranch,
                 $this->blacklistToken,
                 $this->allowedFileEndings,
-                $processIsolation,
                 $this->whitelistGlue
             );
         }
@@ -132,10 +126,5 @@ abstract class AbstractBlackAndWhitelistAdapter
     public function getCommands(): array
     {
         return $this->commands;
-    }
-
-    public function isEscape(): bool
-    {
-        return $this->escape;
     }
 }

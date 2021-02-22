@@ -90,13 +90,12 @@ class PHPStanCommandTest extends TestCase
     public function writeViolationsToOutput()
     {
         $mockedTargetBranch = '';
-        $mockedProcessIsolation = true;
         $expectedExitCode = 0;
 
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation);
+        $this->prepareInputInterfaceMock($mockedTargetBranch);
 
         $this->subjectParameters[PHPStanAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+            ->with($mockedTargetBranch)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
         self::assertSame($expectedExitCode, $result);
@@ -115,15 +114,12 @@ class PHPStanCommandTest extends TestCase
      * This method prepares the InputInterface mocks.
      *
      * @param string $mockedTargetBranch
-     * @param bool   $mockedProcessIsolation
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedProcessIsolation)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('auto-target')->andReturn(null);
-        $this->mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('process-isolation')->andReturn($mockedProcessIsolation);
     }
 }

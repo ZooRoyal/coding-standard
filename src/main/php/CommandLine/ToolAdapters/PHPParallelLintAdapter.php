@@ -39,14 +39,14 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false)
+    public function writeViolationsToOutput($targetBranch = '')
     {
         $toolShortName = 'PHPPL';
         $prefix = $toolShortName . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, $toolShortName, $diffMessage);
 
         return $exitCode;
     }

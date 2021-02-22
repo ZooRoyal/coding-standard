@@ -79,7 +79,6 @@ class PHPParallelLintAdapterTest extends TestCase
         self::assertSame('--exclude ' . $this->mockedRootDirectory . '/', $this->partialSubject->getBlacklistPrefix());
         self::assertSame(' ', $this->partialSubject->getBlacklistGlue());
         self::assertSame(' ', $this->partialSubject->getWhitelistGlue());
-        self::assertFalse($this->partialSubject->isEscape());
 
         MatcherAssert::assertThat(
             $this->partialSubject->getCommands(),
@@ -128,15 +127,14 @@ class PHPParallelLintAdapterTest extends TestCase
         string $diffMessage,
         string $method
     ) {
-        $mockedProcessIsolation = true;
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
         $this->partialSubject->shouldReceive('runTool')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation, $fullMessage, $tool, $diffMessage)
+            ->with($mockedTargetBranch, $fullMessage, $tool, $diffMessage)
             ->andReturn($expectedResult);
 
-        $result = $this->partialSubject->$method($mockedTargetBranch, $mockedProcessIsolation);
+        $result = $this->partialSubject->$method($mockedTargetBranch);
 
         self::assertSame($expectedResult, $result);
     }

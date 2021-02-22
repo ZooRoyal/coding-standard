@@ -61,7 +61,7 @@ class AllToolsCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(4),
+                                H::arrayWithSize(3),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )

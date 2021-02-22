@@ -70,7 +70,7 @@ class PHPCodeSnifferCommandTest extends TestCase
                         MatcherAssert::assertThat(
                             $options,
                             H::allOf(
-                                H::arrayWithSize(4),
+                                H::arrayWithSize(3),
                                 H::everyItem(
                                     H::anInstanceOf(InputOption::class)
                                 )
@@ -91,16 +91,15 @@ class PHPCodeSnifferCommandTest extends TestCase
     public function executeFullBuildWithFix()
     {
         $mockedTargetBranch = '';
-        $mockedProcessIsolation = true;
         $mockedFixMode = true;
         $expectedExitCode = 0;
 
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
+        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedFixMode);
 
         $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+            ->with($mockedTargetBranch)->andReturn($expectedExitCode);
         $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+            ->with($mockedTargetBranch)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
 
@@ -113,15 +112,14 @@ class PHPCodeSnifferCommandTest extends TestCase
     public function executeFullBuildWithoutFix()
     {
         $mockedTargetBranch = '';
-        $mockedProcessIsolation = true;
         $mockedFixMode = false;
         $expectedExitCode = 0;
 
-        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedProcessIsolation, $mockedFixMode);
+        $this->prepareInputInterfaceMock($mockedTargetBranch, $mockedFixMode);
 
         $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('fixViolations')->never();
         $this->subjectParameters[PHPCodeSnifferAdapter::class]->shouldReceive('writeViolationsToOutput')->once()
-            ->with($mockedTargetBranch, $mockedProcessIsolation)->andReturn($expectedExitCode);
+            ->with($mockedTargetBranch)->andReturn($expectedExitCode);
 
         $result = $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
 
@@ -141,17 +139,14 @@ class PHPCodeSnifferCommandTest extends TestCase
      * This method prepares the InputInterface mocks.
      *
      * @param string $mockedTargetBranch
-     * @param bool   $mockedProcessIsolation
      * @param bool   $mockedFixMode
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedProcessIsolation, bool $mockedFixMode)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedFixMode)
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('auto-target')->andReturn(false);
-        $this->mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('process-isolation')->andReturn($mockedProcessIsolation);
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('fix')->andReturn($mockedFixMode);
     }

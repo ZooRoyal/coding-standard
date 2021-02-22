@@ -74,7 +74,7 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     /**
      * {@inheritdoc}
      */
-    public function writeViolationsToOutput($targetBranch = '', bool $processIsolation = false): ?int
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         $toolShortName = 'PHPStan';
         $prefix = $toolShortName . ' : ';
@@ -83,7 +83,7 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 
         $this->writeConfigFile();
 
-        return $this->runTool($targetBranch, $processIsolation, $fullMessage, $toolShortName, $diffMessage);
+        return $this->runTool($targetBranch, $fullMessage, $toolShortName, $diffMessage);
     }
 
     /**
