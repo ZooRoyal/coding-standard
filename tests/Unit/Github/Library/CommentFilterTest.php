@@ -69,7 +69,7 @@ class CommentFilterTest extends TestCase
         array $mockedComments,
         int $mockedPosition,
         string $mockedCommitId,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         $result = $this->subject->filterForStaleComments($mockedComments, $mockedPosition, $mockedCommitId);
 
@@ -103,7 +103,7 @@ class CommentFilterTest extends TestCase
         array $mockedComments,
         string $mockedPath,
         string $mockedUser,
-        array $expectedResult
+        array $expectedResult,
     ): void {
         $result = $this->subject->filterForOwnComments($mockedComments, $mockedPath, $mockedUser);
 

@@ -90,11 +90,11 @@ class GlobalSystemTest extends AsyncTestCase
             [$fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts'],
             [$fixtureDirectory . '/stylelint/BadCode.less', $badCodeDirectory . '/BadCode.less'],
             [$badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php'],
-            [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect1.php'],
-            [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect2.php'],
+            [$fixtureDirectory . '/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect1.php'],
+            [$fixtureDirectory . '/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect2.php'],
             [$fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php'],
             [$fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php'],
-            [$fixtureDirectory . '/complete/BadMessDectect.php', $badCodeDirectory . '/BadMessDetect.php'],
+            [$fixtureDirectory . '/complete/BadMessDetect.php', $badCodeDirectory . '/BadMessDetect.php'],
         ];
 
         foreach ($copyFiles as $copyFile) {
@@ -146,10 +146,10 @@ class GlobalSystemTest extends AsyncTestCase
             );
         }
 
-        $startPromises = array_map(static fn($process) => $process->start(), $processes);
+        $startPromises = array_map(static fn(Process $process) => $process->start(), $processes);
         yield all($startPromises);
 
-        $endPromises = array_map(static fn($process) => $process->join(), $processes);
+        $endPromises = array_map(static fn(Process $process) => $process->join(), $processes);
         $exitCodes = yield all($endPromises);
 
         return yield new Success($exitCodes);

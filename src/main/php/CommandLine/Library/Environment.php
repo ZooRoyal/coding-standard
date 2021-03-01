@@ -15,20 +15,14 @@ use function Safe\realpath;
 class Environment
 {
     private ?string $localHeadHash = null;
-    private ProcessRunner $processRunner;
-    private GitInputValidator $gitInputValidator;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
     /** @var string */
     private const GIT = 'git';
 
     public function __construct(
-        ProcessRunner $processRunner,
-        GitInputValidator $gitInputValidator,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private ProcessRunner $processRunner,
+        private GitInputValidator $gitInputValidator,
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->gitInputValidator = $gitInputValidator;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**

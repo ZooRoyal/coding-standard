@@ -13,12 +13,10 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class MultiprocessDecorator implements TerminalCommandDecorator
 {
-    private ProcessRunner $processRunner;
     private ?int $possibleProcesses = null;
 
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     public function decorate(GenericEvent $genericEvent): void

@@ -1,6 +1,6 @@
 parameters:
     level: 5
-    excludes_analyse:
+    excludePaths:
         - ../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs
         - ../../tests/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/Fixtures/FixtureCorrectComments.php
     parallel:

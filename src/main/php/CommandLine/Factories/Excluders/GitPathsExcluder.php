@@ -13,28 +13,21 @@ use function Safe\substr;
 
 class GitPathsExcluder implements ExcluderInterface
 {
-    private Environment $environment;
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-
     /**
      * GitPathsExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private Environment $environment,
+        private ProcessRunner $processRunner,
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
      * The methods search for Git submodules and returns their paths.
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
-     * @param array<mixed>  $config
+     * @param array<mixed>            $config
      *
      * @return array<EnhancedFileInfo>
      */

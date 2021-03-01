@@ -12,10 +12,6 @@ class ExclusionListFactory
 {
     /** @var array<string,array<EnhancedFileInfo>> */
     private array $exclusionListCache = [];
-    /** @var array<ExcluderInterface> */
-    private array $excluders;
-    private ExclusionListSanitizer $exclusionListSanitizer;
-
     /**
      * BlacklistFactory constructor.
      *
@@ -23,10 +19,8 @@ class ExclusionListFactory
      *
      * @Inject({"excluders" = "excluders"})
      */
-    public function __construct(array $excluders, ExclusionListSanitizer $exclusionListSanitizer)
+    public function __construct(private array $excluders, private ExclusionListSanitizer $exclusionListSanitizer)
     {
-        $this->excluders = $excluders;
-        $this->exclusionListSanitizer = $exclusionListSanitizer;
     }
 
     /**

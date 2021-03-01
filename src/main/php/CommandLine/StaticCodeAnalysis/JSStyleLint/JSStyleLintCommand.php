@@ -15,8 +15,10 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\FixingToolCom
 class JSStyleLintCommand extends FixingToolCommand
 {
     protected string $exclusionListToken = '.dontSniffLESS';
+
     /** @var array<string> */
     protected array $allowedFileEndings = ['css', 'scss', 'sass', 'less'];
+
     private TerminalCommandFinder $terminalCommandFinder;
 
     /**
@@ -41,10 +43,11 @@ class JSStyleLintCommand extends FixingToolCommand
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('stylelint');
-        } catch (TerminalCommandNotFoundException $exception) {
+        } catch (TerminalCommandNotFoundException) {
             $output->writeln('<info>Stylelint could not be found. To use this sniff please refer to the README.md</info>');
             return 0;
         }
+
         return parent::execute($input, $output);
     }
 

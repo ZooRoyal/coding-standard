@@ -42,7 +42,7 @@ class JSESLintCommand extends FixingToolCommand
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('eslint');
-        } catch (TerminalCommandNotFoundException $exception) {
+        } catch (TerminalCommandNotFoundException) {
             $output->writeln('<info>EsLint could not be found. To use this sniff please refer to the README.md</info>');
             return 0;
         }

@@ -12,21 +12,14 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $fileFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * CheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $fileFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private ProcessRunner $processRunner,
+        private GitChangeSetFilter $fileFilter,
+        private GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->fileFilter = $fileFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
@@ -40,7 +33,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if ($targetBranch === null || $targetBranch === '') {
             throw new InvalidArgumentException(

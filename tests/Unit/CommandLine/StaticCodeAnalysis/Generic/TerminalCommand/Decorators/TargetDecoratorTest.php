@@ -74,13 +74,11 @@ class TargetDecoratorTest extends TestCase
      * @test
      *
      * @dataProvider decorateAddsTargetsToTerminalCommandDataProvider
-     *
-     * @param string|false $forgedTarget
      */
     public function decorateAddsTargetsToTerminalCommand(
         bool $forgedAutoTarget,
-        $forgedTarget,
-        ?string $expectedTargetBranch
+        ?string $forgedTarget,
+        ?string $expectedTargetBranch,
     ): void {
         $forgedRealPath = 'asdasd';
         $forgedCommitHash = 'asdasdwqeqwe';

@@ -15,27 +15,31 @@ use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 class PullCommentRefreshCommand extends Command
 {
     private const USER_NAME = 'user_name';
+
     private const TOKEN = 'token';
+
     private const ORGANISATION = 'organisation';
+
     private const REPOSITORY = 'repository';
+
     private const PULL_NUMBER = 'pullNumber';
+
     private const COMMIT_ID = 'commitId';
+
     private const BODY = 'body';
+
     private const PATH = 'path';
+
     private const POSITION = 'position';
+
     private const ID = 'id';
-    private Client $client;
-    private CommentFilter $commentFilter;
 
     /**
      * GithubAddCommentCommand constructor.
      */
-    public function __construct(Client $client, CommentFilter $commentFilter)
+    public function __construct(private Client $client, private CommentFilter $commentFilter)
     {
         parent::__construct();
-
-        $this->client = $client;
-        $this->commentFilter = $commentFilter;
     }
 
     /**
@@ -73,7 +77,7 @@ class PullCommentRefreshCommand extends Command
     {
         $arguments = $input->getArguments();
 
-        $this->client->authenticate($arguments[self::USER_NAME], $arguments[self::TOKEN], Client::AUTH_HTTP_PASSWORD);
+        $this->client->authenticate($arguments[self::USER_NAME], $arguments[self::TOKEN], Client::AUTH_ACCESS_TOKEN);
 
         [$ownComments, $staleComments] = $this->getCommentSets($arguments);
 
@@ -169,6 +173,7 @@ class PullCommentRefreshCommand extends Command
                     if ($item[self::ID] < $otherItem[self::ID]) {
                         return -1;
                     }
+
                     if ($item[self::ID] > $otherItem[self::ID]) {
                         return 1;
                     }

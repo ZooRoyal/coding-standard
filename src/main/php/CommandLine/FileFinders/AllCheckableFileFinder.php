@@ -11,21 +11,14 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class AllCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $gitChangeSetFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * AllCheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $gitChangeSetFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private ProcessRunner $processRunner,
+        private GitChangeSetFilter $gitChangeSetFilter,
+        private GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->gitChangeSetFilter = $gitChangeSetFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
@@ -37,7 +30,7 @@ class AllCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
         $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');

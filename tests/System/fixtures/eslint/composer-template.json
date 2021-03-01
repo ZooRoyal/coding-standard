@@ -2,7 +2,9 @@
   "version": "0.0.1",
   "require-dev":  {
     "zooroyal/coding-standard": "@dev",
-    "php-http/mock-client": "*"
+    "php-http/mock-client": "*",
+    "slim/psr7": "*",
+    "php-http/curl-client": "*"
   },
   "repositories":{
     "localRepo":{

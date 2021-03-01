@@ -19,19 +19,14 @@ class ForbiddenChangesCommand extends Command
     private const BLACKLIST_TOKEN = '.dontChangeFiles';
     /** @var string */
     private const WHITELIST_TOKEN = '.doChangeFiles';
-    private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private Environment $environment;
-
     /**
      * ForbiddenChangesCommand constructor.
      */
     public function __construct(
-        DiffCheckableFileFinder $diffCheckableFileFinder,
-        Environment $environment
+        private DiffCheckableFileFinder $diffCheckableFileFinder,
+        private Environment $environment,
     ) {
         parent::__construct();
-        $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->environment = $environment;
     }
 
     /**
@@ -73,7 +68,7 @@ class ForbiddenChangesCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $warning = $input->getOption('warn');
         $targetBranch = $input->getOption('target') ?? $this->environment->guessParentBranchAsCommitHash();

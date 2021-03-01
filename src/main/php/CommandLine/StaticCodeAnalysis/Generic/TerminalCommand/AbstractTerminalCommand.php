@@ -6,10 +6,11 @@ namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\Termina
 
 use DI\Annotation\Inject;
 use Exception;
+use Stringable;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractTerminalCommand implements TerminalCommand
+abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
 {
     /** @var array<string> */
     protected array $commandParts = [];
@@ -85,8 +86,8 @@ abstract class AbstractTerminalCommand implements TerminalCommand
         $this->compiled = true;
         try {
             $this->compile();
-        } catch (NoUsefulCommandFoundException $exception) {
-            throw $exception;
+        } catch (NoUsefulCommandFoundException $noUsefulCommandFoundException) {
+            throw $noUsefulCommandFoundException;
         } catch (Exception $exception) {
             throw new RuntimeException('Something went wrong compiling a command', 1616426291, $exception);
         }

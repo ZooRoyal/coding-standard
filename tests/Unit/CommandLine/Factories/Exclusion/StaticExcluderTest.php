@@ -18,8 +18,7 @@ class StaticExcluderTest extends TestCase
 {
     private StaticExcluder $subject;
     private string $forgedRootDirectory;
-    /** @var MockInterface|EnhancedFileInfo */
-    private $mockedEnhancedFileInfo;
+    private MockInterface|EnhancedFileInfo $mockedEnhancedFileInfo;
     /** @var array<MockInterface> */
     private array $subjectParameters;
 

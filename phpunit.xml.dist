@@ -7,6 +7,7 @@
         resolveDependencies="true"
         stopOnRisky="true"
         timeoutForSmallTests="2"
+        timeoutForMediumTests="60"
         timeoutForLargeTests="180"
         verbose="false"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"

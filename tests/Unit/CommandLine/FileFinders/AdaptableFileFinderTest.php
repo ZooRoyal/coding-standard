@@ -88,7 +88,7 @@ class AdaptableFileFinderTest extends TestCase
         ?string $targetBranchInput,
         bool $isCommitishValid,
         bool $isLocalBranch,
-        string $finder
+        string $finder,
     ): void {
         $mockedAllowedFileEndings = ['asdqwe'];
         $mockedBlacklistToken = 'qwegfasdfqwe';

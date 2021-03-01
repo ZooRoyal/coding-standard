@@ -34,14 +34,11 @@ class EventDispatcherFactory
             VerbosityDecorator::class,
             MultiprocessDecorator::class,
         ];
-    private Container $container;
-
     /**
      * EventDispatcherFactory constructor.
      */
-    public function __construct(Container $container)
+    public function __construct(private Container $container)
     {
-        $this->container = $container;
     }
 
     /**

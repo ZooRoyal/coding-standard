@@ -18,16 +18,14 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
  */
 class GitCommandPreconditionChecker implements EventSubscriberInterface
 {
-    private ProcessRunner $processRunner;
     private ?int $exitCode = null;
     private const COMMAND = 'git rev-parse --git-dir';
 
     /**
      * CommandPreconditionChecker constructor.
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     /**

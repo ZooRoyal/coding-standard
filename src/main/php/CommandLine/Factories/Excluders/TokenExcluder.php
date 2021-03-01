@@ -13,21 +13,14 @@ use function Safe\substr;
 
 class TokenExcluder implements ExcluderInterface
 {
-    private Environment $environment;
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-
     /**
      * TokenExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private Environment $environment,
+        private ProcessRunner $processRunner,
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
@@ -63,7 +56,7 @@ class TokenExcluder implements ExcluderInterface
         $rawExcludePathsByToken = explode(PHP_EOL, trim($finderResult));
         $absoluteDirectories = array_map('dirname', $rawExcludePathsByToken);
         $relativeDirectories = array_map(
-            static function ($value) use ($rootDirectory) {
+            static function ($value) use ($rootDirectory): string {
                 $rootDirectoryLength = strlen($rootDirectory);
                 if (strlen($value) === $rootDirectoryLength) {
                     return '.';

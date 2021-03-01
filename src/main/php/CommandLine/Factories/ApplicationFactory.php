@@ -40,18 +40,13 @@ class ApplicationFactory
             JSESLintCommand::class,
             JSStyleLintCommand::class,
         ];
-    private EventDispatcherInterface $eventDispatcher;
-    private Container $container;
-
     /**
      * ApplicationFactory constructor.
      */
     public function __construct(
-        Container $container,
-        EventDispatcherInterface $eventDispatcher
+        private Container $container,
+        private EventDispatcherInterface $eventDispatcher,
     ) {
-        $this->container = $container;
-        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**

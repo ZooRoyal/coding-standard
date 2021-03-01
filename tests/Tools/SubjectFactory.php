@@ -25,9 +25,9 @@ class SubjectFactory
         $parameters = $reflection->getConstructor()->getParameters();
 
         foreach ($parameters as $parameter) {
-            $type = $parameter->getClass()->getName();
-            $result['parameters'][$type] = Mockery::mock($type);
-            $parameterInstances[] = $result['parameters'][$type];
+            $type = $parameter->getType();
+            $result['parameters'][(string) $type] = Mockery::mock((string) $type);
+            $parameterInstances[] = $result['parameters'][(string) $type];
         }
 
         $result['subject'] = $reflection->newInstanceArgs($parameterInstances);

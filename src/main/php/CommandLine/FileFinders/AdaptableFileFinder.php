@@ -14,24 +14,15 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
  */
 class AdaptableFileFinder implements FileFinderInterface
 {
-    private GitInputValidator $gitInputValidator;
-    private AllCheckableFileFinder $allCheckableFileFinder;
-    private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private Environment $environment;
-
     /**
      * AdaptableFileFinder constructor.
      */
     public function __construct(
-        GitInputValidator $gitInputValidator,
-        AllCheckableFileFinder $allCheckableFileFinder,
-        DiffCheckableFileFinder $diffCheckableFileFinder,
-        Environment $environment
+        private GitInputValidator $gitInputValidator,
+        private AllCheckableFileFinder $allCheckableFileFinder,
+        private DiffCheckableFileFinder $diffCheckableFileFinder,
+        private Environment $environment,
     ) {
-        $this->gitInputValidator = $gitInputValidator;
-        $this->allCheckableFileFinder = $allCheckableFileFinder;
-        $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->environment = $environment;
     }
 
 
@@ -44,7 +35,7 @@ class AdaptableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if ($targetBranch !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranch)

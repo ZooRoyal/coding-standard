@@ -42,7 +42,7 @@ class FixDecorator implements TerminalCommandDecorator
      *
      * @return array<string,array<int,int|string>>
      */
-    public static function getSubscribedEvents()
+    public static function getSubscribedEvents(): array
     {
         return [AbstractToolCommand::EVENT_DECORATE_TERMINAL_COMMAND => ['decorate', 50]];
     }

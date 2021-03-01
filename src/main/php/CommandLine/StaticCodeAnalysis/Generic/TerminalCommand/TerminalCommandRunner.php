@@ -10,13 +10,8 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
 class TerminalCommandRunner
 {
-    private ProcessRunner $processRunner;
-    private OutputInterface $output;
-
-    public function __construct(ProcessRunner $processRunner, OutputInterface $output)
+    public function __construct(private ProcessRunner $processRunner, private OutputInterface $output)
     {
-        $this->processRunner = $processRunner;
-        $this->output = $output;
     }
 
     public function run(TerminalCommand $terminalCommand): ?int

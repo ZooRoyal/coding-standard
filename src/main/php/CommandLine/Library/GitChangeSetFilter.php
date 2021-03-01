@@ -13,18 +13,13 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class GitChangeSetFilter
 {
-    private ExclusionListFactory $exclusionListFactory;
-    private TokenExcluder $tokenExcluder;
-
     /**
      * FileFilter constructor.
      */
     public function __construct(
-        ExclusionListFactory $exclusionListFactory,
-        TokenExcluder $tokenExcluder
+        private ExclusionListFactory $exclusionListFactory,
+        private TokenExcluder $tokenExcluder,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
-        $this->tokenExcluder = $tokenExcluder;
     }
 
     /**
@@ -36,7 +31,7 @@ class GitChangeSetFilter
         GitChangeSet $gitChangeSet,
         array $allowedFileEndings = [],
         string $blacklistToken = '',
-        string $whitelistToken = ''
+        string $whitelistToken = '',
     ): void {
         $whitelist = [];
         $deDuped = true;
@@ -65,9 +60,9 @@ class GitChangeSetFilter
      */
     private function mergeLists(
         array $blacklist,
-        array $whitelist
+        array $whitelist,
     ): SplObjectStorage {
-        if (count(array_intersect($blacklist, $whitelist)) !== 0) {
+        if (array_intersect($blacklist, $whitelist) !== []) {
             throw new LogicException('Directories can\'t be black- and whitelisted at the same time', 1553780055);
         }
         $result = new SplObjectStorage();

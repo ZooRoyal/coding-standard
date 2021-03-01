@@ -11,6 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TargetableToo
 class PHPParallelLintCommand extends TargetableToolsCommand
 {
     protected string $exclusionListToken = '.dontLintPHP';
+
     /** @var array<string>  */
     protected array $allowedFileEndings = ['php'];
 

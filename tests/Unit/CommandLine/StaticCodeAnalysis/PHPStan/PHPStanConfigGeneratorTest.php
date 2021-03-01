@@ -109,7 +109,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     private function buildConfigMatcher(
         string $forgedHamcrestPath,
         string $forgedMockeryPath,
-        string $forgedFilePath
+        string $forgedFilePath,
     ): Matcher {
         $includesMatcher = H::hasKeyValuePair(
             'includes',
@@ -121,7 +121,7 @@ class PHPStanConfigGeneratorTest extends TestCase
             H::hasItems($forgedHamcrestPath . '/hamcrest/Hamcrest.php', $forgedMockeryPath . '/library/helpers.php')
         );
 
-        $excludesMatcher = H::hasKeyValuePair('excludes_analyse', H::hasItem($forgedFilePath));
+        $excludesMatcher = H::hasKeyValuePair('excludePaths', H::hasItem($forgedFilePath));
         $staticDirectoriesMatcher = H::hasKeyValuePair(
             'scanDirectories',
             H::allOf(
@@ -166,7 +166,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     private function prepareMockedComposerLocator(
         MockInterface $mockedComposerLocator,
         string $forgedHamcrestPath,
-        string $forgedMockeryPath
+        string $forgedMockeryPath,
     ): void {
         $mockedComposerLocator->shouldReceive('getPath')->once()
             ->with('hamcrest/hamcrest-php')->andReturn($forgedHamcrestPath);

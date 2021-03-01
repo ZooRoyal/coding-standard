@@ -47,7 +47,7 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           tools:  cs2pr, composer
         env:
           fail-fast: true
@@ -78,7 +78,7 @@ jobs:
       - codestyle
     strategy:
       matrix:
-        composer_version: [1,2]
+        composer_version: [2]
         composer_parameters: ['--prefer-lowest', ' ']
     steps:
       - name: Checkout repository
@@ -115,9 +115,9 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4'
+          php-version: '8.0'
           tools:  composer:${{ matrix.composer_version }}
-          extensions: xdebug-2.9.8
+          extensions: xdebug
         env:
           fail-fast: true
 

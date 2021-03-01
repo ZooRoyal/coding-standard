@@ -8,14 +8,11 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GitInputValidator
 {
-    private ProcessRunner $processRunner;
-
     /**
      * GitInputValidator constructor.
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     /**
@@ -29,7 +26,7 @@ class GitInputValidator
 
         try {
             $this->processRunner->runAsProcess('git', 'rev-parse', $commitish);
-        } catch (ProcessFailedException $processFailedException) {
+        } catch (ProcessFailedException) {
             return false;
         }
         return true;

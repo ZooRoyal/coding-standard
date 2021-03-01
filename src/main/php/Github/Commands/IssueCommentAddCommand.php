@@ -13,29 +13,30 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IssueCommentAddCommand extends Command
 {
-    private Client $client;
-
     /** @var string */
     private const USER_NAME = 'user_name';
+
     /** @var string */
     private const ISSUE_ID = 'issue_id';
+
     /** @var string */
     private const REPOSITORY = 'repository';
+
     /** @var string */
     private const ORGANISATION = 'organisation';
+
     /** @var string */
     private const TOKEN = 'token';
+
     /** @var string */
     private const BODY = 'body';
 
     /**
      * GithubAddCommentCommand constructor.
      */
-    public function __construct(Client $client)
+    public function __construct(private Client $client)
     {
         parent::__construct();
-
-        $this->client = $client;
     }
 
     /**
@@ -79,7 +80,7 @@ class IssueCommentAddCommand extends Command
         $username     = $input->getArgument(self::USER_NAME);
         $parameter    = [self::BODY => $input->getArgument(self::BODY)];
 
-        $this->client->authenticate($username, $token, Client::AUTH_HTTP_PASSWORD);
+        $this->client->authenticate($username, $token, Client::AUTH_ACCESS_TOKEN);
         $this->client->issue()->comments()->create(
             $organisation,
             $repository,

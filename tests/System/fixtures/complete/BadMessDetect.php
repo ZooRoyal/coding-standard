@@ -2,7 +2,7 @@
 
 namespace Zooroyal\CodingStandard\Tests\System\fixtures\complete;
 
-class BadMessDectect
+class BadMessDetect
 {
     public function asd(): void
     {

@@ -14,8 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class AbstractTerminalCommandTest extends TestCase
 {
-    /** @var MockInterface|AbstractTerminalCommand */
-    private $subject;
+    private MockInterface|AbstractTerminalCommand $subject;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;
 

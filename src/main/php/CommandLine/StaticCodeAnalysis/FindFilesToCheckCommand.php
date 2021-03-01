@@ -16,21 +16,11 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class FindFilesToCheckCommand extends Command
 {
-    private ExclusionListFactory $blacklistFactory;
-    private AdaptableFileFinder $adaptableFileFinder;
-    private Environment $environment;
-
-    /**
-     * FindFilesToCheckCommand constructor.
-     */
     public function __construct(
-        ExclusionListFactory $blacklistFactory,
-        AdaptableFileFinder $adaptableFileFinder,
-        Environment $environment
+        private ExclusionListFactory $blacklistFactory,
+        private AdaptableFileFinder $adaptableFileFinder,
+        private Environment $environment,
     ) {
-        $this->blacklistFactory = $blacklistFactory;
-        $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->environment = $environment;
         parent::__construct();
     }
 
@@ -116,7 +106,7 @@ class FindFilesToCheckCommand extends Command
 
         if ($exclusionListInput === true) {
             $blacklist = $this->blacklistFactory->build($blacklistTokenInput);
-            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname() . '/', $blacklist);
+            $result = array_map(static fn(EnhancedFileInfo $file): string => $file->getRelativePathname() . '/', $blacklist);
         } else {
             $foundFiles = $this->adaptableFileFinder->findFiles(
                 $allowedFileEndings,
@@ -124,7 +114,7 @@ class FindFilesToCheckCommand extends Command
                 $whitelistTokenInput,
                 $targetBranch
             )->getFiles();
-            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname(), $foundFiles);
+            $result = array_map(static fn(EnhancedFileInfo $file): string => $file->getRelativePathname(), $foundFiles);
         }
 
         $output->writeln(implode(PHP_EOL, $result));

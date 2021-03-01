@@ -11,7 +11,6 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class StaticExcluder implements ExcluderInterface
 {
-    private Environment $environment;
     /** @var array<string> */
     private const PATHS_TO_EXCLUDE = [
         '.eslintrc.js',
@@ -20,21 +19,18 @@ class StaticExcluder implements ExcluderInterface
         '.vagrant',
         'node_modules',
         'vendor',
+        'var',
         'bower_components',
         '.pnpm',
         '.pnpm-store',
     ];
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-
     /**
      * StaticExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private Environment $environment,
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->environment = $environment;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**

@@ -17,6 +17,6 @@ interface FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet;
 }

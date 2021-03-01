@@ -56,9 +56,9 @@ class ForbiddenChangesCommandTest extends TestCase
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(ForbiddenChangesCommand::class)->makePartial();
-        $localSubject->shouldReceive('setName')->once()->with('checks:forbidden-changes');
+        $localSubject->shouldReceive('setName')->once()->with('checks:forbidden-changes')->andReturnSelf();
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Checks for unwanted code changes.');
+            ->with('Checks for unwanted code changes.')->andReturnSelf();
         $localSubject->shouldReceive('setHelp')->once()
             ->with(
                 'This tool checks if there where changes made to files. If a parent directory contains a '
@@ -66,7 +66,7 @@ class ForbiddenChangesCommandTest extends TestCase
                 . ' file the tools will report the violation. Changes in subdirectories of a '
                 . 'marked directory may be allowed by placing a ' . $this->whitelistToken . ' file in the subdirectory.'
                 . ' Use parameter to determine if this should be handled as Warning or not.'
-            );
+            )->andReturnSelf();
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
@@ -86,8 +86,7 @@ class ForbiddenChangesCommandTest extends TestCase
                         return true;
                     }
                 )
-            );
-
+            )->andReturnSelf();
         $localSubject->configure();
     }
 
@@ -145,7 +144,7 @@ class ForbiddenChangesCommandTest extends TestCase
         Matcher $messageMatcher,
         array $expectedWrongfullyChangesFiles,
         ?string $mockedTargetBranch,
-        ?string $mockedTargetGuess
+        ?string $mockedTargetGuess,
     ): void {
         /** @var MockInterface|InputInterface $mockedInputInterface */
         $mockedInputInterface = Mockery::mock(InputInterface::class);

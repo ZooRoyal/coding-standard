@@ -12,6 +12,7 @@ class PHPCopyPasteDetectorCommand extends AbstractToolCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontCopyPasteDetectPHP';
+
     /** @var array<string>  */
     protected array $allowedFileEndings = ['.php'];
 

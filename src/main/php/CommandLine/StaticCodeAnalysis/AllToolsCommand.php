@@ -15,12 +15,12 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 class AllToolsCommand extends Command
 {
     /** @var array<InputOption> */
-    private array $injectedOptions;
+    private array $injectedOptions = [];
 
     public function __construct(
         FixableInputFacet $fixableFacet,
         TargetableInputFacet $targetableFacet,
-        ?string $name = null
+        ?string $name = null,
     ) {
         $this->injectedOptions = array_merge(
             $fixableFacet->getInputDefinition()->getOptions(),

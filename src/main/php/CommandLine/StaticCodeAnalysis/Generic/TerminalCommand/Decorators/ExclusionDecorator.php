@@ -14,12 +14,9 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionDecorator implements TerminalCommandDecorator
 {
-    private ExclusionListFactory $exclusionListFactory;
-
     public function __construct(
-        ExclusionListFactory $exclusionListFactory
+        private ExclusionListFactory $exclusionListFactory,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
     }
 
     /**

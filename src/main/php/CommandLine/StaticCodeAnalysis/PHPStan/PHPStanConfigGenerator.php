@@ -20,25 +20,21 @@ class PHPStanConfigGenerator
             'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
             'mockery/mockery' => '/library/helpers.php',
         ];
+
     private const STATIC_DIRECTORIES_TO_SCAN
         = [
             '/Plugins',
             '/custom/plugins',
             '/custom/project',
         ];
-    private NeonAdapter $neonAdapter;
-    private Filesystem $filesystem;
+
     private string $phpStanConfigPath;
-    private Environment $environment;
 
     public function __construct(
-        NeonAdapter $neonAdapter,
-        Filesystem $filesystem,
-        Environment $environment
+        private NeonAdapter $neonAdapter,
+        private Filesystem $filesystem,
+        private Environment $environment,
     ) {
-        $this->neonAdapter = $neonAdapter;
-        $this->filesystem = $filesystem;
-        $this->environment = $environment;
         $this->phpStanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
     }
 
@@ -64,6 +60,7 @@ class PHPStanConfigGenerator
 
         $configValues = $this->generateConfig($output, $exclusionList);
 
+        /** @phpstan-ignore-next-line */
         $onTheFlyConfig = $this->neonAdapter->dump($configValues);
         $this->filesystem->dumpFile($this->phpStanConfigPath, $onTheFlyConfig);
     }
@@ -91,7 +88,7 @@ class PHPStanConfigGenerator
      *
      * @param array<string,array<string>> $configValues
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<string|int,array<string>>>
      */
     private function addFunctionsFiles(array $configValues, OutputInterface $output): array
     {
@@ -99,13 +96,14 @@ class PHPStanConfigGenerator
             try {
                 $toolPath = ComposerLocator::getPath($tool);
                 $configValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;
-            } catch (RuntimeException $exception) {
+            } catch (RuntimeException) {
                 $output->writeln(
                     '<info>' . $tool . ' not found. Skip loading ' . $functionsFile . '</info>',
                     OutputInterface::VERBOSITY_VERBOSE
                 );
             }
         }
+
         return $configValues;
     }
 
@@ -115,15 +113,17 @@ class PHPStanConfigGenerator
      * @param array<string,array<string|int,string|array<string>>> $configValues
      * @param array<EnhancedFileInfo> $exclusionList
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<array<string|int,string>>>
      */
     private function addExcludedFiles(array $configValues, array $exclusionList): array
     {
+        // phpcs:disable
         $directoryExcludedFilesStrings = array_map(
-            static fn(EnhancedFileInfo $file) => $file->getRealPath(),
-            $exclusionList
+            static fn(EnhancedFileInfo $file): string|false => $file->getRealPath(),
+            $exclusionList,
         );
-        $configValues['parameters']['excludes_analyse'] = $directoryExcludedFilesStrings;
+        // phpcs:enable
+        $configValues['parameters']['excludePaths'] = $directoryExcludedFilesStrings;
         return $configValues;
     }
 
@@ -132,7 +132,7 @@ class PHPStanConfigGenerator
      *
      * @param array<string,array<string|int,string|array<string>>> $configValues
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<string|int,array<string>>>
      */
     private function addStaticDirectoriesToScan(array $configValues): array
     {
@@ -144,6 +144,7 @@ class PHPStanConfigGenerator
 
             $configValues['parameters']['scanDirectories'][] = $absolutePath;
         }
+
         return $configValues;
     }
 }

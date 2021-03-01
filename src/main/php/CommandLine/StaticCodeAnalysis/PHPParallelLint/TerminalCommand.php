@@ -26,11 +26,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use TargetableTrait, ExcludingTrait, FileExtensionTrait, MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
-    private Environment $environment;
-
-    public function __construct(Environment $environment)
+    public function __construct(private Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**

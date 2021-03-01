@@ -9,20 +9,13 @@ namespace Zooroyal\CodingStandard\CommandLine\ValueObjects;
  */
 class GitChangeSet
 {
-    /** @var array<EnhancedFileInfo> */
-    private array $files;
-
-    private string $commitHash;
-
     /**
      * GitChangeSet constructor.
      *
      * @param array<EnhancedFileInfo> $files
      */
-    public function __construct(array $files, string $commitHash = '')
+    public function __construct(private array $files, private string $commitHash = '')
     {
-        $this->files = $files;
-        $this->commitHash = $commitHash;
     }
 
     /**

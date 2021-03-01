@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\Tests\Unit\Github\Commands;
 
+use Github\Api\Issue;
 use Github\Client;
 use Hamcrest\Matchers as H;
 use Mockery;
@@ -22,10 +23,8 @@ class IssueCommentAddCommandTest extends TestCase
     /** @var array<MockInterface>|array<mixed> */
     private array $subjectParameters;
     private IssueCommentAddCommand $subject;
-    /** @var MockInterface|InputInterface */
-    private $mockedInputInterface;
-    /** @var MockInterface|OutputInterface */
-    private $mockedOutputInterface;
+    private MockInterface|InputInterface $mockedInputInterface;
+    private MockInterface|OutputInterface $mockedOutputInterface;
 
     protected function setUp(): void
     {
@@ -52,9 +51,9 @@ class IssueCommentAddCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(IssueCommentAddCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('issue:comment:add');
+        $localSubject->shouldReceive('setName')->once()->with('issue:comment:add')->andReturnSelf();
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Adds comment to Github Issue.');
+            ->with('Adds comment to Github Issue.')->andReturnSelf();
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 H::allOf(
@@ -73,7 +72,7 @@ class IssueCommentAddCommandTest extends TestCase
                         )
                     )
                 )
-            );
+            )->andReturnSelf();
 
         $localSubject->configure();
     }
@@ -86,7 +85,7 @@ class IssueCommentAddCommandTest extends TestCase
         $expectedTokenValue = 'myToken';
         $expectedOrganisationValue = 'myOrganisation';
         $expectedRepositoryValue = 'myRepository';
-        $expectedIssueIdValue = 'myIssueId';
+        $expectedIssueIdValue = 0;
         $expectedBodyValue = 'myBody';
         $username = 'foo';
         $expectedParameterValue = ['body' => $expectedBodyValue];
@@ -105,9 +104,17 @@ class IssueCommentAddCommandTest extends TestCase
             ->with('body')->andReturn($expectedBodyValue);
 
         $this->subjectParameters[Client::class]->shouldReceive('authenticate')->once()
-            ->with($username, $expectedTokenValue, Client::AUTH_HTTP_PASSWORD);
-        $this->subjectParameters[Client::class]->shouldReceive('issue->comments->create')->once()
+            ->with($username, $expectedTokenValue, Client::AUTH_ACCESS_TOKEN);
+
+        $issueMock = Mockery::mock(Issue::class);
+        $issueMock
+            ->shouldReceive('comments->create')
+            ->once()
             ->with($expectedOrganisationValue, $expectedRepositoryValue, $expectedIssueIdValue, $expectedParameterValue);
+
+        $this->subjectParameters[Client::class]->shouldReceive('issue')
+            ->once()
+            ->andReturn($issueMock);
 
         $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
     }

@@ -9,14 +9,11 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 abstract class FixingToolCommand extends TargetableToolsCommand
 {
-    private FixableInputFacet $fixableFacet;
-
     public function __construct(
-        FixableInputFacet $fixableFacet,
+        private FixableInputFacet $fixableFacet,
         TargetableInputFacet $targetableFacet,
-        ?string $name = null
+        ?string $name = null,
     ) {
-        $this->fixableFacet = $fixableFacet;
         parent::__construct($targetableFacet, $name);
     }
 
