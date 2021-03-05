@@ -11,16 +11,12 @@ use DI\Annotation\Injectable;
  */
 class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontSniffPHP';
+    protected string $blacklistToken = '.dontSniffPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = ',';
-    /** @var string */
-    protected $whitelistGlue = ' ';
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistPrefix = '';
+    protected string $blacklistGlue = ',';
+    protected string $whitelistGlue = ' ';
 
     /**
      * {@inheritDoc}

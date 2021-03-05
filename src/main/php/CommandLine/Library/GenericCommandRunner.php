@@ -148,7 +148,7 @@ class GenericCommandRunner
      *
      * @return int
      */
-    private function runAndWriteToOutput($commandWithParameters)
+    private function runAndWriteToOutput($commandWithParameters): int
     {
         $exitCode = 0;
         $process = $this->processRunner->runAsProcessReturningProcessObject(
@@ -164,7 +164,7 @@ class GenericCommandRunner
     }
 
     /**
-     * Builds a command from themplate and argument.
+     * Builds a command from template and argument.
      *
      * @param string $command
      * @param string $argument

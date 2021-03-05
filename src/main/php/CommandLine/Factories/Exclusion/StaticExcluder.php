@@ -9,8 +9,9 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 class StaticExcluder implements ExcluderInterface
 {
     private Environment $environment;
-    /** @var array<string>  */
-    private array $pathsToExclude = [
+    /** @var array<string> */
+    private array $pathsToExclude
+        = [
             '.eslintrc.js',
             '.git',
             '.idea',

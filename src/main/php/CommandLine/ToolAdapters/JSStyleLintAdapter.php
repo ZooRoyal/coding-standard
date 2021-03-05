@@ -12,18 +12,13 @@ use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFou
  */
 class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface, FixerSupportInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontSniffLESS';
+    protected string $blacklistToken = '.dontSniffLESS';
     /** @var string[] */
-    protected $allowedFileEndings = ['/*.{css,scss,sass,less}'];
-    /** @var string */
-    protected $blacklistPrefix = '--ignore-pattern=';
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var bool */
-    private $commandNotFound = false;
+    protected array $allowedFileEndings = ['/*.{css,scss,sass,less}'];
+    protected string $blacklistPrefix = '--ignore-pattern=';
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private bool $commandNotFound = false;
 
     /**
      * {@inheritDoc}

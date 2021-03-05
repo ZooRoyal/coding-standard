@@ -12,7 +12,7 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycle()
+    public function readWriteCycle(): void
     {
         $expectedFiles = [Mockery::mock(EnhancedFileInfo::class), Mockery::mock(EnhancedFileInfo::class)];
         $expectedCommitHash = 'asdasdasd1223213';
@@ -29,7 +29,7 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycleWithSetter()
+    public function readWriteCycleWithSetter(): void
     {
         $mockeryEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
         $forgedFiles = [$mockeryEnhancedFileInfo];

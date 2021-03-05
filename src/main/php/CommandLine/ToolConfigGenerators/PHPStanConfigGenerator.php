@@ -43,7 +43,7 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
         return $this->neonAdapter->dump($parameters);
     }
 
-    public function writeConfig(string $filename, string $content) : void
+    public function writeConfig(string $filename, string $content): void
     {
         $this->fileWriter->write($filename, $content);
     }

@@ -20,7 +20,7 @@ class ExclusionListSanitizer
      *         no sense to exclude them "again". As the parent is excluded they are automatically
      *         excluded too.
      */
-    public function sanitizeExclusionList(array $rawExcludePaths)
+    public function sanitizeExclusionList(array $rawExcludePaths): array
     {
         $filteredArray = $rawExcludePaths;
         $count = count($filteredArray);

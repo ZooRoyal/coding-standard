@@ -137,7 +137,7 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterThrowsExceptionIfBlackAndWhitelisted()
+    public function filterThrowsExceptionIfBlackAndWhitelisted(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionCode('1553780055');

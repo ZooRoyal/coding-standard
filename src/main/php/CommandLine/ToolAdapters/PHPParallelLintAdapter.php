@@ -11,16 +11,12 @@ use DI\Annotation\Injectable;
  */
 class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontLintPHP';
+    protected string $blacklistToken = '.dontLintPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistPrefix = '--exclude ';
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
 
     /**
      * {@inheritDoc}

@@ -18,16 +18,12 @@ use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenera
  */
 class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontStanPHP';
+    protected string $blacklistToken = '.dontStanPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var PHPStanConfigGenerator */
-    private $phpstanConfigGenerator;
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private PHPStanConfigGenerator $phpstanConfigGenerator;
     /** @var array<string,string> */
     private array $toolFunctionsFileMapping
         = [

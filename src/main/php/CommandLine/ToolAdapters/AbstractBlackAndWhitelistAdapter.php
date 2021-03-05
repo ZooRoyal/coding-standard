@@ -9,27 +9,19 @@ use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 
 abstract class AbstractBlackAndWhitelistAdapter
 {
-    /** @var OutputInterface */
-    protected $output;
-    /** @var Environment */
-    protected $environment;
-    /** @var GenericCommandRunner */
-    protected $genericCommandRunner;
+    protected OutputInterface $output;
+    protected Environment $environment;
+    protected GenericCommandRunner $genericCommandRunner;
 
-    /** @var string */
-    protected $blacklistToken = '';
+    protected string $blacklistToken = '';
     /** @var string[] */
-    protected $allowedFileEndings = [];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = '';
-    /** @var string */
-    protected $whitelistGlue = '';
+    protected array $allowedFileEndings = [];
+    protected string $blacklistPrefix = '';
+    protected string $blacklistGlue = '';
+    protected string $whitelistGlue = '';
     /** @var string[] */
-    protected $commands = [];
-    /** @var TerminalCommandFinder */
-    protected $terminalCommandFinder;
+    protected array $commands = [];
+    protected TerminalCommandFinder $terminalCommandFinder;
 
     /**
      * Constructor of all ToolAdapters

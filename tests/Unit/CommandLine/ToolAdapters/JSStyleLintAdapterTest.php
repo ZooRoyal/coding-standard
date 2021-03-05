@@ -66,7 +66,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         $expectedFilter = '/*.{css,scss,sass,less}';
         $config = '/config/stylelint/.stylelintrc';
@@ -140,7 +140,7 @@ class JSStyleLintAdapterTest extends TestCase
         string $fullMessage,
         string $diffMessage,
         string $method
-    ) {
+    ): void {
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
@@ -156,7 +156,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -183,7 +183,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -209,7 +209,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

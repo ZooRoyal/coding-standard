@@ -41,7 +41,7 @@ class GitChangeSetFilter
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = ''
-    ) {
+    ): void {
         $whitelist = [];
         $deDuped = true;
 

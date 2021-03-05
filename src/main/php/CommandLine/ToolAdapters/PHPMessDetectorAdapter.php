@@ -11,14 +11,11 @@ use DI\Annotation\Injectable;
  */
 class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontMessDetectPHP';
+    protected string $blacklistToken = '.dontMessDetectPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistGlue = ',';
-    /** @var string */
-    protected $whitelistGlue = ',';
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistGlue = ',';
+    protected string $whitelistGlue = ',';
 
     /**
      * {@inheritDoc}

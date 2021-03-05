@@ -29,14 +29,11 @@ class JSESLintAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|JSESLintAdapter */
     private $partialSubject;
-    /** @var string */
-    private $mockedPackageDirectory;
-    /** @var string */
-    private $mockedRootDirectory;
-    /** @var string */
-    private $forgedCommandPath;
+    private string $mockedPackageDirectory;
+    private string $mockedRootDirectory;
+    private string $forgedCommandPath;
     /** @var string[] */
-    private $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
+    private array $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
 

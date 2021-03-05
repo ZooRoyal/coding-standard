@@ -7,8 +7,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 
 $autoloadFiles = [
-    __DIR__ . '/../../vendor/autoload.php',
     __DIR__ . '/../../../../autoload.php',
+    __DIR__ . '/../../vendor/autoload.php',
 ];
 
 foreach ($autoloadFiles as $autoloadFile) {

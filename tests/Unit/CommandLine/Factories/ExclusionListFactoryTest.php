@@ -13,14 +13,14 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 class ExclusionListFactoryTest extends TestCase
 {
     /** @var ExclusionListFactory */
-    private $subject;
+    private ExclusionListFactory $subject;
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder1;
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder2;
     /** @var array<MockInterface|ExcluderInterface> */
     private $mockedExcluders;
-    /** @var Mockery\LegacyMockInterface|MockInterface|ExclusionListSanitizer */
+    /** @var MockInterface|ExclusionListSanitizer */
     private $mockedExclusionListSanitizer;
 
     protected function setUp(): void
