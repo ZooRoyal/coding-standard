@@ -23,12 +23,12 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
-        $phpMessDetectorConfig = $this->environment->getPackageDirectory() . '/config/phpmd/phpmd.xml';
+        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
-        $vendorPath = $this->environment->getVendorPath();
-        $rootDirectory = $this->environment->getRootDirectory();
+        $phpMessDetectorConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/phpmd/phpmd.xml';
 
         $this->commands['PHPMDWL'] = 'php ' . $vendorPath . '/bin/phpmd %1$s' .
             ' text ' . $phpMessDetectorConfig . ' --suffixes php';
@@ -39,7 +39,7 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '')
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         $toolShortName = 'PHPMD';
         $prefix = $toolShortName . ' : ';

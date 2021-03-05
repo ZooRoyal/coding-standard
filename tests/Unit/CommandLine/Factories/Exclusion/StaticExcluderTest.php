@@ -2,31 +2,39 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\Exclusion;
 
-use Hamcrest\MatcherAssert;
-use Hamcrest\Matchers as H;
+use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\StaticExcluder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class StaticExcluderTest extends TestCase
 {
     private StaticExcluder $subject;
-    /** @var MockInterface|Environment */
-    private $mockedEnvironment;
-    private $forgedRootDirectory;
+    private string $forgedRootDirectory;
+    /** @var MockInterface|EnhancedFileInfo */
+    private $mockedEnhancedFileInfo;
+    /** @var array<MockInterface> */
+    private array $subjectParameters;
 
     protected function setUp(): void
     {
         $this->forgedRootDirectory = dirname(__DIR__, 5);
+        $this->mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
 
-        $this->mockedEnvironment = Mockery::mock(Environment::class);
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(StaticExcluder::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')->once()
+        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')
+            ->once()->withNoArgs()->andReturn($this->mockedEnhancedFileInfo);
+        $this->mockedEnhancedFileInfo->shouldReceive('getRealPath')->once()
             ->withNoArgs()->andReturn($this->forgedRootDirectory);
-
-        $this->subject = new StaticExcluder($this->mockedEnvironment);
     }
 
     protected function tearDown(): void
@@ -40,9 +48,22 @@ class StaticExcluderTest extends TestCase
      */
     public function getPathsToExclude()
     {
-        $expectedResult = ['.git', 'node_modules', 'vendor'];
+        $forgedRemainingPaths = ['.git', 'node_modules', 'vendor'];
+        $that = $this;
+        $expectedResult = array_map(
+            static function ($path) use ($that) {
+                return new EnhancedFileInfo(
+                    $that->forgedRootDirectory . '/' . $path,
+                    $that->forgedRootDirectory
+                );
+            },
+            $forgedRemainingPaths
+        );
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with(Matchers::hasItems(...$forgedRemainingPaths))->andReturn($expectedResult);
 
         $result = $this->subject->getPathsToExclude([]);
-        MatcherAssert::assertThat($result, H::hasItems(...$expectedResult));
+        self::assertSame($expectedResult, $result);
     }
 }

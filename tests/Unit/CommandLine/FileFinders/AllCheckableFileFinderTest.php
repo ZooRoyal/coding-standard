@@ -48,7 +48,7 @@ class AllCheckableFileFinderTest extends TestCase
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
 
-        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
+        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')->once()
             ->with($mockedGitChangeSet, $mockedAllowedFileEndings, $expectedBlacklistToken);
 
         $result = $this->subject->findFiles($mockedAllowedFileEndings, $expectedBlacklistToken);
@@ -69,7 +69,7 @@ class AllCheckableFileFinderTest extends TestCase
         $this->subjectParameters[GitChangeSetFactory::class]->shouldReceive('build')
             ->with(['asd', 'qwe'], null)->andReturn($mockedGitChangeSet);
 
-        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
+        $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')->once()
             ->with($mockedGitChangeSet, [], '');
 
         $result = $this->subject->findFiles();

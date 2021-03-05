@@ -56,9 +56,9 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         PHPStanConfigGenerator $phpstanConfigGenerator
     ) {
         $this->phpstanConfigGenerator = $phpstanConfigGenerator;
-        $this->vendorPath = $environment->getVendorPath();
-        $this->rootDirectory = $environment->getRootDirectory();
-        $this->phpstanConfigPath = $environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
+        $this->vendorPath = $environment->getVendorPath()->getRealPath();
+        $this->rootDirectory = $environment->getRootDirectory()->getRealPath();
+        $this->phpstanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
         parent::__construct($environment, $output, $genericCommandRunner, $terminalCommandFinder);
     }
 
@@ -96,7 +96,6 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 
         $parameters = $this->phpstanConfigGenerator->addConfigParameters(
             $this->blacklistToken,
-            $this->rootDirectory,
             $additionalConfigValues
         );
         $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);

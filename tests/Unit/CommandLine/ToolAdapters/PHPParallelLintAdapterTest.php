@@ -26,8 +26,6 @@ class PHPParallelLintAdapterTest extends TestCase
     /** @var MockInterface|PHPParallelLintAdapter */
     private $partialSubject;
     /** @var string */
-    private $mockedPackageDirectory;
-    /** @var string */
     private $mockedRootDirectory;
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
@@ -42,14 +40,11 @@ class PHPParallelLintAdapterTest extends TestCase
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
         $this->mockedVendorDirectory = '/I/Am/The/Vendor';
-        $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
-        $this->mockedEnvironment->shouldReceive('getVendorPath')
+        $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
             ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
+        $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $this->partialSubject = Mockery::mock(

@@ -9,6 +9,17 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
  */
 class GitChangeSetFactory
 {
+    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+
+    /**
+     * GitChangeSetFactory constructor.
+     *
+     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
+     */
+    public function __construct(EnhancedFileInfoFactory $enhancedFileInfoFactory)
+    {
+        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
+    }
     /**
      * Build provides GitChangeSet instances.
      *
@@ -19,6 +30,7 @@ class GitChangeSetFactory
      */
     public function build(array $files, $commitHash = '')
     {
-        return new GitChangeSet($files, $commitHash);
+        $fileInfos = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($files);
+        return new GitChangeSet($fileInfos, $commitHash);
     }
 }

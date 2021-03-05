@@ -121,7 +121,6 @@ class PHPStanAdapterTest extends TestCase
             ->withArgs(
                 [
                     '.dontStanPHP',
-                    '/root/directory',
                     ['includes' => ['/package/directory/config/phpstan/phpstan.neon.dist']],
                 ]
             )->andReturn(['config']);
@@ -164,7 +163,7 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedPHPStanConfigGenerator->shouldIgnoreMissing();
 
         $this->mockedPHPStanConfigGenerator->shouldReceive('addConfigParameters')->once()
-            ->with('.dontStanPHP', '/root/directory', $mockedConfig)->andReturn(['config']);
+            ->with('.dontStanPHP', $mockedConfig)->andReturn(['config']);
 
         $this->partialSubject->shouldReceive('runTool')->once()->andReturn($expectedResult);
 
@@ -209,11 +208,11 @@ class PHPStanAdapterTest extends TestCase
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
-        $this->mockedEnvironment->shouldReceive('getVendorPath')
+        $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
             ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
+        $this->mockedEnvironment->shouldReceive('getPackageDirectory->getRealPath')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
+        $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
 
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use function Safe\substr;
@@ -10,17 +11,23 @@ class TokenExcluder implements ExcluderInterface
 {
     private Environment $environment;
     private ProcessRunner $processRunner;
+    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     /**
      * TokenExcluder constructor.
      *
-     * @param Environment   $environment
-     * @param ProcessRunner $processRunner
+     * @param Environment             $environment
+     * @param ProcessRunner           $processRunner
+     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
-    public function __construct(Environment $environment, ProcessRunner $processRunner)
-    {
+    public function __construct(
+        Environment $environment,
+        ProcessRunner $processRunner,
+        EnhancedFileInfoFactory $enhancedFileInfoFactory
+    ) {
         $this->environment = $environment;
         $this->processRunner = $processRunner;
+        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
@@ -28,7 +35,7 @@ class TokenExcluder implements ExcluderInterface
      * $alreadyExcludedPaths to speed things up.
      *
      * @param array<string> $alreadyExcludedPaths
-     * @param array<mixed> $config
+     * @param array<mixed>  $config
      *
      * @return array
      */
@@ -39,7 +46,7 @@ class TokenExcluder implements ExcluderInterface
         }
         $token = $config['token'];
 
-        $rootDirectory = $this->environment->getRootDirectory();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $excludeParameters = '';
         if (!empty($alreadyExcludedPaths)) {
@@ -60,6 +67,8 @@ class TokenExcluder implements ExcluderInterface
             $absoluteDirectories
         );
 
-        return $relativeDirectories;
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);
+
+        return $result;
     }
 }

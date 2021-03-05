@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -25,9 +26,15 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class FindFilesToCheckCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var FindFilesToCheckCommand */
-    private $subject;
+    private array $subjectParameters;
+    private FindFilesToCheckCommand $subject;
+    /** @var MockInterface|EnhancedFileInfo */
+    private $forgedBlacklistDirectory1;
+    /** @var MockInterface|EnhancedFileInfo */
+    private $forgedBlacklistDirectory2;
+    private $expectedArray;
+    private $expectedResult1 = 'phpunit.xml.dist';
+    private $expectedResult2 = 'composer.json';
 
     protected function setUp(): void
     {
@@ -35,6 +42,15 @@ class FindFilesToCheckCommandTest extends TestCase
         $buildFragments = $subjectFactory->buildSubject(FindFilesToCheckCommand::class);
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
+
+        $this->forgedBlacklistDirectory1 = Mockery::mock(EnhancedFileInfo::class);
+        $this->forgedBlacklistDirectory2 = Mockery::mock(EnhancedFileInfo::class);
+        $this->expectedArray = [$this->forgedBlacklistDirectory1, $this->forgedBlacklistDirectory2];
+
+        $this->forgedBlacklistDirectory1->shouldReceive('getRelativePathname')
+            ->withNoArgs()->andReturn($this->expectedResult1);
+        $this->forgedBlacklistDirectory2->shouldReceive('getRelativePathname')
+            ->withNoArgs()->andReturn($this->expectedResult2);
     }
 
     protected function tearDown(): void
@@ -91,8 +107,6 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedTargetBranch = 'mockedTarget';
         $mockedExclusiveFlag = true;
 
-        $expectedArray = ['resulting', 'array'];
-
         /** @var MockInterface|InputInterface $mockedInputInterface */
         $mockedInputInterface = Mockery::mock(InputInterface::class);
         /** @var MockInterface|OutputInterface $mockedOutputInterface */
@@ -108,12 +122,21 @@ class FindFilesToCheckCommandTest extends TestCase
         );
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
-            ->with($mockedBlacklistToken)->andReturn($expectedArray);
-
+            ->with($mockedBlacklistToken)->andReturn($this->expectedArray);
         $mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with(implode("\n", array_values($expectedArray)));
+            ->with($this->expectedResult1 . '/' . PHP_EOL . $this->expectedResult2 . '/');
 
-        $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
+        $result = $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
+        self::assertSame(0, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function checkIfCommandGetsConfigured(): void
+    {
+        $result = $this->subject->getDefinition()->getOptions();
+        self::assertNotEmpty($result);
     }
 
     /**
@@ -127,7 +150,6 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedTargetBranch = '';
         $mockedExclusiveFlag = false;
 
-        $expectedArray = ['resulting', 'array'];
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         /** @var MockInterface|InputInterface $mockedInputInterface */
@@ -147,24 +169,13 @@ class FindFilesToCheckCommandTest extends TestCase
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
             ->with($allowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch)
             ->andReturn($mockedGitChangeSet);
-
-        $mockedGitChangeSet->shouldReceive('getFiles')->andReturn($expectedArray);
+        $mockedGitChangeSet->shouldReceive('getFiles')->once()
+            ->withNoArgs()->andReturn($this->expectedArray);
 
         $mockedOutputInterface->shouldReceive('writeln')->once()
-            ->with(implode("\n", array_values($expectedArray)));
+            ->with($this->expectedResult1 . PHP_EOL . $this->expectedResult2);
 
-        $result = $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
-
-        self::assertSame(0, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function checkIfCommandGetsConfigured(): void
-    {
-        $result = $this->subject->getDefinition()->getOptions();
-        self::assertNotEmpty($result);
+        $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
     }
 
     /**

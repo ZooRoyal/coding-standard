@@ -6,6 +6,7 @@ namespace Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators;
 use PHPStan\DependencyInjection\NeonAdapter;
 use PHPStan\File\FileWriter;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
 {
@@ -26,17 +27,15 @@ class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
         $this->blacklistFactory = $blacklistFactory;
     }
 
-
-    public function addConfigParameters(string $blackListToken, string $rootDirectory, array $parameters): array
+    public function addConfigParameters(string $blackListToken, array $parameters): array
     {
-        $blackListfiles = $this->blacklistFactory->build($blackListToken);
-        $diretoryBlackListfiles = [];
+        $blacklistFiles = $this->blacklistFactory->build($blackListToken);
+        $directoryBlackListfiles = array_map(
+            static fn(EnhancedFileInfo $file) => $file->getRealPath(),
+            $blacklistFiles
+        );
 
-        foreach ($blackListfiles as $file) {
-            $diretoryBlackListfiles[] = $rootDirectory.'/'.$file;
-        }
-
-        return array_merge_recursive(['parameters' => ['excludes_analyse' => $diretoryBlackListfiles]], $parameters);
+        return array_merge_recursive(['parameters' => ['excludes_analyse' => $directoryBlackListfiles]], $parameters);
     }
 
     public function generateConfig(array $parameters): string

@@ -25,11 +25,11 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
-        $phpCodeSnifferConfig = $this->environment->getPackageDirectory() . '/config/phpcs/ZooRoyal/ruleset.xml';
-        $vendorPath = $this->environment->getVendorPath();
-        $rootDirectory = $this->environment->getRootDirectory();
+        $phpCodeSnifferConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/phpcs/ZooRoyal/ruleset.xml';
+        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $sniffWhitelistCommand = 'php ' . $vendorPath . '/bin/phpcs -s --extensions=php --standard='
             . $phpCodeSnifferConfig . ' %1$s';
@@ -51,7 +51,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '')
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         $tool = 'PHPCS';
         $prefix = $tool . ' : ';
@@ -66,7 +66,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '')
+    public function fixViolations($targetBranch = ''): ?int
     {
         $tool = 'PHPCBF';
         $prefix = $tool . ' : ';

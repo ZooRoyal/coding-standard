@@ -56,7 +56,7 @@ abstract class AbstractBlackAndWhitelistAdapter
     /**
      * This method is supposed to be used to set the tool up.
      */
-    abstract protected function init();
+    abstract protected function init(): void;
 
     /**
      * Runs tool in normal or fix mode according to settings.

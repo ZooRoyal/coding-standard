@@ -2,7 +2,9 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
 
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class StaticExcluder implements ExcluderInterface
 {
@@ -19,15 +21,20 @@ class StaticExcluder implements ExcluderInterface
             '.pnpm',
             '.pnpm-store',
         ];
+    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     /**
      * StaticExcluder constructor.
      *
-     * @param Environment $environment
+     * @param Environment             $environment
+     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
-    public function __construct(Environment $environment)
-    {
+    public function __construct(
+        Environment $environment,
+        EnhancedFileInfoFactory $enhancedFileInfoFactory
+    ) {
         $this->environment = $environment;
+        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
@@ -36,11 +43,11 @@ class StaticExcluder implements ExcluderInterface
      * @param array<string> $alreadyExcludedPaths
      * @param array<mixed>  $config
      *
-     * @return array<string>
+     * @return array<EnhancedFileInfo>
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
-        $rootDirectory = $this->environment->getRootDirectory();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $filteredDirectories = array_filter(
             $this->pathsToExclude,
@@ -49,6 +56,8 @@ class StaticExcluder implements ExcluderInterface
             }
         );
 
-        return array_values($filteredDirectories);
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(array_values($filteredDirectories));
+
+        return $result;
     }
 }

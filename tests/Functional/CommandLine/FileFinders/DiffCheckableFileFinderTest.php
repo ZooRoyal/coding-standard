@@ -2,6 +2,7 @@
 
 namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\FileFinders;
 
+use ComposerLocator;
 use DI\Container;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -10,12 +11,31 @@ use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
 use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class DiffCheckableFileFinderTest extends TestCase
 {
+    private array $forgedFileSet;
+    private string $forgedRawDiffUnfilteredString;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->forgedFileSet = [
+            'topFolder/allowedChangesFile',
+            'topFolder/folder/subFolder/allowedChangesFile',
+            'topFolder/folder/subFolder/.doChangeFiles',
+        ];
+        $this->forgedRawDiffUnfilteredString = 'topFolder/allowedChangesFile' . PHP_EOL
+            . 'topFolder/folder/subFolder/allowedChangesFile' . PHP_EOL
+            . 'topFolder/folder/subFolder/.doChangeFiles' . PHP_EOL
+            . 'topFolder/folder/subFolder/finalFolder/disallowedChangesFile' . PHP_EOL
+            . 'topFolder/folder/subFolder/finalFolder/.dontChangeFiles' . PHP_EOL
+            . 'topFolder/folder/disallowedChangesFile' . PHP_EOL
+            . 'topFolder/folder/.dontChangeFiles';
+    }
+
     protected function tearDown(): void
     {
         Mockery::close();
@@ -23,43 +43,43 @@ class DiffCheckableFileFinderTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
-    public function findFiles()
+    public function findFiles(): void
     {
         $forgedRootDirectory = __DIR__ . '/fixtures';
-        $forgedRawDiffUnfilteredString = 'topFolder/allowedChangesFile' . PHP_EOL
-            . 'topFolder/folder/subFolder/allowedChangesFile' . PHP_EOL
-            . 'topFolder/folder/subFolder/.doChangeFiles' . PHP_EOL
-            . 'topFolder/folder/subFolder/finalFolder/disallowedChangesFile' . PHP_EOL
-            . 'topFolder/folder/subFolder/finalFolder/.dontChangeFiles' . PHP_EOL
-            . 'topFolder/folder/disallowedChangesFile' . PHP_EOL
-            . 'topFolder/folder/.dontChangeFiles';
 
-        $forgedFileSet = [
-            'topFolder/allowedChangesFile',
-            'topFolder/folder/subFolder/allowedChangesFile',
-            'topFolder/folder/subFolder/.doChangeFiles',
-        ];
-
-        $targetBranch = 'myTarget';
-        $container = $this->setUpMockedObjects($forgedRootDirectory, $targetBranch, $forgedRawDiffUnfilteredString);
+        $container = $this->setUpMockedObjects($forgedRootDirectory, 'myTarget', $this->forgedRawDiffUnfilteredString);
         /** @var DiffCheckableFileFinder $subject */
         $subject = $container->get(DiffCheckableFileFinder::class);
 
-        $result = $subject->findFiles(
-            [],
-            '.dontChangeFiles',
-            '.doChangeFiles',
-            $targetBranch
-        );
+        $result = $subject->findFiles([], '.dontChangeFiles', '.doChangeFiles', 'myTarget');
 
         MatcherAssert::assertThat(
             $result,
-            H::both(
-                H::anInstanceOf(GitChangeSet::class)
-            )->andAlso(
-                HasProperty::hasProperty('files', H::arrayContainingInAnyOrder($forgedFileSet))
-            )
+            H::both(H::anInstanceOf(GitChangeSet::class))
+                ->andAlso(
+                    HasProperty::hasProperty(
+                        'files',
+                        H::arrayContainingInAnyOrder(
+                            [
+                                HasProperty::hasProperty(
+                                    'getRealPath',
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[0]
+                                ),
+                                HasProperty::hasProperty(
+                                    'getRealPath',
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[1]
+                                ),
+                                HasProperty::hasProperty(
+                                    'getRealPath',
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[2]
+                                ),
+                            ]
+                        )
+                    )
+                )
         );
     }
 
@@ -76,16 +96,15 @@ class DiffCheckableFileFinderTest extends TestCase
         string $forgedRootDirectory,
         string $targetBranch,
         string $forgedRawDiffUnfilteredString
-    ) : Container {
+    ): Container {
         $targetMergeBase = '123asdasdMergeBase123123asd';
 
-        $mockedEnvironment = Mockery::mock(Environment::class);
-        $mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($forgedRootDirectory);
-        $mockedEnvironment->shouldReceive('getBlacklistedDirectories')
-            ->withNoArgs()->andReturn(['.eslintrc.js', '.git', '.idea', '.vagrant', 'vendor']);
+        $mockedComposerLocator = Mockery::mock('overload:' . ComposerLocator::class);
+        $mockedComposerLocator->shouldReceive('getRootPath')->andReturn($forgedRootDirectory);
 
         $mockedProcessRunner = Mockery::mock(ProcessRunner::class)->makePartial();
+        $mockedProcessRunner->shouldReceive('runAsProcess')
+            ->with('git', 'rev-parse', '--show-toplevel')->andReturn($forgedRootDirectory);
         $mockedProcessRunner->shouldReceive('runAsProcess')->once()
             ->with('git', 'merge-base', 'HEAD', $targetBranch)->andReturn($targetMergeBase);
         $mockedProcessRunner->shouldReceive('runAsProcess')->once()
@@ -93,7 +112,6 @@ class DiffCheckableFileFinderTest extends TestCase
             ->andReturn($forgedRawDiffUnfilteredString);
 
         $container = ContainerFactory::getUnboundContainerInstance();
-        $container->set(Environment::class, $mockedEnvironment);
         $container->set(ProcessRunner::class, $mockedProcessRunner);
         return $container;
     }

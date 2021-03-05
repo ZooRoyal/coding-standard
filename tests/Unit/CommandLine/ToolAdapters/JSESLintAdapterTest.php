@@ -47,13 +47,13 @@ class JSESLintAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
+        $this->mockedRootDirectory = '/I/Am/Root';
+        $this->mockedPackageDirectory = $this->mockedRootDirectory . '/src';
         $this->forgedCommandPath = 'wubwubwub';
 
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
+        $this->mockedEnvironment->shouldReceive('getPackageDirectory->getRealPath')
+            ->withNoArgs()->andReturn($this->mockedPackageDirectory);
+        $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
         $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('eslint')->andReturn($this->forgedCommandPath)->byDefault();
@@ -151,6 +151,8 @@ class JSESLintAdapterTest extends TestCase
 
     /**
      * @test
+     * @medium
+     *
      * @dataProvider callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider
      *
      * @param string $tool
@@ -186,18 +188,10 @@ class JSESLintAdapterTest extends TestCase
      */
     public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound()
     {
-        $mockedEnvironment = Mockery::mock(Environment::class);
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $mockedPackageDirectory = '/package/directory';
-        $mockedRootDirectory = '/root/directory';
-
-        $mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $mockedPackageDirectory);
-        $mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($mockedRootDirectory);
         $mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('eslint')->andThrow(new TerminalCommandNotFoundException());
 
@@ -207,7 +201,12 @@ class JSESLintAdapterTest extends TestCase
         /** @var MockInterface|JSESLintAdapter $partialSubject */
         $partialSubject = Mockery::mock(
             JSESLintAdapter::class . '[!init]',
-            [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
+            [
+                $this->mockedEnvironment,
+                $mockedOutputInterface,
+                $mockedGenericCommandRunner,
+                $mockedTerminalCommandFinder,
+            ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
         $result = $partialSubject->writeViolationsToOutput('asd');
@@ -220,18 +219,10 @@ class JSESLintAdapterTest extends TestCase
      */
     public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound()
     {
-        $mockedEnvironment = Mockery::mock(Environment::class);
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $mockedPackageDirectory = '/package/directory';
-        $mockedRootDirectory = '/root/directory';
-
-        $mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $mockedPackageDirectory);
-        $mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($mockedRootDirectory);
         $mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('eslint')->andThrow(new TerminalCommandNotFoundException());
 
@@ -240,7 +231,12 @@ class JSESLintAdapterTest extends TestCase
 
         $partialSubject = Mockery::mock(
             JSESLintAdapter::class . '[!init]',
-            [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
+            [
+                $this->mockedEnvironment,
+                $mockedOutputInterface,
+                $mockedGenericCommandRunner,
+                $mockedTerminalCommandFinder,
+            ]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
         /** @var MockInterface|JSESLintAdapter $partialSubject */

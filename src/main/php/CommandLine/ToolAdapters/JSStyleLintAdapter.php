@@ -28,7 +28,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
         try {
             $commandPath = $this->terminalCommandFinder->findTerminalCommand('stylelint');
@@ -37,7 +37,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
             $commandPath = '';
         }
 
-        $stylelintConfig = $this->environment->getPackageDirectory() . '/config/stylelint/.stylelintrc';
+        $stylelintConfig = $this->environment->getPackageDirectory()->getRealPath() . '/config/stylelint/.stylelintrc';
         $styleLintBlacklistCommand = $commandPath . ' **' .
             $this->allowedFileEndings[0] . ' --allow-empty-input --config=' . $stylelintConfig . ' %1$s';
         $styleLintWhitelistCommand = $commandPath . ' %1$s --allow-empty-input --config=' . $stylelintConfig;
@@ -57,7 +57,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): int
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .
@@ -78,7 +78,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '')
+    public function fixViolations($targetBranch = ''): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .

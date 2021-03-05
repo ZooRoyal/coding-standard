@@ -16,6 +16,7 @@ use Zooroyal\CodingStandard\CommandLine\Commands\Checks\ForbiddenChangesCommand;
 use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -56,7 +57,6 @@ class ForbiddenChangesCommandTest extends TestCase
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(ForbiddenChangesCommand::class)->makePartial();
-
         $localSubject->shouldReceive('setName')->once()->with('checks:forbidden-changes');
         $localSubject->shouldReceive('setDescription')->once()
             ->with('Checks for unwanted code changes.');
@@ -137,21 +137,21 @@ class ForbiddenChangesCommandTest extends TestCase
      * @test
      * @dataProvider executeInteractsWithWarningFlagDataProvider
      *
-     * @param bool        $warning
-     * @param Matcher     $expectedResultMatcher
-     * @param Matcher     $messageMatcher
-     * @param string[]    $expectedWrongfullyChangesFiles
-     * @param string|null $mockedTargetBranch
-     * @param string|null $mockedTargetGuess
+     * @param bool                    $warning
+     * @param Matcher                 $expectedResultMatcher
+     * @param Matcher                 $messageMatcher
+     * @param array<EnhancedFileInfo> $expectedWrongfullyChangesFiles
+     * @param string|null             $mockedTargetBranch
+     * @param string|null             $mockedTargetGuess
      */
     public function executeInteractsWithWarningFlag(
         bool $warning,
         Matcher $expectedResultMatcher,
         Matcher $messageMatcher,
         array $expectedWrongfullyChangesFiles,
-        $mockedTargetBranch,
-        $mockedTargetGuess
-    ) {
+        ?string $mockedTargetBranch,
+        ?string $mockedTargetGuess
+    ): void {
         /** @var MockInterface|InputInterface $mockedInputInterface */
         $mockedInputInterface = Mockery::mock(InputInterface::class);
         /** @var MockInterface|OutputInterface $mockedOutputInterface */

@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 use DI\Annotation\Inject;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExcluderInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExclusionListSanitizer;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactory
 {
@@ -33,7 +34,7 @@ class ExclusionListFactory
      * @param string $token
      * @param bool   $deDuped
      *
-     * @return array<string>
+     * @return array<EnhancedFileInfo>
      */
     public function build(string $token = '', bool $deDuped = true): array
     {

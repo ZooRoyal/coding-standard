@@ -40,6 +40,7 @@ class DiffCheckableFileFinderTest extends TestCase
     public function findFilesWithoutTargetBranchMakesNoSense()
     {
         $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionCode(1553857649);
         $this->subject->findFiles([], '', '', '');
     }
 
@@ -53,9 +54,9 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedBlacklistToken = 'blaStopword';
         $mockedWhitelistToken = 'blaGO';
         $mockedMergeBase = 'alsdkfujh178290346';
-        $mockedFileDiff = 'dir1/file1' . "\n" . 'dir2/file2' . "\n";
-        $mockedFiles = ['dir1/file1', 'dir2/file2'];
-        $mockedChangeSet = new GitChangeSet($mockedFiles, $mockedMergeBase);
+        $mockedFileDiff = 'composer.json' . "\n" . 'package.json' . "\n";
+        $mockedFiles = ['composer.json', 'package.json'];
+        $mockedChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git', 'merge-base', 'HEAD', $mockedTargetBranch)

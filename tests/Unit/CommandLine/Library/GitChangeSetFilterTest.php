@@ -10,8 +10,8 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -31,8 +31,6 @@ class GitChangeSetFilterTest extends TestCase
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(GitChangeSetFilter::class);
         $this->subjectParameters = $buildFragments['parameters'];
-        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $this->subject = $buildFragments['subject'];
     }
@@ -46,27 +44,29 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterByBlacklistAndWhitelistWithoutFilter()
+    public function filterByBlacklistAndWhitelistWithoutFilter(): void
     {
         $whitelistedDirectory = $this->blacklistedDirectory . '/wumpe';
         $whitelistedFile = $whitelistedDirectory . '/binNochDa';
+        $expectedResult = $this->prepareMockedEnhancedFileInfo(['wahwah', 'bla', $whitelistedFile]);
         $mockedFileList = new GitChangeSet(
-            [
-                $this->blacklistedDirectory . '/sowas',
-                $whitelistedFile,
-                'wahwah',
-                'bla',
-            ],
+            array_merge(
+                $this->prepareMockedEnhancedFileInfo([$this->blacklistedDirectory . '/sowas']),
+                $expectedResult
+            ),
             'asdaqwe212123'
         );
-        $expectedResult = ['wahwah', 'bla', $whitelistedFile];
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
-            ->once()->with($blacklistToken, false)->andReturn([$this->blacklistedDirectory]);
+            ->once()->with($blacklistToken, false)->andReturn(
+                $this->prepareMockedEnhancedFileInfo([$this->blacklistedDirectory])
+            );
         $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
-            ->once()->with([], ['token' => $whitelistToken])->andReturn([$whitelistedDirectory]);
+            ->once()->with([], ['token' => $whitelistToken])->andReturn(
+                $this->prepareMockedEnhancedFileInfo([$whitelistedDirectory])
+            );
 
         $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
 
@@ -79,44 +79,53 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterByBlacklistAndFilterStringWithoutFilter()
+    public function filterByBlacklistAndFilterStringWithoutFilter(): void
     {
-        $mockedFileList = new GitChangeSet(
-            [$this->blacklistedDirectory . '/sowas', 'wahwah', 'bla'],
-            'asdaqwe212123'
-        );
-        $expectedResult = ['wahwah', 'bla'];
         $blackListToken = 'stopMe';
+        $expectedResult = $this->prepareMockedEnhancedFileInfo(['wahwah', 'bla']);
+        $mockedInput = array_merge(
+            $this->prepareMockedEnhancedFileInfo([$this->blacklistedDirectory . '/sowas']),
+            $expectedResult
+        );
+        $forgedBlacklistedDirectories = $this->prepareMockedEnhancedFileInfo([$this->blacklistedDirectory]);
+        $forgedGitChangeSet = new GitChangeSet($mockedInput, 'asdaqwe212123');
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
-            ->once()->with($blackListToken, true)->andReturn([$this->blacklistedDirectory]);
+            ->once()->with($blackListToken, true)->andReturn($forgedBlacklistedDirectories);
 
-        $this->subject->filter($mockedFileList, [], $blackListToken);
-        MatcherAssert::assertThat(
-            $mockedFileList->getFiles(),
-            Matchers::arrayContainingInAnyOrder(...$expectedResult)
-        );
+        $this->subject->filter($forgedGitChangeSet, [], $blackListToken);
+        $result = $forgedGitChangeSet->getFiles();
+
+        self::assertEquals($expectedResult, $result);
     }
 
     /**
      * @test
      */
-    public function filterByBlacklistAndFilterStringWithFilter()
+    public function filterByBlacklistAndFilterStringWithFilter(): void
     {
         $mockedFilter = ['wahwah', 'wubwub'];
-        $mockedFileList = new GitChangeSet(
+        $expectedResult = $this->prepareMockedEnhancedFileInfo(
             [
-                $this->blacklistedDirectory . '/mussWeg',
                 'asd' . $mockedFilter[0],
                 'qweqweq' . $mockedFilter[1],
-                $mockedFilter[1] . 'FalsePositive',
-            ],
+            ]
+        );
+        $mockedFileList = new GitChangeSet(
+            array_merge(
+                $this->prepareMockedEnhancedFileInfo(
+                    [
+                        $this->blacklistedDirectory . '/mussWeg',
+                        $mockedFilter[1] . 'FalsePositive',
+                    ]
+                ),
+                $expectedResult
+            ),
             'asdaqwe212123'
         );
-        $expectedResult = ['asd' . $mockedFilter[0], 'qweqweq' . $mockedFilter[1]];
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
-            ->once()->with('', true)->andReturn([$this->blacklistedDirectory]);
+            ->once()->with('', true)->andReturn($this->prepareMockedEnhancedFileInfo([$this->blacklistedDirectory]));
 
         $this->subject->filter($mockedFileList, $mockedFilter);
         MatcherAssert::assertThat(
@@ -137,12 +146,38 @@ class GitChangeSetFilterTest extends TestCase
         $mockedFileList = Mockery::mock(GitChangeSet::class);
         $blacklistToken = 'stopMe';
         $whitelistToken = 'neverMind';
+        $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
-            ->once()->with($blacklistToken, false)->andReturn(['hallo']);
+            ->once()->with($blacklistToken, false)->andReturn([$mockedEnhancedFileInfo]);
         $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
-            ->once()->with([], ['token' => $whitelistToken])->andReturn(['hallo']);
+            ->once()->with([], ['token' => $whitelistToken])->andReturn([$mockedEnhancedFileInfo]);
 
         $this->subject->filter($mockedFileList, [], $blacklistToken, $whitelistToken);
+    }
+
+    /**
+     * Creates preconfigured Mockery mocks of EnhancedFileInfo for given Paths.
+     *
+     * @param array<string> $filePaths
+     *
+     * @return array<MockInterface|EnhancedFileInfo>
+     */
+    private function prepareMockedEnhancedFileInfo(array $filePaths): array
+    {
+        $enhancedFileMocks = [];
+        foreach ($filePaths as $filePath) {
+            $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
+            $mockedEnhancedFileInfo->shouldReceive('getRelativePathname')
+                ->withNoArgs()->andReturn($filePath);
+            $mockedEnhancedFileInfo->shouldReceive('getRealPath')
+                ->withNoArgs()->andReturn($this->mockedRootDirectory . '/' . $filePath);
+            $mockedEnhancedFileInfo->shouldReceive('endsWith')
+                ->andReturnUsing(fn($suffix) => str_ends_with($this->mockedRootDirectory . '/' . $filePath, $suffix));
+            $mockedEnhancedFileInfo->shouldReceive('startsWith')
+                ->andReturnUsing(fn($prefix) => str_starts_with($this->mockedRootDirectory . '/' . $filePath, $prefix));
+            $enhancedFileMocks[] = $mockedEnhancedFileInfo;
+        }
+        return $enhancedFileMocks;
     }
 }

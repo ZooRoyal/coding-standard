@@ -2,6 +2,8 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
 
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+
 interface ExcluderInterface
 {
     /**
@@ -10,7 +12,7 @@ interface ExcluderInterface
      * @param array<string> $alreadyExcludedPaths
      * @param array<mixed>  $config
      *
-     * @return array<string>
+     * @return array<EnhancedFileInfo>
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array;
 }

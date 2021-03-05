@@ -28,7 +28,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
         try {
             $commandPath = $this->terminalCommandFinder->findTerminalCommand('eslint');
@@ -36,7 +36,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
             $this->commandNotFound = true;
             $commandPath = '';
         }
-        $esLintConfigPath = $this->environment->getPackageDirectory() . '/config/eslint/';
+        $esLintConfigPath = $this->environment->getPackageDirectory()->getRealPath() . '/config/eslint/';
 
         $esLintCliOptions = [
             'ignoreFile' => '--ignore-path ' . $esLintConfigPath . '.eslintignore',
@@ -46,9 +46,15 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
         ];
         $baseCommand = $commandPath . ' ' . implode(' ', $esLintCliOptions);
 
-        $esLintBlacklistCommand = implode(' ', [$baseCommand, '%1$s', $this->environment->getRootDirectory()]);
+        $esLintBlacklistCommand = implode(
+            ' ',
+            [$baseCommand, '%1$s', $this->environment->getRootDirectory()->getRealPath()]
+        );
         $esLintWhitelistCommand = implode(' ', [$baseCommand, '%1$s']);
-        $esLintFixBlacklistCommand = implode(' ', [$baseCommand, '--fix %1$s', $this->environment->getRootDirectory()]);
+        $esLintFixBlacklistCommand = implode(
+            ' ',
+            [$baseCommand, '--fix %1$s', $this->environment->getRootDirectory()->getRealPath()]
+        );
         $esLintFixWhitelistCommand =  implode(' ', [$baseCommand, '--fix %1$s']);
 
         $this->commands = [
@@ -62,7 +68,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '')
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .
@@ -83,7 +89,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = '')
+    public function fixViolations($targetBranch = ''): ?int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .
