@@ -5,6 +5,7 @@ config/phpstan/phpstan.neon
 composer.lock
 node_modules
 package-lock.json
+phpunit.xml
 infection.log
 tests/Functional/Plugin/Fixtures/ComposerTest/package.json
 tests/Functional/Plugin/Fixtures/ComposerTest/package-lock.json

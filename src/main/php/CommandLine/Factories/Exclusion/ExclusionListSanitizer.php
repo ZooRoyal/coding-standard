@@ -2,12 +2,14 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
 
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+
 class ExclusionListSanitizer
 {
     /**
      * This method deletes entries from exclusionList which would have no effect.
      *
-     * @param array<string> $rawExcludePaths
+     * @param array<EnhancedFileInfo> $rawExcludePaths
      *
      * @return array
      *
@@ -18,7 +20,7 @@ class ExclusionListSanitizer
      *         no sense to exclude them "again". As the parent is excluded they are automatically
      *         excluded too.
      */
-    public function sanitizeExclusionList(array $rawExcludePaths)
+    public function sanitizeExclusionList(array $rawExcludePaths): array
     {
         $filteredArray = $rawExcludePaths;
         $count = count($filteredArray);
@@ -33,7 +35,7 @@ class ExclusionListSanitizer
                     if ($key === $i) {
                         return true;
                     }
-                    return strpos($value, $item) !== 0;
+                    return !$value->startsWith($item);
                 },
                 ARRAY_FILTER_USE_BOTH
             );

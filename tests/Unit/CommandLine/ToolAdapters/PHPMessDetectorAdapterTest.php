@@ -45,11 +45,11 @@ class PHPMessDetectorAdapterTest extends TestCase
         $this->mockedPackageDirectory = '/package/directory';
         $this->mockedRootDirectory = '/root/directory';
 
-        $this->mockedEnvironment->shouldReceive('getVendorPath')
+        $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
             ->withNoArgs()->andReturn('' . $this->mockedVendorDirectory);
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
+        $this->mockedEnvironment->shouldReceive('getPackageDirectory->getRealPath')
             ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
+        $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->withNoArgs()->andReturn($this->mockedRootDirectory);
 
         $this->partialSubject = Mockery::mock(

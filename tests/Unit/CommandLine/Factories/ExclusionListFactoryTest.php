@@ -8,18 +8,19 @@ use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExcluderInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExclusionListSanitizer;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactoryTest extends TestCase
 {
     /** @var ExclusionListFactory */
-    private $subject;
+    private ExclusionListFactory $subject;
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder1;
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder2;
     /** @var array<MockInterface|ExcluderInterface> */
     private $mockedExcluders;
-    /** @var Mockery\LegacyMockInterface|MockInterface|ExclusionListSanitizer */
+    /** @var MockInterface|ExclusionListSanitizer */
     private $mockedExclusionListSanitizer;
 
     protected function setUp(): void
@@ -44,11 +45,14 @@ class ExclusionListFactoryTest extends TestCase
      */
     public function getBlacklistWithNoStopword(): void
     {
-        $forgedResultExcluder1 = ['blub', 'bla'];
-        $forgedResultExcluder2 = ['wub', 'bla/blarg'];
+        $forgedItemsToBeExcluded = $this->prepareMockedEnhancedFileInfo(['bla/blarg']);
+        $forgedItemsToStay = $this->prepareMockedEnhancedFileInfo(['wub']);
 
-        $expectedSanitationInput = ['blub', 'bla', 'wub', 'bla/blarg'];
-        $expectedResult = ['blub', 'bla', 'wub'];
+        $forgedResultExcluder1 = $this->prepareMockedEnhancedFileInfo(['blub', 'bla']);
+        $forgedResultExcluder2 = array_merge($forgedItemsToStay, $forgedItemsToBeExcluded);
+
+        $expectedSanitationInput = array_merge($forgedResultExcluder1, $forgedResultExcluder2);
+        $expectedResult = array_merge($forgedResultExcluder1, $forgedItemsToStay);
 
         $this->mockedExcluder1->shouldReceive('getPathsToExclude')->once()
             ->with([], [])->andReturn($forgedResultExcluder1);
@@ -70,12 +74,15 @@ class ExclusionListFactoryTest extends TestCase
      */
     public function getBlacklistWithStopword(): void
     {
-        $forgedResultExcluder1 = ['blub', 'bla'];
-        $forgedResultExcluder2 = ['wub', 'bla/blarg'];
+        $forgedItemsToBeExcluded = $this->prepareMockedEnhancedFileInfo(['bla/blarg']);
+        $forgedItemsToStay = $this->prepareMockedEnhancedFileInfo(['wub']);
+
+        $forgedResultExcluder1 = $this->prepareMockedEnhancedFileInfo(['blub', 'bla']);
+        $forgedResultExcluder2 = array_merge($forgedItemsToStay, $forgedItemsToBeExcluded);
         $forgedStopword = 'halt!';
 
-        $expectedSanitationInput = ['blub', 'bla', 'wub', 'bla/blarg'];
-        $expectedResult = ['blub', 'bla', 'wub'];
+        $expectedSanitationInput = array_merge($forgedResultExcluder1, $forgedResultExcluder2);
+        $expectedResult = array_merge($forgedResultExcluder1, $forgedItemsToStay);
         $expectedConfig = ['token' => $forgedStopword];
 
         $this->mockedExcluder1->shouldReceive('getPathsToExclude')->once()
@@ -98,10 +105,10 @@ class ExclusionListFactoryTest extends TestCase
      */
     public function getBlacklistWithoutSanitizing(): void
     {
-        $forgedResultExcluder1 = ['blub', 'bla'];
-        $forgedResultExcluder2 = ['wub', 'bla/blarg'];
+        $forgedResultExcluder1 = $this->prepareMockedEnhancedFileInfo(['blub', 'bla']);
+        $forgedResultExcluder2 = $this->prepareMockedEnhancedFileInfo(['wub', 'bla/blarg']);
 
-        $expectedResult = ['blub', 'bla', 'wub', 'bla/blarg'];
+        $expectedResult = array_merge($forgedResultExcluder1, $forgedResultExcluder2);
 
         $this->mockedExcluder1->shouldReceive('getPathsToExclude')->once()
             ->with([], [])->andReturn($forgedResultExcluder1);
@@ -115,5 +122,21 @@ class ExclusionListFactoryTest extends TestCase
 
         self::assertSame($expectedResult, $result1);
         self::assertSame($result1, $result2);
+    }
+
+    /**
+     * Converts file paths to enhancedFileInfos
+     *
+     * @param array<string> $filePaths
+     *
+     * @return array<EnhancedFileInfo>
+     */
+    private function prepareMockedEnhancedFileInfo(array $filePaths): array
+    {
+        $enhancedFileMocks = [];
+        for ($i=0, $iMax = count($filePaths); $i < $iMax; $i++) {
+            $enhancedFileMocks[] = Mockery::mock(EnhancedFileInfo::class);
+        }
+        return $enhancedFileMocks;
     }
 }

@@ -3,58 +3,60 @@
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use ComposerLocator;
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use function Safe\realpath;
 
 /**
  * This Class supplies information about the environment the script is running in.
  */
 class Environment
 {
-    /** @var string */
-    private $localHeadHash;
-
-    /** @var ProcessRunner */
-    private $processRunner;
-    /** @var GitInputValidator */
-    private $gitInputValidator;
+    private ?string $localHeadHash = null;
+    private ProcessRunner $processRunner;
+    private GitInputValidator $gitInputValidator;
+    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     public function __construct(
         ProcessRunner $processRunner,
-        GitInputValidator $gitInputValidator
+        GitInputValidator $gitInputValidator,
+        EnhancedFileInfoFactory $enhancedFileInfoFactory
     ) {
         $this->processRunner = $processRunner;
         $this->gitInputValidator = $gitInputValidator;
+        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
      * Returns the directory of the root composer.json. As the vendor directory can be moved
-     * we can not determine the directory in relativ to our own package.
-     *
-     * @return string
+     * we can not determine the directory relative to our own package.
      */
-    public function getRootDirectory() : string
+    public function getRootDirectory(): EnhancedFileInfo
     {
         $projectRootPath = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
-        return $projectRootPath;
+        $enhancedFileInfo = $this->enhancedFileInfoFactory->buildFromPath(realpath($projectRootPath));
+
+        return $enhancedFileInfo;
     }
 
     /**
      * Returns vendor path where coding-standard is installed.
-     *
-     * @return string
      */
-    public function getVendorPath(): string
+    public function getVendorPath(): EnhancedFileInfo
     {
-        return ComposerLocator::getRootPath() . '/vendor';
+        $vendorPath = ComposerLocator::getRootPath() . DIRECTORY_SEPARATOR . 'vendor';
+        $enhancedFileInfo = $this->enhancedFileInfoFactory->buildFromPath($vendorPath);
+        return $enhancedFileInfo;
     }
 
     /**
      * Returns the directory of out package
-     *
-     * @return string
      */
-    public function getPackageDirectory() : string
+    public function getPackageDirectory(): EnhancedFileInfo
     {
-        return dirname(__DIR__, 5);
+        $packagePath = dirname(__DIR__, 5);
+        $enhancedFileInfo = $this->enhancedFileInfoFactory->buildFromPath($packagePath);
+        return $enhancedFileInfo;
     }
 
     /**
@@ -64,7 +66,7 @@ class Environment
      *
      * @return bool
      */
-    public function isLocalBranchEqualTo($targetBranch) : bool
+    public function isLocalBranchEqualTo(?string $targetBranch): bool
     {
         if (!$this->gitInputValidator->isCommitishValid($targetBranch)) {
             return false;
@@ -79,6 +81,18 @@ class Environment
     }
 
     /**
+     * Converts a commit-tish to a commit hash.
+     *
+     * @param string $branchName
+     *
+     * @return string
+     */
+    private function commitishToHash(string $branchName): string
+    {
+        return $this->processRunner->runAsProcess('git', 'rev-list', '-n 1', $branchName);
+    }
+
+    /**
      * This method searches the first parent commit which is part of another branch and returns this commit as merge base
      * with parent branch.
      *
@@ -86,7 +100,7 @@ class Environment
      *
      * @return string
      */
-    public function guessParentBranchAsCommitHash(string $branchName = 'HEAD') : string
+    public function guessParentBranchAsCommitHash(string $branchName = 'HEAD'): string
     {
         $initialNumberOfContainingBranches = $this->getCountOfContainingBranches($branchName);
         while ($this->isParentCommitishACommit($branchName)) {
@@ -109,7 +123,7 @@ class Environment
      *
      * @return int
      */
-    private function getCountOfContainingBranches(string $targetCommit) : int
+    private function getCountOfContainingBranches(string $targetCommit): int
     {
         $numberOfContainingBranches = substr_count(
             $this->processRunner->runAsProcess(
@@ -132,22 +146,10 @@ class Environment
      *
      * @return bool
      */
-    private function isParentCommitishACommit(string $targetCommit) : bool
+    private function isParentCommitishACommit(string $targetCommit): bool
     {
         $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
 
         return $targetType === 'commit';
-    }
-
-    /**
-     * Converts a commit-tish to a commit hash.
-     *
-     * @param string $branchName
-     *
-     * @return string
-     */
-    private function commitishToHash(string $branchName) : string
-    {
-        return $this->processRunner->runAsProcess('git', 'rev-list', '-n 1', $branchName);
     }
 }

@@ -11,24 +11,20 @@ use DI\Annotation\Injectable;
  */
 class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontLintPHP';
+    protected string $blacklistToken = '.dontLintPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistPrefix = '';
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistPrefix = '--exclude ';
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
 
     /**
      * {@inheritDoc}
      */
-    protected function init()
+    protected function init(): void
     {
-        $vendorPath = $this->environment->getVendorPath();
-        $rootDirectory = $this->environment->getRootDirectory();
+        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $this->blacklistPrefix = '--exclude ' . $rootDirectory . '/';
         $this->commands['PHPPLWL'] = 'php ' . $vendorPath . '/bin/parallel-lint -j 2 %1$s';
@@ -39,7 +35,7 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '')
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         $toolShortName = 'PHPPL';
         $prefix = $toolShortName . ' : ';

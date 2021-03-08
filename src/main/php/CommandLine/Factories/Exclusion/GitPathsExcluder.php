@@ -2,27 +2,33 @@
 
 namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
 
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use function Safe\substr;
 
 class GitPathsExcluder implements ExcluderInterface
 {
-    /** @var Environment */
     private Environment $environment;
-    /** @var ProcessRunner */
     private ProcessRunner $processRunner;
+    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     /**
      * GitPathsExcluder constructor.
      *
-     * @param Environment   $environment
-     * @param ProcessRunner $processRunner
+     * @param Environment             $environment
+     * @param ProcessRunner           $processRunner
+     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
-    public function __construct(Environment $environment, ProcessRunner $processRunner)
-    {
+    public function __construct(
+        Environment $environment,
+        ProcessRunner $processRunner,
+        EnhancedFileInfoFactory $enhancedFileInfoFactory
+    ) {
         $this->environment = $environment;
         $this->processRunner = $processRunner;
+        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
@@ -31,7 +37,7 @@ class GitPathsExcluder implements ExcluderInterface
      * @param array<string> $alreadyExcludedPaths
      * @param array<mixed>  $config
      *
-     * @return array<string>
+     * @return array<EnhancedFileInfo>
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
@@ -40,7 +46,7 @@ class GitPathsExcluder implements ExcluderInterface
             $excludeParameters = ' -not -path "./' . implode('" -not -path "./', $alreadyExcludedPaths) . '"';
         }
 
-        $rootDirectory = $this->environment->getRootDirectory();
+        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
         $finderResult = $this->processRunner->runAsProcess(
             'find ' . $rootDirectory . ' -type d -mindepth 2 -name .git' . $excludeParameters
         );
@@ -56,6 +62,8 @@ class GitPathsExcluder implements ExcluderInterface
             $rawExcludePathsByFileByGit
         );
 
-        return $relativeDirectories;
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);
+
+        return $result;
     }
 }

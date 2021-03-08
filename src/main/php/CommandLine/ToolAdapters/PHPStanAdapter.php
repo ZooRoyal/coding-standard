@@ -18,16 +18,12 @@ use Zooroyal\CodingStandard\CommandLine\ToolConfigGenerators\PHPStanConfigGenera
  */
 class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
-    /** @var string */
-    protected $blacklistToken = '.dontStanPHP';
+    protected string $blacklistToken = '.dontStanPHP';
     /** @var string[] */
-    protected $allowedFileEndings = ['.php'];
-    /** @var string */
-    protected $blacklistGlue = ' ';
-    /** @var string */
-    protected $whitelistGlue = ' ';
-    /** @var PHPStanConfigGenerator */
-    private $phpstanConfigGenerator;
+    protected array $allowedFileEndings = ['.php'];
+    protected string $blacklistGlue = ' ';
+    protected string $whitelistGlue = ' ';
+    private PHPStanConfigGenerator $phpstanConfigGenerator;
     /** @var array<string,string> */
     private array $toolFunctionsFileMapping
         = [
@@ -56,9 +52,9 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
         PHPStanConfigGenerator $phpstanConfigGenerator
     ) {
         $this->phpstanConfigGenerator = $phpstanConfigGenerator;
-        $this->vendorPath = $environment->getVendorPath();
-        $this->rootDirectory = $environment->getRootDirectory();
-        $this->phpstanConfigPath = $environment->getPackageDirectory() . '/config/phpstan/phpstan.neon';
+        $this->vendorPath = $environment->getVendorPath()->getRealPath();
+        $this->rootDirectory = $environment->getRootDirectory()->getRealPath();
+        $this->phpstanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
         parent::__construct($environment, $output, $genericCommandRunner, $terminalCommandFinder);
     }
 
@@ -96,7 +92,6 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
 
         $parameters = $this->phpstanConfigGenerator->addConfigParameters(
             $this->blacklistToken,
-            $this->rootDirectory,
             $additionalConfigValues
         );
         $onTheFlyConfig = $this->phpstanConfigGenerator->generateConfig($parameters);

@@ -6,10 +6,13 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
+use function Safe\realpath;
 
 class EnvironmentTest extends TestCase
 {
@@ -17,9 +20,12 @@ class EnvironmentTest extends TestCase
     private $subject;
     /** @var MockInterface[]|mixed[] */
     private $subjectParameters;
+    private $mockedEnhancedFileInfo;
 
     protected function setUp(): void
     {
+        $this->mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
+
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(Environment::class);
         $this->subject = $buildFragments['subject'];
@@ -37,13 +43,17 @@ class EnvironmentTest extends TestCase
      */
     public function getRootDirectory()
     {
-        $expectedPath = 'wurbel scwurbel';
+        $expectedPath = dirname(__DIR__, 4);
+
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with('git', 'rev-parse', '--show-toplevel')->andReturn($expectedPath);
 
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
+            ->with(realpath(dirname(__DIR__, 4)))->andReturn($this->mockedEnhancedFileInfo);
+
         $result = $this->subject->getRootDirectory();
 
-        self::assertSame($expectedPath, $result);
+        self::assertSame($this->mockedEnhancedFileInfo, $result);
     }
 
     /**
@@ -51,10 +61,13 @@ class EnvironmentTest extends TestCase
      */
     public function getVendorPath()
     {
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
+            ->with(realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'vendor'))
+            ->andReturn($this->mockedEnhancedFileInfo);
+
         $result = $this->subject->getVendorPath();
 
-        self::assertTrue(is_dir($result));
-        self::assertStringEndsWith('vendor', $result);
+        self::assertSame($this->mockedEnhancedFileInfo, $result);
     }
 
     /**
@@ -62,9 +75,12 @@ class EnvironmentTest extends TestCase
      */
     public function getPackageDirectory(): void
     {
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
+            ->with(dirname(__DIR__, 4))->andReturn($this->mockedEnhancedFileInfo);
+
         $result = $this->subject->getPackageDirectory();
 
-        self::assertSame(dirname(__DIR__, 4), $result);
+        self::assertSame($this->mockedEnhancedFileInfo, $result);
     }
 
     /**

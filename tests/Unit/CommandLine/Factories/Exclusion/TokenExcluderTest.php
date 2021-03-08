@@ -6,28 +6,29 @@ use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class TokenExcluderTest extends TestCase
 {
     private TokenExcluder $subject;
-    /** @var MockInterface|Environment */
-    private $mockedEnvironment;
-    /** @var MockInterface|ProcessRunner */
-    private $mockedProcessRunner;
     private string $forgedRootDirectory = '/rootDirectory';
+    /** @var array<MockInterface> */
+    private array $subjectParameters;
 
     protected function setUp(): void
     {
-        $this->mockedEnvironment = Mockery::mock(Environment::class);
-        $this->mockedProcessRunner = Mockery::mock(ProcessRunner::class);
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(TokenExcluder::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
 
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')->atMost()->once()
+        $this->subjectParameters[Environment::class]->shouldReceive('getRootDirectory->getRealPath')->atMost()->once()
             ->withNoArgs()->andReturn($this->forgedRootDirectory);
-
-        $this->subject = new TokenExcluder($this->mockedEnvironment, $this->mockedProcessRunner);
     }
 
     protected function tearDown(): void
@@ -55,7 +56,7 @@ class TokenExcluderTest extends TestCase
 
         $forgedConfig = ['token' => 'bla'];
 
-        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with(Matchers::stringValue())->andReturn('');
 
         $result = $this->subject->getPathsToExclude([], $forgedConfig);
@@ -69,7 +70,13 @@ class TokenExcluderTest extends TestCase
     public function getPathsToExcludeWithoutAlreadyExcluded(): void
     {
         $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
-        $expectedResult = $forgedExcludedDirectories;
+        $expectedResult = array_map(
+            fn($paths) => new EnhancedFileInfo(
+                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $paths,
+                $this->forgedRootDirectory
+            ),
+            $forgedExcludedDirectories
+        );
 
         $forgedConfig = ['token' => 'bla'];
 
@@ -81,8 +88,11 @@ class TokenExcluderTest extends TestCase
             . $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
             . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
 
-        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with($forgedExcludedDirectories)->andReturn($expectedResult);
 
         $result = $this->subject->getPathsToExclude([], $forgedConfig);
 
@@ -96,7 +106,13 @@ class TokenExcluderTest extends TestCase
     {
         $forgedAlreadyExcluded = ['asdasd', 'blubblub'];
         $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
-        $expectedResult = ['qweqwe'];
+        $forgedRemainingPaths = ['qweqwe'];
+        $expectedResult = [
+            new EnhancedFileInfo(
+                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
+                $this->forgedRootDirectory
+            ),
+        ];
 
         $forgedConfig = ['token' => 'bla'];
 
@@ -106,8 +122,11 @@ class TokenExcluderTest extends TestCase
         $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
             . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
 
-        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with($forgedRemainingPaths)->andReturn($expectedResult);
 
         $result = $this->subject->getPathsToExclude($forgedAlreadyExcluded, $forgedConfig);
 

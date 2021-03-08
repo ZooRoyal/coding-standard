@@ -40,8 +40,8 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
 
         $this->stopword = '.dontCopyPasteDetectPHP';
 
-        $vendorPath = $environment->getVendorPath();
-        $rootDirectory = $environment->getRootDirectory();
+        $vendorPath = $environment->getVendorPath()->getRealPath();
+        $rootDirectory = $environment->getRootDirectory()->getRelativePathname();
 
         $this->copyPasteDetectCommand = 'php ' . $vendorPath . '/bin/phpcpd '
             . '--fuzzy --exclude=ZRBannerSlider.php,Installer.php,ZRPreventShipping.php %1$s '
@@ -51,7 +51,7 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = '')
+    public function writeViolationsToOutput($targetBranch = ''): ?int
     {
         $fullMessage = 'PHPCPD : Running full check';
 

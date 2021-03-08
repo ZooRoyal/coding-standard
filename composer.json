@@ -48,8 +48,10 @@
     "squizlabs/php_codesniffer": "^3.5",
     "symfony/console": "^3.4.43 || ^4.2 || ^5.0",
     "symfony/event-dispatcher": "^4.4.13 || ^5.2",
+    "symfony/polyfill-php80": "^1.22",
     "symfony/process": "^3.4.43 || ^4.2 || ^5.2",
-    "thecodingmachine/safe": "^1.2"
+    "thecodingmachine/safe": "^1.2",
+    "webmozart/path-util": "^2.3"
   },
   "require-dev": {
     "ext-json": "*",

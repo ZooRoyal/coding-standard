@@ -5,6 +5,7 @@ namespace Zooroyal\CodingStandard\CommandLine\Library;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use function Safe\sprintf;
 
 class GenericCommandRunner
@@ -70,7 +71,10 @@ class GenericCommandRunner
         foreach ($whitelistArguments as $argument) {
             $commandWithParameters = $this->buildCommand($template, $argument);
 
-            $exitCode = $this->runAndWriteToOutput($commandWithParameters);
+            $runAndWriteToOutputExitCode = $this->runAndWriteToOutput($commandWithParameters);
+            $exitCode = $exitCode === 0
+                ? $runAndWriteToOutputExitCode
+                : $exitCode;
         }
 
         return $exitCode;
@@ -114,7 +118,10 @@ class GenericCommandRunner
         string $glue = ','
     ): array {
         $gitChangeSet = $this->adaptableFileFinder->findFiles($allowedFileEndings, $blacklistToken, '', $targetBranch);
-        $changedFiles = $gitChangeSet->getFiles();
+        $changedFiles = array_map(
+            static fn(EnhancedFileInfo $file) => $file->getRelativePathname(),
+            $gitChangeSet->getFiles()
+        );
 
         $whitelistArguments = empty($changedFiles)
             ? $changedFiles
@@ -141,7 +148,7 @@ class GenericCommandRunner
      *
      * @return int
      */
-    private function runAndWriteToOutput($commandWithParameters)
+    private function runAndWriteToOutput($commandWithParameters): int
     {
         $exitCode = 0;
         $process = $this->processRunner->runAsProcessReturningProcessObject(
@@ -157,7 +164,7 @@ class GenericCommandRunner
     }
 
     /**
-     * Builds a command from themplate and argument.
+     * Builds a command from template and argument.
      *
      * @param string $command
      * @param string $argument
@@ -187,7 +194,11 @@ class GenericCommandRunner
         string $prefix,
         string $glue
     ): string {
-        $blackList = $this->blacklistFactory->build($blacklistToken);
+        $blackList = array_map(
+            static fn(EnhancedFileInfo $file) => $file->getRelativePathname() . '/',
+            $this->blacklistFactory->build($blacklistToken)
+        );
+
         return $prefix . implode($glue . $prefix, $blackList);
     }
 }

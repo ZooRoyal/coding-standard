@@ -7,7 +7,7 @@ namespace Zooroyal\CodingStandard\CommandLine\ValueObjects;
  */
 class GitChangeSet
 {
-    /** @var string[] */
+    /** @var array<EnhancedFileInfo> */
     private $files;
 
     /** @var string */
@@ -16,8 +16,8 @@ class GitChangeSet
     /**
      * GitChangeSet constructor.
      *
-     * @param string[] $files
-     * @param string   $commitHash
+     * @param array<EnhancedFileInfo> $files
+     * @param string $commitHash
      */
     public function __construct(array $files, $commitHash = '')
     {
@@ -28,11 +28,21 @@ class GitChangeSet
     /**
      * Returns changed files since commit.
      *
-     * @return string[]
+     * @return array<EnhancedFileInfo>
      */
     public function getFiles()
     {
         return $this->files;
+    }
+
+    /**
+     * Overwrite changed files.
+     *
+     * @param array<EnhancedFileInfo> $files
+     */
+    public function setFiles(array $files)
+    {
+        $this->files = $files;
     }
 
     /**
@@ -43,15 +53,5 @@ class GitChangeSet
     public function getCommitHash()
     {
         return $this->commitHash;
-    }
-
-    /**
-     * Overwrite changed files.
-     *
-     * @param string[] $files
-     */
-    public function setFiles($files)
-    {
-        $this->files = $files;
     }
 }

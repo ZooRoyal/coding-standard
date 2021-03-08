@@ -2,7 +2,9 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ValueObjects;
 
+use Mockery;
 use PHPUnit\Framework\TestCase;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class GitChangeSetTest extends TestCase
@@ -10,9 +12,9 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycle()
+    public function readWriteCycle(): void
     {
-        $expectedFiles = ['asd', 'qwe'];
+        $expectedFiles = [Mockery::mock(EnhancedFileInfo::class), Mockery::mock(EnhancedFileInfo::class)];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($expectedFiles, $expectedCommitHash);
@@ -27,10 +29,11 @@ class GitChangeSetTest extends TestCase
     /**
      * @test
      */
-    public function readWriteCycleWithSetter()
+    public function readWriteCycleWithSetter(): void
     {
-        $forgedFiles = ['asd'];
-        $expectedFiles = ['asd', 'qwe'];
+        $mockeryEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
+        $forgedFiles = [$mockeryEnhancedFileInfo];
+        $expectedFiles = [$mockeryEnhancedFileInfo, Mockery::mock(EnhancedFileInfo::class)];
         $expectedCommitHash = 'asdasdasd1223213';
 
         $subject = new GitChangeSet($forgedFiles, $expectedCommitHash);

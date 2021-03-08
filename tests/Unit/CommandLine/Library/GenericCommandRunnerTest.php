@@ -11,6 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 use function Safe\sprintf;
@@ -57,6 +58,8 @@ class GenericCommandRunnerTest extends TestCase
      * @dataProvider runWhitelistCommandWithAllParametersDataProvider
      *
      * @param int $mockedExitCode
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function runWhitelistCommandWithAllParameters(int $mockedExitCode): void
     {
@@ -65,13 +68,19 @@ class GenericCommandRunnerTest extends TestCase
         $mockedStopword = 'HALT';
         $mockedAllowedFileEndings = ['Morty'];
         $mockedGlue = 'juhu';
-        $mockedChangedFiles = ['mocked', 'files'];
+        $mockedFilePaths = ['mocked', 'files'];
+        $mockedFileInfos = $this->preparemockedEnhancedFileInfo($mockedFilePaths);
         $mockedOutput = 'Das hab ich zu sagen.';
         $mockedErrorOutput = 'ROOOOOOOOOOORERROR!';
 
-        $this->prepareMocksForFindFiles($mockedAllowedFileEndings, $mockedStopword, $mockedTargetBranch, $mockedChangedFiles);
+        $this->prepareMocksForFindFiles(
+            $mockedAllowedFileEndings,
+            $mockedStopword,
+            $mockedTargetBranch,
+            $mockedFileInfos
+        );
         $this->prepareMocksForRunAndWriteToOutput(
-            $mockedChangedFiles,
+            $mockedFilePaths,
             $mockedTemplate,
             $mockedOutput,
             $mockedErrorOutput,
@@ -112,13 +121,14 @@ class GenericCommandRunnerTest extends TestCase
         $mockedStopword = 'HALT';
         $mockedPrefix = 'teil mich!';
         $mockedGlue = 'juhu';
-        $mockedBlacklist = ['mocked', 'files'];
+        $mockedBlacklistPaths = ['mocked/', 'files/'];
+        $mockedBlacklistInfos = $this->preparemockedEnhancedFileInfo(['mocked', 'files']);
         $mockedOutput = 'Das hab ich zu sagen.';
         $mockedErrorOutput = 'ERRRRRRRRRRRRROROROROROR';
         $mockedExitCode = 0;
 
         $this->prepareMocksForRunAndWriteToOutput(
-            $mockedBlacklist,
+            $mockedBlacklistPaths,
             $mockedTemplate,
             $mockedOutput,
             $mockedErrorOutput,
@@ -126,7 +136,7 @@ class GenericCommandRunnerTest extends TestCase
             $mockedPrefix
         );
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
-            ->with($mockedStopword)->andReturn($mockedBlacklist);
+            ->with($mockedStopword)->andReturn($mockedBlacklistInfos);
 
         $this->mockedProcess->shouldReceive('getExitCode')->withNoArgs()->andReturn($mockedExitCode);
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->times($mockedExitCode)
@@ -180,9 +190,9 @@ class GenericCommandRunnerTest extends TestCase
      * Prepare mocks for call to findFiles.
      *
      * @param string[] $mockedAllowedFileEndings
-     * @param string   $mockedStopword
-     * @param string   $mockedTargetBranch
-     * @param string[] $mockedChangedFiles
+     * @param string $mockedStopword
+     * @param string $mockedTargetBranch
+     * @param array<EnhancedFileInfo> $mockedChangedFiles
      */
     private function prepareMocksForFindFiles(
         array $mockedAllowedFileEndings,
@@ -197,11 +207,30 @@ class GenericCommandRunnerTest extends TestCase
             ->with($mockedAllowedFileEndings, $mockedStopword, '', $mockedTargetBranch)->andReturn(
                 $this->mockedGitChangeSet
             );
-
+        $mockedChangedFilePathNames = array_map(fn($value) => $value->getRelativePathname(), $mockedChangedFiles);
         $this->subjectParameters[OutputInterface::class]->shouldReceive('writeln')->once()
             ->with(
-                'Files to handle:' . "\n" . implode("\n", $mockedChangedFiles) . "\n",
+                'Files to handle:' . "\n" . implode("\n", $mockedChangedFilePathNames) . "\n",
                 OutputInterface::VERBOSITY_VERBOSE
             );
+    }
+
+    /**
+     * Creates preconfigured Mockery mocks of EnhancedFileInfo for given Paths.
+     *
+     * @param array<string> $filePaths
+     *
+     * @return array<MockInterface|EnhancedFileInfo>
+     */
+    private function preparemockedEnhancedFileInfo(array $filePaths): array
+    {
+        $enhancedFileMocks = [];
+        foreach ($filePaths as $filePath) {
+            $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
+            $mockedEnhancedFileInfo->shouldReceive('getRelativePathname')
+                ->withNoArgs()->andReturn($filePath);
+            $enhancedFileMocks[] = $mockedEnhancedFileInfo;
+        }
+        return $enhancedFileMocks;
     }
 }

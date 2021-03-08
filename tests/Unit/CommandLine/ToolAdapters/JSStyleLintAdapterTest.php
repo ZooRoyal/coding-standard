@@ -26,14 +26,10 @@ class JSStyleLintAdapterTest extends TestCase
     private $mockedOutputInterface;
     /** @var MockInterface|JSStyleLintAdapter */
     private $partialSubject;
-    /** @var string */
-    private $mockedPackageDirectory;
-    /** @var string */
-    private $mockedRootDirectory;
+    private string $mockedPackageDirectory;
+    private string $forgedCommandPath;
     /** @var MockInterface|TerminalCommandFinder */
     private $mockedTerminalCommandFinder;
-    /** @var string */
-    private $forgedCommandPath;
 
     protected function setUp(): void
     {
@@ -42,14 +38,11 @@ class JSStyleLintAdapterTest extends TestCase
         $this->mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $this->mockedPackageDirectory = '/package/directory';
-        $this->mockedRootDirectory = '/root/directory';
         $this->forgedCommandPath = 'wubwubwub';
+        $this->mockedPackageDirectory = '/package/directory';
 
-        $this->mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $this->mockedPackageDirectory);
-        $this->mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($this->mockedRootDirectory);
+        $this->mockedEnvironment->shouldReceive('getPackageDirectory->getRealPath')
+            ->withNoArgs()->andReturn($this->mockedPackageDirectory);
         $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('stylelint')->andReturn($this->forgedCommandPath)->byDefault();
 
@@ -73,7 +66,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         $expectedFilter = '/*.{css,scss,sass,less}';
         $config = '/config/stylelint/.stylelintrc';
@@ -147,7 +140,7 @@ class JSStyleLintAdapterTest extends TestCase
         string $fullMessage,
         string $diffMessage,
         string $method
-    ) {
+    ): void {
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
@@ -163,29 +156,23 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
-        $mockedEnvironment = Mockery::mock(Environment::class);
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $mockedPackageDirectory = '/package/directory';
-        $mockedRootDirectory = '/root/directory';
-
-        $mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $mockedPackageDirectory);
-        $mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($mockedRootDirectory);
         $mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('stylelint')->andThrow(new TerminalCommandNotFoundException());
 
         $mockedOutputInterface->shouldReceive('write')->once()
             ->with(H::containsString('StyleLint could not be found'), true);
 
+        /** @var MockInterface|JSStyleLintAdapter $partialSubject */
         $partialSubject = Mockery::mock(
             JSStyleLintAdapter::class . '[!init]',
-            [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
+            [$this->mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner,
+            $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
         $result = $partialSubject->writeViolationsToOutput('asd');
@@ -196,29 +183,22 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
-        $mockedEnvironment = Mockery::mock(Environment::class);
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
         $mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
 
-        $mockedPackageDirectory = '/package/directory';
-        $mockedRootDirectory = '/root/directory';
-
-        $mockedEnvironment->shouldReceive('getPackageDirectory')
-            ->withNoArgs()->andReturn('' . $mockedPackageDirectory);
-        $mockedEnvironment->shouldReceive('getRootDirectory')
-            ->withNoArgs()->andReturn($mockedRootDirectory);
         $mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')
             ->with('stylelint')->andThrow(new TerminalCommandNotFoundException());
 
         $mockedOutputInterface->shouldReceive('write')->once()
             ->with(H::containsString('StyleLint could not be found'), true);
 
+        /** @var MockInterface|JSStyleLintAdapter $partialSubject */
         $partialSubject = Mockery::mock(
             JSStyleLintAdapter::class . '[!init]',
-            [$mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
+            [$this->mockedEnvironment, $mockedOutputInterface, $mockedGenericCommandRunner, $mockedTerminalCommandFinder]
         )->shouldAllowMockingProtectedMethods()->makePartial();
 
         $result = $partialSubject->fixViolations('asd');
@@ -229,7 +209,7 @@ class JSStyleLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);
