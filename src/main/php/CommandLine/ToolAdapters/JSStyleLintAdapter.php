@@ -52,7 +52,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .
@@ -73,7 +73,7 @@ class JSStyleLintAdapter extends AbstractBlackAndWhitelistAdapter implements Too
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = ''): ?int
+    public function fixViolations($targetBranch = ''): int
     {
         if ($this->commandNotFound) {
             $this->output->write('StyleLint could not be found. ' .

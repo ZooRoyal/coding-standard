@@ -3,7 +3,6 @@
 namespace Zooroyal\CodingStandard\Github\Commands;
 
 use Github\Client;
-use Github\Exception\MissingArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -12,8 +11,20 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class IssueCommentAddCommand extends Command
 {
-    /** @var Client */
-    private $client;
+    private Client $client;
+
+    /** @var string */
+    private const USER_NAME = 'user_name';
+    /** @var string */
+    private const ISSUE_ID = 'issue_id';
+    /** @var string */
+    private const REPOSITORY = 'repository';
+    /** @var string */
+    private const ORGANISATION = 'organisation';
+    /** @var string */
+    private const TOKEN = 'token';
+    /** @var string */
+    private const BODY = 'body';
 
     /**
      * GithubAddCommentCommand constructor.
@@ -30,19 +41,27 @@ class IssueCommentAddCommand extends Command
     /**
      * Configures the current command.
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('issue:comment:add');
         $this->setDescription('Adds comment to Github Issue.');
         $this->setDefinition(
             new InputDefinition(
                 [
-                    new InputArgument('token', InputArgument::REQUIRED, 'Access token or password for user.'),
-                    new InputArgument('user_name', InputArgument::REQUIRED, 'The Github username'),
-                    new InputArgument('organisation', InputArgument::REQUIRED, 'The organisation of the repository.'),
-                    new InputArgument('repository', InputArgument::REQUIRED, 'Repository of the issue.'),
-                    new InputArgument('issue_id', InputArgument::REQUIRED, 'ID of the issue to add the command to.'),
-                    new InputArgument('body', InputArgument::REQUIRED, 'Body of the comment.'),
+                    new InputArgument(self::TOKEN, InputArgument::REQUIRED, 'Access token or password for user.'),
+                    new InputArgument(self::USER_NAME, InputArgument::REQUIRED, 'The Github username'),
+                    new InputArgument(
+                        self::ORGANISATION,
+                        InputArgument::REQUIRED,
+                        'The organisation of the repository.'
+                    ),
+                    new InputArgument(self::REPOSITORY, InputArgument::REQUIRED, 'Repository of the issue.'),
+                    new InputArgument(
+                        self::ISSUE_ID,
+                        InputArgument::REQUIRED,
+                        'ID of the issue to add the command to.'
+                    ),
+                    new InputArgument(self::BODY, InputArgument::REQUIRED, 'Body of the comment.'),
                 ]
             )
         );
@@ -51,28 +70,17 @@ class IssueCommentAddCommand extends Command
     /**
      * Executes the current command.
      *
-     * This method is not abstract because you can use this class
-     * as a concrete class. In this case, instead of defining the
-     * execute() method, you set the code to execute by passing
-     * a Closure to the setCode() method.
-     *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
-     *
-     * @return void|null|0|int void null or 0 if everything went fine, or an error code
-     *
-     * @see setCode()
-     *
-     * @throws MissingArgumentException
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
-        $token = $input->getArgument('token');
-        $organisation = $input->getArgument('organisation');
-        $repository = $input->getArgument('repository');
-        $issueId = (int) $input->getArgument('issue_id');
-        $username = $input->getArgument('user_name');
-        $parameter = ['body' => $input->getArgument('body')];
+        $token        = $input->getArgument(self::TOKEN);
+        $organisation = $input->getArgument(self::ORGANISATION);
+        $repository   = $input->getArgument(self::REPOSITORY);
+        $issueId      = (int) $input->getArgument(self::ISSUE_ID);
+        $username     = $input->getArgument(self::USER_NAME);
+        $parameter    = [self::BODY => $input->getArgument(self::BODY)];
 
         $this->client->authenticate($username, $token, Client::AUTH_HTTP_PASSWORD);
         $this->client->issue()->comments()->create(
@@ -81,5 +89,7 @@ class IssueCommentAddCommand extends Command
             $issueId,
             $parameter
         );
+
+        return 0;
     }
 }

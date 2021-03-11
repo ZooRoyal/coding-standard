@@ -6,8 +6,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFou
 
 class TerminalCommandFinder
 {
-    /** @var ProcessRunner */
-    private $processRunner;
+    private ProcessRunner $processRunner;
     /**
      * TerminalCommandFinder constructor.
      *
@@ -25,7 +24,7 @@ class TerminalCommandFinder
      *
      * @throws TerminalCommandNotFoundException
      */
-    public function findTerminalCommand($commandName): string
+    public function findTerminalCommand(string $commandName): string
     {
         $exitCode = $this->processRunner->runAsProcessReturningProcessObject(
             'npx --no-install ' . $commandName . ' --help'

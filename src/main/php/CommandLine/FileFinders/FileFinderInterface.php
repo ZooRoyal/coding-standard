@@ -13,8 +13,6 @@ interface FileFinderInterface
      * @param string      $blacklistToken
      * @param string      $whitelistToken
      * @param string|bool $targetBranch
-     *
-     * @return GitChangeSet
      */
     public function findFiles(
         array $allowedFileEndings = [],

@@ -10,12 +10,9 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class PHPStanConfigGenerator implements ToolConfigGeneratorInterface
 {
-    /** @var NeonAdapter */
-    private $neonAdapter;
-    /** @var FileWriter */
-    private $fileWriter;
-    /** @var ExclusionListFactory */
-    private $blacklistFactory;
+    private NeonAdapter $neonAdapter;
+    private FileWriter $fileWriter;
+    private ExclusionListFactory $blacklistFactory;
 
     public function __construct(
         NeonAdapter $neonAdapter,

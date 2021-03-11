@@ -24,16 +24,17 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     protected string $blacklistGlue = ' ';
     protected string $whitelistGlue = ' ';
     private PHPStanConfigGenerator $phpstanConfigGenerator;
-    /** @var array<string,string> */
-    private array $toolFunctionsFileMapping
-        = [
-            'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
-            'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
-            'mockery/mockery' => '/library/helpers.php',
-        ];
+    /** @var array<string, string> */
+    private const TOOL_FUNCTIONS_FILE_MAPPING = [
+        'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
+        'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
+        'mockery/mockery' => '/library/helpers.php',
+    ];
     private string $rootDirectory;
     private string $phpstanConfigPath;
     private string $vendorPath;
+    /** @var string */
+    private const TOOL_SHORT_NAME = 'PHPStan';
 
     /**
      * PHPStanAdapter constructor.
@@ -70,16 +71,15 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
     /**
      * {@inheritdoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
-        $toolShortName = 'PHPStan';
-        $prefix = $toolShortName . ' : ';
+        $prefix = self::TOOL_SHORT_NAME . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
         $this->writeConfigFile();
 
-        return $this->runTool($targetBranch, $fullMessage, $toolShortName, $diffMessage);
+        return $this->runTool($targetBranch, $fullMessage, self::TOOL_SHORT_NAME, $diffMessage);
     }
 
     /**
@@ -107,7 +107,7 @@ class PHPStanAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAda
      */
     private function addFunctionFilesToBootstrap(array $additionalConfigValues): array
     {
-        foreach ($this->toolFunctionsFileMapping as $tool => $functionsFile) {
+        foreach (self::TOOL_FUNCTIONS_FILE_MAPPING as $tool => $functionsFile) {
             try {
                 $toolPath = ComposerLocator::getPath($tool);
                 $additionalConfigValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;

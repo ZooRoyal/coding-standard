@@ -57,15 +57,13 @@ abstract class AbstractBlackAndWhitelistAdapter
      * @param string $fullMessage
      * @param string $tool
      * @param string $diffMessage
-     *
-     * @return int|null
      */
     protected function runTool(
         $targetBranch,
         string $fullMessage,
         string $tool,
         string $diffMessage
-    ) {
+    ): int {
         if ($targetBranch === false || $this->environment->isLocalBranchEqualTo($targetBranch)) {
             $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
             $template = $this->commands[$tool . 'BL'];

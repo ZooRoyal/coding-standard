@@ -10,18 +10,17 @@ class StaticExcluder implements ExcluderInterface
 {
     private Environment $environment;
     /** @var array<string> */
-    private array $pathsToExclude
-        = [
-            '.eslintrc.js',
-            '.git',
-            '.idea',
-            '.vagrant',
-            'node_modules',
-            'vendor',
-            'bower_components',
-            '.pnpm',
-            '.pnpm-store',
-        ];
+    private const PATHS_TO_EXCLUDE = [
+        '.eslintrc.js',
+        '.git',
+        '.idea',
+        '.vagrant',
+        'node_modules',
+        'vendor',
+        'bower_components',
+        '.pnpm',
+        '.pnpm-store',
+    ];
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     /**
@@ -51,8 +50,8 @@ class StaticExcluder implements ExcluderInterface
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
 
         $filteredDirectories = array_filter(
-            $this->pathsToExclude,
-            static function ($value) use ($rootDirectory) {
+            self::PATHS_TO_EXCLUDE,
+            static function ($value) use ($rootDirectory): bool {
                 return is_dir($rootDirectory . DIRECTORY_SEPARATOR . $value);
             }
         );

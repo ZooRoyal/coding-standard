@@ -10,14 +10,12 @@ class CommentFilter
      * @param array  $comments
      * @param int    $position
      * @param string $commitId
-     *
-     * @return array
      */
     public function filterForStaleComments(array $comments, int $position, string $commitId) : array
     {
         $staleComments = array_filter(
             $comments,
-            static function ($item) use ($position, $commitId) {
+            static function ($item) use ($position, $commitId): bool {
                 return ($item['position'] === $position || $item['original_position'] === $position)
                     && $item['original_commit_id'] !== $commitId;
             }
@@ -32,14 +30,12 @@ class CommentFilter
      * @param array       $comments
      * @param string      $path
      * @param string      $login
-     *
-     * @return array
      */
     public function filterForOwnComments(array $comments, string $path, string $login) : array
     {
         $result = array_filter(
             $comments,
-            static function ($item) use ($path, $login) {
+            static function ($item) use ($path, $login): bool {
                 return $item['path'] === $path
                     && $item['user']['login'] === $login;
             }

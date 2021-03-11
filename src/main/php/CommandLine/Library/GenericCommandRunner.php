@@ -10,14 +10,10 @@ use function Safe\sprintf;
 
 class GenericCommandRunner
 {
-    /** @var OutputInterface */
-    private $output;
-    /** @var ProcessRunner */
-    private $processRunner;
-    /** @var AdaptableFileFinder */
-    private $adaptableFileFinder;
-    /** @var ExclusionListFactory */
-    private $blacklistFactory;
+    private OutputInterface $output;
+    private ProcessRunner $processRunner;
+    private AdaptableFileFinder $adaptableFileFinder;
+    private ExclusionListFactory $blacklistFactory;
 
     /**
      * AbstractToolAdapter constructor.
@@ -50,12 +46,10 @@ class GenericCommandRunner
      * @param string $blacklistToken
      * @param string[] $allowedFileEndings
      * @param string $glue
-     *
-     * @return int
      */
     public function runWhitelistCommand(
         string $template,
-        $targetBranch,
+        ?string $targetBranch,
         string $blacklistToken,
         array $allowedFileEndings,
         string $glue = ','
@@ -87,15 +81,13 @@ class GenericCommandRunner
      * @param string $blacklistToken
      * @param string $prefix
      * @param string $glue
-     *
-     * @return int|null
      */
     public function runBlacklistCommand(
         string $template,
         string $blacklistToken,
         string $prefix = '',
         string $glue = ','
-    ) {
+    ): int {
         $argument = $this->concatBlackListArguments($blacklistToken, $prefix, $glue);
         $command = $this->buildCommand($template, $argument);
         return $this->runAndWriteToOutput($command);
@@ -112,7 +104,7 @@ class GenericCommandRunner
      * @return string[]
      */
     private function buildWhitelistArguments(
-        $targetBranch,
+        ?string $targetBranch,
         string $blacklistToken,
         array $allowedFileEndings,
         string $glue = ','
@@ -145,10 +137,8 @@ class GenericCommandRunner
      * Runs a command and prints the output to the screen if the command couldn't be executed without errors.
      *
      * @param string $commandWithParameters
-     *
-     * @return int
      */
-    private function runAndWriteToOutput($commandWithParameters): int
+    private function runAndWriteToOutput(string $commandWithParameters): ?int
     {
         $exitCode = 0;
         $process = $this->processRunner->runAsProcessReturningProcessObject(
@@ -168,10 +158,8 @@ class GenericCommandRunner
      *
      * @param string $command
      * @param string $argument
-     *
-     * @return string
      */
-    private function buildCommand($command, $argument)
+    private function buildCommand(string $command, string $argument): string
     {
         $command = sprintf($command, $argument);
         $this->output->writeln(

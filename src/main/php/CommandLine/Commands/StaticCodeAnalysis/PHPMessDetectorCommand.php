@@ -11,8 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPMessDetectorAdapter;
 
 class PHPMessDetectorCommand extends Command
 {
-    /** @var PHPMessDetectorAdapter */
-    private $toolAdapter;
+    private PHPMessDetectorAdapter $toolAdapter;
 
     /**
      * PHPMessDetectorCommand constructor.
@@ -28,7 +27,7 @@ class PHPMessDetectorCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:mess-detect');
         $this->setDescription('Run PHP-MD on PHP files.');

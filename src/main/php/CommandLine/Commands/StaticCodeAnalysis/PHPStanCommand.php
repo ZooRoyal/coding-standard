@@ -12,8 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPStanAdapter;
 
 class PHPStanCommand extends Command
 {
-    /** @var PHPStanAdapter */
-    private $toolAdapter;
+    private PHPStanAdapter $toolAdapter;
 
     /**
      * PHPCodeSnifferCommand constructor.

@@ -11,8 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\ToolAdapters\PHPParallelLintAdapter;
 
 class PHPParallelLintCommand extends Command
 {
-    /** @var PHPParallelLintAdapter */
-    private $toolAdapter;
+    private PHPParallelLintAdapter $toolAdapter;
 
     /**
      * PHPParallelLintCommand constructor.
@@ -28,7 +27,7 @@ class PHPParallelLintCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:parallel-lint');
         $this->setDescription('Run Parallel-Lint on PHP files.');

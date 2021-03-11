@@ -25,10 +25,8 @@ class GitChangeSetFactory
      *
      * @param string[] $files
      * @param string   $commitHash
-     *
-     * @return GitChangeSet
      */
-    public function build(array $files, $commitHash = '')
+    public function build(array $files, string $commitHash = ''): GitChangeSet
     {
         $fileInfos = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($files);
         return new GitChangeSet($fileInfos, $commitHash);

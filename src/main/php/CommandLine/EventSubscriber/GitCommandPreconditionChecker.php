@@ -18,7 +18,7 @@ class GitCommandPreconditionChecker implements EventSubscriberInterface
 {
     private ProcessRunner $processRunner;
     private ?int $exitCode = null;
-    private string $command = 'git rev-parse --git-dir';
+    private const COMMAND = 'git rev-parse --git-dir';
 
     /**
      * CommandPreconditionChecker constructor.
@@ -49,7 +49,7 @@ class GitCommandPreconditionChecker implements EventSubscriberInterface
     public function checkForGit(): void
     {
         if ($this->exitCode === null) {
-            $process = $this->processRunner->runAsProcessReturningProcessObject($this->command);
+            $process = $this->processRunner->runAsProcessReturningProcessObject(self::COMMAND);
 
             $this->exitCode = $process->getExitCode();
         }

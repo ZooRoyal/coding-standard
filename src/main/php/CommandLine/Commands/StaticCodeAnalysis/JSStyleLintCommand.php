@@ -20,7 +20,7 @@ class JSStyleLintCommand extends AbstractFixableToolCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:stylelint');
         $this->setDescription('Run StyleLint on Less files.');

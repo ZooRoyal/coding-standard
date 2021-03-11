@@ -65,8 +65,6 @@ class GitChangeSetFilter
      * @param array<EnhancedFileInfo> $blacklist
      * @param array<EnhancedFileInfo> $whitelist
      *
-     * @return SplObjectStorage
-     *
      * @throws LogicException
      */
     private function mergeLists(
@@ -94,8 +92,6 @@ class GitChangeSetFilter
      * @param string[]                $allowedFileEndings
      * @param array<EnhancedFileInfo> $files
      * @param SplObjectStorage        $list
-     *
-     * @return array
      */
     private function applyFilters(array $allowedFileEndings, array $files, SplObjectStorage $list): array
     {
@@ -117,7 +113,7 @@ class GitChangeSetFilter
         if (!empty($allowedFileEndings)) {
             $result = array_filter(
                 $result,
-                static function ($file) use ($allowedFileEndings) {
+                static function ($file) use ($allowedFileEndings): bool {
                     foreach ($allowedFileEndings as $allowedFileEnding) {
                         if ($file->endsWith($allowedFileEnding)) {
                             return true;

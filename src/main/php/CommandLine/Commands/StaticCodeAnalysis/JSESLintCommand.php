@@ -20,7 +20,7 @@ class JSESLintCommand extends AbstractFixableToolCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:eslint');
         $this->setDescription('Run ESLint on JS files.');
