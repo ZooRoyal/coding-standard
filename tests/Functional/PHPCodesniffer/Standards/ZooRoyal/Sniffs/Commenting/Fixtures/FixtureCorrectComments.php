@@ -31,7 +31,7 @@ class FixtureCorrectComments
     /**
      * @test
      */
-    public function fakeTestMethod()
+    public function fakeTestMethod(): string
     {
         return 'bla';
     }

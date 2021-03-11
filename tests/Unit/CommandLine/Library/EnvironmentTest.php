@@ -41,7 +41,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function getRootDirectory()
+    public function getRootDirectory(): void
     {
         $expectedPath = dirname(__DIR__, 4);
 
@@ -59,7 +59,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function getVendorPath()
+    public function getVendorPath(): void
     {
         $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
             ->with(realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'vendor'))
@@ -86,7 +86,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsTrueIfCommitHashesAreEqual()
+    public function isLocalBranchEqualToReturnsTrueIfCommitHashesAreEqual(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -106,7 +106,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal()
+    public function isLocalBranchEqualToReturnsFalseIfCommitHashesAreUnequal(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -127,7 +127,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToCachesLocalHeadHash()
+    public function isLocalBranchEqualToCachesLocalHeadHash(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedCommitHash = '123qwe0';
@@ -149,7 +149,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToReturnsFalseIfParameterNoBranch()
+    public function isLocalBranchEqualToReturnsFalseIfParameterNoBranch(): void
     {
         $mockedBranchName = 'my/mocked/branch';
         $mockedLocalCommitHash = '0ewq321';
@@ -169,7 +169,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function isLocalBranchEqualToWithNull()
+    public function isLocalBranchEqualToWithNull(): void
     {
         $mockedBranchName = null;
 
@@ -188,7 +188,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function guessParentBranchAsCommitHashFindParent()
+    public function guessParentBranchAsCommitHashFindParent(): void
     {
         $mockedBranch = 'myBranch';
         $expectedHash = 'asdasqweqwe12312323234';
@@ -212,7 +212,7 @@ class EnvironmentTest extends TestCase
     /**
      * @test
      */
-    public function guessParentBranchAsCommitHashFindNoParent()
+    public function guessParentBranchAsCommitHashFindNoParent(): void
     {
         $mockedBranch = 'myBranch';
         $expectedHash = 'asdasqweqwe12312323234';

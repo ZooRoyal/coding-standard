@@ -43,7 +43,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPCopyPasteDetectorCommand::class, $this->subjectParameters)->makePartial();
@@ -63,7 +63,7 @@ class PHPCopyPasteDetectorCommandTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutput()
+    public function writeViolationsToOutput(): void
     {
         $expectedExitCode = 0;
 

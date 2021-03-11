@@ -46,7 +46,7 @@ class IssueCommentAddCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(IssueCommentAddCommand::class, $this->subjectParameters)->makePartial();
@@ -80,7 +80,7 @@ class IssueCommentAddCommandTest extends TestCase
     /**
      * @test
      */
-    public function executePassesDataToClient()
+    public function executePassesDataToClient(): void
     {
         $expectedTokenValue = 'myToken';
         $expectedOrganisationValue = 'myOrganisation';

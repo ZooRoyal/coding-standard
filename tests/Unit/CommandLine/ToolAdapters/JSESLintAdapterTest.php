@@ -75,7 +75,7 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function commandsGetBuiltCorrectly()
+    public function commandsGetBuiltCorrectly(): void
     {
         $configFile = '/config/eslint/.eslintrc.js';
         $ignoreFile = '/config/eslint/.eslintignore';
@@ -105,8 +105,6 @@ class JSESLintAdapterTest extends TestCase
 
     /**
      * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
-     *
-     * @return array
      */
     public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider(): array
     {
@@ -166,7 +164,7 @@ class JSESLintAdapterTest extends TestCase
         string $method,
         int $toolResult,
         int $expectedResult
-    ) {
+    ): void {
         $mockedTargetBranch = 'myTargetBranch';
 
         $this->partialSubject->shouldReceive('runTool')->once()
@@ -183,7 +181,7 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function skipWriteViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -214,7 +212,7 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound()
+    public function fixViolationsWritesWarningToOutputIfEsLintIsNotFound(): void
     {
         $mockedGenericCommandRunner = Mockery::mock(GenericCommandRunner::class);
         $mockedOutputInterface = Mockery::mock(OutputInterface::class);
@@ -245,7 +243,7 @@ class JSESLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterImplementsInterface()
+    public function phpCodeSnifferAdapterImplementsInterface(): void
     {
         self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

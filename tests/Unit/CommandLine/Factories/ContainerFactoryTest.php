@@ -23,7 +23,7 @@ class ContainerFactoryTest extends TestCase
     /**
      * @test
      */
-    public function getContainerInstance()
+    public function getContainerInstance(): void
     {
         $result = ContainerFactory::getUnboundContainerInstance();
         $buildItem = $result->get(OutputInterface::class);
@@ -35,7 +35,7 @@ class ContainerFactoryTest extends TestCase
     /**
      * @test
      */
-    public function containerFactoryIsCantBeInstantiated()
+    public function containerFactoryIsCantBeInstantiated(): void
     {
         $reflection = new ReflectionClass(ContainerFactory::class);
         self::assertFalse($reflection->isInstantiable());

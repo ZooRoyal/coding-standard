@@ -33,7 +33,7 @@ class GlobalSystemTest extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function runCodingStandardToFindErrors(): ?Generator
+    public function runCodingStandardToFindErrors(): iterable
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
 
@@ -76,7 +76,7 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @coversNothing
      */
-    public function dontFilesMakeAllGood(): ?Generator
+    public function dontFilesMakeAllGood(): iterable
     {
         $environmentDirectory = $this->prepareInstallationDirectory();
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
@@ -104,8 +104,6 @@ class GlobalSystemTest extends AsyncTestCase
 
     /**
      * Provides an composer environment to run tests on.
-     *
-     * @return string
      */
     private function prepareInstallationDirectory(): string
     {
@@ -127,7 +125,7 @@ class GlobalSystemTest extends AsyncTestCase
      * @return Generator|array<int|null>
      */
     // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
-    private function runTools(string $environmentDirectory)
+    private function runTools(string $environmentDirectory): iterable
     {
         $tools = [
             'sca:sniff',

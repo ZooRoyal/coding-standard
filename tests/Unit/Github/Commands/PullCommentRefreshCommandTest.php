@@ -89,7 +89,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PullCommentRefreshCommand::class, $this->subjectParameters)->makePartial();
@@ -126,7 +126,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /**
      * @test
      */
-    public function executePassesDataToClientForUpdate()
+    public function executePassesDataToClientForUpdate(): void
     {
         $expectedParameterValue = ['body' => $this->mockedArguments['body']];
 
@@ -161,7 +161,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /**
      * @test
      */
-    public function executePassesDataToClientForCreate()
+    public function executePassesDataToClientForCreate(): void
     {
         $expectedParameterValue = [
             'body' => $this->mockedArguments['body'],
@@ -198,7 +198,7 @@ class PullCommentRefreshCommandTest extends TestCase
         $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
     }
 
-    private function prepareMocksForFiltering($staleCommentsToReturn)
+    private function prepareMocksForFiltering(array $staleCommentsToReturn): void
     {
         $mockedAllComments = [$this->mockedOwnStaleComment, $this->mockedOwnCurrentComment];
 

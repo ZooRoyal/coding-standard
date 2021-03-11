@@ -38,7 +38,7 @@ class AllToolsCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(AllToolsCommand::class)->makePartial();
@@ -54,7 +54,7 @@ class AllToolsCommandTest extends TestCase
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value) {
+                    function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();
@@ -76,7 +76,7 @@ class AllToolsCommandTest extends TestCase
         $localSubject->configure();
     }
 
-    public function executeRunsAllCommandsDataProvider()
+    public function executeRunsAllCommandsDataProvider(): array
     {
         return [
             'success' => ['returnValue' => 0, 'outputCount' => 0],
@@ -88,7 +88,7 @@ class AllToolsCommandTest extends TestCase
      * @test
      * @dataProvider executeRunsAllCommandsDataProvider
      */
-    public function executeRunsAllCommands($returnValue, $outputCount)
+    public function executeRunsAllCommands($returnValue, $outputCount): void
     {
         /** @var MockInterface|AllToolsCommand $subject */
         $subject = Mockery::mock(AllToolsCommand::class)->makePartial();

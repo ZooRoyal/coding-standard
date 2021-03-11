@@ -34,7 +34,7 @@ class GitInputValidatorTest extends TestCase
     /**
      * @test
      */
-    public function isCommitishValidCallsProcess()
+    public function isCommitishValidCallsProcess(): void
     {
         $mockedCommitish = 'asdasdasd';
 
@@ -49,7 +49,7 @@ class GitInputValidatorTest extends TestCase
     /**
      * @test
      */
-    public function isCommitishValidCallsProcessAndFails()
+    public function isCommitishValidCallsProcessAndFails(): void
     {
         $mockedCommitish = 'asdasdasd';
 
@@ -64,7 +64,7 @@ class GitInputValidatorTest extends TestCase
     /**
      * @test
      */
-    public function isCommitishValidWithNullAndFails()
+    public function isCommitishValidWithNullAndFails(): void
     {
         $result = $this->subject->isCommitishValid(null);
 

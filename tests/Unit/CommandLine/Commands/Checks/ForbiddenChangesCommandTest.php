@@ -68,7 +68,7 @@ class ForbiddenChangesCommandTest extends TestCase
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value) {
+                    function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();

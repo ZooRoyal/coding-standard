@@ -39,7 +39,7 @@ class EventDispatcherFactoryTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
      */
-    public function build()
+    public function build(): void
     {
         $mockedEventDispatcher = Mockery::mock('overload:' . EventDispatcher::class);
 

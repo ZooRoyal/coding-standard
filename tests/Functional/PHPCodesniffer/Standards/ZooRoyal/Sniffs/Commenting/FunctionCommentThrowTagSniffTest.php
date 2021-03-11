@@ -9,11 +9,10 @@ use Symfony\Component\Process\Process;
 
 class FunctionCommentThrowTagSniffTest extends TestCase
 {
-    /** @var string */
-    private static $vendorDir;
-
     /** @var array */
     private $commandPrefix;
+    /** @var string */
+    private static $vendorDir;
 
     public static function setUpBeforeClass(): void
     {
@@ -35,7 +34,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
      *
      * @test
      */
-    public function processApprovesCorrectCount()
+    public function processApprovesCorrectCount(): void
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectCountOfTags.php';
@@ -51,7 +50,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
     /**
      * @test
      */
-    public function processRejectsIncorrectCount()
+    public function processRejectsIncorrectCount(): void
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectCountOfTags.php';

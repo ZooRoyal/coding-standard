@@ -46,12 +46,12 @@ class StaticExcluderTest extends TestCase
     /**
      * @test
      */
-    public function getPathsToExclude()
+    public function getPathsToExclude(): void
     {
         $forgedRemainingPaths = ['.git', 'node_modules', 'vendor'];
         $that = $this;
         $expectedResult = array_map(
-            static function ($path) use ($that) {
+            static function ($path) use ($that): EnhancedFileInfo {
                 return new EnhancedFileInfo(
                     $that->forgedRootDirectory . '/' . $path,
                     $that->forgedRootDirectory

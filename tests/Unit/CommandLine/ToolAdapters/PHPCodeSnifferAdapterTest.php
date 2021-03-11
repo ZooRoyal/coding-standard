@@ -72,7 +72,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         $config = '/config/phpcs/ZooRoyal/ruleset.xml';
         self::assertSame('.dontSniffPHP', $this->partialSubject->getBlacklistToken());
@@ -113,7 +113,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
      *
      * @return mixed[]
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider(): array
     {
         return [
             'find Violations' => [
@@ -145,7 +145,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
         string $fullMessage,
         string $diffMessage,
         string $method
-    ) {
+    ): void {
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
@@ -161,7 +161,7 @@ class PHPCodeSnifferAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

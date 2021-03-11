@@ -40,7 +40,7 @@ class TokenExcluderTest extends TestCase
     /**
      * @test
      */
-    public function getPathsToExcludeWithoutToken()
+    public function getPathsToExcludeWithoutToken(): void
     {
         $result = $this->subject->getPathsToExclude([]);
 

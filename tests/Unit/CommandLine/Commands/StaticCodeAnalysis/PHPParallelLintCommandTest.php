@@ -43,7 +43,7 @@ class PHPParallelLintCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPParallelLintCommand::class, $this->subjectParameters)->makePartial();
@@ -62,7 +62,7 @@ class PHPParallelLintCommandTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutput()
+    public function writeViolationsToOutput(): void
     {
         $mockedTargetBranch = '';
         $expectedExitCode = 0;
@@ -91,7 +91,7 @@ class PHPParallelLintCommandTest extends TestCase
      *
      * @param string $mockedTargetBranch
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch): void
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);

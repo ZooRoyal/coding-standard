@@ -4,7 +4,6 @@ namespace Zooroyal\CodingStandard\Tests\System\Eslint;
 
 use Amp\PHPUnit\AsyncTestCase;
 use Amp\Process\Process;
-use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
@@ -27,7 +26,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function runEslintForJSInCleanInstall(): ?Generator
+    public function runEslintForJSInCleanInstall(): iterable
     {
         $testInstancePath = $this->prepareInstallationDirectory();
 
@@ -54,7 +53,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function runEslintForTSInCleanInstall(): ?Generator
+    public function runEslintForTSInCleanInstall(): iterable
     {
         $testInstancePath = $this->prepareInstallationDirectory();
 
@@ -81,7 +80,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function runStylelintInCleanInstall(): ?Generator
+    public function runStylelintInCleanInstall(): iterable
     {
         $testInstancePath = $this->prepareInstallationDirectory();
 
@@ -98,8 +97,6 @@ class RunEslintWithConfigTest extends AsyncTestCase
 
     /**
      * Provides an composer environment to run tests on.
-     *
-     * @return string
      */
     private function prepareInstallationDirectory(): string
     {
@@ -113,7 +110,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
         return $environment->getInstallationPath();
     }
 
-    private function getEslintCommand($fileToCheck, $testInstancePath): string
+    private function getEslintCommand(string $fileToCheck, string $testInstancePath): string
     {
         return self::ESLINT_COMMAND
             . $testInstancePath . DIRECTORY_SEPARATOR

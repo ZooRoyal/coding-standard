@@ -37,7 +37,7 @@ class GitCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): void
     {
         $events = $this->subject::getSubscribedEvents();
 
@@ -47,7 +47,7 @@ class GitCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function checkForGitRunsCommand()
+    public function checkForGitRunsCommand(): void
     {
         $mockedProcess = Mockery::mock(Process::class);
 
@@ -63,7 +63,7 @@ class GitCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function checkForGitThrowsExceptionOnFailedCommand()
+    public function checkForGitThrowsExceptionOnFailedCommand(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionCode(1612348705);

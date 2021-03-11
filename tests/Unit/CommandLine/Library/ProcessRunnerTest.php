@@ -30,7 +30,7 @@ class ProcessRunnerTest extends TestCase
     /**
      * @test
      */
-    public function runAsProcess()
+    public function runAsProcess(): void
     {
         $result = $this->subject->runAsProcess('ls');
         self::assertIsString($result);
@@ -39,7 +39,7 @@ class ProcessRunnerTest extends TestCase
     /**
      * @test
      */
-    public function runAsProcessReturningProcessObject()
+    public function runAsProcessReturningProcessObject(): void
     {
         $expectedResult = $this->subject->runAsProcess('ls');
 
@@ -52,7 +52,7 @@ class ProcessRunnerTest extends TestCase
     /**
      * @test
      */
-    public function runAsProcessReturningProcessObjectWithArgumentsInjection()
+    public function runAsProcessReturningProcessObjectWithArgumentsInjection(): void
     {
         $this->expectException(ProcessFailedException::class);
         $this->subject->runAsProcess('git', 'version\'; ls');
@@ -61,7 +61,7 @@ class ProcessRunnerTest extends TestCase
     /**
      * @test
      */
-    public function runProcessWithArguments()
+    public function runProcessWithArguments(): void
     {
         $result = $this->subject->runAsProcess('git', 'version');
 
@@ -72,7 +72,7 @@ class ProcessRunnerTest extends TestCase
     /**
      * @test
      */
-    public function runProcessWithArgumentsInjection()
+    public function runProcessWithArgumentsInjection(): void
     {
         $this->expectException(ProcessFailedException::class);
         $this->subject->runAsProcess('git', 'version\'; ls');

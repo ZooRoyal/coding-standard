@@ -38,7 +38,7 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function getSubscribedEvents()
+    public function getSubscribedEvents(): void
     {
         $events = $this->subject::getSubscribedEvents();
 
@@ -57,7 +57,7 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function checkForTerminalCommands()
+    public function checkForTerminalCommands(): void
     {
         $mockedProcess = Mockery::mock(Process::class);
 
@@ -75,7 +75,7 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
     /**
      * @test
      */
-    public function checkForTerminalCommandsThrowsExceptionOnFailedCommand()
+    public function checkForTerminalCommandsThrowsExceptionOnFailedCommand(): void
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionCode(1613124231);
