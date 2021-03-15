@@ -31,7 +31,7 @@
     "guzzlehttp/psr7": "^1.4",
     "knplabs/github-api": "^2.19",
     "mindplay/composer-locator": "^2.1.4",
-    "ocramius/proxy-manager": " >= 2.2.3 < 3",
+    "ocramius/proxy-manager": ">= 2.2.3 < 3",
     "php-di/php-di": "^6.3",
     "php-parallel-lint/php-console-highlighter": "^0.5",
     "php-parallel-lint/php-parallel-lint": "^1.2",
