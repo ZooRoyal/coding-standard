@@ -48,7 +48,7 @@ class GitPathsExcluder implements ExcluderInterface
 
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
         $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootDirectory . ' -type d -mindepth 2 -name .git' . $excludeParameters
+            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters
         );
 
         if (empty($finderResult)) {
