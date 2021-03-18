@@ -47,7 +47,7 @@ class JSESLintCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(JSESLintCommand::class, $this->subjectParameters)->makePartial();
@@ -63,7 +63,7 @@ class JSESLintCommandTest extends TestCase
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value) {
+                    function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();
@@ -88,7 +88,7 @@ class JSESLintCommandTest extends TestCase
     /**
      * @test
      */
-    public function executeFullBuildWithFix()
+    public function executeFullBuildWithFix(): void
     {
         $mockedTargetBranch = '';
         $mockedFixMode = true;
@@ -109,7 +109,7 @@ class JSESLintCommandTest extends TestCase
     /**
      * @test
      */
-    public function executeFullBuildWithoutFix()
+    public function executeFullBuildWithoutFix(): void
     {
         $mockedTargetBranch = '';
         $mockedFixMode = false;
@@ -141,7 +141,7 @@ class JSESLintCommandTest extends TestCase
      * @param string $mockedTargetBranch
      * @param bool   $mockedFixMode
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedFixMode)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch, bool $mockedFixMode): void
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);

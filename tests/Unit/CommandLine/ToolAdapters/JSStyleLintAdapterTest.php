@@ -105,8 +105,6 @@ class JSStyleLintAdapterTest extends TestCase
 
     /**
      * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
-     *
-     * @return array
      */
     public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider(): array
     {

@@ -20,7 +20,7 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
     /** @var array<string,int> */
     private array $results = [];
     /** @var array<string> */
-    private array $commands = ['git', 'find'];
+    private const COMMANDS = ['git', 'find'];
 
     /**
      * TerminalCommandPreconditionChecker constructor.
@@ -50,7 +50,7 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
      */
     public function checkForTerminalCommands(): void
     {
-        foreach ($this->commands as $command) {
+        foreach (self::COMMANDS as $command) {
             if (!isset($this->results[$command])) {
                 $process = $this->processRunner->runAsProcessReturningProcessObject('which ' . $command);
 

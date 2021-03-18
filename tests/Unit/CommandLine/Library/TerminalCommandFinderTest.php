@@ -35,7 +35,7 @@ class TerminalCommandFinderTest extends TestCase
     /**
      * @test
      */
-    public function findTerminalCommandReturnsCommandIfFound()
+    public function findTerminalCommandReturnsCommandIfFound(): void
     {
         $forgedCommand = 'bnlablalbal';
         $expectedCommand = 'npx --no-install ' . $forgedCommand;
@@ -54,7 +54,7 @@ class TerminalCommandFinderTest extends TestCase
     /**
      * @test
      */
-    public function findTerminalCommandThrowsExceptionIfCommandNotFound()
+    public function findTerminalCommandThrowsExceptionIfCommandNotFound(): void
     {
         $forgedCommand = 'bnlablalbal';
         $mockedProcess = Mockery::mock(Process::class);

@@ -12,7 +12,7 @@ class AllToolsCommand extends AbstractFixableToolCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:all');
         $this->setDescription('Run all static code analysis tools.');
@@ -26,7 +26,7 @@ class AllToolsCommand extends AbstractFixableToolCommand
     /**
      * {@inheritdoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output)
+    public function execute(InputInterface $input, OutputInterface $output): int
     {
         $output->writeln('All SCA-Commands will be executed.', OutputInterface::OUTPUT_NORMAL);
 

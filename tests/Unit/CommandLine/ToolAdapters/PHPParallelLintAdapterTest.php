@@ -67,7 +67,7 @@ class PHPParallelLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function constructSetsUpSubjectCorrectly()
+    public function constructSetsUpSubjectCorrectly(): void
     {
         self::assertSame('.dontLintPHP', $this->partialSubject->getBlacklistToken());
         self::assertSame(['.php'], $this->partialSubject->getAllowedFileEndings());
@@ -92,10 +92,8 @@ class PHPParallelLintAdapterTest extends TestCase
 
     /**
      * Data Provider for callMethodsWithParametersCallsRunToolAndReturnsResult.
-     *
-     * @return array
      */
-    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider()
+    public function callMethodsWithParametersCallsRunToolAndReturnsResultDataProvider(): array
     {
         return [
             'find Violations' => [
@@ -121,7 +119,7 @@ class PHPParallelLintAdapterTest extends TestCase
         string $fullMessage,
         string $diffMessage,
         string $method
-    ) {
+    ): void {
         $mockedTargetBranch = 'myTargetBranch';
         $expectedResult = 123123123;
 
@@ -137,7 +135,7 @@ class PHPParallelLintAdapterTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferAdapterimplementsInterface()
+    public function phpCodeSnifferAdapterimplementsInterface(): void
     {
         self::assertNotInstanceOf(FixerSupportInterface::class, $this->partialSubject);
         self::assertInstanceOf(ToolAdapterInterface::class, $this->partialSubject);

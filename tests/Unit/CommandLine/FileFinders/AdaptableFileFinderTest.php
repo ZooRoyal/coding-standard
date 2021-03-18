@@ -38,7 +38,7 @@ class AdaptableFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findFilesWithInvalidTargetThrowsException()
+    public function findFilesWithInvalidTargetThrowsException(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode('1553766210');
@@ -51,8 +51,6 @@ class AdaptableFileFinderTest extends TestCase
 
     /**
      * Data Provider for findFilesCallsAllCheckableFileFinder.
-     *
-     * @return array
      */
     public function findFilesCallsAllCheckableFileFinderDataProvider(): array
     {
@@ -93,7 +91,7 @@ class AdaptableFileFinderTest extends TestCase
         bool $targetBranchInput,
         bool $isLocalBranch,
         string $finder
-    ) {
+    ): void {
         $mockedAllowedFileEndings = ['asdqwe'];
         $mockedBlacklistToken = 'qwegfasdfqwe';
         $mockedWhitelistToken = '12123sdfasdf123123';

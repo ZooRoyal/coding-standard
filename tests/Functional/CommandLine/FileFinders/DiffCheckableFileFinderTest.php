@@ -89,8 +89,6 @@ class DiffCheckableFileFinderTest extends TestCase
      * @param string $forgedRootDirectory
      * @param string $targetBranch
      * @param string $forgedRawDiffUnfilteredString
-     *
-     * @return Container
      */
     private function setUpMockedObjects(
         string $forgedRootDirectory,

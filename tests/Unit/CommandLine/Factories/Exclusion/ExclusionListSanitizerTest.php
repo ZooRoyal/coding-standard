@@ -18,7 +18,7 @@ class ExclusionListSanitizerTest extends TestCase
     /**
      * @test
      */
-    public function sanitizeExclusionList()
+    public function sanitizeExclusionList(): void
     {
         $expectedResult = $this->prepareMockedEnhancedFileInfo(['bla', 'schackalacka', 'bum/schackalacka']);
         $input = array_merge($expectedResult, $this->prepareMockedEnhancedFileInfo(['bla', 'bla/blub',]));

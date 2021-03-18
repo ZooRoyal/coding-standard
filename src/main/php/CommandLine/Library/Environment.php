@@ -16,6 +16,8 @@ class Environment
     private ProcessRunner $processRunner;
     private GitInputValidator $gitInputValidator;
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+    /** @var string */
+    private const GIT = 'git';
 
     public function __construct(
         ProcessRunner $processRunner,
@@ -33,7 +35,7 @@ class Environment
      */
     public function getRootDirectory(): EnhancedFileInfo
     {
-        $projectRootPath = $this->processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
+        $projectRootPath = $this->processRunner->runAsProcess(self::GIT, 'rev-parse', '--show-toplevel');
         $enhancedFileInfo = $this->enhancedFileInfoFactory->buildFromPath(realpath($projectRootPath));
 
         return $enhancedFileInfo;
@@ -63,8 +65,6 @@ class Environment
      * Compare if the HEAD of $target Branch equals the HEAD of the local branch.
      *
      * @param string|null $targetBranch
-     *
-     * @return bool
      */
     public function isLocalBranchEqualTo(?string $targetBranch): bool
     {
@@ -84,12 +84,10 @@ class Environment
      * Converts a commit-tish to a commit hash.
      *
      * @param string $branchName
-     *
-     * @return string
      */
-    private function commitishToHash(string $branchName): string
+    private function commitishToHash(?string $branchName): string
     {
-        return $this->processRunner->runAsProcess('git', 'rev-list', '-n 1', $branchName);
+        return $this->processRunner->runAsProcess(self::GIT, 'rev-list', '-n 1', $branchName);
     }
 
     /**
@@ -97,8 +95,6 @@ class Environment
      * with parent branch.
      *
      * @param string $branchName
-     *
-     * @return string
      */
     public function guessParentBranchAsCommitHash(string $branchName = 'HEAD'): string
     {
@@ -111,7 +107,7 @@ class Environment
                 break;
             }
         }
-        $gitCommitHash = $this->processRunner->runAsProcess('git', 'rev-parse', $branchName);
+        $gitCommitHash = $this->processRunner->runAsProcess(self::GIT, 'rev-parse', $branchName);
 
         return $gitCommitHash;
     }
@@ -120,14 +116,12 @@ class Environment
      * Calls git to retriev the count of branches this commit is part of.
      *
      * @param string $targetCommit
-     *
-     * @return int
      */
     private function getCountOfContainingBranches(string $targetCommit): int
     {
         $numberOfContainingBranches = substr_count(
             $this->processRunner->runAsProcess(
-                'git',
+                self::GIT,
                 'branch',
                 '-a',
                 '--contains',
@@ -143,12 +137,10 @@ class Environment
      * Returns true if $targetCommit commit-ish is a valid commit.
      *
      * @param string $targetCommit
-     *
-     * @return bool
      */
     private function isParentCommitishACommit(string $targetCommit): bool
     {
-        $targetType = $this->processRunner->runAsProcess('git', 'cat-file', '-t', $targetCommit . '^');
+        $targetType = $this->processRunner->runAsProcess(self::GIT, 'cat-file', '-t', $targetCommit . '^');
 
         return $targetType === 'commit';
     }

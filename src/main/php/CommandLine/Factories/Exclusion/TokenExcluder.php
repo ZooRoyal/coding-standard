@@ -36,8 +36,6 @@ class TokenExcluder implements ExcluderInterface
      *
      * @param array<string> $alreadyExcludedPaths
      * @param array<mixed>  $config
-     *
-     * @return array
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {

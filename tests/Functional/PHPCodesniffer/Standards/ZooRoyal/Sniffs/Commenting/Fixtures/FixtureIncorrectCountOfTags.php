@@ -6,7 +6,7 @@ use RuntimeException;
 
 class FixtureIncorrectCountOfTags
 {
-    public function bla()
+    public function bla(): void
     {
         throw new RuntimeException();
     }
@@ -14,7 +14,7 @@ class FixtureIncorrectCountOfTags
     /**
      * @throws Exception
      */
-    public function blub()
+    public function blub(): void
     {
         if (mt_rand(0, 1) == 1) {
             throw new Exception();

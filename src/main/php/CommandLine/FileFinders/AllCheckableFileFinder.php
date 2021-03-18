@@ -9,12 +9,9 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class AllCheckableFileFinder implements FileFinderInterface
 {
-    /** @var ProcessRunner */
-    private $processRunner;
-    /** @var GitChangeSetFilter */
-    private $gitChangeSetFilter;
-    /** @var GitChangeSetFactory */
-    private $gitChangeSetFactory;
+    private ProcessRunner $processRunner;
+    private GitChangeSetFilter $gitChangeSetFilter;
+    private GitChangeSetFactory $gitChangeSetFactory;
 
     /**
      * AllCheckableFileFinder constructor.
@@ -40,8 +37,6 @@ class AllCheckableFileFinder implements FileFinderInterface
      * @param string $blacklistToken
      * @param string $whitelistToken
      * @param string|false $targetBranch
-     *
-     * @return GitChangeSet
      */
     public function findFiles(
         array $allowedFileEndings = [],

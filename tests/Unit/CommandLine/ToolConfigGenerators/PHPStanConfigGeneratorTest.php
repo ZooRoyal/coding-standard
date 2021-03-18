@@ -48,7 +48,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function addConfigParameters()
+    public function addConfigParameters(): void
     {
         $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
 
@@ -79,7 +79,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function generateConfig()
+    public function generateConfig(): void
     {
         $params = ['parameters' => ['excludes_analyse' => ['vendor'], ['includes' => '/blala/lalal']]];
         $this->mockedNeonAdapter->shouldReceive('dump')->once()->with($params)->andReturn('neonstring');
@@ -90,7 +90,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function writeConfig()
+    public function writeConfig(): void
     {
         $this->mockedFileWriter->shouldReceive('write')->withArgs(
             [
@@ -104,7 +104,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function writeConfigWithThrownException()
+    public function writeConfigWithThrownException(): void
     {
         $this->expectException(CouldNotWriteFileException::class);
         $this->mockedFileWriter->shouldReceive('write')->once()->withArgs([' ', 'neonconfig'])
@@ -116,7 +116,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function phpCodeSnifferConfigToolGeneratorimplementsInterface()
+    public function phpCodeSnifferConfigToolGeneratorimplementsInterface(): void
     {
         self::assertInstanceOf(ToolConfigGeneratorInterface::class, $this->subject);
     }

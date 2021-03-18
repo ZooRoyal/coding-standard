@@ -6,8 +6,7 @@ use Symfony\Component\Process\Exception\ProcessFailedException;
 
 class GitInputValidator
 {
-    /** @var ProcessRunner */
-    private $processRunner;
+    private ProcessRunner $processRunner;
 
     /**
      * GitInputValidator constructor.

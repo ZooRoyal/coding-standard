@@ -63,7 +63,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .
@@ -84,7 +84,7 @@ class JSESLintAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAd
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = ''): ?int
+    public function fixViolations($targetBranch = ''): int
     {
         if ($this->commandNotFound) {
             $this->output->write('Eslint could not be found. ' .

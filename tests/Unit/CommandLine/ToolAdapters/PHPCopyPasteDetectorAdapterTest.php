@@ -74,7 +74,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     /**
      * @test
      */
-    public function subjectImplementsToolAdapterInterface()
+    public function subjectImplementsToolAdapterInterface(): void
     {
         self::assertInstanceOf(ToolAdapterInterface::class, $this->subject);
     }
@@ -82,7 +82,7 @@ class PHPCopyPasteDetectorAdapterTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutputWithTargetForBlacklistCheck()
+    public function writeViolationsToOutputWithTargetForBlacklistCheck(): void
     {
         $mockedTargetBranch = 'targetBranch';
         $expectedCommand = 'php ' . $this->mockedVendorDirectory . '/bin/phpcpd --fuzzy ' .

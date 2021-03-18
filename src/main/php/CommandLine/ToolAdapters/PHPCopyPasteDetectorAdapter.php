@@ -14,14 +14,12 @@ use Zooroyal\CodingStandard\CommandLine\Library\GenericCommandRunner;
  */
 class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
 {
+    private string $copyPasteDetectCommand;
+    private OutputInterface $output;
+    private GenericCommandRunner $genericCommandRunner;
+    private string $stopword;
     /** @var string */
-    private $copyPasteDetectCommand;
-    /** @var OutputInterface */
-    private $output;
-    /** @var GenericCommandRunner */
-    private $genericCommandRunner;
-    /** @var string */
-    private $stopword;
+    private const FULL_MESSAGE = 'PHPCPD : Running full check';
 
     /**
      * PHPCodeSnifferAdapter constructor.
@@ -53,9 +51,7 @@ class PHPCopyPasteDetectorAdapter implements ToolAdapterInterface
      */
     public function writeViolationsToOutput($targetBranch = ''): ?int
     {
-        $fullMessage = 'PHPCPD : Running full check';
-
-        $this->output->writeln($fullMessage, OutputInterface::VERBOSITY_NORMAL);
+        $this->output->writeln(self::FULL_MESSAGE, OutputInterface::VERBOSITY_NORMAL);
         $exitCode = $this->genericCommandRunner->runBlacklistCommand(
             $this->copyPasteDetectCommand,
             $this->stopword,

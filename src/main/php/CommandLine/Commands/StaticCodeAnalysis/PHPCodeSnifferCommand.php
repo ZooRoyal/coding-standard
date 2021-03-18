@@ -20,7 +20,7 @@ class PHPCodeSnifferCommand extends AbstractFixableToolCommand
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:sniff');
         $this->setDescription('Run PHP-CS on PHP files.');

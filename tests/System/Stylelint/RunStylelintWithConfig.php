@@ -4,7 +4,6 @@ namespace Zooroyal\CodingStandard\Tests\System\Stylelint;
 
 use Amp\PHPUnit\AsyncTestCase;
 use Amp\Process\Process;
-use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use function Amp\ByteStream\buffer;
@@ -16,7 +15,7 @@ class RunStylelintWithConfig extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function findViolationsByEslintInLess(): ?Generator
+    public function findViolationsByEslintInLess(): iterable
     {
         $process = new Process(
             [
@@ -37,7 +36,7 @@ class RunStylelintWithConfig extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function findViolationsByEslintInScss(): ?Generator
+    public function findViolationsByEslintInScss(): iterable
     {
         $process = new Process(
             [
@@ -60,7 +59,7 @@ class RunStylelintWithConfig extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function findViolationsByEslintInSass(): ?Generator
+    public function findViolationsByEslintInSass(): iterable
     {
         $process = new Process(
             [
@@ -83,7 +82,7 @@ class RunStylelintWithConfig extends AsyncTestCase
      * @large
      * @coversNothing
      */
-    public function findViolationsByEslintInCss(): ?Generator
+    public function findViolationsByEslintInCss(): iterable
     {
         $process = new Process(
             [

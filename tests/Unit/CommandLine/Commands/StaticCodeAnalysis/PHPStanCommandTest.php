@@ -46,7 +46,7 @@ class PHPStanCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         $localSubject = Mockery::mock(PHPStanCommand::class, $this->subjectParameters)
             ->shouldAllowMockingProtectedMethods()->makePartial();
@@ -63,7 +63,7 @@ class PHPStanCommandTest extends TestCase
         $localSubject->shouldReceive('getInputDefinition')->once()->withNoArgs()
             ->andReturn(new InputDefinition([new InputOption('eins'),new InputOption('zwei'),new InputOption('drei')]));
         $localSubject->shouldReceive('setDefinition')->once()->with(Mockery::on(
-            function ($value) {
+            function ($value): bool {
                 MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                 /** @var InputDefinition $value */
                 $options = $value->getOptions();
@@ -87,7 +87,7 @@ class PHPStanCommandTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutput()
+    public function writeViolationsToOutput(): void
     {
         $mockedTargetBranch = '';
         $expectedExitCode = 0;
@@ -115,7 +115,7 @@ class PHPStanCommandTest extends TestCase
      *
      * @param string $mockedTargetBranch
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch): void
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);

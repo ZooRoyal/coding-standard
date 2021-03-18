@@ -27,7 +27,7 @@ class GitChangeSetFactoryTest extends TestCase
     /**
      * @test
      */
-    public function buildReturns()
+    public function buildReturns(): void
     {
         $forgedFiles = ['asd', 'qwe'];
         $expectedCommitHash = 'asdasdasd1223213';

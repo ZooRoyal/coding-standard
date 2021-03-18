@@ -17,6 +17,8 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     protected string $blacklistPrefix = '--exclude ';
     protected string $blacklistGlue = ' ';
     protected string $whitelistGlue = ' ';
+    /** @var string */
+    private const TOOL_SHORT_NAME = 'PHPPL';
 
     /**
      * {@inheritDoc}
@@ -35,14 +37,13 @@ class PHPParallelLintAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
-        $toolShortName = 'PHPPL';
-        $prefix = $toolShortName . ' : ';
+        $prefix = self::TOOL_SHORT_NAME . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $fullMessage, $toolShortName, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, self::TOOL_SHORT_NAME, $diffMessage);
 
         return $exitCode;
     }

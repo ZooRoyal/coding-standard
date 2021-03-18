@@ -13,10 +13,8 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class FindFilesToCheckCommand extends Command
 {
-    /** @var ExclusionListFactory */
-    private $blacklistFactory;
-    /** @var AdaptableFileFinder */
-    private $adaptableFileFinder;
+    private ExclusionListFactory $blacklistFactory;
+    private AdaptableFileFinder $adaptableFileFinder;
 
     /**
      * FindFilesToCheckCommand constructor.
@@ -36,7 +34,7 @@ class FindFilesToCheckCommand extends Command
     /**
      * {@inheritdoc}
      */
-    public function configure()
+    public function configure(): void
     {
         $this->setName('find-files');
         $this->setDescription('Finds files for code style checks.');
@@ -46,8 +44,6 @@ class FindFilesToCheckCommand extends Command
 
     /**
      * Builds InputDefinition for Command
-     *
-     * @return InputDefinition
      *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

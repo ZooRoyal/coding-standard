@@ -9,7 +9,7 @@ class FixtureCorrectCountOfTags
     /**
      * @throws RuntimeException
      */
-    public function bla()
+    public function bla(): void
     {
         throw new RuntimeException();
     }
@@ -18,7 +18,7 @@ class FixtureCorrectCountOfTags
      * @throws Exception
      * @throws RuntimeException
      */
-    public function blub()
+    public function blub(): void
     {
         throw new Exception();
     }
@@ -28,7 +28,7 @@ class FixtureCorrectCountOfTags
      *
      * @throws RuntimeException
      */
-    public function foo()
+    public function foo(): void
     {
         $this->bla();
     }

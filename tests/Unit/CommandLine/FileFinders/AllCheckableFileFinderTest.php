@@ -36,7 +36,7 @@ class AllCheckableFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findAll()
+    public function findAll(): void
     {
         $mockedAllowedFileEndings = ['asd'];
         $expectedBlacklistToken = 'StopMeNow';
@@ -59,7 +59,7 @@ class AllCheckableFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findAllWithNoParameter()
+    public function findAllWithNoParameter(): void
     {
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 

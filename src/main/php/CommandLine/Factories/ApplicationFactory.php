@@ -27,7 +27,7 @@ class ApplicationFactory
     private EventDispatcherInterface $eventDispatcher;
     private Container $container;
     /** @var array<string> */
-    private array $commands = [
+    private const COMMANDS = [
         PHPParallelLintCommand::class,
         PHPCodeSnifferCommand::class,
         PHPStanCommand::class,
@@ -56,15 +56,13 @@ class ApplicationFactory
 
     /**
      * Builds an instance of Application and sets it up with EventDispatcher and coding-standard Commands.
-     *
-     * @return Application
      */
     public function build(): Application
     {
         $application = new Application();
         $application->setDispatcher($this->eventDispatcher);
 
-        foreach ($this->commands as $command) {
+        foreach (self::COMMANDS as $command) {
             $application->add($this->container->get($command));
         }
 

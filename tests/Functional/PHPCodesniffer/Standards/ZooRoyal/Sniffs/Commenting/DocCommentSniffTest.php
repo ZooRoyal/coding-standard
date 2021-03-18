@@ -9,11 +9,10 @@ use Symfony\Component\Process\Process;
 
 class DocCommentSniffTest extends TestCase
 {
-    /** @var string */
-    private static $vendorDir;
-
     /** @var array */
     private $commandPrefix;
+    /** @var string */
+    private static $vendorDir;
 
     public static function setUpBeforeClass(): void
     {
@@ -36,7 +35,7 @@ class DocCommentSniffTest extends TestCase
      * @test
      * @medium
      */
-    public function processApprovesCorrectCount()
+    public function processApprovesCorrectCount(): void
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureCorrectComments.php';
@@ -53,7 +52,7 @@ class DocCommentSniffTest extends TestCase
      * @test
      * @medium
      */
-    public function processRejectsIncorrectCount()
+    public function processRejectsIncorrectCount(): void
     {
         $fileToTest = 'tests/Functional/PHPCodesniffer/Standards/ZooRoyal/'
             . 'Sniffs/Commenting/Fixtures/FixtureIncorrectComments.php';

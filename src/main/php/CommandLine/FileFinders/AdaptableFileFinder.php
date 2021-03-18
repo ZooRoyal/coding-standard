@@ -12,14 +12,10 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
  */
 class AdaptableFileFinder implements FileFinderInterface
 {
-    /** @var GitInputValidator */
-    private $gitInputValidator;
-    /** @var AllCheckableFileFinder */
-    private $allCheckableFileFinder;
-    /** @var DiffCheckableFileFinder */
-    private $diffCheckableFileFinder;
-    /** @var Environment */
-    private $environment;
+    private GitInputValidator $gitInputValidator;
+    private AllCheckableFileFinder $allCheckableFileFinder;
+    private DiffCheckableFileFinder $diffCheckableFileFinder;
+    private Environment $environment;
 
     /**
      * AdaptableFileFinder constructor.

@@ -11,8 +11,6 @@ class ExclusionListSanitizer
      *
      * @param array<EnhancedFileInfo> $rawExcludePaths
      *
-     * @return array
-     *
      * @example
      *         Input: ['./a', './a/b', './a/b/c']
      *         Output: ['./a']
@@ -31,7 +29,7 @@ class ExclusionListSanitizer
             $item = $filteredArray[$i];
             $filteredArray = array_filter(
                 $filteredArray,
-                static function ($value, $key) use ($item, $i) {
+                static function ($value, $key) use ($item, $i): bool {
                     if ($key === $i) {
                         return true;
                     }

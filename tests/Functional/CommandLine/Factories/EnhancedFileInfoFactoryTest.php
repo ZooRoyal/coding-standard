@@ -14,12 +14,12 @@ use function Safe\realpath;
 
 class EnhancedFileInfoFactoryTest extends TestCase
 {
-    private static $DiSe = DIRECTORY_SEPARATOR;
     private EnhancedFileInfoFactory $subject;
     private string $absolutFilePath;
     private string $relativeFilePath;
     private string $relativeFilePath2;
     private string $rootDirectory;
+    private static $DiSe = DIRECTORY_SEPARATOR;
 
     public function setUp(): void
     {

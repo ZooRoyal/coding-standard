@@ -10,12 +10,9 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
-    /** @var ProcessRunner */
-    private $processRunner;
-    /** @var GitChangeSetFilter */
-    private $fileFilter;
-    /** @var GitChangeSetFactory */
-    private $gitChangeSetFactory;
+    private ProcessRunner $processRunner;
+    private GitChangeSetFilter $fileFilter;
+    private GitChangeSetFactory $gitChangeSetFactory;
 
     /**
      * CheckableFileFinder constructor.
@@ -42,8 +39,6 @@ class DiffCheckableFileFinder implements FileFinderInterface
      * @param string       $whitelistToken
      * @param string|false $targetBranch
      *
-     * @return GitChangeSet
-     *
      * @throws InvalidArgumentException
      */
     public function findFiles(
@@ -69,8 +64,6 @@ class DiffCheckableFileFinder implements FileFinderInterface
      * This method finds all files in diff to target branch.
      *
      * @param string $targetBranch
-     *
-     * @return GitChangeSet
      */
     private function findFilesInDiffToTarget(string $targetBranch) : GitChangeSet
     {

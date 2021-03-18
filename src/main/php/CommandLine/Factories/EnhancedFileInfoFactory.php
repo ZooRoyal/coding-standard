@@ -34,8 +34,6 @@ class EnhancedFileInfoFactory
      *
      * @param string $pathName
      *
-     * @return EnhancedFileInfo
-     *
      * @throws FileNotFoundException
      */
     public function buildFromPath(string $pathName): EnhancedFileInfo
@@ -69,7 +67,7 @@ class EnhancedFileInfoFactory
     public function buildFromArrayOfPaths(array $pathNames): array
     {
         $enhancedFileInfoInstancesOrNull = array_map(
-            function ($value) {
+            function ($value): ?EnhancedFileInfo {
                 try {
                     return $this->buildFromPath($value);
                 } catch (InvalidArgumentException $invalidArgumentException) {

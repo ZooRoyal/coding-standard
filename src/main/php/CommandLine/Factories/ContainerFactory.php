@@ -8,8 +8,7 @@ use Exception;
 
 class ContainerFactory
 {
-    /** @var Container */
-    private static $container;
+    private static ?Container $container = null;
 
     /**
      * ContainerFactory singleton constructor.
@@ -20,8 +19,6 @@ class ContainerFactory
 
     /**
      * Returns the single application container instance to use.
-     *
-     * @return Container
      *
      * @throws Exception
      */
@@ -38,7 +35,6 @@ class ContainerFactory
      * Returns an unbound Container which is configured like the application container. This is meant to be used for
      * functional tests only.
      *
-     * @return Container
      * @throws Exception
      */
     public static function getUnboundContainerInstance() : Container

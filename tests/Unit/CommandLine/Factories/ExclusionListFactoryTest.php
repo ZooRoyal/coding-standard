@@ -12,7 +12,6 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactoryTest extends TestCase
 {
-    /** @var ExclusionListFactory */
     private ExclusionListFactory $subject;
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder1;

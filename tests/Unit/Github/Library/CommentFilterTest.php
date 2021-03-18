@@ -22,19 +22,36 @@ class CommentFilterTest extends TestCase
         parent::tearDown();
     }
 
-    public function filterForStaleCommentsDoesExactlyThatDataProvider() : array
+    public function filterForStaleCommentsDoesExactlyThatDataProvider(): array
     {
         $position = 1;
         $commitId = '1asdasd2';
 
-        $positionsData = ['position' => $position, 'original_position' => $position, 'original_commit_id' => $commitId];
-        $onePositionWrongData = ['position' => $position, 'original_position' => 123, 'original_commit_id' => $commitId];
-        $allWrongData = ['position' => 432, 'original_position' => 123, 'original_commit_id' => 'qweasdqwe121212'];
+        $positionsData = [
+            'position' => $position,
+            'original_position' => $position,
+            'original_commit_id' => $commitId,
+        ];
+        $onePositionWrongData = [
+            'position' => $position,
+            'original_position' => 123,
+            'original_commit_id' => $commitId,
+        ];
+        $allWrongData = [
+            'position' => 432,
+            'original_position' => 123,
+            'original_commit_id' => 'qweasdqwe121212',
+        ];
 
         return [
-            'alles richtig' => [[$allWrongData, $positionsData], $position, 5, [$positionsData]],
-            'eine position falsch' => [[$allWrongData, $onePositionWrongData], $position, 5, [$onePositionWrongData]],
-            'positions falsch' => [[$allWrongData, $positionsData], 5, 5, []],
+            'alles richtig' => [[$allWrongData, $positionsData], $position, '5', [$positionsData]],
+            'eine position falsch' => [
+                [$allWrongData, $onePositionWrongData],
+                $position,
+                '5',
+                [$onePositionWrongData],
+            ],
+            'positions falsch' => [[$allWrongData, $positionsData], 5, '5', []],
             'original_commit_id falsch' => [[$allWrongData, $positionsData], $position, $commitId, []],
         ];
     }
@@ -42,15 +59,24 @@ class CommentFilterTest extends TestCase
     /**
      * @test
      * @dataProvider filterForStaleCommentsDoesExactlyThatDataProvider
+     *
+     * @param array  $mockedComments
+     * @param int    $mockedPosition
+     * @param string $mockedCommitId
+     * @param array  $expectedResult
      */
-    public function filterForStaleCommentsDoesExactlyThat($mockedComments, $mockedPosition, $mockedCommitId, $expectedResult)
-    {
+    public function filterForStaleCommentsDoesExactlyThat(
+        $mockedComments,
+        $mockedPosition,
+        $mockedCommitId,
+        $expectedResult
+    ): void {
         $result = $this->subject->filterForStaleComments($mockedComments, $mockedPosition, $mockedCommitId);
 
         self::assertSame($expectedResult, $result);
     }
 
-    public function filterForOwnCommentsDoesExactlyThatDataProvider() : array
+    public function filterForOwnCommentsDoesExactlyThatDataProvider(): array
     {
         $path = 'asdasd';
         $login = '1asdasd2';
@@ -69,8 +95,12 @@ class CommentFilterTest extends TestCase
      * @test
      * @dataProvider filterForOwnCommentsDoesExactlyThatDataProvider
      */
-    public function filterForOwnCommentsDoesExactlyThat($mockedComments, $mockedPath, $mockedUser, $expectedResult)
-    {
+    public function filterForOwnCommentsDoesExactlyThat(
+        $mockedComments,
+        $mockedPath,
+        $mockedUser,
+        $expectedResult
+    ): void {
         $result = $this->subject->filterForOwnComments($mockedComments, $mockedPath, $mockedUser);
 
         self::assertSame($expectedResult, $result);

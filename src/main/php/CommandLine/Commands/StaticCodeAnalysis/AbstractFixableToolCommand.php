@@ -34,8 +34,6 @@ abstract class AbstractFixableToolCommand extends Command
 
     /**
      * Builds InputDefinition for Command.
-     *
-     * @return InputDefinition
      */
     protected function buildInputDefinition() : InputDefinition
     {

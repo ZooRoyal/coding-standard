@@ -12,14 +12,12 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 
 class ForbiddenChangesCommand extends Command
 {
-    /** @var DiffCheckableFileFinder */
-    private $diffCheckableFileFinder;
+    private DiffCheckableFileFinder $diffCheckableFileFinder;
     /** @var string */
-    private $blacklistToken = '.dontChangeFiles';
+    private const BLACKLIST_TOKEN = '.dontChangeFiles';
     /** @var string */
-    private $whitelistToken = '.doChangeFiles';
-    /** @var Environment */
-    private $environment;
+    private const WHITELIST_TOKEN = '.doChangeFiles';
+    private Environment $environment;
 
     /**
      * ForbiddenChangesCommand constructor.
@@ -39,14 +37,14 @@ class ForbiddenChangesCommand extends Command
     /**
      * {@inheritdoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('checks:forbidden-changes');
         $this->setDescription('Checks for unwanted code changes.');
         $this->setHelp(
             'This tool checks if there where changes made to files. If a parent directory contains a '
-            . ' ' . $this->blacklistToken . ' file the tools will report the violation. Changes in subdirectories of a '
-            . 'marked directory may be allowed by placing a ' . $this->whitelistToken . ' file in the subdirectory.'
+            . ' ' . self::BLACKLIST_TOKEN . ' file the tools will report the violation. Changes in subdirectories of a '
+            . 'marked directory may be allowed by placing a ' . self::WHITELIST_TOKEN . ' file in the subdirectory.'
             . ' Use parameter to determine if this should be handled as Warning or not.'
         );
         $this->setDefinition(
@@ -83,7 +81,7 @@ class ForbiddenChangesCommand extends Command
         $output->writeln('Checking diff to ' . $targetBranch . ' for forbidden changes.');
 
         $wrongfullyChangedFiles = $this->diffCheckableFileFinder
-            ->findFiles([], $this->whitelistToken, $this->blacklistToken, $targetBranch)->getFiles();
+            ->findFiles([], self::WHITELIST_TOKEN, self::BLACKLIST_TOKEN, $targetBranch)->getFiles();
 
         $this->publishFindingsToUser($output, $wrongfullyChangedFiles);
 
@@ -96,7 +94,7 @@ class ForbiddenChangesCommand extends Command
      * @param OutputInterface $output
      * @param string[]        $wrongfullyChangedFiles
      */
-    private function publishFindingsToUser(OutputInterface $output, array $wrongfullyChangedFiles)
+    private function publishFindingsToUser(OutputInterface $output, array $wrongfullyChangedFiles): void
     {
         if (empty($wrongfullyChangedFiles)) {
             $output->writeln('All good!');

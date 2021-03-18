@@ -37,7 +37,7 @@ class DiffCheckableFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findFilesWithoutTargetBranchMakesNoSense()
+    public function findFilesWithoutTargetBranchMakesNoSense(): void
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionCode(1553857649);
@@ -47,7 +47,7 @@ class DiffCheckableFileFinderTest extends TestCase
     /**
      * @test
      */
-    public function findDiffByGitDiff()
+    public function findDiffByGitDiff(): void
     {
         $mockedTargetBranch = 'blaBranch';
         $mockedAllowedFileEndings = ['blaFilter'];

@@ -13,12 +13,12 @@ use function Safe\json_encode;
 
 class TestEnvironmentInstallation
 {
-    private static TestEnvironmentInstallation $instance;
     private Filesystem $filesystem;
     private string $installationPath;
     private string $composerJsonPath = '';
     private string $composerPath;
     private bool $isInstalled = false;
+    private static TestEnvironmentInstallation $instance;
 
     /**
      * The Constructor is private because this is a Singleton.
@@ -35,8 +35,6 @@ class TestEnvironmentInstallation
 
     /**
      * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
-     *
-     * @return TestEnvironmentInstallation
      */
     public static function getInstance(): TestEnvironmentInstallation
     {
@@ -51,12 +49,10 @@ class TestEnvironmentInstallation
      *
      * @param string $composerTemplatePath
      *
-     * @return TestEnvironmentInstallation
-     *
      * @throws RuntimeException
      * @throws BadMethodCallException
      */
-    public function addComposerJson(string $composerTemplatePath): TestEnvironmentInstallation
+    public function addComposerJson(string $composerTemplatePath): self
     {
         if (!is_file($composerTemplatePath)) {
             throw new RuntimeException($composerTemplatePath . ' is not a valid path.', 1605083728);
@@ -72,8 +68,6 @@ class TestEnvironmentInstallation
 
     /**
      * Get the path of the current composer-template.json which will be used.
-     *
-     * @return string
      *
      * @throws RuntimeException
      */
@@ -98,10 +92,8 @@ class TestEnvironmentInstallation
 
     /**
      * Actually install the test environment.
-     *
-     * @return $this
      */
-    public function installComposerInstance(): TestEnvironmentInstallation
+    public function installComposerInstance(): self
     {
         $this->filesystem->mkdir($this->installationPath);
         $composerTemplate = json_decode(file_get_contents($this->getComposerJson()), true);
@@ -122,10 +114,8 @@ class TestEnvironmentInstallation
 
     /**
      * Removes the test environment completely
-     *
-     * @return $this
      */
-    public function removeInstallation(): TestEnvironmentInstallation
+    public function removeInstallation(): self
     {
         $this->filesystem->remove($this->installationPath);
         $this->isInstalled = false;

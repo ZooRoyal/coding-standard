@@ -197,8 +197,6 @@ class PHPStanAdapterTest extends TestCase
 
     /**
      * Instantiates mock object for environment dependency with default behavior.
-     *
-     * @return void
      */
     private function prepareMockedEnvironment(): void
     {

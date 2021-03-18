@@ -47,7 +47,7 @@ class PHPMessDetectorCommandTest extends TestCase
     /**
      * @test
      */
-    public function configure()
+    public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(PHPMessDetectorCommand::class, $this->subjectParameters)->makePartial();
@@ -63,7 +63,7 @@ class PHPMessDetectorCommandTest extends TestCase
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value) {
+                    function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();
@@ -89,7 +89,7 @@ class PHPMessDetectorCommandTest extends TestCase
     /**
      * @test
      */
-    public function writeViolationsToOutput()
+    public function writeViolationsToOutput(): void
     {
         $mockedTargetBranch = '';
         $expectedExitCode = 0;
@@ -118,7 +118,7 @@ class PHPMessDetectorCommandTest extends TestCase
      *
      * @param string $mockedTargetBranch
      */
-    private function prepareInputInterfaceMock(string $mockedTargetBranch)
+    private function prepareInputInterfaceMock(string $mockedTargetBranch): void
     {
         $this->mockedInputInterface->shouldReceive('getOption')->once()
             ->with('target')->andReturn($mockedTargetBranch);

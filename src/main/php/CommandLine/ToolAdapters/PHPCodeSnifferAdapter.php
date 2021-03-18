@@ -47,7 +47,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
         $tool = 'PHPCS';
         $prefix = $tool . ' : ';
@@ -62,7 +62,7 @@ class PHPCodeSnifferAdapter extends AbstractBlackAndWhitelistAdapter implements 
     /**
      * {@inheritDoc}
      */
-    public function fixViolations($targetBranch = ''): ?int
+    public function fixViolations($targetBranch = ''): int
     {
         $tool = 'PHPCBF';
         $prefix = $tool . ' : ';

@@ -11,18 +11,16 @@ class ProcessRunner
      * Runs a shell command as single Process and returns the reseult.
      *
      * @param string $command
-     * @param string|string[]|null ...$arguments Multiple strings interpreted as Arguments
-     *
-     * @return string
+     * @param string ...$arguments Multiple strings interpreted as Arguments
      */
-    public function runAsProcess(string $command, ...$arguments): string
+    public function runAsProcess(string $command, string ...$arguments): string
     {
         $version = Versions::getVersion('symfony/process');
         if ((int) $version[1] <= 3) {
             /** @phpstan-ignore-next-line */
             $process = new Process($command . ' ' . implode(' ', $arguments));
         } else {
-            $process = new Process(array_merge(explode(' ', $command), $arguments));
+            $process = new Process([...explode(' ', $command), ...$arguments]);
         }
         $process->setTimeout(null);
         $process->setIdleTimeout(60);
@@ -42,8 +40,6 @@ class ProcessRunner
      * Runs a shell command as single Process and returns the reseult.
      *
      * @param string $command
-     *
-     * @return Process
      */
     public function runAsProcessReturningProcessObject(string $command): Process
     {

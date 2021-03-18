@@ -12,10 +12,12 @@ use DI\Annotation\Injectable;
 class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements ToolAdapterInterface
 {
     protected string $blacklistToken = '.dontMessDetectPHP';
-    /** @var string[] */
+    /** @var array<string> */
     protected array $allowedFileEndings = ['.php'];
     protected string $blacklistGlue = ',';
     protected string $whitelistGlue = ',';
+    /** @var string */
+    private const TOOL_SHORT_NAME = 'PHPMD';
 
     /**
      * {@inheritDoc}
@@ -36,14 +38,13 @@ class PHPMessDetectorAdapter extends AbstractBlackAndWhitelistAdapter implements
     /**
      * {@inheritDoc}
      */
-    public function writeViolationsToOutput($targetBranch = ''): ?int
+    public function writeViolationsToOutput($targetBranch = ''): int
     {
-        $toolShortName = 'PHPMD';
-        $prefix = $toolShortName . ' : ';
+        $prefix = self::TOOL_SHORT_NAME . ' : ';
         $fullMessage = $prefix . 'Running full check';
         $diffMessage = $prefix . 'Running check on diff';
 
-        $exitCode = $this->runTool($targetBranch, $fullMessage, $toolShortName, $diffMessage);
+        $exitCode = $this->runTool($targetBranch, $fullMessage, self::TOOL_SHORT_NAME, $diffMessage);
 
         return $exitCode;
     }

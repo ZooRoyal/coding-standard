@@ -16,7 +16,7 @@ class EventDispatcherFactory
 {
     private Container $container;
     /** @var array<string> */
-    private array $subscribers = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
+    private const SUBSCRIBERS = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
 
     /**
      * EventDispatcherFactory constructor.
@@ -30,14 +30,12 @@ class EventDispatcherFactory
 
     /**
      * This method returns the EventDispatcher prehooked with all EventSubscribers used in coding-standard cli.
-     *
-     * @return EventDispatcher
      */
     public function build(): EventDispatcher
     {
         $eventDispatcher = new EventDispatcher();
 
-        foreach ($this->subscribers as $subscriber) {
+        foreach (self::SUBSCRIBERS as $subscriber) {
             $eventDispatcher->addSubscriber($this->container->get($subscriber));
         }
 
