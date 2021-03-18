@@ -50,7 +50,7 @@ class GitPathsExcluderTest extends TestCase
             $forgedExcludedDirectories
         );
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d -mindepth 2 -name .git';
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git';
 
         $forgedCommandResult = $this->forgedRootDirectory
             . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[0]
@@ -84,7 +84,7 @@ class GitPathsExcluderTest extends TestCase
             ),
         ];
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d -mindepth 2 -name .git'
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git'
             . ' -not -path "./' . $forgedAlreadyExcluded[0] . '" -not -path "./' . $forgedAlreadyExcluded[1] . '"';
 
         $forgedCommandResult = $this->forgedRootDirectory
@@ -109,7 +109,7 @@ class GitPathsExcluderTest extends TestCase
     {
         $expectedResult = [];
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d -mindepth 2 -name .git';
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git';
 
         $forgedCommandResult = '';
 
