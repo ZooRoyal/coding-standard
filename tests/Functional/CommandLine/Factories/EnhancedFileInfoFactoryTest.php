@@ -43,6 +43,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromPathToDirectoryCreatesFromPath(): void
     {
@@ -51,6 +53,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromPathCreatesFromAbsolutPath(): void
     {
@@ -59,6 +63,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromNonCannonicalPath(): void
     {
@@ -77,6 +83,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromPathCreatesRelativToComposerPath(): void
     {
@@ -93,6 +101,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromPathReturnsSameObjectsForSameFiles(): void
     {
@@ -104,6 +114,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromArrayOfPathsReturnsArrayOfEnhancedFileInfo(): void
     {
@@ -137,6 +149,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromArrayOfPathsContinuesWorkEvenIfAPathDoesNotExist(): void
     {
@@ -163,6 +177,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
 
     /**
      * @test
+     * @runInSeparateProcess
+     * @preserveGlobalState  disabled
      */
     public function buildFromPathThrowsExceptionIfFileDoesNotExist(): void
     {

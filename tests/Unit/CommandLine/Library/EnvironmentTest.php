@@ -58,6 +58,9 @@ class EnvironmentTest extends TestCase
 
     /**
      * @test
+     *
+     * @runInSeparateProcess
+     * @preserveGlobalState  false
      */
     public function getVendorPath(): void
     {
