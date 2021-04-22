@@ -2,6 +2,7 @@
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
 
+use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -35,11 +36,12 @@ class TerminalCommandRunnerTest extends TestCase
 
     /**
      * @test
+     * @medium
      */
     public function runRelaysOutputOfCommand(): void
     {
         $this->mockedOutput->shouldReceive('write')->once()->with(
-            'Reading ./composer.json' . PHP_EOL,
+            Matchers::startsWith('Reading ./composer.json'),
             false,
             Output::OUTPUT_RAW
         );
