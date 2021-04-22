@@ -66,6 +66,7 @@ class TerminalCommandFinderTest extends TestCase
 
         $this->expectException(TerminalCommandNotFoundException::class);
         $this->expectExceptionCode(1595949828);
+        $this->expectErrorMessageMatches('/^Bnlablalbal could not be found in path or by npm.*/');
 
         $this->subject->findTerminalCommand($forgedCommand);
     }

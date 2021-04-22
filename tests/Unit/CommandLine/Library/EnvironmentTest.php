@@ -200,7 +200,8 @@ class EnvironmentTest extends TestCase
             ->with('git', 'branch', '-a', '--contains', $mockedBranch)->andReturn('a');
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git', 'cat-file', '-t', H::containsString($mockedBranch))->andReturn('commit');
+            ->with('git', 'cat-file', '-t', H::either(H::containsString($mockedBranch))->andAlso(H::endsWith('^')))
+            ->andReturn('commit');
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->with('git', 'branch', '-a', '--contains', $mockedBranch . '^')->andReturn('a' . PHP_EOL . 'b');
