@@ -56,7 +56,7 @@ class ExclusionDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateAddsExclusionToTerminalCommand()
+    public function decorateAddsExclusionToTerminalCommand(): void
     {
         $forgedMockedRealPath = 'wubwub';
         $forgedToken = '.asdasdqweqwe';
@@ -86,7 +86,7 @@ class ExclusionDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToOtherTerminalCommands()
+    public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
         $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);

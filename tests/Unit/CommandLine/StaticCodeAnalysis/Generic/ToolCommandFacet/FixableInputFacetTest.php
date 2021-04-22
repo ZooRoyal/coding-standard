@@ -7,7 +7,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 class FixableInputFacetTest extends TestCase
 {
-    public function testGetInputDefinition()
+    public function testGetInputDefinition(): void
     {
         $subject = new FixableInputFacet();
 

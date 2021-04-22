@@ -33,7 +33,7 @@ abstract class AbstractToolCommand extends Command
      *
      * @throws RuntimeException
      */
-    public function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         $output->writeln(PHP_EOL . '<comment>Running ' . $this->terminalCommandName . '</comment>');
 

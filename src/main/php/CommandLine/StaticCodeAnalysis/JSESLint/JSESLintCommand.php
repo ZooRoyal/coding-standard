@@ -20,7 +20,7 @@ class JSESLintCommand extends FixingToolCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('sca:eslint');
@@ -35,7 +35,7 @@ class JSESLintCommand extends FixingToolCommand
     /**
      * {@inheritDoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('eslint');
@@ -57,7 +57,7 @@ class JSESLintCommand extends FixingToolCommand
      *
      * @Inject
      */
-    public function injectDependenciesCommand(Container $container, TerminalCommandFinder $terminalCommandFinder)
+    public function injectDependenciesCommand(Container $container, TerminalCommandFinder $terminalCommandFinder): void
     {
         $this->terminalCommandFinder = $terminalCommandFinder;
         $this->terminalCommand = $container->make(TerminalCommand::class);

@@ -59,7 +59,7 @@ class VerbosityDecoratorTest extends TestCase
         bool $isQuiet,
         int $verboseRuns,
         int $quietRuns
-    ) {
+    ): void {
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
 
         $this->mockedInput->shouldReceive('getOption')->atLeast()->once()->with('verbose')->andReturn($isVerbose);
@@ -88,7 +88,7 @@ class VerbosityDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToOtherTerminalCommands()
+    public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
         $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);

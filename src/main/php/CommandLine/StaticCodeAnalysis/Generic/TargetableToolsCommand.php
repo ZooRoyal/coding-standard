@@ -6,7 +6,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 abstract class TargetableToolsCommand extends AbstractToolCommand
 {
-    /** @var TargetableInputFacet */
     private TargetableInputFacet $targetableFacet;
 
     public function __construct(TargetableInputFacet $targetableFacet, string $name = null)
@@ -15,7 +14,7 @@ abstract class TargetableToolsCommand extends AbstractToolCommand
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setDefinition($this->targetableFacet->getInputDefinition());
     }

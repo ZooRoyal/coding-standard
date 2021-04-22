@@ -42,7 +42,7 @@ class ExtensionDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateAddsAllowedFileExtensionsToTerminalCommand()
+    public function decorateAddsAllowedFileExtensionsToTerminalCommand(): void
     {
         $forgedAllowedFileEndings = ['asd', 'qwe'];
 
@@ -67,7 +67,7 @@ class ExtensionDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToOtherTerminalCommands()
+    public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
         $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);

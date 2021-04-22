@@ -12,7 +12,7 @@ class PHPCodeSnifferCommand extends FixingToolCommand
     protected string $exclusionListToken = '.dontSniffPHP';
     protected array $allowedFileEndings = ['php'];
 
-    public function configure()
+    public function configure(): void
     {
         parent::configure();
         $this->setName('sca:sniff');

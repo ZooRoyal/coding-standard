@@ -15,7 +15,7 @@ class PHPStanCommand extends TargetableToolsCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('sca:stan');

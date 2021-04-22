@@ -45,7 +45,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
     /**
      * @test
      */
-    public function configureSetsCorrectAttributes()
+    public function configureSetsCorrectAttributes(): void
     {
         self::assertSame('sca:eslint', $this->subject->getName());
         self::assertSame('Run ESLint on JS files.', $this->subject->getDescription());
@@ -85,7 +85,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
     /**
      * @test
      */
-    public function executeWrappsException()
+    public function executeWrappsException(): void
     {
         $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')->once()
             ->with('eslint');

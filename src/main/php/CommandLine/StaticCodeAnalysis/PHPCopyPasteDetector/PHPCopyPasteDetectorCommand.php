@@ -15,7 +15,7 @@ class PHPCopyPasteDetectorCommand extends AbstractToolCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:copy-paste-detect');
         $this->setDescription('Run PHP-CPD on PHP files.');

@@ -110,7 +110,7 @@ class TargetDecoratorTest extends TestCase
         $this->subject->decorate($this->mockedEvent);
     }
 
-    public function decorateAddsTargetsToTerminalCommandDataProvider()
+    public function decorateAddsTargetsToTerminalCommandDataProvider(): array
     {
         return [
             'autoTargeting' => [true, false, null],
@@ -122,7 +122,7 @@ class TargetDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToNonTargetedInput()
+    public function decorateShouldNotReactToNonTargetedInput(): void
     {
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
 

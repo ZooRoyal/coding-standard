@@ -53,7 +53,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     /**
      * @test
      */
-    public function getConfigPathReturnsConfigPath()
+    public function getConfigPathReturnsConfigPath(): void
     {
         $result = $this->subject->getConfigPath();
 
@@ -110,8 +110,6 @@ class PHPStanConfigGeneratorTest extends TestCase
      * @param string $forgedHamcrestPath
      * @param string $forgedMockeryPath
      * @param string $forgedFilePath
-     *
-     * @return Matcher
      */
     private function buildConfigMatcher(
         string $forgedHamcrestPath,

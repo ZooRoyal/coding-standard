@@ -22,7 +22,7 @@ class TerminalCommandRunner
         $output = $this->output;
         $process = $this->processRunner->createProcess(...$terminalCommand->toArray());
         $process->start(
-            static function () use ($process, $output) {
+            static function () use ($process, $output): void {
                 $errorIncrement = $process->getIncrementalErrorOutput();
                 $outputIncrement = $process->getIncrementalOutput();
                 if (!empty($errorIncrement)) {

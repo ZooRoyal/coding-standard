@@ -86,7 +86,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         return $targetingString;
     }
 
-    private function buildExtensionString()
+    private function buildExtensionString(): string
     {
         $extensionString = '';
         if ($this->fileExtensions !== []) {

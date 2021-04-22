@@ -27,7 +27,7 @@ class AllToolsCommand extends Command
         parent::__construct($name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         $this->setName('sca:all');
         $this->setDescription('Run all static code analysis tools.');
@@ -65,11 +65,8 @@ class AllToolsCommand extends Command
      * @param array<InputOption> $inputOptions
      * @param InputInterface     $input
      * @param OutputInterface    $output
-     *
-     * @return int|mixed
-     * @throws \Exception
      */
-    private function executeSubcommands(array $inputOptions, InputInterface $input, OutputInterface $output)
+    private function executeSubcommands(array $inputOptions, InputInterface $input, OutputInterface $output): int
     {
         $commands = $this->getApplication()->all('sca');
 

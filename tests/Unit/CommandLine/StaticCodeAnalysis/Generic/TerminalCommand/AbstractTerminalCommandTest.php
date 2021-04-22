@@ -34,7 +34,7 @@ class AbstractTerminalCommandTest extends TestCase
     /**
      * @test
      */
-    public function toStringCallsCompileCycle()
+    public function toStringCallsCompileCycle(): void
     {
         $this->subject->shouldReceive('compile')->once();
         $this->mockedOutput->shouldReceive('writeln')->once()
@@ -50,7 +50,7 @@ class AbstractTerminalCommandTest extends TestCase
     /**
      * @test
      */
-    public function toArrayCallsCompileCycle()
+    public function toArrayCallsCompileCycle(): void
     {
         $this->subject->shouldReceive('compile')->once();
         $this->mockedOutput->shouldReceive('writeln')->once()
@@ -66,7 +66,7 @@ class AbstractTerminalCommandTest extends TestCase
     /**
      * @test
      */
-    public function compileExceptionWillBeCought()
+    public function compileExceptionWillBeCought(): void
     {
         $forgedException = new Exception();
         $this->expectException(RuntimeException::class);

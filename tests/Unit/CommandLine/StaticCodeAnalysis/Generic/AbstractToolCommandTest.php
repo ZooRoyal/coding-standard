@@ -85,7 +85,7 @@ abstract class AbstractToolCommandTest extends TestCase
     /**
      * @test
      */
-    public function executeWrappsException()
+    public function executeWrappsException(): void
     {
         $this->expectException(Exception::class);
         $this->expectExceptionCode(1617786765);

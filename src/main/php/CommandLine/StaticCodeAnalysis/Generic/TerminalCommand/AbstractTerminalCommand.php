@@ -52,7 +52,7 @@ abstract class AbstractTerminalCommand implements TerminalCommand
      *
      * @Inject
      */
-    public function injectDependenciesAbstractTerminalCommand(OutputInterface $output)
+    public function injectDependenciesAbstractTerminalCommand(OutputInterface $output): void
     {
         $this->output = $output;
     }

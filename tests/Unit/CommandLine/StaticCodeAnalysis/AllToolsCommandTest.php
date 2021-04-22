@@ -26,15 +26,12 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
  */
 class AllToolsCommandTest extends TestCase
 {
-    /** @var AllToolsCommand */
     private AllToolsCommand $subject;
     /** @var MockInterface|FixableInputFacet */
     private FixableInputFacet $mockedFixableInputFacet;
     /** @var MockInterface|TargetableInputFacet */
     private TargetableInputFacet $mockedTargetableInputFacet;
-    /** @var InputOption */
     private InputOption $forgedFixableOption;
-    /** @var InputOption */
     private InputOption $forgedTargetableOption;
     /** @var MockInterface|InputInterface */
     private InputInterface $mockedInput;
@@ -184,13 +181,11 @@ class AllToolsCommandTest extends TestCase
      * Creates a closure to make sure that all parameters are set
      *
      * @param array<string,string> $optionsAndValues
-     *
-     * @return Closure
      */
     private function assertCorrectParameterOptions(array $optionsAndValues): Closure
     {
         return Mockery::on(
-            static function (ArrayInput $sut) use ($optionsAndValues) {
+            static function (ArrayInput $sut) use ($optionsAndValues): bool {
                 foreach ($optionsAndValues as $option => $value) {
                     MatcherAssert::assertThat($sut->getParameterOption(['--' . $option], H::equalTo($value)));
                 }

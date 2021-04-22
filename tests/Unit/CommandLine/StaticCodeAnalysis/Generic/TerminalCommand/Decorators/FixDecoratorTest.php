@@ -49,7 +49,7 @@ class FixDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateAddsFixingFlagToTerminalCommandIfTrue()
+    public function decorateAddsFixingFlagToTerminalCommandIfTrue(): void
     {
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(true);
@@ -65,7 +65,7 @@ class FixDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateNotChangeFixingFlagIfFalse()
+    public function decorateNotChangeFixingFlagIfFalse(): void
     {
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(false);
@@ -80,7 +80,7 @@ class FixDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToOtherTerminalCommands()
+    public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
         $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);

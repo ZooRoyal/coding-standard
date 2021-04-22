@@ -14,7 +14,7 @@ class PHPParallelLintCommand extends TargetableToolsCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('sca:parallel-lint');
@@ -36,7 +36,7 @@ class PHPParallelLintCommand extends TargetableToolsCommand
      *
      * @Inject
      */
-    public function injectDependenciesCommand(Container $container)
+    public function injectDependenciesCommand(Container $container): void
     {
         $this->terminalCommand = $container->make(TerminalCommand::class);
     }

@@ -55,7 +55,7 @@ class JSStyleLintCommandTest extends FixingToolCommandTest
     /**
      * @test
      */
-    public function executeWrappsException()
+    public function executeWrappsException(): void
     {
         $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')->once()
             ->with('stylelint');
@@ -65,7 +65,7 @@ class JSStyleLintCommandTest extends FixingToolCommandTest
     /**
      * @test
      */
-    public function configureSetsCorrectAttributes()
+    public function configureSetsCorrectAttributes(): void
     {
         self::assertSame('sca:stylelint', $this->subject->getName());
         self::assertSame('Run StyleLint on Less files.', $this->subject->getDescription());

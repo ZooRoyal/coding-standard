@@ -7,7 +7,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 abstract class FixingToolCommand extends TargetableToolsCommand
 {
-    /** @var FixableInputFacet */
     private FixableInputFacet $fixableFacet;
 
     public function __construct(
@@ -19,7 +18,7 @@ abstract class FixingToolCommand extends TargetableToolsCommand
         parent::__construct($targetableFacet, $name);
     }
 
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $fixableInputDefinition = $this->fixableFacet->getInputDefinition();

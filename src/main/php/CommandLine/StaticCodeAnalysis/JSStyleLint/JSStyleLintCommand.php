@@ -20,7 +20,7 @@ class JSStyleLintCommand extends FixingToolCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('sca:stylelint');
@@ -35,7 +35,7 @@ class JSStyleLintCommand extends FixingToolCommand
     /**
      * {@inheritDoc}
      */
-    public function execute(InputInterface $input, OutputInterface $output): int
+    public function execute(InputInterface $input, OutputInterface $output): ?int
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('stylelint');

@@ -15,7 +15,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
     /**
      * {@inheritDoc}
      */
-    protected function configure()
+    protected function configure(): void
     {
         parent::configure();
         $this->setName('sca:mess-detect');
@@ -37,7 +37,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
      *
      * @Inject
      */
-    public function injectDependenciesCommand(Container $container)
+    public function injectDependenciesCommand(Container $container): void
     {
         $this->terminalCommand = $container->make(TerminalCommand::class);
     }
