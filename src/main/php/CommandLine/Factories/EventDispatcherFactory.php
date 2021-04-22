@@ -6,6 +6,11 @@ use DI\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExclusionDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExtensionDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\FixDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\VerbosityDecorator;
 
 /**
  * Class EventDispatcherFactory
@@ -14,9 +19,18 @@ use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPrecondit
  */
 class EventDispatcherFactory
 {
-    private Container $container;
     /** @var array<string> */
-    private const SUBSCRIBERS = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
+    private const SUBSCRIBERS
+        = [
+            GitCommandPreconditionChecker::class,
+            TerminalCommandPreconditionChecker::class,
+            ExclusionDecorator::class,
+            ExtensionDecorator::class,
+            FixDecorator::class,
+            TargetDecorator::class,
+            VerbosityDecorator::class,
+        ];
+    private Container $container;
 
     /**
      * EventDispatcherFactory constructor.

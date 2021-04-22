@@ -67,6 +67,7 @@ class EnhancedFileInfoFactory
     public function buildFromArrayOfPaths(array $pathNames): array
     {
         $enhancedFileInfoInstancesOrNull = array_map(
+            /* @phpstan-ignore-next-line */
             function ($value): ?EnhancedFileInfo {
                 try {
                     return $this->buildFromPath($value);
