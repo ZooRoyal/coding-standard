@@ -10,6 +10,11 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
 use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\Factories\EventDispatcherFactory;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExclusionDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExtensionDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\FixDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\VerbosityDecorator;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class EventDispatcherFactoryTest extends TestCase
@@ -18,21 +23,16 @@ class EventDispatcherFactoryTest extends TestCase
     /** @var array<MockInterface> */
     private array $subjectParameters;
     /** @var array<string> */
-    private array $subscribers = [GitCommandPreconditionChecker::class, TerminalCommandPreconditionChecker::class];
-
-    public function setUp(): void
-    {
-        $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(EventDispatcherFactory::class);
-        $this->subject = $buildFragments['subject'];
-        $this->subjectParameters = $buildFragments['parameters'];
-    }
-
-    protected function tearDown(): void
-    {
-        Mockery::close();
-        parent::tearDown();
-    }
+    private array $subscribers
+        = [
+            GitCommandPreconditionChecker::class,
+            TerminalCommandPreconditionChecker::class,
+            ExclusionDecorator::class,
+            ExtensionDecorator::class,
+            FixDecorator::class,
+            TargetDecorator::class,
+            VerbosityDecorator::class,
+        ];
 
     /**
      * @test
@@ -55,5 +55,19 @@ class EventDispatcherFactoryTest extends TestCase
 
         /** @phpstan-ignore-next-line */
         self::assertSame($result->mockery_getName(), $mockedEventDispatcher->mockery_getName());
+    }
+
+    public function setUp(): void
+    {
+        $subjectFactory = new SubjectFactory();
+        $buildFragments = $subjectFactory->buildSubject(EventDispatcherFactory::class);
+        $this->subject = $buildFragments['subject'];
+        $this->subjectParameters = $buildFragments['parameters'];
+    }
+
+    protected function tearDown(): void
+    {
+        Mockery::close();
+        parent::tearDown();
     }
 }

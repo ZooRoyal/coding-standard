@@ -11,7 +11,7 @@ use SebastianKnott\HamcrestObjectAccessor\HasProperty as HP;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\Github\Commands\PullCommentRefreshCommand;
 use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;

@@ -32,7 +32,7 @@ class TerminalCommandFinder
 
         if ($exitCode !== 0) {
             throw new TerminalCommandNotFoundException(
-                $commandName . ' could not be found in path or by npm',
+                ucfirst($commandName) . ' could not be found in path or by npm',
                 1595949828
             );
         }

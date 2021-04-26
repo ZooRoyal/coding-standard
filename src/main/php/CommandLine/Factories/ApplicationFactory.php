@@ -5,16 +5,16 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 use DI\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Zooroyal\CodingStandard\CommandLine\Commands\Checks\ForbiddenChangesCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\AllToolsCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\FindFilesToCheckCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSESLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\JSStyleLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCodeSnifferCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPCopyPasteDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPMessDetectorCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPParallelLintCommand;
-use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanCommand;
+use Zooroyal\CodingStandard\CommandLine\Checks\ForbiddenChangesCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\AllToolsCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\JSESLintCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSStyleLint\JSStyleLintCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPCodeSniffer\PHPCodeSnifferCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPCopyPasteDetector\PHPCopyPasteDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPMessDetector\PHPMessDetectorCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPParallelLint\PHPParallelLintCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPStan\PHPStanCommand;
 
 /**
  * Class ApplicationFactory
@@ -24,21 +24,22 @@ use Zooroyal\CodingStandard\CommandLine\Commands\StaticCodeAnalysis\PHPStanComma
  */
 class ApplicationFactory
 {
+    /** @var array<string> */
+    private const COMMANDS
+        = [
+            AllToolsCommand::class,
+            FindFilesToCheckCommand::class,
+            ForbiddenChangesCommand::class,
+            PHPCodeSnifferCommand::class,
+            PHPCopyPasteDetectorCommand::class,
+            PHPParallelLintCommand::class,
+            PHPMessDetectorCommand::class,
+            PHPStanCommand::class,
+            JSESLintCommand::class,
+            JSStyleLintCommand::class,
+        ];
     private EventDispatcherInterface $eventDispatcher;
     private Container $container;
-    /** @var array<string> */
-    private const COMMANDS = [
-        PHPParallelLintCommand::class,
-        PHPCodeSnifferCommand::class,
-        PHPStanCommand::class,
-        FindFilesToCheckCommand::class,
-        PHPMessDetectorCommand::class,
-        PHPCopyPasteDetectorCommand::class,
-        JSESLintCommand::class,
-        JSStyleLintCommand::class,
-        AllToolsCommand::class,
-        ForbiddenChangesCommand::class,
-    ];
 
     /**
      * ApplicationFactory constructor.
@@ -59,7 +60,7 @@ class ApplicationFactory
      */
     public function build(): Application
     {
-        $application = new Application();
+        $application = new Application('Coding-Standard');
         $application->setDispatcher($this->eventDispatcher);
 
         foreach (self::COMMANDS as $command) {

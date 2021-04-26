@@ -15,15 +15,7 @@ class ProcessRunner
      */
     public function runAsProcess(string $command, string ...$arguments): string
     {
-        $version = Versions::getVersion('symfony/process');
-        if ((int) $version[1] <= 3) {
-            /** @phpstan-ignore-next-line */
-            $process = new Process($command . ' ' . implode(' ', $arguments));
-        } else {
-            $process = new Process([...explode(' ', $command), ...$arguments]);
-        }
-        $process->setTimeout(null);
-        $process->setIdleTimeout(60);
+        $process = $this->createProcess($command, ...$arguments);
         $process->mustRun();
 
         $output = $process->getOutput();
@@ -43,16 +35,23 @@ class ProcessRunner
      */
     public function runAsProcessReturningProcessObject(string $command): Process
     {
+        $process = $this->createProcess($command);
+        $process->run();
+
+        return $process;
+    }
+
+    public function createProcess(string $command, string ...$arguments): Process
+    {
         $version = Versions::getVersion('symfony/process');
-        if ($version[1] <= 3) {
+        if ((int) $version[1] <= 3) {
             /** @phpstan-ignore-next-line */
-            $process = new Process($command);
+            $process = new Process(trim($command . ' ' . implode(' ', $arguments)));
         } else {
-            $process = new Process(explode(' ', $command));
+            $process = new Process([...explode(' ', $command), ...$arguments]);
         }
         $process->setTimeout(null);
-        $process->setIdleTimeout(60);
-        $process->run();
+        $process->setIdleTimeout(120);
 
         return $process;
     }
