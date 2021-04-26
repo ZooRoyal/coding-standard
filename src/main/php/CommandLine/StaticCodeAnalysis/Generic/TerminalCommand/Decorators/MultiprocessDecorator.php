@@ -26,7 +26,8 @@ class MultiprocessDecorator implements TerminalCommandDecorator
             return;
         }
 
-        $this->possibleProcesses = $this->possibleProcesses ?? (int) $this->processRunner->runAsProcess('nproc');
+        $this->possibleProcesses = $this->possibleProcesses
+            ?? (int) $this->processRunner->runAsProcess('getconf _NPROCESSORS_ONLN');
 
         $output = $genericEvent->getArgument(AbstractToolCommand::KEY_OUTPUT);
         $output->writeln(
