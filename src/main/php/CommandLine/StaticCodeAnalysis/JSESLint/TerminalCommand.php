@@ -129,7 +129,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $fixingString = '';
         if ($this->fixingMode === true) {
-            $fixingString = '-f ';
+            $fixingString = '--fix ';
         }
         return $fixingString;
     }

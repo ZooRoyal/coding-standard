@@ -100,7 +100,7 @@ class TerminalCommandTest extends TestCase
             'all' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install eslint --quiet -f --no-error-on-unmatched-pattern --config '
+                        'expectedCommand' => 'npx --no-install eslint --quiet --fix --no-error-on-unmatched-pattern --config '
                             . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/eslint/.eslintrc.js --ext qweasd --ext argh --ignore-path '
                             . self::FORGED_PACKAGE_DIRECTORY
@@ -159,7 +159,7 @@ class TerminalCommandTest extends TestCase
             'fixing' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install eslint -f --no-error-on-unmatched-pattern --config '
+                        'expectedCommand' => 'npx --no-install eslint --fix --no-error-on-unmatched-pattern --config '
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/eslint/.eslintrc.js --ignore-path '
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/eslint/.eslintignore '
                             . self::FORGED_RELATIV_ROOT,
