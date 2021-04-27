@@ -13,6 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\Factories\EventDispatcherFactory;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExclusionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExtensionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\FixDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\MultiprocessDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\VerbosityDecorator;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -32,6 +33,7 @@ class EventDispatcherFactoryTest extends TestCase
             FixDecorator::class,
             TargetDecorator::class,
             VerbosityDecorator::class,
+            MultiprocessDecorator::class,
         ];
 
     /**

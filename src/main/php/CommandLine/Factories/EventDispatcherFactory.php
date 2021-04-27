@@ -9,6 +9,7 @@ use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPrecondit
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExclusionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\ExtensionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\FixDecorator;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\MultiprocessDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\VerbosityDecorator;
 
@@ -29,6 +30,7 @@ class EventDispatcherFactory
             FixDecorator::class,
             TargetDecorator::class,
             VerbosityDecorator::class,
+            MultiprocessDecorator::class,
         ];
     private Container $container;
 

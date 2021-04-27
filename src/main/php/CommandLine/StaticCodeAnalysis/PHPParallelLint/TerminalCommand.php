@@ -6,9 +6,11 @@ use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\AbstractTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\ExcludingTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\FileExtensionTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\MultiprocessTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\ExcludingTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\FileExtensionTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\MultiprocessTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\TargetableTrait;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use function Safe\sprintf;
@@ -16,11 +18,12 @@ use function Safe\sprintf;
 class TerminalCommand extends AbstractTerminalCommand implements
     TargetableTerminalCommand,
     ExcludingTerminalCommand,
-    FileExtensionTerminalCommand
+    FileExtensionTerminalCommand,
+    MultiprocessTerminalCommand
 {
-    use TargetableTrait, ExcludingTrait, FileExtensionTrait;
+    use TargetableTrait, ExcludingTrait, FileExtensionTrait, MultiprocessTrait;
 
-    private const TEMPLATE = 'php %1$s -j 2%2$s%3$s%4$s';
+    private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
     private Environment $environment;
 
     public function __construct(Environment $environment)
@@ -43,6 +46,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $this->buildExcludingString(),
             $this->buildExtensionString(),
             $this->buildTargetingString(),
+            $this->maxConcurrentProcesses,
         );
 
         $this->command = $sprintfCommand;

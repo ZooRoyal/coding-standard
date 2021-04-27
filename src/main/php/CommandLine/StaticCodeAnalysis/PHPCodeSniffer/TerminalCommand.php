@@ -8,10 +8,12 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\ExcludingTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\FileExtensionTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\FixingTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\MultiprocessTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\ExcludingTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\FileExtensionTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\FixingTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\MultiprocessTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\TargetableTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\VerbosityTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\VerboseTerminalCommand;
@@ -23,11 +25,12 @@ class TerminalCommand extends AbstractTerminalCommand implements
     TargetableTerminalCommand,
     ExcludingTerminalCommand,
     FileExtensionTerminalCommand,
-    VerboseTerminalCommand
+    VerboseTerminalCommand,
+    MultiprocessTerminalCommand
 {
-    use TargetableTrait, FixingTrait, ExcludingTrait, FileExtensionTrait, VerbosityTrait;
+    use TargetableTrait, FixingTrait, ExcludingTrait, FileExtensionTrait, VerbosityTrait, MultiprocessTrait;
 
-    private const TEMPLATE = 'php %1$s %5$s%6$s--parallel=4 -p --standard=%2$s %3$s%4$s';
+    private const TEMPLATE = 'php %1$s %5$s%6$s--parallel=%7$d -p --standard=%2$s %3$s%4$s';
     private Environment $environment;
 
     public function __construct(Environment $environment)
@@ -56,6 +59,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $this->buildTargetingString(),
             $this->buildVerbosityString(),
             $this->buildExtensionString(),
+            $this->maxConcurrentProcesses,
         );
 
         $this->command = $sprintfCommand;

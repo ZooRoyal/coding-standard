@@ -67,6 +67,7 @@ class TerminalCommandTest extends TestCase
         $this->subject->addAllowedFileExtensions($data->getExtensions());
         $this->subject->addExclusions($data->getExcluded());
         $this->subject->addTargets($data->getTargets());
+        $this->subject->setMaximalConcurrentProcesses($data->getProcesses());
 
         $result = (string) $this->subject;
         $resultingArray = $this->subject->toArray();
@@ -100,7 +101,7 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/parallel-lint -j 2 --exclude a/ --exclude b/ -e qweasd,argh c d',
+                            . '/bin/parallel-lint -j 5 --exclude a/ --exclude b/ -e qweasd,argh c d',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -110,6 +111,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
+                        'processes' => 5,
                     ]
                 ),
             ],
@@ -117,7 +119,7 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/parallel-lint -j 2 .',
+                            . '/bin/parallel-lint -j 1 .',
                     ]
                 ),
             ],
@@ -125,7 +127,7 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/parallel-lint -j 2 --exclude a/ --exclude b/ .',
+                            . '/bin/parallel-lint -j 1 --exclude a/ --exclude b/ .',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -137,7 +139,7 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/parallel-lint -j 2 -e ts,js .',
+                            . '/bin/parallel-lint -j 1 -e ts,js .',
                         'extensions' => ['ts', 'js'],
                     ]
                 ),
@@ -146,11 +148,20 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/parallel-lint -j 2 c d',
+                            . '/bin/parallel-lint -j 1 c d',
                         'targets' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
+                    ]
+                ),
+            ],
+            'processes' => [
+                new TerminalCommandTestData(
+                    [
+                        'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
+                            . '/bin/parallel-lint -j 17 .',
+                        'processes' => 17,
                     ]
                 ),
             ],
