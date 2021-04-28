@@ -61,7 +61,13 @@ class TokenExcluder implements ExcluderInterface
         $rawExcludePathsByToken = explode(PHP_EOL, trim($finderResult));
         $absoluteDirectories = array_map('dirname', $rawExcludePathsByToken);
         $relativeDirectories = array_map(
-            static fn($value) => substr($value, strlen($rootDirectory) + 1),
+            static function ($value) use ($rootDirectory) {
+                $rootDirectoryLength = strlen($rootDirectory);
+                if (strlen($value) === $rootDirectoryLength) {
+                    return '.';
+                }
+                return substr($value, strlen($rootDirectory) + 1);
+            },
             $absoluteDirectories
         );
 

@@ -40,16 +40,6 @@ class TokenExcluderTest extends TestCase
     /**
      * @test
      */
-    public function getPathsToExcludeWithoutToken(): void
-    {
-        $result = $this->subject->getPathsToExclude([]);
-
-        self::assertSame([], $result);
-    }
-
-    /**
-     * @test
-     */
     public function getPathsToExcludeFinderFindsNothing(): void
     {
         $expectedResult = [];
@@ -58,6 +48,68 @@ class TokenExcluderTest extends TestCase
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with(Matchers::stringValue())->andReturn('');
+
+        $result = $this->subject->getPathsToExclude([], $forgedConfig);
+
+        self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getPathsToExcludeWithAlreadyExcluded(): void
+    {
+        $forgedAlreadyExcluded = ['asdasd', 'blubblub'];
+        $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
+        $forgedRemainingPaths = ['qweqwe'];
+        $expectedResult = [
+            new EnhancedFileInfo(
+                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
+                $this->forgedRootDirectory
+            ),
+        ];
+
+        $forgedConfig = ['token' => 'bla'];
+
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token']
+            . ' -not -path "./' . $forgedAlreadyExcluded[0] . '" -not -path "./' . $forgedAlreadyExcluded[1] . '"';
+
+        $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
+            . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
+            ->with($expectedCommand)->andReturn($forgedCommandResult);
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with($forgedRemainingPaths)->andReturn($expectedResult);
+
+        $result = $this->subject->getPathsToExclude($forgedAlreadyExcluded, $forgedConfig);
+
+        self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getPathsToExcludeWithDontFilesInRoot(): void
+    {
+        $forgedExcludedDirectories = ['.'];
+        $expectedResult = [new EnhancedFileInfo(
+            $this->forgedRootDirectory,
+            $this->forgedRootDirectory
+        )];
+
+        $forgedConfig = ['token' => 'bla'];
+
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token'];
+
+        $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
+            ->with($expectedCommand)->andReturn($forgedCommandResult);
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with($forgedExcludedDirectories)->andReturn($expectedResult);
 
         $result = $this->subject->getPathsToExclude([], $forgedConfig);
 
@@ -102,34 +154,10 @@ class TokenExcluderTest extends TestCase
     /**
      * @test
      */
-    public function getPathsToExcludeWithAlreadyExcluded(): void
+    public function getPathsToExcludeWithoutToken(): void
     {
-        $forgedAlreadyExcluded = ['asdasd', 'blubblub'];
-        $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
-        $forgedRemainingPaths = ['qweqwe'];
-        $expectedResult = [
-            new EnhancedFileInfo(
-                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
-                $this->forgedRootDirectory
-            ),
-        ];
+        $result = $this->subject->getPathsToExclude([]);
 
-        $forgedConfig = ['token' => 'bla'];
-
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token']
-            . ' -not -path "./' . $forgedAlreadyExcluded[0] . '" -not -path "./' . $forgedAlreadyExcluded[1] . '"';
-
-        $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
-            . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with($expectedCommand)->andReturn($forgedCommandResult);
-
-        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
-            ->once()->with($forgedRemainingPaths)->andReturn($expectedResult);
-
-        $result = $this->subject->getPathsToExclude($forgedAlreadyExcluded, $forgedConfig);
-
-        self::assertSame($expectedResult, $result);
+        self::assertSame([], $result);
     }
 }
