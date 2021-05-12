@@ -8,6 +8,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPCopyPasteDetector\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\TerminalCommandTestData;
@@ -23,10 +24,13 @@ class TerminalCommandTest extends TestCase
     private Environment $mockedEnvironment;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;
+    /** @var MockInterface|ProcessRunner */
+    private ProcessRunner $mockedProcessRunner;
 
     protected function setUp(): void
     {
         $this->mockedEnvironment = Mockery::mock(Environment::class);
+        $this->mockedProcessRunner = Mockery::mock(ProcessRunner::class);
         $this->mockedOutput = Mockery::mock(OutputInterface::class);
 
         $this->mockedEnvironment->shouldReceive('getPackageDirectory->getRealPath')
@@ -38,7 +42,7 @@ class TerminalCommandTest extends TestCase
         $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
             ->andReturn(self::FORGED_ABSOLUTE_VENDOR);
 
-        $this->subject = new TerminalCommand($this->mockedEnvironment);
+        $this->subject = new TerminalCommand($this->mockedEnvironment, $this->mockedProcessRunner);
         $this->subject->injectDependenciesAbstractTerminalCommand($this->mockedOutput);
     }
 
@@ -64,6 +68,13 @@ class TerminalCommandTest extends TestCase
                 OutputInterface::VERBOSITY_VERY_VERBOSE
             );
 
+        $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
+            ->with(
+                'find ' . self::FORGED_RELATIV_ROOT . ' -path \'' . self::FORGED_RELATIV_ROOT
+                . '/custom/plugins/*\' -name Installer.php -maxdepth 4'
+            )
+            ->andReturn('blabla/Installer.php' . PHP_EOL . 'blubblub/Installer.php' . PHP_EOL);
+
         $this->subject->addAllowedFileExtensions($data->getExtensions());
         $this->subject->addExclusions($data->getExcluded());
 
@@ -86,8 +97,10 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/phpcpd --fuzzy --suffix qweasd --suffix argh --exclude a/ --exclude b/ ' .
-                            '--exclude ZRBannerSlider.php --exclude Installer.php --exclude ZRPreventShipping.php .',
+                            . '/bin/phpcpd --fuzzy --suffix qweasd --suffix argh --exclude a/ --exclude b/ '
+                            . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
+                            . '--exclude blubblub/Installer.php .',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -100,8 +113,9 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/phpcpd --fuzzy ' .
-                            '--exclude ZRBannerSlider.php --exclude Installer.php --exclude ZRPreventShipping.php .',
+                            . '/bin/phpcpd --fuzzy --exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
+                            . '--exclude blabla/Installer.php --exclude blubblub/Installer.php .',
                     ]
                 ),
             ],
@@ -109,8 +123,10 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/phpcpd --fuzzy --exclude a/ --exclude b/ ' .
-                            '--exclude ZRBannerSlider.php --exclude Installer.php --exclude ZRPreventShipping.php .',
+                            . '/bin/phpcpd --fuzzy --exclude a/ --exclude b/ '
+                            . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
+                            . '--exclude blubblub/Installer.php .',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -122,8 +138,10 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
-                            . '/bin/phpcpd --fuzzy --suffix argh --suffix wub ' .
-                        '--exclude ZRBannerSlider.php --exclude Installer.php --exclude ZRPreventShipping.php .',
+                            . '/bin/phpcpd --fuzzy --suffix argh --suffix wub '
+                            . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
+                            . '--exclude blubblub/Installer.php .',
                         'extensions' => ['argh', 'wub'],
                     ]
                 ),
