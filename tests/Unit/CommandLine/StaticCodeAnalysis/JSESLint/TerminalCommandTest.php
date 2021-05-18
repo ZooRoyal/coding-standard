@@ -9,6 +9,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\TerminalCommandTestData;
@@ -75,9 +76,12 @@ class TerminalCommandTest extends TestCase
         foreach ($data->getExcluded() as $exclude) {
             $this->subject->addExclusions([$exclude]);
         }
-        foreach ($data->getTargets() as $target) {
-            $this->subject->addTargets([$target]);
+        if ($data->getTargets() !== null) {
+            foreach ($data->getTargets() as $target) {
+                $this->subject->addTargets([$target]);
+            }
         }
+
         $this->subject->addAllowedFileExtensions($data->getExtensions());
         $this->subject->setFixingMode($data->isFixing());
         $this->subject->addVerbosityLevel($data->getVerbosityLevel());
@@ -227,5 +231,19 @@ class TerminalCommandTest extends TestCase
             ],
 
         ];
+    }
+
+    /**
+     * @test
+     */
+    public function terminalCommandCompilationThrowsExceptionOnNoFilesToCheck(): void
+    {
+        $this->expectException(NoUsefulCommandFoundException::class);
+        $this->expectExceptionCode(1620831304);
+        $this->expectExceptionMessage('It makes no sense to sniff no files.');
+
+        $this->subject->addTargets([]);
+
+        $this->subject->__toString();
     }
 }

@@ -42,6 +42,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
+        $this->validateTargets();
         $esLintConfigPath = $this->environment->getPackageDirectory()->getRealPath() . '/config/eslint/';
 
         $sprintfCommand = sprintf(
@@ -109,7 +110,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildTargetingString(): string
     {
-        if ($this->targetedFiles !== []) {
+        if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles

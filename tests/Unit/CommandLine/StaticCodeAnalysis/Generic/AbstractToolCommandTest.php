@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 
@@ -97,5 +98,33 @@ abstract class AbstractToolCommandTest extends TestCase
             ->with(Mockery::any())->andThrow(new Exception());
 
         $this->subject->execute($this->mockedInput, $this->mockedOutput);
+    }
+
+    /**
+     * @test
+     */
+    public function executeWarnsAboutNoUsefulFilesToSniff(): void
+    {
+        $localMassage = 'Hamlo ich bin 1 problem';
+        $localCode = 123456;
+
+        $this->mockedOutput->shouldIgnoreMissing();
+        $this->mockedEventDispatcher->shouldIgnoreMissing();
+
+        $this->mockedOutput->shouldReceive('writeln')->once()
+            ->with('Skipping tool.');
+        $this->mockedOutput->shouldReceive('writeln')->once()
+            ->with(
+                'Reason to skip tool: ' . $localMassage . PHP_EOL . 'Code: ' . $localCode,
+                OutputInterface::VERBOSITY_VERBOSE
+            );
+
+        $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
+            ->with(Mockery::any())->andThrow(new NoUsefulCommandFoundException($localMassage, $localCode));
+
+        $result = $this->subject->execute($this->mockedInput, $this->mockedOutput);
+
+        //exitcode auf 0 prüfen
+        self::assertSame(0, $result);
     }
 }

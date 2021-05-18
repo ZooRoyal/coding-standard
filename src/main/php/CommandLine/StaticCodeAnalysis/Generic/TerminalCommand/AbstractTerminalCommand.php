@@ -77,6 +77,7 @@ abstract class AbstractTerminalCommand implements TerminalCommand
     /**
      * Triggers the compilation implemented in the child class.
      *
+     * @throws NoUsefulCommandFoundException
      * @throws RuntimeException
      */
     private function runCompilation(): void
@@ -84,6 +85,8 @@ abstract class AbstractTerminalCommand implements TerminalCommand
         $this->compiled = true;
         try {
             $this->compile();
+        } catch (NoUsefulCommandFoundException $exception) {
+            throw $exception;
         } catch (Exception $exception) {
             throw new RuntimeException('Something went wrong compiling a command', 1616426291, $exception);
         }

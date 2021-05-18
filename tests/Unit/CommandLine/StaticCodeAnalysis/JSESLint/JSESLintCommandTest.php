@@ -91,4 +91,14 @@ class JSESLintCommandTest extends FixingToolCommandTest
             ->with('eslint');
         parent::executeRunsTerminalCommand();
     }
+
+    /**
+     * @test
+     */
+    public function executeWarnsAboutNoUsefulFilesToSniff(): void
+    {
+        $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')->once()
+            ->with('eslint');
+        parent::executeWarnsAboutNoUsefulFilesToSniff();
+    }
 }
