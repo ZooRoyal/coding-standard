@@ -36,6 +36,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
+        $this->validateTargets();
+
         $this->phpstanConfigGenerator->writeConfigFile($this->output, $this->excludesFiles);
 
         $vendorPath = $this->environment->getVendorPath()->getRealPath();
@@ -77,7 +79,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildTargetingString(): string
     {
-        if ($this->targetedFiles !== []) {
+        if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles

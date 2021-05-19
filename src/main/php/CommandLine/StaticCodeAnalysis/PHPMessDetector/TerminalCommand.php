@@ -33,6 +33,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
+        $this->validateTargets();
+
         $vendorPath = $this->environment->getVendorPath()->getRealPath();
         $phpMessDetectorConfig = $this->environment->getPackageDirectory()->getRealPath()
             . '/config/phpmd/phpmd.xml';
@@ -74,7 +76,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildTargetingString(): string
     {
-        if ($this->targetedFiles !== []) {
+        if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRealPath(),
                 $this->targetedFiles

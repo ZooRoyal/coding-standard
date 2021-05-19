@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 
@@ -49,6 +50,14 @@ abstract class AbstractToolCommand extends Command
 
         try {
             $exitCode = $this->terminalCommandRunner->run($this->terminalCommand);
+        } catch (NoUsefulCommandFoundException $exception) {
+            $output->writeln('Skipping tool.');
+            $output->writeln(
+                'Reason to skip tool: ' . $exception->getMessage() . PHP_EOL
+                . 'Code: ' . $exception->getCode(),
+                OutputInterface::VERBOSITY_VERBOSE
+            );
+            $exitCode = 0;
         } catch (Exception $exception) {
             throw new RuntimeException(
                 'Something went wrong while executing a terminal command.',

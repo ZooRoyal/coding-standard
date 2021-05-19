@@ -45,6 +45,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
+        $this->validateTargets();
+
         $styleLintConfig = $this->environment->getPackageDirectory()->getRealPath()
             . '/config/stylelint/.stylelintrc';
 
@@ -97,7 +99,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildTargetingString(): string
     {
-        if ($this->targetedFiles !== []) {
+        if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles

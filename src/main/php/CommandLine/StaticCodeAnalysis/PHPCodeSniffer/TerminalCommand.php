@@ -43,6 +43,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
+        $this->validateTargets();
+
         $vendorPath = $this->environment->getVendorPath()->getRealPath();
         $phpCodeSnifferConfig = $this->environment->getPackageDirectory()->getRealPath()
             . '/config/phpcs/ZooRoyal/ruleset.xml';
@@ -117,7 +119,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildTargetingString(): string
     {
-        if ($this->targetedFiles !== []) {
+        if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles

@@ -11,7 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 class TerminalCommandTestData
 {
     private string $expectedCommand;
-    private array $targets = [];
+    private ?array $targets = null;
     private bool $fixingMode = false;
     private array $excluded = [];
     private int $verbosityLevel = OutputInterface::VERBOSITY_NORMAL;
@@ -54,7 +54,7 @@ class TerminalCommandTestData
         return $this->processes;
     }
 
-    public function getTargets(): array
+    public function getTargets(): ?array
     {
         return $this->targets;
     }

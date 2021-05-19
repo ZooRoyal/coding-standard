@@ -91,4 +91,14 @@ class JSStyleLintCommandTest extends FixingToolCommandTest
 
         self::assertSame(0, $result);
     }
+
+    /**
+     * @test
+     */
+    public function executeWarnsAboutNoUsefulFilesToSniff(): void
+    {
+        $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')->once()
+            ->with('stylelint');
+        parent::executeWarnsAboutNoUsefulFilesToSniff();
+    }
 }
