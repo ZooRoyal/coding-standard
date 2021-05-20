@@ -18,9 +18,16 @@ class PHPStanConfigGenerator
             'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
             'mockery/mockery' => '/library/helpers.php',
         ];
+    private const STATIC_DIRECTORIES_TO_SCAN
+        = [
+            '/Plugins',
+            '/custom/plugins',
+            '/custom/project',
+        ];
     private NeonAdapter $neonAdapter;
     private Filesystem $filesystem;
     private string $phpStanConfigPath;
+    private Environment $environment;
 
     public function __construct(
         NeonAdapter $neonAdapter,
@@ -29,6 +36,7 @@ class PHPStanConfigGenerator
     ) {
         $this->neonAdapter = $neonAdapter;
         $this->filesystem = $filesystem;
+        $this->environment = $environment;
         $this->phpStanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
     }
 
@@ -70,6 +78,7 @@ class PHPStanConfigGenerator
         $configValues = ['includes' => [$this->phpStanConfigPath . '.dist']];
         $configValues = $this->addFunctionsFiles($configValues, $output);
         $configValues = $this->addExcludedFiles($configValues, $exclusionList);
+        $configValues = $this->addStaticDirectoriesToScan($configValues);
 
         return $configValues;
     }
@@ -113,6 +122,26 @@ class PHPStanConfigGenerator
             $exclusionList
         );
         $configValues['parameters']['excludes_analyse'] = $directoryExcludedFilesStrings;
+        return $configValues;
+    }
+
+    /**
+     * Adds the list of static folders to scan if they exist.
+     *
+     * @param array<string,array<string|int,string|array<string>>> $configValues
+     *
+     * @return array<string,array<string|int,string|array<string>>>
+     */
+    private function addStaticDirectoriesToScan(array $configValues): array
+    {
+        foreach (self::STATIC_DIRECTORIES_TO_SCAN as $directory) {
+            $absolutePath = $this->environment->getRootDirectory()->getRealPath() . $directory;
+            if (!$this->filesystem->exists($absolutePath)) {
+                continue;
+            }
+
+            $configValues['parameters']['scanDirectories'][] = $absolutePath;
+        }
         return $configValues;
     }
 }
