@@ -1,0 +1,479 @@
+@startuml
+!pragma layout elk
+skinparam groupInheritance 2
+skinparam style strictuml
+
+set namespaceSeparator \\
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\PHPStanCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  
+  #configure ():void
+  +injectDependenciesCommand (container:Container):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\PHPStanCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand {
+  -phpstanConfigGenerator:mixed
+  -environment:mixed
+  
+  +<<create>> TerminalCommand (environment:Environment, phpstanConfigGenerator:PHPStanConfigGenerator)
+  #compile ():void
+  -buildVerbosityString ():string
+  -buildTargetingString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\PHPStanConfigGenerator
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\VerbosityTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPStan\\PHPStanConfigGenerator {
+  -neonAdapter:mixed
+  -filesystem:mixed
+  -phpStanConfigPath:mixed
+  -environment:mixed
+  
+  +<<create>> PHPStanConfigGenerator (neonAdapter:NeonAdapter, filesystem:Filesystem, environment:Environment)
+  +getConfigPath ():string
+  +writeConfigFile (output:OutputInterface, exclusionList:array):void
+  -generateConfig (output:OutputInterface, exclusionList:array):array
+  -addFunctionsFiles (configValues:array, output:OutputInterface):array
+  -addExcludedFiles (configValues:array, exclusionList:array):array
+  -addStaticDirectoriesToScan (configValues:array):array
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\FindFilesToCheckCommand {
+  -blacklistFactory:mixed
+  -adaptableFileFinder:mixed
+  
+  +<<create>> FindFilesToCheckCommand (blacklistFactory:ExclusionListFactory, adaptableFileFinder:AdaptableFileFinder)
+  +configure ():void
+  -buildInputDefinition ():InputDefinition
+  +execute (input:InputInterface, output:OutputInterface):int
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand {
+  -environment:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand (environment:Environment)
+  #compile ():void
+  -buildExcludingString ():string
+  -buildTargetingString ():string
+  -buildExtensionString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\MultiprocessTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\MultiprocessTerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\PHPParallelLintCommand {
+  #exclusionListToken:mixed
+  #allowedFileEndings:mixed
+  
+  #configure ():void
+  +injectDependenciesCommand (container:Container):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPParallelLint\\PHPParallelLintCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\PHPMessDetectorCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  
+  #configure ():void
+  +injectDependenciesCommand (container:Container):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\PHPMessDetectorCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand {
+  -environment:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand (environment:Environment)
+  #compile ():void
+  -buildExcludingString ():string
+  -buildTargetingString ():string
+  -buildExtensionString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPMessDetector\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\AllToolsCommand {
+  -injectedOptions:array<InputOption>
+  
+  +<<create>> AllToolsCommand (fixableFacet:FixableInputFacet, targetableFacet:TargetableInputFacet, name:string)
+  #configure ():void
+  +execute (input:InputInterface, output:OutputInterface):int
+  -executeSubcommands (inputOptions:array, input:InputInterface, output:OutputInterface):int
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\AllToolsCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\FixableInputFacet
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\AllToolsCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\TargetableInputFacet
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand {
+  -environment:mixed
+  -processRunner:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand (environment:Environment, processRunner:ProcessRunner)
+  #compile ():void
+  -buildExcludingString ():string
+  -buildExtensionsString ():string
+  -collapseExcludes (finderResultLines:array):string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\PHPCopyPasteDetectorCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  
+  #configure ():void
+  +injectDependenciesCommand (container:Container):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCopyPasteDetector\\PHPCopyPasteDetectorCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\AbstractToolCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\JSStyleLintCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  -terminalCommandFinder:mixed
+  
+  #configure ():void
+  +execute (input:InputInterface, output:OutputInterface):int
+  +injectDependenciesCommand (container:Container, terminalCommandFinder:TerminalCommandFinder):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\JSStyleLintCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand {
+  -environment:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand (environment:Environment)
+  #compile ():void
+  -buildVerbosityString ():string
+  -buildExcludingString ():string
+  -buildTargetingString ():string
+  -buildFixingString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FixingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\VerbosityTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FixingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSStyleLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\PHPCodeSnifferCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  
+  +configure ():void
+  +injectDependenciesCommand (container:Container):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\PHPCodeSnifferCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand {
+  -environment:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand (environment:Environment)
+  #compile ():void
+  -buildExtensionString ():string
+  -buildVerbosityString ():string
+  -buildExcludingString ():string
+  -buildTargetingString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FixingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\VerbosityTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\MultiprocessTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FixingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\PHPCodeSniffer\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\MultiprocessTerminalCommand
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand {
+  -fixableFacet:mixed
+  
+  +<<create>> FixingToolCommand (fixableFacet:FixableInputFacet, targetableFacet:TargetableInputFacet, name:string)
+  #configure ():void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\FixableInputFacet
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\TargetableInputFacet
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\ToolCommandInputFacet {
+  +getInputDefinition ():InputDefinition
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\TargetableInputFacet {
+  +getInputDefinition ():InputDefinition
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\TargetableInputFacet ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\ToolCommandInputFacet
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\FixableInputFacet {
+  +getInputDefinition ():InputDefinition
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\FixableInputFacet ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\ToolCommandInputFacet
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand {
+  +addTargets (targetedFiles:array):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\NoUsefulCommandFoundException {
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommandRunner {
+  -processRunner:mixed
+  -output:mixed
+  
+  +<<create>> TerminalCommandRunner (processRunner:ProcessRunner, output:OutputInterface)
+  +run (terminalCommand:Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand):int
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand {
+  #commandParts:array<string>
+  #command:mixed
+  #output:mixed
+  -compiled:mixed
+  
+  +__toString ():string
+  +toArray ():array
+  +injectDependenciesAbstractTerminalCommand (output:OutputInterface):void
+  {abstract} #compile ():void
+  -postCompile ():void
+  -runCompilation ():void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FixingTrait <<trait>> {
+  #fixingMode:mixed
+  
+  +setFixingMode (fixingMode:bool):void
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait <<trait>> {
+  #fileExtensions:mixed
+  
+  +addAllowedFileExtensions (fileExtensions:array):void
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\VerbosityTrait <<trait>> {
+  #verbosityLevel:mixed
+  -allowedValues:array<int>
+  
+  {final} +addVerbosityLevel (verbosityLevel:int):void
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait <<trait>> {
+  #targetedFiles:array<EnhancedFileInfo>|null
+  
+  {final} +addTargets (targetedFiles:array):void
+  -validateTargets ():void
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\MultiprocessTrait <<trait>> {
+  #maxConcurrentProcesses:mixed
+  
+  +setMaximalConcurrentProcesses (maxConcurrentProcesses:int):void
+}
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait <<trait>> {
+  #excludesFiles:array<EnhancedFileInfo>
+  
+  {final} +addExclusions (excludesFiles:array):void
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\ExclusionDecorator {
+  -exclusionListFactory:mixed
+  
+  +<<create>> ExclusionDecorator (exclusionListFactory:ExclusionListFactory)
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ():array
+  -verboseOutputExclusionList (exclusionList:array, output:OutputInterface):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\ExclusionDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\ExtensionDecorator {
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ()
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\ExtensionDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TargetDecorator {
+  -adaptableFileFinder:mixed
+  
+  +<<create>> TargetDecorator (adaptableFileFinder:AdaptableFileFinder)
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ()
+  -writeOutput (output:OutputInterface, gitChangeSet:GitChangeSet, targets:array):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TargetDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\MultiprocessDecorator {
+  -processRunner:mixed
+  -possibleProcesses:mixed
+  
+  +<<create>> MultiprocessDecorator (processRunner:ProcessRunner)
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ():array
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\MultiprocessDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\FixDecorator {
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ()
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\FixDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\VerbosityDecorator {
+  +decorate (genericEvent:GenericEvent):void
+  {static} +getSubscribedEvents ()
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\VerbosityDecorator ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Decorators\\TerminalCommandDecorator {
+  +decorate (genericEvent:GenericEvent):void
+}
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand {
+  +addExclusions (excludesFiles:array):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand {
+  +__toString ():string
+  +toArray ():array
+}
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand {
+  +addVerbosityLevel (verbosityLevel:int):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\MultiprocessTerminalCommand {
+  +setMaximalConcurrentProcesses (maxConcurrentProcesses:int):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\MultiprocessTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FixingTerminalCommand {
+  +setFixingMode (fixingMode:bool):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FixingTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+interface Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand {
+  +addAllowedFileExtensions (fileExtensions:array):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TerminalCommand
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand {
+  -targetableFacet:mixed
+  
+  +<<create>> TargetableToolsCommand (targetableFacet:TargetableInputFacet, name:string)
+  #configure ():void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand ----> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\ToolCommandFacet\\TargetableInputFacet
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TargetableToolsCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\AbstractToolCommand
+
+abstract class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\AbstractToolCommand {
+  #exclusionListToken:mixed
+  #allowedFileEndings:mixed
+  #terminalCommand:mixed
+  #terminalCommandName:mixed
+  -terminalCommandRunner:mixed
+  -eventDispatcher:mixed
+  
+  +execute (input:InputInterface, output:OutputInterface):int
+  +injectDependenciesToolCommand (terminalCommandRunner:TerminalCommandRunner, eventDispatcher:EventDispatcherInterface):void
+}
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\JSESLintCommand {
+  #exclusionListToken:string
+  #allowedFileEndings:mixed
+  -terminalCommandFinder:mixed
+  
+  #configure ():void
+  +execute (input:InputInterface, output:OutputInterface):int
+  +injectDependenciesCommand (container:Container, terminalCommandFinder:TerminalCommandFinder):void
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\JSESLintCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\FixingToolCommand
+
+class Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand {
+  -environment:mixed
+  
+  +<<create>> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand (environment:Environment)
+  #compile ():void
+  -buildExtensionString ():string
+  -buildVerbosityString ():string
+  -buildExcludingString ():string
+  -buildTargetingString ():string
+  -buildFixingString ():string
+}
+
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\AbstractTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\TargetableTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FixingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\ExcludingTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\FileExtensionTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ----|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\Traits\\VerbosityTrait
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FixingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\TargetableTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\ExcludingTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\VerboseTerminalCommand
+Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\JSESLint\\TerminalCommand ....|> Zooroyal\\CodingStandard\\CommandLine\\StaticCodeAnalysis\\Generic\\TerminalCommand\\FileExtensionTerminalCommand
+
+
+@enduml
