@@ -1,10 +1,10 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use SplObjectStorage;
 use Symfony\Component\Console\Exception\LogicException;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;

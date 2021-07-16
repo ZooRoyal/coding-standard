@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
@@ -34,10 +35,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string[]     $allowedFileEndings
-     * @param string       $blacklistToken
-     * @param string       $whitelistToken
-     * @param string|false $targetBranch
+     * @param string[]    $allowedFileEndings
      *
      * @throws InvalidArgumentException
      */
@@ -45,9 +43,9 @@ class DiffCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        $targetBranch = ''
-    ) : GitChangeSet {
-        if (empty($targetBranch)) {
+        ?string $targetBranch = null
+    ): GitChangeSet {
+        if ($targetBranch === null || $targetBranch === '') {
             throw new InvalidArgumentException(
                 'Finding a diff makes no sense without a target branch.',
                 1553857649
@@ -65,7 +63,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      *
      * @param string $targetBranch
      */
-    private function findFilesInDiffToTarget(string $targetBranch) : GitChangeSet
+    private function findFilesInDiffToTarget(string $targetBranch): GitChangeSet
     {
         $mergeBase = $this->processRunner->runAsProcess('git', 'merge-base', 'HEAD', $targetBranch);
 

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\Checks;
 
@@ -9,14 +10,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ForbiddenChangesCommand extends Command
 {
-    private DiffCheckableFileFinder $diffCheckableFileFinder;
     /** @var string */
     private const BLACKLIST_TOKEN = '.dontChangeFiles';
     /** @var string */
     private const WHITELIST_TOKEN = '.doChangeFiles';
+    private DiffCheckableFileFinder $diffCheckableFileFinder;
     private Environment $environment;
 
     /**
@@ -91,8 +93,8 @@ class ForbiddenChangesCommand extends Command
     /**
      * Communicates the result to the User.
      *
-     * @param OutputInterface $output
-     * @param string[]        $wrongfullyChangedFiles
+     * @param OutputInterface         $output
+     * @param array<EnhancedFileInfo> $wrongfullyChangedFiles
      */
     private function publishFindingsToUser(OutputInterface $output, array $wrongfullyChangedFiles): void
     {
@@ -105,5 +107,4 @@ class ForbiddenChangesCommand extends Command
             );
         }
     }
-
 }

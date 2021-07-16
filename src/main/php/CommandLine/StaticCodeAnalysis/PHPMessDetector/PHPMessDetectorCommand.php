@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPMessDetector;
 
 use DI\Annotation\Inject;
@@ -10,6 +10,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontMessDetectPHP';
+    /** @var array<string> */
     protected array $allowedFileEndings = ['php'];
 
     /**

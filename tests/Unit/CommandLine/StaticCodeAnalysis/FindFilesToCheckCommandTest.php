@@ -13,6 +13,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
@@ -62,6 +63,15 @@ class FindFilesToCheckCommandTest extends TestCase
     /**
      * @test
      */
+    public function checkIfCommandGetsConfigured(): void
+    {
+        $result = $this->subject->getDefinition()->getOptions();
+        self::assertNotEmpty($result);
+    }
+
+    /**
+     * @test
+     */
     public function configure(): void
     {
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
@@ -99,6 +109,46 @@ class FindFilesToCheckCommandTest extends TestCase
     /**
      * @test
      */
+    public function executeAutoDetectsTarget(): void
+    {
+        $allowedFileEndings = ['myFilter'];
+        $mockedBlacklistToken = 'myStopword';
+        $mockedWhitelistToken = 'myGoword';
+        $mockedGuessedTargetBranch = 'auto/target';
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
+
+        /** @var MockInterface|InputInterface $mockedInputInterface */
+        $mockedInputInterface = Mockery::mock(InputInterface::class);
+        /** @var MockInterface|OutputInterface $mockedOutputInterface */
+        $mockedOutputInterface = Mockery::mock(OutputInterface::class);
+
+        $this->prepareMockedInputInterface(
+            $mockedInputInterface,
+            $mockedBlacklistToken,
+            $mockedWhitelistToken,
+            $allowedFileEndings,
+            null,
+            false,
+            true
+        );
+
+        $this->subjectParameters[Environment::class]->shouldReceive('guessParentBranchAsCommitHash')
+            ->once()->andReturn($mockedGuessedTargetBranch);
+
+        $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
+            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedGuessedTargetBranch)
+            ->andReturn($mockedGitChangeSet);
+        $mockedGitChangeSet->shouldReceive('getFiles')->once()
+            ->withNoArgs()->andReturn($this->expectedArray);
+        $mockedOutputInterface->shouldReceive('writeln')->once()
+            ->with($this->expectedResult1 . PHP_EOL . $this->expectedResult2);
+
+        $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
+    }
+
+    /**
+     * @test
+     */
     public function executeInExclusionMode(): void
     {
         $mockedAllowedFileEndings = ['myFilter'];
@@ -128,15 +178,6 @@ class FindFilesToCheckCommandTest extends TestCase
 
         $result = $this->subject->execute($mockedInputInterface, $mockedOutputInterface);
         self::assertSame(0, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function checkIfCommandGetsConfigured(): void
-    {
-        $result = $this->subject->getDefinition()->getOptions();
-        self::assertNotEmpty($result);
     }
 
     /**
@@ -180,20 +221,16 @@ class FindFilesToCheckCommandTest extends TestCase
     /**
      * Prepare $mockedInputInterface for test.
      *
-     * @param MockInterface $mockedInputInterface
-     * @param string        $mockedBlacklistToken
-     * @param string        $mockedWhitelistToken
-     * @param string[]      $allowedFileEndings
-     * @param string        $mockedTargetBranch
-     * @param bool          $mockedExclusiveFlag
+     * @param array<string> $allowedFileEndings
      */
     private function prepareMockedInputInterface(
         MockInterface $mockedInputInterface,
         string $mockedBlacklistToken,
         string $mockedWhitelistToken,
         array $allowedFileEndings,
-        string $mockedTargetBranch,
-        bool $mockedExclusiveFlag
+        ?string $mockedTargetBranch = null,
+        bool $mockedExclusiveFlag = false,
+        bool $autoTargetValue = false
     ): void {
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('blacklist-token')->andReturn($mockedBlacklistToken);
@@ -201,10 +238,14 @@ class FindFilesToCheckCommandTest extends TestCase
             ->with('whitelist-token')->andReturn($mockedWhitelistToken);
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('allowed-file-endings')->andReturn($allowedFileEndings);
+        if ($autoTargetValue) {
+            $mockedInputInterface->shouldReceive('getOption')->never();
+        } else {
+            $mockedInputInterface->shouldReceive('getOption')->once()
+                ->with('target')->andReturn($mockedTargetBranch);
+        }
         $mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('target')->andReturn($mockedTargetBranch);
-        $mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('auto-target')->andReturn(false);
+            ->with('auto-target')->andReturn($autoTargetValue);
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('exclusionList')->andReturn($mockedExclusiveFlag);
     }

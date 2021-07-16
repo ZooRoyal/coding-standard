@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 use DI\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\ArgvInput;
@@ -9,9 +9,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ApplicationFactory;
 use Zooroyal\CodingStandard\CommandLine\Factories\EventDispatcherFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\GitPathsExcluder;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\StaticExcluder;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\GitPathsExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\StaticExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\TokenExcluder;
 use function DI\factory;
 use function DI\get;
 

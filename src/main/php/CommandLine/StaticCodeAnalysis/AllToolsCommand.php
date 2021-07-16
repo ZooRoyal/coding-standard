@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
@@ -18,7 +18,7 @@ class AllToolsCommand extends Command
     public function __construct(
         FixableInputFacet $fixableFacet,
         TargetableInputFacet $targetableFacet,
-        string $name = null
+        ?string $name = null
     ) {
         $this->injectedOptions = array_merge(
             $fixableFacet->getInputDefinition()->getOptions(),
@@ -50,7 +50,7 @@ class AllToolsCommand extends Command
 
         $inputOptions = array_filter(
             $unfilteredInputOptions,
-            static fn($value, $key) => !isset($defaultOptionValues[$key]) || $defaultOptionValues[$key] !== $value,
+            static fn($value, $key) => !array_key_exists($key, $defaultOptionValues) || $defaultOptionValues[$key] !== $value,
             ARRAY_FILTER_USE_BOTH
         );
 

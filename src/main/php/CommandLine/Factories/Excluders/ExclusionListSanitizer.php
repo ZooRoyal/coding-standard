@@ -1,6 +1,6 @@
 <?php
-
-namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
+declare(strict_types = 1);
+namespace Zooroyal\CodingStandard\CommandLine\Factories\Excluders;
 
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
@@ -33,7 +33,7 @@ class ExclusionListSanitizer
                     if ($key === $i) {
                         return true;
                     }
-                    return !$value->startsWith($item);
+                    return !$value->startsWith((string) $item);
                 },
                 ARRAY_FILTER_USE_BOTH
             );
