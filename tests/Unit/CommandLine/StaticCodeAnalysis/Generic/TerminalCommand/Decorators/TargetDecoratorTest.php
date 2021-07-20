@@ -20,7 +20,7 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 /**
- * This is a very buisy test and needs all the objects ;/
+ * This is a very busy test and needs all the objects ;/
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
