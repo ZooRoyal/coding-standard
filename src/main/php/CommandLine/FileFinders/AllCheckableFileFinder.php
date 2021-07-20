@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
@@ -33,16 +33,13 @@ class AllCheckableFileFinder implements FileFinderInterface
     /**
      * This function finds all files to check.
      *
-     * @param string[] $allowedFileEndings
-     * @param string $blacklistToken
-     * @param string $whitelistToken
-     * @param string|false $targetBranch
+     * @param string[]    $allowedFileEndings
      */
     public function findFiles(
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        $targetBranch = ''
+        ?string $targetBranch = null
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
         $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');

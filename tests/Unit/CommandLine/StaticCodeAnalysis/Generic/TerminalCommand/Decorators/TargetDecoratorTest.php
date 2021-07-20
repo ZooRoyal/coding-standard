@@ -9,15 +9,21 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\TargetableInputFacet;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
+/**
+ * This is a very busy test and needs all the objects ;/
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class TargetDecoratorTest extends TestCase
 {
     private TargetDecorator $subject;
@@ -82,6 +88,9 @@ class TargetDecoratorTest extends TestCase
         $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
         $mockedEnhancedFileInfos = [$mockedEnhancedFileInfo, $mockedEnhancedFileInfo];
 
+        $this->subjectParameters[Environment::class]->shouldReceive('guessParentBranchAsCommitHash')
+            ->withNoArgs()->andReturn($expectedTargetBranch);
+
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
 
         $this->mockedInput->shouldReceive('getOption')->once()
@@ -89,13 +98,7 @@ class TargetDecoratorTest extends TestCase
         $this->mockedInput->shouldReceive('getOption')->once()
             ->with(TargetableInputFacet::OPTION_TARGET)->andReturn($forgedTarget);
 
-        $this->mockedOutput->shouldReceive('writeln')->once()
-            ->with('<info>Checking diff to ' . $forgedCommitHash . '</info>', OutputInterface::VERBOSITY_NORMAL);
-        $this->mockedOutput->shouldReceive('writeln')->once()
-            ->with('<info>Following files will be checked</info>', OutputInterface::VERBOSITY_VERBOSE);
-        $this->mockedOutput->shouldReceive('writeln')->twice()
-            ->with($forgedRealPath, OutputInterface::VERBOSITY_VERBOSE);
-        $this->mockedOutput->shouldReceive('writeln')->once()->with('');
+        $this->prepareOutput($forgedCommitHash, $forgedRealPath);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
             ->with($this->forgedAllowedFileEndings, $this->forgedExclusionListToken, '', $expectedTargetBranch)
@@ -113,9 +116,9 @@ class TargetDecoratorTest extends TestCase
     public function decorateAddsTargetsToTerminalCommandDataProvider(): array
     {
         return [
-            'autoTargeting' => [true, false, null],
+            'autoTargeting' => [true, null, 'auto/targeted'],
             'targeted' => [false, 'origin/asdqwe', 'origin/asdqwe'],
-            'both' => [true, 'origin/asdqwe', null],
+            'both' => [true, 'origin/asdqwe', 'auto/targeted'],
         ];
     }
 
@@ -161,5 +164,19 @@ class TargetDecoratorTest extends TestCase
         $result = TargetDecorator::getSubscribedEvents();
 
         self::assertSame($expectedEvents, $result);
+    }
+
+    /**
+     * Prepares the mocked output for a diffed run.
+     */
+    private function prepareOutput(string $forgedCommitHash, string $forgedRealPath): void
+    {
+        $this->mockedOutput->shouldReceive('writeln')->once()
+            ->with('<info>Checking diff to ' . $forgedCommitHash . '</info>', OutputInterface::VERBOSITY_NORMAL);
+        $this->mockedOutput->shouldReceive('writeln')->once()
+            ->with('<info>Following files will be checked</info>', OutputInterface::VERBOSITY_VERBOSE);
+        $this->mockedOutput->shouldReceive('writeln')->twice()
+            ->with($forgedRealPath, OutputInterface::VERBOSITY_VERBOSE);
+        $this->mockedOutput->shouldReceive('writeln')->once()->with('');
     }
 }

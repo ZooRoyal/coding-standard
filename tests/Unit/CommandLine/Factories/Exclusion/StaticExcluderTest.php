@@ -7,7 +7,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\StaticExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\StaticExcluder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;

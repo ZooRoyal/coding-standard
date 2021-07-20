@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPCodeSniffer;
 
 use Symfony\Component\Console\Output\OutputInterface;
@@ -110,7 +110,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             );
             $excludingString .= implode(',', $excludesFilePaths);
             $excludingString .= ' ';
-        };
+        }
         return $excludingString;
     }
 

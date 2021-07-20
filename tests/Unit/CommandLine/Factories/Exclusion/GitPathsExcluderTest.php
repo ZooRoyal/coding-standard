@@ -6,7 +6,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\GitPathsExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\GitPathsExcluder;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
@@ -74,12 +74,15 @@ class GitPathsExcluderTest extends TestCase
      */
     public function getPathsToExcludeWithAlreadyExcluded(): void
     {
-        $forgedAlreadyExcluded = ['asdasd', 'blubblub'];
-        $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
-        $forgedRemainingPaths = ['qweqwe'];
+        $mockedEnhancedFileInfo1 = Mockery::mock(EnhancedFileInfo::class);
+        $mockedEnhancedFileInfo2 = Mockery::mock(EnhancedFileInfo::class);
+        $mockedEnhancedFileInfoRemaining = Mockery::mock(EnhancedFileInfo::class);
+        $forgedAlreadyExcluded = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfo2];
+        $forgedExcludedDirectories = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfoRemaining];
+        $forgedRemainingPaths = [$mockedEnhancedFileInfoRemaining];
         $expectedResult = [
             new EnhancedFileInfo(
-                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
+                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfoRemaining,
                 $this->forgedRootDirectory
             ),
         ];

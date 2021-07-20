@@ -13,42 +13,30 @@ use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 
 class PullCommentRefreshCommand extends Command
 {
-    private Client        $client;
-
-    private CommentFilter $commentFilter;
-
-    /** @var string */
     private const USER_NAME = 'user_name';
-    /** @var string */
     private const TOKEN = 'token';
-    /** @var string */
     private const ORGANISATION = 'organisation';
-    /** @var string */
     private const REPOSITORY = 'repository';
-    /** @var string */
     private const PULL_NUMBER = 'pullNumber';
-    /** @var string */
     private const COMMIT_ID = 'commitId';
-    /** @var string */
     private const BODY = 'body';
-    /** @var string */
     private const PATH = 'path';
-    /** @var string */
     private const POSITION = 'position';
-    /** @var string */
     private const ID = 'id';
+    private Client $client;
+    private CommentFilter $commentFilter;
 
     /**
      * GithubAddCommentCommand constructor.
      *
-     * @param Client $client
+     * @param Client        $client
      * @param CommentFilter $commentFilter
      */
     public function __construct(Client $client, CommentFilter $commentFilter)
     {
         parent::__construct();
 
-        $this->client        = $client;
+        $this->client = $client;
         $this->commentFilter = $commentFilter;
     }
 
@@ -83,7 +71,7 @@ class PullCommentRefreshCommand extends Command
     /**
      * Executes the current command.
      *
-     * @param InputInterface $input
+     * @param InputInterface  $input
      * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output): int
@@ -112,13 +100,13 @@ class PullCommentRefreshCommand extends Command
      */
     private function getCommentSets(array $arguments): array
     {
-        $login         = ($this->client->currentUser()->show())['login'];
-        $comments      = $this->client->pullRequest()->comments()->all(
+        $login = ($this->client->currentUser()->show())['login'];
+        $comments = $this->client->pullRequest()->comments()->all(
             $arguments[self::ORGANISATION],
             $arguments[self::REPOSITORY],
             $arguments[self::PULL_NUMBER]
         );
-        $ownComments   = $this->commentFilter->filterForOwnComments($comments, $arguments[self::PATH], $login);
+        $ownComments = $this->commentFilter->filterForOwnComments($comments, $arguments[self::PATH], $login);
         $staleComments = $this->commentFilter->filterForStaleComments(
             $ownComments,
             $arguments[self::POSITION],
@@ -155,9 +143,9 @@ class PullCommentRefreshCommand extends Command
     private function createComment(array $arguments): void
     {
         $parameter = [
-            self::BODY     => $arguments[self::BODY],
-            'commit_id'    => $arguments[self::COMMIT_ID],
-            self::PATH     => $arguments[self::PATH],
+            self::BODY => $arguments[self::BODY],
+            'commit_id' => $arguments[self::COMMIT_ID],
+            self::PATH => $arguments[self::PATH],
             self::POSITION => (int) $arguments[self::POSITION],
         ];
 

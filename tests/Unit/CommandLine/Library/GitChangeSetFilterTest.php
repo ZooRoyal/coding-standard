@@ -8,7 +8,7 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\LogicException;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;

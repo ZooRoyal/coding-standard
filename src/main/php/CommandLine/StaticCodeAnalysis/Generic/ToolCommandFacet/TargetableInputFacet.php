@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet;
 
 use Symfony\Component\Console\Input\InputDefinition;
@@ -26,7 +26,7 @@ class TargetableInputFacet implements ToolCommandInputFacet
                     InputOption::VALUE_REQUIRED,
                     'Finds Files which have changed since the current branch parted from the target branch '
                     . 'only. The Value has to be a commit-ish.',
-                    false
+                    null
                 ),
                 new InputOption(
                     self::OPTION_AUTO_TARGET,

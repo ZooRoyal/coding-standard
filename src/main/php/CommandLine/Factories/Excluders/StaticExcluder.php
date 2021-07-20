@@ -1,8 +1,9 @@
 <?php
-
-namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
+declare(strict_types = 1);
+namespace Zooroyal\CodingStandard\CommandLine\Factories\Excluders;
 
 use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExcluderInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
@@ -40,7 +41,7 @@ class StaticExcluder implements ExcluderInterface
     /**
      * This method searches for default directories and returns them if it finds them.
      *
-     * @param array<string> $alreadyExcludedPaths
+     * @param array<EnhancedFileInfo> $alreadyExcludedPaths
      * @param array<mixed>  $config
      *
      * @return array<EnhancedFileInfo>

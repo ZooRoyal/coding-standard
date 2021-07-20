@@ -88,7 +88,7 @@
     "test": "phpunit",
     "infection": [
       "@test",
-      "infection -n --threads=$(nproc) --only-covered --coverage=/tmp/phpunit --no-progress"
+      "infection -n --threads=$(nproc) --only-covered --skip-initial-tests --coverage=/tmp/phpunit --no-progress"
     ]
   },
   "config": {

@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic;
 
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\FixableInputFacet;
@@ -12,7 +12,7 @@ abstract class FixingToolCommand extends TargetableToolsCommand
     public function __construct(
         FixableInputFacet $fixableFacet,
         TargetableInputFacet $targetableFacet,
-        string $name = null
+        ?string $name = null
     ) {
         $this->fixableFacet = $fixableFacet;
         parent::__construct($targetableFacet, $name);

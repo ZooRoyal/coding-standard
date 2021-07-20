@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPParallelLint;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
@@ -68,7 +68,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
                 $this->excludesFiles
             );
             $excludingString .= implode(' ', $excludesFilePaths);
-        };
+        }
         return $excludingString;
     }
 

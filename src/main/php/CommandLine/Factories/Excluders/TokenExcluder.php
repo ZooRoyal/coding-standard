@@ -1,10 +1,12 @@
 <?php
-
-namespace Zooroyal\CodingStandard\CommandLine\Factories\Exclusion;
+declare(strict_types = 1);
+namespace Zooroyal\CodingStandard\CommandLine\Factories\Excluders;
 
 use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExcluderInterface;
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use function Safe\substr;
 
 class TokenExcluder implements ExcluderInterface
@@ -34,7 +36,7 @@ class TokenExcluder implements ExcluderInterface
      * This method searches for paths which contain a file by the name of $config['token']. It will not search in
      * $alreadyExcludedPaths to speed things up.
      *
-     * @param array<string> $alreadyExcludedPaths
+     * @param array<EnhancedFileInfo> $alreadyExcludedPaths
      * @param array<mixed>  $config
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array

@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis;
 
 use Symfony\Component\Console\Command\Command;
@@ -9,12 +9,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\Library\Environment;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class FindFilesToCheckCommand extends Command
 {
     private ExclusionListFactory $blacklistFactory;
     private AdaptableFileFinder $adaptableFileFinder;
+    private Environment $environment;
 
     /**
      * FindFilesToCheckCommand constructor.
@@ -24,10 +26,12 @@ class FindFilesToCheckCommand extends Command
      */
     public function __construct(
         ExclusionListFactory $blacklistFactory,
-        AdaptableFileFinder $adaptableFileFinder
+        AdaptableFileFinder $adaptableFileFinder,
+        Environment $environment
     ) {
         $this->blacklistFactory = $blacklistFactory;
         $this->adaptableFileFinder = $adaptableFileFinder;
+        $this->environment = $environment;
         parent::__construct();
     }
 
@@ -57,7 +61,7 @@ class FindFilesToCheckCommand extends Command
                     InputOption::VALUE_REQUIRED,
                     'Finds files which have changed since the current branch parted from the target branch '
                     . 'only. The Value has to be a commit-ish.',
-                    false
+                    null
                 ),
                 new InputOption(
                     'auto-target',
@@ -107,7 +111,9 @@ class FindFilesToCheckCommand extends Command
         $allowedFileEndings = $input->getOption('allowed-file-endings');
         $blacklistTokenInput = $input->getOption('blacklist-token');
         $whitelistTokenInput = $input->getOption('whitelist-token');
-        $targetBranch = $input->getOption('auto-target') ? null : $input->getOption('target');
+        $targetBranch = $input->getOption('auto-target')
+            ? $this->environment->guessParentBranchAsCommitHash()
+            : $input->getOption('target');
 
         if ($exclusionListInput === true) {
             $blacklist = $this->blacklistFactory->build($blacklistTokenInput);

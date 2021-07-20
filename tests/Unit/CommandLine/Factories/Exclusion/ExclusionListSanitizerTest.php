@@ -3,7 +3,7 @@
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\Exclusion;
 
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExclusionListSanitizer;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\ExclusionListSanitizer;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListSanitizerTest extends TestCase

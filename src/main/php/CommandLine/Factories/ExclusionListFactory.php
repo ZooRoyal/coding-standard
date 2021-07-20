@@ -1,10 +1,9 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use DI\Annotation\Inject;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExcluderInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExclusionListSanitizer;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\ExclusionListSanitizer;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactory

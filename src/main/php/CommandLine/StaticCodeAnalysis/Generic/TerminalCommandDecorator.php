@@ -1,6 +1,6 @@
 <?php
-
-namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators;
+declare(strict_types = 1);
+namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
