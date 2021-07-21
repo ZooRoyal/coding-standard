@@ -5,8 +5,8 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExcluderInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\Exclusion\ExclusionListSanitizer;
+use Zooroyal\CodingStandard\CommandLine\Factories\ExcluderInterface;
+use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\ExclusionListSanitizer;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 

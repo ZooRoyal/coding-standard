@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use ComposerLocator;
@@ -119,14 +119,16 @@ class Environment
      */
     private function getCountOfContainingBranches(string $targetCommit): int
     {
+        $process = $this->processRunner->runAsProcess(
+            self::GIT,
+            'branch',
+            '-a',
+            '--contains',
+            $targetCommit
+        );
+
         $numberOfContainingBranches = substr_count(
-            $this->processRunner->runAsProcess(
-                self::GIT,
-                'branch',
-                '-a',
-                '--contains',
-                $targetCommit
-            ),
+            $process,
             PHP_EOL
         );
 

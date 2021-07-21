@@ -1,5 +1,5 @@
 <?php
-
+declare(strict_types = 1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
@@ -47,22 +47,19 @@ class AdaptableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $blacklistToken = '',
         string $whitelistToken = '',
-        $targetBranch = ''
+        ?string $targetBranch = null
     ) : GitChangeSet {
-        if ($targetBranch !== false
-            && $targetBranch !== null
+        if ($targetBranch !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranch)
         ) {
             throw new InvalidArgumentException('Target ' . $targetBranch . ' is no valid commit-ish.', 1553766210);
         }
 
-        $finder = $targetBranch === false || $this->environment->isLocalBranchEqualTo($targetBranch)
+        $finder = $targetBranch === null || $this->environment->isLocalBranchEqualTo($targetBranch)
             ? $this->allCheckableFileFinder
             : $this->diffCheckableFileFinder;
 
-        $actualTargetBranch = $targetBranch ?? $this->environment->guessParentBranchAsCommitHash();
-
-        $result = $finder->findFiles($allowedFileEndings, $blacklistToken, $whitelistToken, $actualTargetBranch);
+        $result = $finder->findFiles($allowedFileEndings, $blacklistToken, $whitelistToken, $targetBranch);
 
         return $result;
     }

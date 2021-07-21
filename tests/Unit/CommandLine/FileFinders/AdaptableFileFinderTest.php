@@ -56,24 +56,22 @@ class AdaptableFileFinderTest extends TestCase
     {
         return [
             'targetBranch' => [
-                'targetBranchInput' => false,
+                'targetBranchInput' => 'bla',
+                'isCommitishValid' => true,
                 'isLocalBranch' => false,
-                'finder' => AllCheckableFileFinder::class,
+                'finder' => DiffCheckableFileFinder::class,
             ],
             'isLocalBranch' => [
-                'targetBranchInput' => true,
-                'isLocalBranch' => true,
-                'finder' => AllCheckableFileFinder::class,
-            ],
-            'both' => [
-                'targetBranchInput' => false,
+                'targetBranchInput' => 'blarg',
+                'isCommitishValid' => true,
                 'isLocalBranch' => true,
                 'finder' => AllCheckableFileFinder::class,
             ],
             'none' => [
-                'targetBranchInput' => true,
+                'targetBranchInput' => null,
+                'isCommitishValid' => false,
                 'isLocalBranch' => false,
-                'finder' => DiffCheckableFileFinder::class,
+                'finder' => AllCheckableFileFinder::class,
             ],
         ];
     }
@@ -82,13 +80,10 @@ class AdaptableFileFinderTest extends TestCase
      * @test
      *
      * @dataProvider findFilesCallsAllCheckableFileFinderDataProvider
-     *
-     * @param bool $targetBranchInput
-     * @param bool $isLocalBranch
-     * @param string $finder
      */
     public function findFilesCallsAllCheckableFileFinder(
-        bool $targetBranchInput,
+        ?string $targetBranchInput,
+        bool $isCommitishValid,
         bool $isLocalBranch,
         string $finder
     ): void {
@@ -98,7 +93,7 @@ class AdaptableFileFinderTest extends TestCase
         $expectedResult = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[GitInputValidator::class]->shouldReceive('isCommitishValid')
-            ->with($targetBranchInput)->andReturn(true);
+            ->with($targetBranchInput)->andReturn($isCommitishValid);
 
         $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')
             ->with($targetBranchInput)->andReturn($isLocalBranch);

@@ -33,8 +33,6 @@ jobs:
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
-            ${{ runner.os }}-codestyle-
-            ${{ runner.os }}-
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -45,8 +43,6 @@ jobs:
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
-            ${{ runner.os }}-codestyle-
-            ${{ runner.os }}-
 
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@v2
@@ -99,13 +95,12 @@ jobs:
         uses: actions/cache@v2
         env:
           cache-name: cache-composer
+          matrix-entries: ${{ matrix.composer_version }}-${{ matrix.composer_parameters }}
         with:
           path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
-          key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
+          key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ env.matrix-entries }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
-            ${{ runner.os }}-codestyle-${{ env.cache-name }}-
-            ${{ runner.os }}-codestyle-
-            ${{ runner.os }}-
+            ${{ runner.os }}-tests-${{ env.cache-name }}-${{ env.matrix-entries }}-
 
       - name: Cache node modules
         uses: actions/cache@v2
@@ -116,8 +111,6 @@ jobs:
           key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-tests-${{ env.cache-name }}-
-            ${{ runner.os }}-tests-
-            ${{ runner.os }}-
 
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@v2
