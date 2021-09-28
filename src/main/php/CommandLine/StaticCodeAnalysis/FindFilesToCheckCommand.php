@@ -20,9 +20,6 @@ class FindFilesToCheckCommand extends Command
 
     /**
      * FindFilesToCheckCommand constructor.
-     *
-     * @param ExclusionListFactory $blacklistFactory
-     * @param AdaptableFileFinder  $adaptableFileFinder
      */
     public function __construct(
         ExclusionListFactory $blacklistFactory,

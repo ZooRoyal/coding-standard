@@ -10,7 +10,6 @@ class ProcessRunner
     /**
      * Runs a shell command as single Process and returns the reseult.
      *
-     * @param string $command
      * @param string ...$arguments Multiple strings interpreted as Arguments
      */
     public function runAsProcess(string $command, string ...$arguments): string
@@ -30,8 +29,6 @@ class ProcessRunner
 
     /**
      * Runs a shell command as single Process and returns the reseult.
-     *
-     * @param string $command
      */
     public function runAsProcessReturningProcessObject(string $command): Process
     {

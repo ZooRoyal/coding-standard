@@ -17,10 +17,6 @@ class GitPathsExcluder implements ExcluderInterface
 
     /**
      * GitPathsExcluder constructor.
-     *
-     * @param Environment             $environment
-     * @param ProcessRunner           $processRunner
-     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
     public function __construct(
         Environment $environment,

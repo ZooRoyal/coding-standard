@@ -43,4 +43,7 @@
     <logging>
         <junit outputFile="/tmp/phpunit/junit.xml"/>
     </logging>
+    <php>
+        <env name="COMPOSER_MEMORY_LIMIT" value="-1" force="true" />
+    </php>
 </phpunit>

@@ -68,8 +68,10 @@ class TerminalCommandRunnerTest extends TestCase
     /**
      * @test
      * @dataProvider runReturnsExitCodeDataProvider
+     *
+     * @param array<string> $command
      */
-    public function runReturnsExitCode($command, $exitCode): void
+    public function runReturnsExitCode(array $command, int $exitCode): void
     {
         $this->mockedTerminalCommand->shouldReceive('toArray')->andReturn($command);
         $result = $this->subject->run($this->mockedTerminalCommand);

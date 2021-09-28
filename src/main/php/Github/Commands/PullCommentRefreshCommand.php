@@ -28,9 +28,6 @@ class PullCommentRefreshCommand extends Command
 
     /**
      * GithubAddCommentCommand constructor.
-     *
-     * @param Client        $client
-     * @param CommentFilter $commentFilter
      */
     public function __construct(Client $client, CommentFilter $commentFilter)
     {
@@ -70,9 +67,6 @@ class PullCommentRefreshCommand extends Command
 
     /**
      * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
@@ -96,7 +90,7 @@ class PullCommentRefreshCommand extends Command
     /**
      * Fetches filtered sets of necessary comments
      *
-     * @param array $arguments
+     * @param array<string|bool|int|float|array|null> $arguments
      */
     private function getCommentSets(array $arguments): array
     {
@@ -119,8 +113,8 @@ class PullCommentRefreshCommand extends Command
     /**
      * Removes comments from Github.
      *
-     * @param array $comments
-     * @param array $arguments
+     * @param array<mixed> $comments
+     * @param array<string|bool|int|float|array|null> $arguments
      */
     private function removeComments(array $comments, array $arguments): void
     {
@@ -136,7 +130,7 @@ class PullCommentRefreshCommand extends Command
     /**
      * Creates an comment by the given arguments from commandline.
      *
-     * @param array $arguments
+     * @param array<string|bool|int|float|array|null> $arguments
      *
      * @throws MissingArgumentException
      */
@@ -160,9 +154,9 @@ class PullCommentRefreshCommand extends Command
     /**
      * Updates an comment which is not stale by the given arguments from commandline.
      *
-     * @param array $ownComments
-     * @param array $staleComments
-     * @param array $arguments
+     * @param array<mixed> $ownComments
+     * @param array<mixed> $staleComments
+     * @param array<string|bool|int|float|array|null> $arguments
      *
      * @throws MissingArgumentException
      */

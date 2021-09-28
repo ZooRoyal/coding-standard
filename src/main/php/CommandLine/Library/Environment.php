@@ -63,8 +63,6 @@ class Environment
 
     /**
      * Compare if the HEAD of $target Branch equals the HEAD of the local branch.
-     *
-     * @param string|null $targetBranch
      */
     public function isLocalBranchEqualTo(?string $targetBranch): bool
     {
@@ -82,8 +80,6 @@ class Environment
 
     /**
      * Converts a commit-tish to a commit hash.
-     *
-     * @param string $branchName
      */
     private function commitishToHash(?string $branchName): string
     {
@@ -93,8 +89,6 @@ class Environment
     /**
      * This method searches the first parent commit which is part of another branch and returns this commit as merge base
      * with parent branch.
-     *
-     * @param string $branchName
      */
     public function guessParentBranchAsCommitHash(string $branchName = 'HEAD'): string
     {
@@ -114,8 +108,6 @@ class Environment
 
     /**
      * Calls git to retriev the count of branches this commit is part of.
-     *
-     * @param string $targetCommit
      */
     private function getCountOfContainingBranches(string $targetCommit): int
     {
@@ -137,8 +129,6 @@ class Environment
 
     /**
      * Returns true if $targetCommit commit-ish is a valid commit.
-     *
-     * @param string $targetCommit
      */
     private function isParentCommitishACommit(string $targetCommit): bool
     {

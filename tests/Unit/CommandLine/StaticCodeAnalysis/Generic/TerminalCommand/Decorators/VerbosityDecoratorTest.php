@@ -48,11 +48,6 @@ class VerbosityDecoratorTest extends TestCase
     /**
      * @test
      * @dataProvider decoradeAddsVerboseFlagIfApplicableDataProvider
-     *
-     * @param bool $isVerbose
-     * @param bool $isQuiet
-     * @param int  $verboseRuns
-     * @param int  $quietRuns
      */
     public function decoradeAddsVerboseFlagIfApplicable(
         bool $isVerbose,

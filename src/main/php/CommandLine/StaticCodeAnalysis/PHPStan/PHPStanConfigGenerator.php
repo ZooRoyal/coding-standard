@@ -51,7 +51,7 @@ class PHPStanConfigGenerator
     /**
      * Writes a custom config file just in time for PHPStan to read.
      *
-     * @param OutputInterface $output
+     * @param array<EnhancedFileInfo> $exclusionList
      */
     public function writeConfigFile(OutputInterface $output, array $exclusionList): void
     {
@@ -69,7 +69,7 @@ class PHPStanConfigGenerator
     /**
      * Adds function bootstraps to PHPStan config so imported functions won't show up as unknown.
      *
-     * @param OutputInterface $output
+     * @param array<EnhancedFileInfo> $exclusionList
      *
      * @return array<string,array<int|string,array<int,string>|string>>>
      */
@@ -88,7 +88,6 @@ class PHPStanConfigGenerator
      * unknown functions if this should fail.
      *
      * @param array<string,array<string>> $configValues
-     * @param OutputInterface             $output
      *
      * @return array<string,array<string|int,string|array<string>>>
      */
@@ -112,6 +111,7 @@ class PHPStanConfigGenerator
      * Adds the list of files to be excluded to the config.
      *
      * @param array<string,array<string|int,string|array<string>>> $configValues
+     * @param array<EnhancedFileInfo> $exclusionList
      *
      * @return array<string,array<string|int,string|array<string>>>
      */

@@ -16,9 +16,8 @@ class GitChangeSet
      * GitChangeSet constructor.
      *
      * @param array<EnhancedFileInfo> $files
-     * @param string $commitHash
      */
-    public function __construct(array $files, $commitHash = '')
+    public function __construct(array $files, string $commitHash = '')
     {
         $this->files = $files;
         $this->commitHash = $commitHash;

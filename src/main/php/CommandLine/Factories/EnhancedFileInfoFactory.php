@@ -17,8 +17,6 @@ class EnhancedFileInfoFactory
 
     /**
      * EnhancedFileInfoFactory constructor.
-     *
-     * @param ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {
@@ -31,8 +29,6 @@ class EnhancedFileInfoFactory
      *
      * SmartFileFactory does its best to  return the same instance of EnhancedFileInfo for a file.
      * It uses Inode to distinguish between Files.
-     *
-     * @param string $pathName
      *
      * @throws FileNotFoundException
      */
@@ -83,8 +79,6 @@ class EnhancedFileInfoFactory
 
     /**
      * Checks if file exists on filesystem and throws exception if not.
-     *
-     * @param string $pathName
      *
      * @throws InvalidArgumentException
      */

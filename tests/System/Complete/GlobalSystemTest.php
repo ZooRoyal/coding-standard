@@ -120,8 +120,6 @@ class GlobalSystemTest extends AsyncTestCase
     /**
      * Runs all coding-standard commands in test environment.
      *
-     * @param string $environmentDirectory
-     *
      * @return Generator|array<int|null>
      */
     // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
@@ -153,9 +151,6 @@ class GlobalSystemTest extends AsyncTestCase
 
     /**
      * Runs a coding-standard command in test environment
-     *
-     * @param string $environmentDirectory
-     * @param string $command
      *
      * @return Generator|int
      */

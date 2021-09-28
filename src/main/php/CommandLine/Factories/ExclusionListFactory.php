@@ -17,7 +17,6 @@ class ExclusionListFactory
      * BlacklistFactory constructor.
      *
      * @param array<ExcluderInterface> $excluders
-     * @param ExclusionListSanitizer   $exclusionListSanitizer
      *
      * @Inject({"excluders" = "excluders"})
      */
@@ -29,9 +28,6 @@ class ExclusionListFactory
 
     /**
      * This function computes a blacklist of directories which should not be checked.
-     *
-     * @param string $token
-     * @param bool   $deDuped
      *
      * @return array<EnhancedFileInfo>
      */

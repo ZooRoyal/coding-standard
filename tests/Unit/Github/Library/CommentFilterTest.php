@@ -60,16 +60,14 @@ class CommentFilterTest extends TestCase
      * @test
      * @dataProvider filterForStaleCommentsDoesExactlyThatDataProvider
      *
-     * @param array  $mockedComments
-     * @param int    $mockedPosition
-     * @param string $mockedCommitId
-     * @param array  $expectedResult
+     * @param array<array<mixed>> $mockedComments
+     * @param array<array<mixed>> $expectedResult
      */
     public function filterForStaleCommentsDoesExactlyThat(
-        $mockedComments,
-        $mockedPosition,
-        $mockedCommitId,
-        $expectedResult
+        array $mockedComments,
+        int $mockedPosition,
+        string $mockedCommitId,
+        array $expectedResult
     ): void {
         $result = $this->subject->filterForStaleComments($mockedComments, $mockedPosition, $mockedCommitId);
 
@@ -86,20 +84,23 @@ class CommentFilterTest extends TestCase
 
         return [
             'alles richtig' => [[$allWrongData, $positionData], $path, $login, [$positionData]],
-            'login falsch' => [[$allWrongData, $positionData], $path, 5, []],
-            'path falsch' => [[$allWrongData, $positionData], 5, $login, []],
+            'login falsch' => [[$allWrongData, $positionData], $path, 'qqqq', []],
+            'path falsch' => [[$allWrongData, $positionData], 'wwww', $login, []],
         ];
     }
 
     /**
      * @test
      * @dataProvider filterForOwnCommentsDoesExactlyThatDataProvider
+     *
+     * @param array<array<mixed>> $mockedComments
+     * @param array<array<mixed>> $expectedResult
      */
     public function filterForOwnCommentsDoesExactlyThat(
-        $mockedComments,
-        $mockedPath,
-        $mockedUser,
-        $expectedResult
+        array $mockedComments,
+        string $mockedPath,
+        string $mockedUser,
+        array $expectedResult
     ): void {
         $result = $this->subject->filterForOwnComments($mockedComments, $mockedPath, $mockedUser);
 

@@ -43,9 +43,6 @@ class ApplicationFactory
 
     /**
      * ApplicationFactory constructor.
-     *
-     * @param Container                $container
-     * @param EventDispatcherInterface $eventDispatcher
      */
     public function __construct(
         Container $container,

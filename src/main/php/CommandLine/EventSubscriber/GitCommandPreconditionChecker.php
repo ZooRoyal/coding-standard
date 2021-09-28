@@ -22,8 +22,6 @@ class GitCommandPreconditionChecker implements EventSubscriberInterface
 
     /**
      * CommandPreconditionChecker constructor.
-     *
-     * @param ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {

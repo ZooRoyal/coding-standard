@@ -80,6 +80,10 @@ class AllToolsCommandTest extends TestCase
     /**
      * @test
      * @dataProvider executeCallsAllCommandsDataProvider
+     *
+     * @param array<string,string> $commands
+     * @param array<string,string|bool> $optionsAndValues
+     * @param array<int,int> $exitCodes
      */
     public function executeCallsAllCommands(
         array $commands,

@@ -15,10 +15,6 @@ class AllCheckableFileFinder implements FileFinderInterface
 
     /**
      * AllCheckableFileFinder constructor.
-     *
-     * @param ProcessRunner $processRunner
-     * @param GitChangeSetFilter $gitChangeSetFilter
-     * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
         ProcessRunner $processRunner,
