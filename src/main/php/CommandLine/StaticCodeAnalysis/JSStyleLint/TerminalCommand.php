@@ -32,8 +32,6 @@ class TerminalCommand extends AbstractTerminalCommand implements
 
     /**
      * TerminalCommand constructor.
-     *
-     * @param Environment $environment
      */
     public function __construct(Environment $environment)
     {

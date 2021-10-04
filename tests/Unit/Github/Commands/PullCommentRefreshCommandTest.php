@@ -198,6 +198,7 @@ class PullCommentRefreshCommandTest extends TestCase
         $this->subject->execute($this->mockedInputInterface, $this->mockedOutputInterface);
     }
 
+    /** @param array<int,array<string,string>> $staleCommentsToReturn */
     private function prepareMocksForFiltering(array $staleCommentsToReturn): void
     {
         $mockedAllComments = [$this->mockedOwnStaleComment, $this->mockedOwnCurrentComment];

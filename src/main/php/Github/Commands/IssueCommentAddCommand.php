@@ -28,8 +28,6 @@ class IssueCommentAddCommand extends Command
 
     /**
      * GithubAddCommentCommand constructor.
-     *
-     * @param Client $client
      */
     public function __construct(Client $client)
     {
@@ -69,9 +67,6 @@ class IssueCommentAddCommand extends Command
 
     /**
      * Executes the current command.
-     *
-     * @param InputInterface  $input
-     * @param OutputInterface $output
      */
     public function execute(InputInterface $input, OutputInterface $output): int
     {

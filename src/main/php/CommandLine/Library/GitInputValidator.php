@@ -10,15 +10,16 @@ class GitInputValidator
 
     /**
      * GitInputValidator constructor.
-     *
-     * @param ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {
         $this->processRunner = $processRunner;
     }
 
-    public function isCommitishValid($commitish) : bool
+    /**
+     * Checks if a commit-ish is known to the local git repository.
+     */
+    public function isCommitishValid(?string $commitish) : bool
     {
         if ($commitish === null) {
             return false;

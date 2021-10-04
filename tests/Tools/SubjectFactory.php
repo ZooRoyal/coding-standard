@@ -11,8 +11,6 @@ class SubjectFactory
     /**
      * Builds Subject and it's constructor parameters.
      *
-     * @param string $className
-     *
      * @return array<string,object|array<MockInterface>>
      */
     public function buildSubject(string $className): array

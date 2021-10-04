@@ -23,9 +23,6 @@ class ForbiddenChangesCommand extends Command
 
     /**
      * ForbiddenChangesCommand constructor.
-     *
-     * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param Environment             $environment
      */
     public function __construct(
         DiffCheckableFileFinder $diffCheckableFileFinder,
@@ -93,7 +90,6 @@ class ForbiddenChangesCommand extends Command
     /**
      * Communicates the result to the User.
      *
-     * @param OutputInterface         $output
      * @param array<EnhancedFileInfo> $wrongfullyChangedFiles
      */
     private function publishFindingsToUser(OutputInterface $output, array $wrongfullyChangedFiles): void

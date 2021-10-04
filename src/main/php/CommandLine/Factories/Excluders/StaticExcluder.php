@@ -26,9 +26,6 @@ class StaticExcluder implements ExcluderInterface
 
     /**
      * StaticExcluder constructor.
-     *
-     * @param Environment             $environment
-     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
     public function __construct(
         Environment $environment,

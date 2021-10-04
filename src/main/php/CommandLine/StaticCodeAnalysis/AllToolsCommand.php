@@ -62,9 +62,7 @@ class AllToolsCommand extends Command
     /**
      * This method calls execute of all commands with the prefix sca excluding sca:all.
      *
-     * @param array<InputOption> $inputOptions
-     * @param InputInterface     $input
-     * @param OutputInterface    $output
+     * @param array<array|bool|float|int|string|null> $inputOptions
      */
     private function executeSubcommands(array $inputOptions, InputInterface $input, OutputInterface $output): int
     {

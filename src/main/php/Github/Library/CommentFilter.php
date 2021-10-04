@@ -7,9 +7,7 @@ class CommentFilter
     /**
      * Finds all stale comments which need to be deleted.
      *
-     * @param array  $comments
-     * @param int    $position
-     * @param string $commitId
+     * @param array<mixed> $comments
      */
     public function filterForStaleComments(array $comments, int $position, string $commitId) : array
     {
@@ -27,9 +25,7 @@ class CommentFilter
     /**
      * Finds all comments which are written by the current user.
      *
-     * @param array       $comments
-     * @param string      $path
-     * @param string      $login
+     * @param array<mixed> $comments
      */
     public function filterForOwnComments(array $comments, string $path, string $login) : array
     {

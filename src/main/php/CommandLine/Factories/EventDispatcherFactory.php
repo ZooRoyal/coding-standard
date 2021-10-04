@@ -36,8 +36,6 @@ class EventDispatcherFactory
 
     /**
      * EventDispatcherFactory constructor.
-     *
-     * @param Container $container
      */
     public function __construct(Container $container)
     {

@@ -9,8 +9,6 @@ class TerminalCommandFinder
     private ProcessRunner $processRunner;
     /**
      * TerminalCommandFinder constructor.
-     *
-     * @param ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {
@@ -19,8 +17,6 @@ class TerminalCommandFinder
 
     /**
      * Finds path to command.
-     *
-     * @param string $commandName
      *
      * @throws TerminalCommandNotFoundException
      */

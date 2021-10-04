@@ -81,8 +81,6 @@ class TargetDecorator implements TerminalCommandDecorator
      * This method writes the targeted files list to the verbose output. It informs the user about the targeted git
      * branch.
      *
-     * @param OutputInterface         $output
-     * @param GitChangeSet            $gitChangeSet
      * @param array<EnhancedFileInfo> $targets
      */
     private function writeOutput(OutputInterface $output, GitChangeSet $gitChangeSet, array $targets): void

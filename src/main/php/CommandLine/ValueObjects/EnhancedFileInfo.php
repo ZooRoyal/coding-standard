@@ -28,8 +28,6 @@ class EnhancedFileInfo extends SplFileInfo
 
     /**
      * Checks if the path name ends with the given suffix.
-     *
-     * @param string $suffix
      */
     public function endsWith(string $suffix): bool
     {
@@ -38,8 +36,6 @@ class EnhancedFileInfo extends SplFileInfo
 
     /**
      * Checks if the path name starts with the given prefix.
-     *
-     * @param string $suffix
      */
     public function startsWith(string $suffix): bool
     {

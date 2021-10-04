@@ -64,10 +64,6 @@ class ProcessRunnerTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
      *
-     * @param string $versionString
-     * @param string $commandInput
-     * @param string $commandArgument1
-     * @param string $commandArgument2
      * @param mixed  $commandOutput
      */
     public function runAsProcessIsVersionStable(
@@ -125,8 +121,6 @@ class ProcessRunnerTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
      *
-     * @param string $versionString
-     * @param string $commandInput
      * @param mixed  $commandOutput
      */
     public function runAsProcessReturningProcessObjectIsVersionStable(

@@ -51,8 +51,6 @@ class TerminalCommandTest extends TestCase
     /**
      * @test
      * @dataProvider terminalCommandCompilationDataProvider
-     *
-     * @param TerminalCommandTestData $data
      */
     public function terminalCommandCompilation(TerminalCommandTestData $data): void
     {

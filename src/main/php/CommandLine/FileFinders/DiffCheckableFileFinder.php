@@ -17,10 +17,6 @@ class DiffCheckableFileFinder implements FileFinderInterface
 
     /**
      * CheckableFileFinder constructor.
-     *
-     * @param ProcessRunner       $processRunner
-     * @param GitChangeSetFilter  $fileFilter
-     * @param GitChangeSetFactory $gitChangeSetFactory
      */
     public function __construct(
         ProcessRunner $processRunner,
@@ -60,8 +56,6 @@ class DiffCheckableFileFinder implements FileFinderInterface
 
     /**
      * This method finds all files in diff to target branch.
-     *
-     * @param string $targetBranch
      */
     private function findFilesInDiffToTarget(string $targetBranch): GitChangeSet
     {

@@ -16,9 +16,6 @@ class GitChangeSetFilter
 
     /**
      * FileFilter constructor.
-     *
-     * @param ExclusionListFactory $exclusionListFactory
-     * @param TokenExcluder        $tokenExcluder
      */
     public function __construct(
         ExclusionListFactory $exclusionListFactory,
@@ -31,10 +28,7 @@ class GitChangeSetFilter
     /**
      * Filters file paths by filter and global Blacklist.
      *
-     * @param GitChangeSet $gitChangeSet
      * @param string[]     $allowedFileEndings
-     * @param string       $blacklistToken
-     * @param string       $whitelistToken
      */
     public function filter(
         GitChangeSet $gitChangeSet,
@@ -91,7 +85,6 @@ class GitChangeSetFilter
      *
      * @param string[]                $allowedFileEndings
      * @param array<EnhancedFileInfo> $files
-     * @param SplObjectStorage        $list
      */
     private function applyFilters(array $allowedFileEndings, array $files, SplObjectStorage $list): array
     {
@@ -129,7 +122,6 @@ class GitChangeSetFilter
      * Filter result by a true/false list of their respective directories and parent directories.
      *
      * @param array<EnhancedFileInfo> $result
-     * @param SplObjectStorage        $list
      */
     private function filterByList(array &$result, SplObjectStorage $list): void
     {

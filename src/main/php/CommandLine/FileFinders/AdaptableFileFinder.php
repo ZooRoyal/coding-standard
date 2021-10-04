@@ -19,11 +19,6 @@ class AdaptableFileFinder implements FileFinderInterface
 
     /**
      * AdaptableFileFinder constructor.
-     *
-     * @param GitInputValidator       $gitInputValidator
-     * @param AllCheckableFileFinder  $allCheckableFileFinder
-     * @param DiffCheckableFileFinder $diffCheckableFileFinder
-     * @param Environment             $environment
      */
     public function __construct(
         GitInputValidator $gitInputValidator,

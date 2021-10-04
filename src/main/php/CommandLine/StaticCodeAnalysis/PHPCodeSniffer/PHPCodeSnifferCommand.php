@@ -28,8 +28,6 @@ class PHPCodeSnifferCommand extends FixingToolCommand
      * This method accepts all dependencies needed to use this class properly.
      * It's annotated for use with PHP-DI.
      *
-     * @param Container $container
-     *
      * @see http://php-di.org/doc/annotations.html
      *
      * @Inject

@@ -135,12 +135,7 @@ class ForbiddenChangesCommandTest extends TestCase
      * @test
      * @dataProvider executeInteractsWithWarningFlagDataProvider
      *
-     * @param bool                    $warning
-     * @param Matcher                 $expectedResultMatcher
-     * @param Matcher                 $messageMatcher
      * @param array<EnhancedFileInfo> $expectedWrongfullyChangesFiles
-     * @param string|null             $mockedTargetBranch
-     * @param string|null             $mockedTargetGuess
      */
     public function executeInteractsWithWarningFlag(
         bool $warning,

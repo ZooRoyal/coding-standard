@@ -47,8 +47,6 @@ class TestEnvironmentInstallation
     /**
      * Add the path of the composer-template.json to build your test environment.
      *
-     * @param string $composerTemplatePath
-     *
      * @throws RuntimeException
      * @throws BadMethodCallException
      */

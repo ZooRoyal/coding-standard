@@ -73,9 +73,7 @@ class TargetDecoratorTest extends TestCase
      *
      * @dataProvider decorateAddsTargetsToTerminalCommandDataProvider
      *
-     * @param bool         $forgedAutoTarget
      * @param string|false $forgedTarget
-     * @param string|null  $expectedTargetBranch
      */
     public function decorateAddsTargetsToTerminalCommand(
         bool $forgedAutoTarget,

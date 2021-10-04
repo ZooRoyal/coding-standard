@@ -24,8 +24,6 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
 
     /**
      * TerminalCommandPreconditionChecker constructor.
-     *
-     * @param ProcessRunner $processRunner
      */
     public function __construct(ProcessRunner $processRunner)
     {

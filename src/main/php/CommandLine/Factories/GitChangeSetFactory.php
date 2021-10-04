@@ -13,8 +13,6 @@ class GitChangeSetFactory
 
     /**
      * GitChangeSetFactory constructor.
-     *
-     * @param EnhancedFileInfoFactory $enhancedFileInfoFactory
      */
     public function __construct(EnhancedFileInfoFactory $enhancedFileInfoFactory)
     {
@@ -24,7 +22,6 @@ class GitChangeSetFactory
      * Build provides GitChangeSet instances.
      *
      * @param string[] $files
-     * @param string   $commitHash
      */
     public function build(array $files, string $commitHash = ''): GitChangeSet
     {

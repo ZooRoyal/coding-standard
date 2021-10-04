@@ -6,6 +6,7 @@ trait FileExtensionTrait
 {
     protected array $fileExtensions = [];
 
+    /** @param array<string> $fileExtensions */
     public function addAllowedFileExtensions(array $fileExtensions): void
     {
         $this->fileExtensions = $fileExtensions;
