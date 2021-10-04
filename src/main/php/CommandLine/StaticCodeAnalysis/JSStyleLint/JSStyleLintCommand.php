@@ -12,7 +12,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\FixingToolCom
 
 class JSStyleLintCommand extends FixingToolCommand
 {
-    /** @var string string */
     protected string $exclusionListToken = '.dontSniffLESS';
     /** @var string[] */
     protected array $allowedFileEndings = ['css', 'scss', 'sass', 'less'];
