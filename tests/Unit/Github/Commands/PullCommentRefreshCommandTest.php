@@ -29,7 +29,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    /** @var array<string, int|string> */
+    /** @var array<string, string> */
     private array $mockedArguments = [
         'token' => 'myToken',
         'user_name' => 'foobar',
