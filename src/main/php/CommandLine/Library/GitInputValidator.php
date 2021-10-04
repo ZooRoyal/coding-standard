@@ -1,5 +1,5 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Symfony\Component\Process\Exception\ProcessFailedException;

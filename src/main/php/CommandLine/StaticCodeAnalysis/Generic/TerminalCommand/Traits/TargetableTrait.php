@@ -1,5 +1,5 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
+
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits;
 
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;

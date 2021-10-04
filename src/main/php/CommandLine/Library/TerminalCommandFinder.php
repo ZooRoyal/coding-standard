@@ -1,5 +1,5 @@
-<?php
-declare(strict_types = 1);
+<?php declare(strict_types = 1);
+
 namespace Zooroyal\CodingStandard\CommandLine\Library;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
