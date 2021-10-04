@@ -15,9 +15,8 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class AllCheckableFileFinderTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var AllCheckableFileFinder */
-    private $subject;
+    private array $subjectParameters;
+    private AllCheckableFileFinder $subject;
 
     protected function setUp(): void
     {

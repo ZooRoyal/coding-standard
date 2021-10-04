@@ -13,8 +13,7 @@ use function Safe\rmdir;
 
 class ExclusionListFactoryTest extends TestCase
 {
-    /** @var ExclusionListFactory */
-    private $subject;
+    private ExclusionListFactory $subject;
 
     protected function setUp(): void
     {

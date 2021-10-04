@@ -14,6 +14,7 @@ class JSStyleLintCommand extends FixingToolCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontSniffLESS';
+    /** @var string[] */
     protected array $allowedFileEndings = ['css', 'scss', 'sass', 'less'];
     private TerminalCommandFinder $terminalCommandFinder;
 

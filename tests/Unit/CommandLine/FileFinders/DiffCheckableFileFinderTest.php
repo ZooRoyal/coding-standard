@@ -16,9 +16,8 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class DiffCheckableFileFinderTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var DiffCheckableFileFinder */
-    private $subject;
+    private array $subjectParameters;
+    private DiffCheckableFileFinder $subject;
 
     protected function setUp(): void
     {
