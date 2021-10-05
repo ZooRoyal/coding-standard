@@ -14,7 +14,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class TerminalCommandFinderTest extends TestCase
 {
     private TerminalCommandFinder $subject;
-    /** @var MockInterface[] */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
 
     protected function setUp(): void
