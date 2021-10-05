@@ -11,10 +11,13 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 class TerminalCommandTestData
 {
     private string $expectedCommand;
+    /** @var EnhancedFileInfo[]|null  */
     private ?array $targets = null;
     private bool $fixingMode = false;
+    /** @var EnhancedFileInfo[]  */
     private array $excluded = [];
     private int $verbosityLevel = OutputInterface::VERBOSITY_NORMAL;
+    /** @var string[]  */
     private array $extensions = [];
     private int $processes = 1;
 

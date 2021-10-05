@@ -23,6 +23,7 @@ abstract class AbstractToolCommand extends Command
     public const KEY_INPUT = 'input';
     public const KEY_OUTPUT = 'output';
     protected string $exclusionListToken;
+    /** @var array<string> */
     protected array $allowedFileEndings;
     protected TerminalCommand $terminalCommand;
     protected string $terminalCommandName;

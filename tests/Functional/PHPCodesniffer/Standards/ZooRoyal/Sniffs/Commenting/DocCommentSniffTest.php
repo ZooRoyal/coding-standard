@@ -9,16 +9,15 @@ use Symfony\Component\Process\Process;
 
 class DocCommentSniffTest extends TestCase
 {
-    /** @var array */
-    private $commandPrefix;
-    /** @var string */
-    private static $vendorDir;
+    /** @var array<string> */
+    private array $commandPrefix;
+    private static string $vendorDir;
 
     public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         $reflection = new ReflectionClass(ClassLoader::class);
-        self::$vendorDir = dirname(dirname($reflection->getFileName()));
+        self::$vendorDir = dirname($reflection->getFileName(), 2);
 
         require_once self::$vendorDir . '/squizlabs/php_codesniffer/autoload.php';
     }

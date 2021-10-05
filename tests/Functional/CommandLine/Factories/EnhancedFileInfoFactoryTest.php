@@ -19,7 +19,7 @@ class EnhancedFileInfoFactoryTest extends TestCase
     private string $relativeFilePath;
     private string $relativeFilePath2;
     private string $rootDirectory;
-    private static $DiSe = DIRECTORY_SEPARATOR;
+    private static string $DiSe = DIRECTORY_SEPARATOR;
 
     public function setUp(): void
     {

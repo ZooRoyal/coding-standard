@@ -17,14 +17,11 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitChangeSetFilterTest extends TestCase
 {
-    /** @var GitChangeSetFilter */
-    private $subject;
+    private GitChangeSetFilter $subject;
     /** @var MockInterface[] */
-    private $subjectParameters;
-    /** @var string */
-    private $blacklistedDirectory = 'blub';
-    /** @var string */
-    private $mockedRootDirectory = '/my/root/directory';
+    private array $subjectParameters;
+    private string $blacklistedDirectory = 'blub';
+    private string $mockedRootDirectory = '/my/root/directory';
 
     protected function setUp(): void
     {

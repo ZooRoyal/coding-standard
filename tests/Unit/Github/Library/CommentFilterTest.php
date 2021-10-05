@@ -8,8 +8,7 @@ use Zooroyal\CodingStandard\Github\Library\CommentFilter;
 
 class CommentFilterTest extends TestCase
 {
-    /** @var CommentFilter */
-    private $subject;
+    private CommentFilter $subject;
 
     protected function setUp(): void
     {
