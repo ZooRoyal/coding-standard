@@ -18,7 +18,7 @@ class ExclusionListFactoryTest extends TestCase
     /** @var MockInterface|ExcluderInterface */
     private $mockedExcluder2;
     /** @var array<MockInterface|ExcluderInterface> */
-    private $mockedExcluders;
+    private array $mockedExcluders;
     /** @var MockInterface|ExclusionListSanitizer */
     private $mockedExclusionListSanitizer;
 

@@ -13,8 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 
 class ProcessRunnerTest extends TestCase
 {
-    /** @var ProcessRunner */
-    private $subject;
+    private ProcessRunner $subject;
 
     protected function setUp(): void
     {

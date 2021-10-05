@@ -14,6 +14,7 @@ class JSESLintCommand extends FixingToolCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontSniffJS';
+    /** @var array<string>  */
     protected array $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
     private TerminalCommandFinder $terminalCommandFinder;
 

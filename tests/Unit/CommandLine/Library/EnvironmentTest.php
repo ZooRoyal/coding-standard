@@ -16,10 +16,10 @@ use function Safe\realpath;
 
 class EnvironmentTest extends TestCase
 {
-    /** @var Environment */
-    private $subject;
+    private Environment $subject;
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
+    private array $subjectParameters;
+    /** @var MockInterface|EnhancedFileInfo  */
     private $mockedEnhancedFileInfo;
 
     protected function setUp(): void

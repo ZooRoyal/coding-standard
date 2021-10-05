@@ -33,9 +33,10 @@ class FindFilesToCheckCommandTest extends TestCase
     private $forgedBlacklistDirectory1;
     /** @var MockInterface|EnhancedFileInfo */
     private $forgedBlacklistDirectory2;
-    private $expectedArray;
-    private $expectedResult1 = 'phpunit.xml.dist';
-    private $expectedResult2 = 'composer.json';
+    /** @var array<int,MockInterface|EnhancedFileInfo> */
+    private array $expectedArray;
+    private string $expectedResult1 = 'phpunit.xml.dist';
+    private string $expectedResult2 = 'composer.json';
 
     protected function setUp(): void
     {

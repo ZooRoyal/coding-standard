@@ -18,9 +18,8 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class IssueCommentAddCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var FindFilesToCheckCommand */
-    private $subject;
+    private array $subjectParameters;
+    private IssueCommentAddCommand $subject;
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
     /** @var MockInterface|OutputInterface */

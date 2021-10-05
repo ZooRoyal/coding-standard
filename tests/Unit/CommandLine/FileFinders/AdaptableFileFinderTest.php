@@ -17,9 +17,8 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class AdaptableFileFinderTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var AdaptableFileFinder */
-    private $subject;
+    private array $subjectParameters;
+    private AdaptableFileFinder $subject;
 
     protected function setUp(): void
     {

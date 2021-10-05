@@ -13,9 +13,8 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class GitInputValidatorTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
-    /** @var GitInputValidator */
-    private $subject;
+    private array $subjectParameters;
+    private GitInputValidator $subject;
 
     protected function setUp(): void
     {

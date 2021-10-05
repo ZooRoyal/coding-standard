@@ -19,10 +19,9 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class PullCommentRefreshCommandTest extends TestCase
 {
     /** @var MockInterface[]|mixed[] */
-    private $subjectParameters;
+    private array $subjectParameters;
 
-    /** @var FindFilesToCheckCommand */
-    private $subject;
+    private PullCommentRefreshCommand $subject;
 
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
@@ -30,8 +29,8 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    /** @var array<string, int|string> */
-    private $mockedArguments = [
+    /** @var array<string, string> */
+    private array $mockedArguments = [
         'token' => 'myToken',
         'user_name' => 'foobar',
         'organisation' => 'myOrganisation',
@@ -44,13 +43,12 @@ class PullCommentRefreshCommandTest extends TestCase
     ];
 
     /** @var array<string, array<string, string>|int|string> */
-    private $mockedOwnCurrentComment;
+    private array $mockedOwnCurrentComment;
 
-    /** @var string */
-    private $mockedLogin = 'MyLogin';
+    private string $mockedLogin = 'MyLogin';
 
     /** @var array<string, array<string, string>|int|string|null> */
-    private $mockedOwnStaleComment;
+    private array $mockedOwnStaleComment;
 
     protected function setUp(): void
     {

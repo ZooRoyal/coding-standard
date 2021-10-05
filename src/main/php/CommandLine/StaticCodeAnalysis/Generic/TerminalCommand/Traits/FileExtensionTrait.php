@@ -4,6 +4,7 @@ namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\Termina
 
 trait FileExtensionTrait
 {
+    /** @var array<string> */
     protected array $fileExtensions = [];
 
     /** @param array<string> $fileExtensions */
