@@ -19,7 +19,7 @@ class GitInputValidator
     /**
      * Checks if a commit-ish is known to the local git repository.
      */
-    public function isCommitishValid(?string $commitish) : bool
+    public function isCommitishValid(?string $commitish): bool
     {
         if ($commitish === null) {
             return false;

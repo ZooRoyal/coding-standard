@@ -9,7 +9,7 @@ trait FixingTrait
     /**
      * {@inheritDoc}
      */
-    public function setFixingMode(bool $fixingMode):void
+    public function setFixingMode(bool $fixingMode): void
     {
         $this->fixingMode = $fixingMode;
     }

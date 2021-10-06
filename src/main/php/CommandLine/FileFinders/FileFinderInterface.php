@@ -16,5 +16,5 @@ interface FileFinderInterface
         string $blacklistToken = '',
         string $whitelistToken = '',
         ?string $targetBranch = null
-    ) : GitChangeSet;
+    ): GitChangeSet;
 }

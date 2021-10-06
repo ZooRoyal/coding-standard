@@ -22,7 +22,7 @@ class ContainerFactory
      *
      * @throws Exception
      */
-    public static function getContainerInstance() : Container
+    public static function getContainerInstance(): Container
     {
         if (self::$container === null) {
             self::$container = self::getUnboundContainerInstance();
@@ -37,7 +37,7 @@ class ContainerFactory
      *
      * @throws Exception
      */
-    public static function getUnboundContainerInstance() : Container
+    public static function getUnboundContainerInstance(): Container
     {
         $builder = new ContainerBuilder();
         $builder->useAnnotations(true);
