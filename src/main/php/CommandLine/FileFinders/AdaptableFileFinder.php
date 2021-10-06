@@ -43,7 +43,7 @@ class AdaptableFileFinder implements FileFinderInterface
         string $blacklistToken = '',
         string $whitelistToken = '',
         ?string $targetBranch = null
-    ) : GitChangeSet {
+    ): GitChangeSet {
         if ($targetBranch !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranch)
         ) {
