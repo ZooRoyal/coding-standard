@@ -12,7 +12,7 @@ class NoUsefulCommandFoundExceptionTest extends TestCase
     /**
      * @test
      */
-    public function noUsefulCommandFoundExceptionIsExcpetion():void
+    public function noUsefulCommandFoundExceptionIsExcpetion(): void
     {
         $subject = new NoUsefulCommandFoundException('Es ist beliebig');
 

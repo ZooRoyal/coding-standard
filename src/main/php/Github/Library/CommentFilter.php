@@ -9,7 +9,7 @@ class CommentFilter
      *
      * @param array<mixed> $comments
      */
-    public function filterForStaleComments(array $comments, int $position, string $commitId) : array
+    public function filterForStaleComments(array $comments, int $position, string $commitId): array
     {
         $staleComments = array_filter(
             $comments,
@@ -27,7 +27,7 @@ class CommentFilter
      *
      * @param array<mixed> $comments
      */
-    public function filterForOwnComments(array $comments, string $path, string $login) : array
+    public function filterForOwnComments(array $comments, string $path, string $login): array
     {
         $result = array_filter(
             $comments,
