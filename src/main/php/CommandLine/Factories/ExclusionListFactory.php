@@ -8,7 +8,7 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactory
 {
-    /** @var mixed[] */
+    /** @var array<mixed> */
     private array $exclusionListCache = [];
     /** @var array<ExcluderInterface> */
     private array $excluders;

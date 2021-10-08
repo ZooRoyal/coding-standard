@@ -19,7 +19,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class ExclusionDecoratorTest extends TestCase
 {
     private ExclusionDecorator $subject;
-    /** @var MockInterface[] */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
     /** @var MockInterface|ExcludingTerminalCommand */
     private ExcludingTerminalCommand $mockedTerminalCommand;

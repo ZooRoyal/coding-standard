@@ -27,7 +27,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class TargetDecoratorTest extends TestCase
 {
     private TargetDecorator $subject;
-    /** @var MockInterface[] */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
     /** @var MockInterface|TargetableTerminalCommand */
     private TargetableTerminalCommand $mockedTerminalCommand;

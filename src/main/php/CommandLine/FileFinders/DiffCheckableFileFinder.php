@@ -31,7 +31,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
     /**
      * This function searches for files to check in a certain diff only.
      *
-     * @param string[]    $allowedFileEndings
+     * @param array<string> $allowedFileEndings
      *
      * @throws InvalidArgumentException
      */
