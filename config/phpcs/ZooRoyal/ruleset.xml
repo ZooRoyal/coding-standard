@@ -150,6 +150,7 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
@@ -172,28 +173,6 @@
         Codor.Files.ReturnNull
         Codor.Files.IndentationLevel
     -->
-    <!--
-        Buggy with sniffversion 4.0 and php 7.0
-        <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
-            <properties>
-                <property name="usefulAnnotations" type="array">
-                    <element value="@test"/>
-                    <element value="@dataProvider"/>
-                    <element value="@expectedException"/>
-                </property>
-            </properties>
-        </rule>
-    -->
-
-    <!--
-        No Effect
-        <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
-            <properties>
-                <property name="spacesCountBeforeColon" type="int" value="3"/>
-            </properties>
-        </rule>
-    -->
-
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
     <rule ref="Squiz.Classes.ClassDeclaration"/>
