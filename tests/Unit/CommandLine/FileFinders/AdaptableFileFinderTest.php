@@ -50,6 +50,8 @@ class AdaptableFileFinderTest extends TestCase
 
     /**
      * Data Provider for findFilesCallsAllCheckableFileFinder.
+     *
+     * @return array<string,array<string,bool|class-string|string|null>>
      */
     public function findFilesCallsAllCheckableFileFinderDataProvider(): array
     {

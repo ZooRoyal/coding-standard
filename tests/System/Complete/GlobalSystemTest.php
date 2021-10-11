@@ -4,6 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\System\Complete;
 
 use Amp\PHPUnit\AsyncTestCase;
 use Amp\Process\Process;
+use Amp\Promise;
 use Closure;
 use Generator;
 use Hamcrest\MatcherAssert;
@@ -32,6 +33,8 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @large
      * @coversNothing
+     *
+     * @return iterable<Promise<int>>
      */
     public function runCodingStandardToFindErrors(): iterable
     {
@@ -61,6 +64,7 @@ class GlobalSystemTest extends AsyncTestCase
             $copyPromises[] = call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
         }
 
+        /* @phpstan-ignore-next-line */
         yield $copyPromises;
 
         $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
@@ -72,9 +76,11 @@ class GlobalSystemTest extends AsyncTestCase
      * @test
      *
      * @large
+     * @coversNothing
+     *
      * @depends runCodingStandardToFindErrors
      *
-     * @coversNothing
+     * @return iterable<Promise>
      */
     public function dontFilesMakeAllGood(): iterable
     {
