@@ -29,7 +29,7 @@ class AllCheckableFileFinder implements FileFinderInterface
     /**
      * This function finds all files to check.
      *
-     * @param string[]    $allowedFileEndings
+     * @param array<string> $allowedFileEndings
      */
     public function findFiles(
         array $allowedFileEndings = [],

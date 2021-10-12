@@ -44,7 +44,7 @@ class ContainerFactoryTest extends TestCase
     /**
      * @test
      */
-    public function getContainerInstanceReturnsSameInstance()
+    public function getContainerInstanceReturnsSameInstance(): void
     {
         $result1 = ContainerFactory::getContainerInstance();
         $result2 = ContainerFactory::getContainerInstance();
@@ -58,7 +58,7 @@ class ContainerFactoryTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
      */
-    public function getContainerInstanceConfiguresContainer()
+    public function getContainerInstanceConfiguresContainer(): void
     {
         $expectedContainer = Mockery::mock(Container::class);
         $mockedContainerBuilder = Mockery::mock('overload:'. ContainerBuilder::class);

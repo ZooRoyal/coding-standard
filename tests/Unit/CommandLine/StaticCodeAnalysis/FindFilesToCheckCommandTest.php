@@ -26,7 +26,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
  */
 class FindFilesToCheckCommandTest extends TestCase
 {
-    /** @var MockInterface[]|mixed[] */
+    /** @var array<MockInterface>|array<mixed> */
     private array $subjectParameters;
     private FindFilesToCheckCommand $subject;
     /** @var MockInterface|EnhancedFileInfo */

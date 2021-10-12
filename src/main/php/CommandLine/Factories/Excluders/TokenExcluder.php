@@ -34,6 +34,8 @@ class TokenExcluder implements ExcluderInterface
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
      * @param array<mixed>  $config
+     *
+     * @return array<EnhancedFileInfo>
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {

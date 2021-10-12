@@ -97,8 +97,6 @@ class TerminalCommand extends AbstractTerminalCommand implements
      * Collapse the excludes to a string like '--exclude asdasd --exclude qweqwe'.
      *
      * @param array<string> $finderResultLines
-     *
-     * @return string
      */
     private function collapseExcludes(array $finderResultLines): string
     {

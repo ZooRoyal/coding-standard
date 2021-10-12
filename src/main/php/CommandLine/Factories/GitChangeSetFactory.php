@@ -21,7 +21,7 @@ class GitChangeSetFactory
     /**
      * Build provides GitChangeSet instances.
      *
-     * @param string[] $files
+     * @param array<string> $files
      */
     public function build(array $files, string $commitHash = ''): GitChangeSet
     {

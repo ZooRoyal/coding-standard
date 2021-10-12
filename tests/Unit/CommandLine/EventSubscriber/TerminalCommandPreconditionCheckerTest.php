@@ -19,7 +19,7 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
     private TerminalCommandPreconditionChecker $subject;
     /** @var array<MockInterface> */
     private array $subjectParameters;
-    /** @var string[]  */
+    /** @var array<string>  */
     private array $commandsToCheck = ['git', 'find'];
 
     public function setUp(): void

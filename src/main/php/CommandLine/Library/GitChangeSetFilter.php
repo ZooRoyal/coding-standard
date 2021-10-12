@@ -28,7 +28,7 @@ class GitChangeSetFilter
     /**
      * Filters file paths by filter and global Blacklist.
      *
-     * @param string[]     $allowedFileEndings
+     * @param array<string> $allowedFileEndings
      */
     public function filter(
         GitChangeSet $gitChangeSet,
@@ -83,8 +83,10 @@ class GitChangeSetFilter
     /**
      * Iterates over the files and returns files as configured in list and filter.
      *
-     * @param string[]                $allowedFileEndings
+     * @param array<string> $allowedFileEndings
      * @param array<EnhancedFileInfo> $files
+     *
+     * @return array<EnhancedFileInfo>
      */
     private function applyFilters(array $allowedFileEndings, array $files, SplObjectStorage $list): array
     {

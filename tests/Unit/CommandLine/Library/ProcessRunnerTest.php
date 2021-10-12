@@ -32,7 +32,7 @@ class ProcessRunnerTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
      */
-    public function createProcessCreatesNewProcess()
+    public function createProcessCreatesNewProcess(): void
     {
         $overwrittenVersions = Mockery::mock('overload:' . Versions::class);
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
@@ -92,6 +92,7 @@ class ProcessRunnerTest extends TestCase
         self::assertSame($expectedOutput . PHP_EOL . $expectedError, $result);
     }
 
+    /** @return  array<string,array<int,array<int,string>|string>> */
     public function runAsProcessIsVersionStableDataProvider(): array
     {
         return [
@@ -142,7 +143,7 @@ class ProcessRunnerTest extends TestCase
 
         self::assertInstanceOf(Process::class, $result);
     }
-
+    /** @return array<string,array<array<string>|string>> */
     public function runAsProcessReturningProcessObjectIsVersionStableDataProvider(): array
     {
         return [

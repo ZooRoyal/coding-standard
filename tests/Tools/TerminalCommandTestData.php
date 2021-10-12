@@ -11,13 +11,13 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 class TerminalCommandTestData
 {
     private string $expectedCommand;
-    /** @var EnhancedFileInfo[]|null  */
+    /** @var array<EnhancedFileInfo>|null  */
     private ?array $targets = null;
     private bool $fixingMode = false;
-    /** @var EnhancedFileInfo[]  */
+    /** @var array<EnhancedFileInfo>  */
     private array $excluded = [];
     private int $verbosityLevel = OutputInterface::VERBOSITY_NORMAL;
-    /** @var string[]  */
+    /** @var array<string>  */
     private array $extensions = [];
     private int $processes = 1;
 
@@ -37,6 +37,7 @@ class TerminalCommandTestData
         $this->processes = $values['processes'] ?? $this->processes;
     }
 
+    /** @return array<EnhancedFileInfo> */
     public function getExcluded(): array
     {
         return $this->excluded;
@@ -47,6 +48,7 @@ class TerminalCommandTestData
         return $this->expectedCommand;
     }
 
+    /** @return array<string> */
     public function getExtensions(): array
     {
         return $this->extensions;
@@ -57,6 +59,7 @@ class TerminalCommandTestData
         return $this->processes;
     }
 
+    /** @return array<EnhancedFileInfo>|null */
     public function getTargets(): ?array
     {
         return $this->targets;

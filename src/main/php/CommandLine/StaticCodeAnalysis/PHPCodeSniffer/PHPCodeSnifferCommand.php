@@ -10,7 +10,7 @@ class PHPCodeSnifferCommand extends FixingToolCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontSniffPHP';
-    /** @var string[]  */
+    /** @var array<string>  */
     protected array $allowedFileEndings = ['php'];
 
     public function configure(): void

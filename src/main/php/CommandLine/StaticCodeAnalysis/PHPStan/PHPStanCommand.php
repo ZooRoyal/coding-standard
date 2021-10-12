@@ -10,7 +10,7 @@ class PHPStanCommand extends TargetableToolsCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontStanPHP';
-    /** @var string[]  */
+    /** @var array<string>  */
     protected array $allowedFileEndings = ['.php'];
 
     /**

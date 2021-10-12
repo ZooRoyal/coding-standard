@@ -111,6 +111,7 @@
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
 
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
     <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
         <properties>
@@ -134,6 +135,7 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+    <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
     <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
@@ -150,12 +152,14 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes"/>
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
 
     <!--
@@ -173,28 +177,6 @@
         Codor.Files.ReturnNull
         Codor.Files.IndentationLevel
     -->
-    <!--
-        Buggy with sniffversion 4.0 and php 7.0
-        <rule ref="SlevomatCodingStandard.TypeHints.TypeHintDeclaration">
-            <properties>
-                <property name="usefulAnnotations" type="array">
-                    <element value="@test"/>
-                    <element value="@dataProvider"/>
-                    <element value="@expectedException"/>
-                </property>
-            </properties>
-        </rule>
-    -->
-
-    <!--
-        No Effect
-        <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing">
-            <properties>
-                <property name="spacesCountBeforeColon" type="int" value="3"/>
-            </properties>
-        </rule>
-    -->
-
 
     <rule ref="Squiz.Arrays.ArrayBracketSpacing"/>
     <rule ref="Squiz.Classes.ClassDeclaration"/>

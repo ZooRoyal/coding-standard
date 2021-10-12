@@ -91,6 +91,8 @@ class PullCommentRefreshCommand extends Command
      * Fetches filtered sets of necessary comments
      *
      * @param array<string|bool|int|float|array|null> $arguments
+     *
+     * @return array<array<mixed>>
      */
     private function getCommentSets(array $arguments): array
     {

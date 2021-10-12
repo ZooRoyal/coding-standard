@@ -124,6 +124,7 @@ class AllToolsCommandTest extends TestCase
         self::assertSame($finalResult, $result);
     }
 
+    /** @return array<string,array<string,array<int|string,bool|int|string>|int>> */
     public function executeCallsAllCommandsDataProvider(): array
     {
         return [

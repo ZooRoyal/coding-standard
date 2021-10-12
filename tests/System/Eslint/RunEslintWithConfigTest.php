@@ -4,6 +4,7 @@ namespace Zooroyal\CodingStandard\Tests\System\Eslint;
 
 use Amp\PHPUnit\AsyncTestCase;
 use Amp\Process\Process;
+use Amp\Promise;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
@@ -25,6 +26,8 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @test
      * @large
      * @coversNothing
+     *
+     * @return iterable<Promise<int>>
      */
     public function runEslintForJSInCleanInstall(): iterable
     {
@@ -52,6 +55,8 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @test
      * @large
      * @coversNothing
+     *
+     * @return array<int,Promise>
      */
     public function runEslintForTSInCleanInstall(): iterable
     {
@@ -79,6 +84,8 @@ class RunEslintWithConfigTest extends AsyncTestCase
      * @test
      * @large
      * @coversNothing
+     *
+     * @return iterable<Promise>
      */
     public function runStylelintInCleanInstall(): iterable
     {

@@ -18,7 +18,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class GitChangeSetFilterTest extends TestCase
 {
     private GitChangeSetFilter $subject;
-    /** @var MockInterface[] */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
     private string $blacklistedDirectory = 'blub';
     private string $mockedRootDirectory = '/my/root/directory';

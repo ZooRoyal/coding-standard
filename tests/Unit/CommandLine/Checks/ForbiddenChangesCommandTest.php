@@ -28,7 +28,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 class ForbiddenChangesCommandTest extends TestCase
 {
     private ForbiddenChangesCommand $subject;
-    /** @var MockInterface[] */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
     private string $blacklistToken = '.dontChangeFiles';
     private string $whitelistToken = '.doChangeFiles';
@@ -92,7 +92,7 @@ class ForbiddenChangesCommandTest extends TestCase
     /**
      * Data Provider for executeInteractsWithWarningFlag.
      *
-     * @return mixed[]
+     * @return array<mixed>
      */
     public function executeInteractsWithWarningFlagDataProvider(): array
     {

@@ -9,7 +9,7 @@ interface FileFinderInterface
     /**
      * This method searches for files by using Git as indexing service.
      *
-     * @param string[]    $allowedFileEndings
+     * @param array<string> $allowedFileEndings
      */
     public function findFiles(
         array $allowedFileEndings = [],
