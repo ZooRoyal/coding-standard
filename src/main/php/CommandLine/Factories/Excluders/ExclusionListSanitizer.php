@@ -17,6 +17,8 @@ class ExclusionListSanitizer
      *         Explanation: As the second and the third directories are children of the first it would make
      *         no sense to exclude them "again". As the parent is excluded they are automatically
      *         excluded too.
+     *
+     * @return array<EnhancedFileInfo>
      */
     public function sanitizeExclusionList(array $rawExcludePaths): array
     {

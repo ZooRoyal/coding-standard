@@ -21,6 +21,7 @@ class CommentFilterTest extends TestCase
         parent::tearDown();
     }
 
+    /** @return array<string,array<array<array<string,int|string>>|int|string>> */
     public function filterForStaleCommentsDoesExactlyThatDataProvider(): array
     {
         $position = 1;
@@ -73,6 +74,7 @@ class CommentFilterTest extends TestCase
         self::assertSame($expectedResult, $result);
     }
 
+    /** @return array<string,array<array<array<string,array<string,string>|string>>|string>> */
     public function filterForOwnCommentsDoesExactlyThatDataProvider(): array
     {
         $path = 'asdasd';

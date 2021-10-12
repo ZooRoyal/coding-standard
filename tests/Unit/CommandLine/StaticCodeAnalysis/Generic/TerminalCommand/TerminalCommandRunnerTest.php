@@ -79,6 +79,7 @@ class TerminalCommandRunnerTest extends TestCase
         self::assertSame($exitCode, $result);
     }
 
+    /** @return array<string,array<array<string>|int>> */
     public function runReturnsExitCodeDataProvider(): array
     {
         return [

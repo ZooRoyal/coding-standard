@@ -85,6 +85,8 @@ class GitChangeSetFilter
      *
      * @param array<string> $allowedFileEndings
      * @param array<EnhancedFileInfo> $files
+     *
+     * @return array<EnhancedFileInfo>
      */
     private function applyFilters(array $allowedFileEndings, array $files, SplObjectStorage $list): array
     {

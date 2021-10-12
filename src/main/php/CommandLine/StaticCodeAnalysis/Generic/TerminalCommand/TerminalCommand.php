@@ -12,6 +12,8 @@ interface TerminalCommand
     /**
      * Returns a array of command parts. The parts can be used to build a bash command by imploding them with ' ' as
      * glue.
+     *
+     * @return array<string>
      */
     public function toArray(): array;
 }

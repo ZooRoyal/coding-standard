@@ -111,6 +111,7 @@ class TargetDecoratorTest extends TestCase
         $this->subject->decorate($this->mockedEvent);
     }
 
+    /** @return array<string,array<int,bool|string|null>> */
     public function decorateAddsTargetsToTerminalCommandDataProvider(): array
     {
         return [
