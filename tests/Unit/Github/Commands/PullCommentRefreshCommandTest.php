@@ -1,4 +1,6 @@
-<?php declare(strict_types = 1);
+<?php
+
+declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\Tests\Unit\Github\Commands;
 
@@ -21,8 +23,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var array<MockInterface>|array<mixed> */
     private array $subjectParameters;
 
-    /** @var PullCommentRefreshCommand|MockInterface[] */
-    private $subject;
+    private PullCommentRefreshCommand $subject;
 
     /** @var MockInterface|InputInterface */
     private $mockedInputInterface;
