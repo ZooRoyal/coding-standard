@@ -7,7 +7,6 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers;
 use Mockery;
-use PackageVersions\Versions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\Exception\ProcessFailedException;
 use Symfony\Component\Process\Process;
@@ -36,13 +35,9 @@ class ProcessRunnerTest extends TestCase
      */
     public function createProcessCreatesNewProcess(): void
     {
-        $overwrittenVersions = Mockery::mock('overload:' . Versions::class);
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
-        $overwrittenVersions->shouldReceive('getVersion')->once()
-            ->with('symfony/process')->andReturn('v3.5@wubwub');
-
-        $overwrittenProcess->shouldReceive('__construct')->once()->with('ls');
+        $overwrittenProcess->shouldReceive('__construct')->once()->with(['ls']);
         $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(120);
         $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
 
@@ -60,27 +55,20 @@ class ProcessRunnerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider runAsProcessIsVersionStableDataProvider
      *
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
-     *
-     * @param mixed  $commandOutput
      */
-    public function runAsProcessIsVersionStable(
-        string $versionString,
-        string $commandInput,
-        string $commandArgument1,
-        string $commandArgument2,
-        $commandOutput
-    ): void {
+    public function runAsProcessIsVersionStable(): void
+    {
+        $commandInput = 'ls';
+        $commandArgument1 = '-l';
+        $commandArgument2 = '-a';
+        $commandOutput = ['ls', '-l', '-a'];
+
         $expectedOutput = 'schlurbel';
         $expectedError = 'wurbel';
-        $overwrittenVersions = Mockery::mock('overload:' . Versions::class);
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
-
-        $overwrittenVersions->shouldReceive('getVersion')->once()
-            ->with('symfony/process')->andReturn($versionString);
 
         $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
         $overwrittenProcess->shouldReceive('mustRun')->once()->withNoArgs();
@@ -92,15 +80,6 @@ class ProcessRunnerTest extends TestCase
         $result = $this->subject->runAsProcess($commandInput, $commandArgument1, $commandArgument2);
 
         self::assertSame($expectedOutput . PHP_EOL . $expectedError, $result);
-    }
-
-    /** @return  array<string,array<int,array<int,string>|string>> */
-    public function runAsProcessIsVersionStableDataProvider(): array
-    {
-        return [
-            'as String' => ['v3.5@wubwub', 'ls', '-l', '-a', 'ls -l -a'],
-            'as Array' => ['v5.5@wubwub', 'ls', '-l', '-a', ['ls', '-l', '-a']],
-        ];
     }
 
     /**
@@ -118,40 +97,26 @@ class ProcessRunnerTest extends TestCase
 
     /**
      * @test
-     * @dataProvider runAsProcessReturningProcessObjectIsVersionStableDataProvider
      *
      * @runInSeparateProcess
      * @preserveGlobalState  disabled
-     *
-     * @param mixed  $commandOutput
      */
-    public function runAsProcessReturningProcessObjectIsVersionStable(
-        string $versionString,
-        string $commandInput,
-        $commandOutput
-    ): void {
-        $overwrittenVersions = Mockery::mock('overload:' . Versions::class);
+    public function runAsProcessReturningProcessObjectIsVersionStable(): void
+    {
+        $commandInput = 'ls -la';
+        $commandOutput = ['ls', '-la'];
+
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
         $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
         $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(120);
         $overwrittenProcess->shouldReceive('run')->once();
 
-        $overwrittenVersions->shouldReceive('getVersion')->once()
-            ->with('symfony/process')->andReturn($versionString);
         $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
 
         $result = $this->subject->runAsProcessReturningProcessObject($commandInput);
 
         self::assertInstanceOf(Process::class, $result);
-    }
-    /** @return array<string,array<array<string>|string>> */
-    public function runAsProcessReturningProcessObjectIsVersionStableDataProvider(): array
-    {
-        return [
-            'as String' => ['v3.5@wubwub', 'ls -la', 'ls -la'],
-            'as Array' => ['v5.5@wubwub', 'ls -la', ['ls', '-la']],
-        ];
     }
 
     /**

@@ -90,7 +90,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
                 $this->excludesFiles
             );
             $excludingString .= implode(' --ignore-pattern=', $excludesFilePaths);
-        };
+        }
         return $excludingString;
     }
 

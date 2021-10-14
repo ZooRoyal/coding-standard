@@ -10,7 +10,7 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ExclusionListFactory
 {
-    /** @var array<mixed> */
+    /** @var array<string,array<EnhancedFileInfo>> */
     private array $exclusionListCache = [];
     /** @var array<ExcluderInterface> */
     private array $excluders;
@@ -49,7 +49,7 @@ class ExclusionListFactory
 
         foreach ($this->excluders as $excluder) {
             $newlyFoundExclusionPaths = $excluder->getPathsToExclude($excludedPaths, $config);
-            $excludedPaths = array_merge($excludedPaths, $newlyFoundExclusionPaths);
+            $excludedPaths = [...$excludedPaths, ...$newlyFoundExclusionPaths];
         }
 
         $filteredArray = $deDuped === true
