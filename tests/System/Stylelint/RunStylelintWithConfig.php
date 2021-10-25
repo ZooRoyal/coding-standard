@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\Tests\System\Stylelint;
 
 use Amp\PHPUnit\AsyncTestCase;

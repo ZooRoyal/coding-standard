@@ -1,5 +1,7 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint;
 
 use Symfony\Component\Console\Output\OutputInterface;

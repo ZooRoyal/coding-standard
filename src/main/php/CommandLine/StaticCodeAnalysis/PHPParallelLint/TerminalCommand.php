@@ -1,5 +1,7 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPParallelLint;
 
 use Zooroyal\CodingStandard\CommandLine\Library\Environment;

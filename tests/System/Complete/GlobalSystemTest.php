@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\Tests\System\Complete;
 
 use Amp\PHPUnit\AsyncTestCase;

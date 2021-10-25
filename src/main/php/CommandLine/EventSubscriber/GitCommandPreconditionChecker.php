@@ -1,5 +1,7 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\CommandLine\EventSubscriber;
 
 use Symfony\Component\Console\ConsoleEvents;

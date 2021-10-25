@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\Tests\Unit\Github\Commands;
 
 use Github\Client;
@@ -29,7 +31,7 @@ class PullCommentRefreshCommandTest extends TestCase
     /** @var MockInterface|OutputInterface */
     private $mockedOutputInterface;
 
-    /** @var array<string, string> */
+    /** @var array<string,int|string> */
     private array $mockedArguments = [
         'token' => 'myToken',
         'user_name' => 'foobar',
@@ -39,15 +41,15 @@ class PullCommentRefreshCommandTest extends TestCase
         'body' => 'myBody',
         'commitId' => 'myCommitId',
         'path' => 'myPath',
-        'position' => '1',
+        'position' => 1,
     ];
 
-    /** @var array<string, array<string, string>|int|string> */
+    /** @var array<string,array<string,string>|int|string> */
     private array $mockedOwnCurrentComment;
 
     private string $mockedLogin = 'MyLogin';
 
-    /** @var array<string, array<string, string>|int|string|null> */
+    /** @var array<string,array<string,string>|int|string|null> */
     private array $mockedOwnStaleComment;
 
     protected function setUp(): void

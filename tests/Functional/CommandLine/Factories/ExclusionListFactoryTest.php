@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\Factories;
 
 use Hamcrest\MatcherAssert;
