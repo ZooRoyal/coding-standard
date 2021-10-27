@@ -30,6 +30,9 @@ module.exports = {
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': 2,
+                'no-useless-constructor': 'off',
+                'jsdoc/require-returns': 0,
+                'jsdoc/require-param': 0,
             },
         },
     ],
