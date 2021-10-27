@@ -127,7 +127,7 @@ module.exports = {
         'arrow-spacing': ['error', { before: true, after: true, }],
         'no-confusing-arrow': ['error', { allowParens: false, }],
         'arrow-parens': ['error', 'as-needed', { requireForBlockBody: true, }],
-        'no-useless-constructor': 2,
+        'no-useless-constructor': 0,
         'no-dupe-class-members': 2,
         'no-duplicate-imports': 2,
         'no-useless-computed-key': 2,
