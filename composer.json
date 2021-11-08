@@ -57,8 +57,10 @@
   "require-dev": {
     "ext-json": "*",
     "amphp/amp": "^2.5 >=2.5.2",
+    "amphp/parallel": "^1.4",
     "amphp/phpunit-util": "^1.4",
     "amphp/process": "^1.1",
+    "brianium/paratest": "^6.3",
     "infection/infection": ">=0.20",
     "mockery/mockery": "^1.4.2",
     "php-http/mock-client": "^1.4",
@@ -84,10 +86,13 @@
   "scripts": {
     "post-update-cmd": "npm install",
     "post-install-cmd": "npm install",
-    "test": "phpunit",
+    "test": [
+      "mkdir /tmp/phpunit",
+      "paratest -p$(getconf _NPROCESSORS_ONLN)"
+    ],
     "infection": [
       "@test",
-      "infection -n --threads=$(nproc) --only-covered --skip-initial-tests --coverage=/tmp/phpunit --no-progress"
+      "infection -n --threads=$(getconf _NPROCESSORS_ONLN) --only-covered --skip-initial-tests --coverage=/tmp/phpunit --no-progress"
     ]
   },
   "config": {
