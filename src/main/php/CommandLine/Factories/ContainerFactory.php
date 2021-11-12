@@ -6,7 +6,6 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use DI\Container;
 use DI\ContainerBuilder;
-use Exception;
 
 class ContainerFactory
 {
@@ -21,8 +20,6 @@ class ContainerFactory
 
     /**
      * Returns the single application container instance to use.
-     *
-     * @throws Exception
      */
     public static function getContainerInstance(): Container
     {
@@ -36,8 +33,6 @@ class ContainerFactory
     /**
      * Returns an unbound Container which is configured like the application container. This is meant to be used for
      * functional tests only.
-     *
-     * @throws Exception
      */
     public static function getUnboundContainerInstance(): Container
     {
