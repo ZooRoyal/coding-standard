@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\Factories;
 
 use InvalidArgumentException;
-use Symfony\Component\Filesystem\Exception\FileNotFoundException;
 use Webmozart\PathUtil\Path;
 use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
@@ -31,8 +30,6 @@ class EnhancedFileInfoFactory
      *
      * SmartFileFactory does its best to  return the same instance of EnhancedFileInfo for a file.
      * It uses Inode to distinguish between Files.
-     *
-     * @throws FileNotFoundException
      */
     public function buildFromPath(string $pathName): EnhancedFileInfo
     {
