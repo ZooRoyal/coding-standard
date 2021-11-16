@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\Github\Commands;
 
 use Github\Client;
-use Github\Exception\MissingArgumentException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputDefinition;
@@ -135,8 +134,6 @@ class PullCommentRefreshCommand extends Command
      * Creates an comment by the given arguments from commandline.
      *
      * @param array<string|bool|int|float|array|null> $arguments
-     *
-     * @throws MissingArgumentException
      */
     private function createComment(array $arguments): void
     {
@@ -161,8 +158,6 @@ class PullCommentRefreshCommand extends Command
      * @param array<mixed> $ownComments
      * @param array<mixed> $staleComments
      * @param array<string|bool|int|float|array|null> $arguments
-     *
-     * @throws MissingArgumentException
      */
     private function updateComment(array $ownComments, array $staleComments, array $arguments): void
     {
