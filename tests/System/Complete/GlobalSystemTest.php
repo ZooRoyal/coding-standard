@@ -7,13 +7,16 @@ namespace Zooroyal\CodingStandard\Tests\System\Complete;
 use Amp\PHPUnit\AsyncTestCase;
 use Amp\Process\Process;
 use Amp\Promise;
-use Closure;
+use Amp\Success;
 use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\call;
+use function Amp\Parallel\Worker\enqueueCallable;
+use function Amp\Promise\all;
+use function Amp\Promise\wait;
 
 class GlobalSystemTest extends AsyncTestCase
 {
@@ -28,6 +31,53 @@ class GlobalSystemTest extends AsyncTestCase
     public static function tearDownAfterClass(): void
     {
         TestEnvironmentInstallation::getInstance()->removeInstallation();
+    }
+
+    /**
+     * @test
+     *
+     * @large
+     * @coversNothing
+     *
+     * @depends runCodingStandardToFindErrors
+     *
+     * @return iterable<Promise>
+     */
+    public function dontFilesMakeAllGood(): iterable
+    {
+        $environmentDirectory = $this->prepareInstallationDirectory();
+        $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
+
+        $dotFiles = [
+            '.dontSniffPHP',
+            '.dontMessDetectPHP',
+            '.dontCopyPasteDetectPHP',
+            '.dontLintPHP',
+            '.dontSniffLESS',
+            '.dontSniffJS',
+            '.dontStanPHP',
+        ];
+
+        foreach ($dotFiles as $dotFile) {
+            yield call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
+        }
+
+        $result = yield from $this->runTools($environmentDirectory);
+
+        MatcherAssert::assertThat('All Tools are satisfied.', $result, H::not(H::hasItems(H::greaterThan(0))));
+    }
+
+    /**
+     * Runs a coding-standard command in test environment
+     */
+    public static function runAndGetExitCode(string $environmentDirectory, string $command): int
+    {
+        $process = new Process(
+            [$environmentDirectory . '/vendor/bin/coding-standard', $command],
+            $environmentDirectory
+        );
+        wait($process->start());
+        return wait($process->join());
     }
 
     /**
@@ -63,51 +113,12 @@ class GlobalSystemTest extends AsyncTestCase
         ];
 
         foreach ($copyFiles as $copyFile) {
-            $copyPromises[] = call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
+             yield call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
         }
 
-        /* @phpstan-ignore-next-line */
-        yield $copyPromises;
-
-        $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
+        $result = yield from $this->runTools($environmentDirectory);
 
         MatcherAssert::assertThat('All tools are not satisfied', $result, H::not(H::hasItems(0)));
-    }
-
-    /**
-     * @test
-     *
-     * @large
-     * @coversNothing
-     *
-     * @depends runCodingStandardToFindErrors
-     *
-     * @return iterable<Promise>
-     */
-    public function dontFilesMakeAllGood(): iterable
-    {
-        $environmentDirectory = $this->prepareInstallationDirectory();
-        $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
-
-        $dotFiles = [
-            '.dontSniffPHP',
-            '.dontMessDetectPHP',
-            '.dontCopyPasteDetectPHP',
-            '.dontLintPHP',
-            '.dontSniffLESS',
-            '.dontSniffJS',
-            '.dontStanPHP',
-        ];
-
-        foreach ($dotFiles as $dotFile) {
-            $promises = call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
-        }
-
-        yield $promises;
-
-        $result = yield call(Closure::fromCallable([$this, 'runTools']), $environmentDirectory);
-
-        MatcherAssert::assertThat('All Tools are satisfied.', $result, H::not(H::hasItems(H::greaterThan(0))));
     }
 
     /**
@@ -126,12 +137,11 @@ class GlobalSystemTest extends AsyncTestCase
     }
 
     /**
-     * Runs all coding-standard commands in test environment.
+     * Run all available coding-standard tools in $environmentDirectory and returns promises for use in Amp.
      *
-     * @return Generator|array<int|null>
+     * @return Generator<Promise>
      */
-    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
-    private function runTools(string $environmentDirectory): iterable
+    private function runTools(string $environmentDirectory): Generator
     {
         $tools = [
             'sca:sniff',
@@ -144,33 +154,15 @@ class GlobalSystemTest extends AsyncTestCase
         ];
 
         foreach ($tools as $tool) {
-            $promises[$tool] = call(Closure::fromCallable([$this, 'runAndGetExitCode']), $environmentDirectory, $tool);
+            $promises[$tool] = enqueueCallable(
+                [self::class, 'runAndGetExitCode'],
+                $environmentDirectory,
+                $tool
+            );
         }
 
-        $exitCodes = yield $promises;
+        $exitCodes = yield all($promises);
 
-        $result = [];
-        foreach ($exitCodes as $tool => $ExitCode) {
-            $result[$tool] = $ExitCode;
-        }
-
-        return $result;
-    }
-
-    /**
-     * Runs a coding-standard command in test environment
-     *
-     * @return Generator|int
-     */
-    // phpcs:ignore SlevomatCodingStandard.Classes.UnusedPrivateElements.UnusedMethod
-    private function runAndGetExitCode(string $environmentDirectory, string $command)
-    {
-        $process = new Process(
-            [$environmentDirectory . '/vendor/bin/coding-standard', $command],
-            $environmentDirectory
-        );
-        yield $process->start();
-
-        return yield $process->join();
+        return yield new Success($exitCodes);
     }
 }
