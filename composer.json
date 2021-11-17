@@ -37,7 +37,7 @@
     "phpcompatibility/php-compatibility": "^9.3 >=9.3.5",
     "phpmd/phpmd": "^2.9.1",
     "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan": "^0.12.71",
+    "phpstan/phpstan": "^0.12.87",
     "phpstan/phpstan-doctrine": "^0.12.13",
     "phpstan/phpstan-mockery": "^0.12.12",
     "phpstan/phpstan-phpunit": "^0.12.17",
@@ -87,7 +87,7 @@
     "post-update-cmd": "npm install",
     "post-install-cmd": "npm install",
     "test": [
-      "mkdir /tmp/phpunit",
+      "mkdir -p /tmp/phpunit",
       "paratest -p$(getconf _NPROCESSORS_ONLN)"
     ],
     "infection": [
