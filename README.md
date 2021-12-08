@@ -34,7 +34,7 @@ In case you want to use eslint and stylelint checks you have to install the pack
 You may install the packages locally in your project. For this to happen you need to follow the following  steps:
 
 1. `composer require --dev zooroyal/coding-standard`
-2. `npm install vendor/zooroyal/coding-standard`
+2. `npm install --save-dev vendor/zooroyal/coding-standard`
 
 ### Global Installation
 
@@ -55,10 +55,10 @@ composer update "zooroyal/coding-standard"
 
 # Usage coding-standard
 
-**Please keep in mind, that coding-standard can only run from inside a git 
+**Please keep in mind, that coding-standard can only run from inside a git
 repository.**
 
-Run the command to get usage instructions. 
+Run the command to get usage instructions.
 ```bash
 php vendor/bin/coding-standard
 ```
@@ -90,9 +90,9 @@ Usage:
   sca:all [options]
 
 Options:
-  -t, --target=TARGET      Finds Files which have changed since the current branch parted from the target 
+  -t, --target=TARGET      Finds Files which have changed since the current branch parted from the target
                            branch only. The Value has to be a commit-ish. [default: false]
-  -a, --auto-target        Finds Files which have changed since the current branch parted from the parent 
+  -a, --auto-target        Finds Files which have changed since the current branch parted from the parent
                            branch only. It tries to find the parent branch by automagic.
   -f, --fix                Runs tool to try to fix violations automagically.
   -p, --process-isolation  Runs all checks in separate processes. Slow but not as resource hungry.
@@ -102,11 +102,11 @@ Options:
       --ansi               Force ANSI output
       --no-ansi            Disable ANSI output
   -n, --no-interaction     Do not ask any interactive question
-  -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output 
+  -v|vv|vvv, --verbose     Increase the verbosity of messages: 1 for normal output, 2 for more verbose output
                            and 3 for debug
 
 Help:
-  This tool executes all static code analysis tools on files of this project. It ignores files which are in 
+  This tool executes all static code analysis tools on files of this project. It ignores files which are in
   directories with a .dont<toolshortcut> file. Subdirectories are ignored too.
 ```
 
@@ -116,7 +116,7 @@ The all command forwards all applicable parameters to all implemented static cod
 vendor/bin/coding-standard sca:all -a -f
 ```
 
-This command for example tries to find the parent branch by automagic (-a) and tells all static code analysis 
+This command for example tries to find the parent branch by automagic (-a) and tells all static code analysis
 tools to fix found violations if they are able to.
 
 ```bash
@@ -129,7 +129,7 @@ For examples just have a look an the .travis.yml
 
 # Usage github
 
-Add an implementation for guzzleX by using php-http/ package (requires since release 2.4): 
+Add an implementation for guzzleX by using php-http/ package (requires since release 2.4):
 For example: https://packagist.org/packages/php-http/guzzle6-adapter.
 
 ```bash
@@ -137,7 +137,7 @@ php composer require --dev php-http/guzzle6-adapter
 ```
 
 
-Run the command to get usage instructions. 
+Run the command to get usage instructions.
 ```bash
 php vendor/bin/github
 ```
@@ -173,5 +173,5 @@ Arguments:
   position              Position in file. [default: "1"]
 ```
 
-This will add a comment to the specified position in a pull request. It will delete all deprecated comments to the same 
+This will add a comment to the specified position in a pull request. It will delete all deprecated comments to the same
 place by the user owning the token.
