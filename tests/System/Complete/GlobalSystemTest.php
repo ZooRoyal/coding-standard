@@ -14,7 +14,6 @@ use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\call;
-use function Amp\Parallel\Worker\enqueueCallable;
 use function Amp\Promise\all;
 use function Amp\Promise\wait;
 
@@ -68,19 +67,6 @@ class GlobalSystemTest extends AsyncTestCase
     }
 
     /**
-     * Runs a coding-standard command in test environment
-     */
-    public static function runAndGetExitCode(string $environmentDirectory, string $command): int
-    {
-        $process = new Process(
-            [$environmentDirectory . '/vendor/bin/coding-standard', $command],
-            $environmentDirectory
-        );
-        wait($process->start());
-        return wait($process->join());
-    }
-
-    /**
      * @test
      *
      * @large
@@ -113,7 +99,7 @@ class GlobalSystemTest extends AsyncTestCase
         ];
 
         foreach ($copyFiles as $copyFile) {
-             yield call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
+            yield call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
         }
 
         $result = yield from $this->runTools($environmentDirectory);
@@ -153,15 +139,19 @@ class GlobalSystemTest extends AsyncTestCase
             'sca:eslint',
         ];
 
+        $processes = [];
         foreach ($tools as $tool) {
-            $promises[$tool] = enqueueCallable(
-                [self::class, 'runAndGetExitCode'],
-                $environmentDirectory,
-                $tool
+            $processes[$tool] = new Process(
+                [$environmentDirectory . '/vendor/bin/coding-standard', $tool],
+                $environmentDirectory
             );
         }
 
-        $exitCodes = yield all($promises);
+        $startPromises = array_map(static fn($process) => $process->start(), $processes);
+        yield all($startPromises);
+
+        $endPromises = array_map(static fn($process) => $process->join(), $processes);
+        $exitCodes = yield all($endPromises);
 
         return yield new Success($exitCodes);
     }

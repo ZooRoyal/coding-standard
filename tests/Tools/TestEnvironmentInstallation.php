@@ -15,12 +15,12 @@ use function Safe\json_encode;
 
 class TestEnvironmentInstallation
 {
+    private static TestEnvironmentInstallation $instance;
     private Filesystem $filesystem;
     private string $installationPath;
     private string $composerJsonPath = '';
     private string $composerPath;
     private bool $isInstalled = false;
-    private static TestEnvironmentInstallation $instance;
 
     /**
      * The Constructor is private because this is a Singleton.
@@ -33,17 +33,6 @@ class TestEnvironmentInstallation
         $this->installationPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . $dirname;
 
         $this->composerPath = dirname(__DIR__, 2);
-    }
-
-    /**
-     * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
-     */
-    public static function getInstance(): TestEnvironmentInstallation
-    {
-        if (!isset(self::$instance)) {
-            self::$instance = new TestEnvironmentInstallation();
-        }
-        return self::$instance;
     }
 
     /**
@@ -80,14 +69,20 @@ class TestEnvironmentInstallation
         return $this->composerJsonPath;
     }
 
-    public function isInstalled(): bool
-    {
-        return $this->isInstalled;
-    }
-
     public function getInstallationPath(): string
     {
         return $this->installationPath;
+    }
+
+    /**
+     * Because of the lack of dependency injection in PHPUnit I present to you the Singleton AntiPattern.
+     */
+    public static function getInstance(): TestEnvironmentInstallation
+    {
+        if (!isset(self::$instance)) {
+            self::$instance = new TestEnvironmentInstallation();
+        }
+        return self::$instance;
     }
 
     /**
@@ -105,11 +100,26 @@ class TestEnvironmentInstallation
         (new Process(['composer', 'install'], $this->installationPath))
             ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
-        (new Process(['npm', 'install', 'vendor/zooroyal/coding-standard'], $this->installationPath))
+        (new Process(
+            [
+                'npm',
+                '--prefer-offline',
+                '--no-audit',
+                '--progress=false',
+                'install',
+                'vendor/zooroyal/coding-standard',
+            ],
+            $this->installationPath
+        ))
             ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->isInstalled = true;
 
         return $this;
+    }
+
+    public function isInstalled(): bool
+    {
+        return $this->isInstalled;
     }
 
     /**
