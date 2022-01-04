@@ -15,7 +15,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\call;
 use function Amp\Promise\all;
-use function Amp\Promise\wait;
 
 class GlobalSystemTest extends AsyncTestCase
 {
