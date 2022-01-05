@@ -7,11 +7,11 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\Exclusion;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\GitPathsExcluder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\GitPathsExcluder;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitPathsExcluderTest extends TestCase

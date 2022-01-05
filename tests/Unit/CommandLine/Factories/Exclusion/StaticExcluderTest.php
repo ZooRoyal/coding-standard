@@ -8,17 +8,17 @@ use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\StaticExcluder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\StaticExcluder;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class StaticExcluderTest extends TestCase
 {
     private StaticExcluder $subject;
     private string $forgedRootDirectory;
-    /** @var MockInterface|EnhancedFileInfo */
+    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo */
     private $mockedEnhancedFileInfo;
     /** @var array<MockInterface> */
     private array $subjectParameters;

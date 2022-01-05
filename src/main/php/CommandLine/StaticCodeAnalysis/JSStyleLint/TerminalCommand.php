@@ -5,29 +5,29 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSStyleLint;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\AbstractTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\ExcludingTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\FileExtensionTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\FixingTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\ExcludingTrait;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\FileExtensionTrait;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\FixingTrait;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\TargetableTrait;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Traits\VerbosityTrait;
-use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\VerboseTerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
-    TargetableTerminalCommand,
-    FixingTerminalCommand,
-    ExcludingTerminalCommand,
+    TargetTerminalCommand,
+    FixTerminalCommand,
+    ExclusionTerminalCommand,
     FileExtensionTerminalCommand,
     VerboseTerminalCommand
 {
-    use TargetableTrait, FixingTrait, ExcludingTrait, FileExtensionTrait, VerbosityTrait;
+    use TargetTrait, FixTrait, ExclusionTrait, FileExtensionTrait, VerboseTrait;
 
     private const TEMPLATE = 'npx --no-install stylelint %3$s %4$s%5$s--allow-empty-input --config=%1$s%2$s';
     private Environment $environment;

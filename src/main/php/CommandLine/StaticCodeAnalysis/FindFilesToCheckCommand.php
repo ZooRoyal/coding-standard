@@ -9,14 +9,14 @@ use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Git\ParentBranchGuesser;
 
 class FindFilesToCheckCommand extends Command
 {
-    private ExclusionListFactory $blacklistFactory;
+    private ExclusionListFactory $exclusionListFactory;
     private AdaptableFileFinder $adaptableFileFinder;
     private ParentBranchGuesser $parentBranchGuesser;
 
@@ -24,11 +24,11 @@ class FindFilesToCheckCommand extends Command
      * FindFilesToCheckCommand constructor.
      */
     public function __construct(
-        ExclusionListFactory $blacklistFactory,
+        ExclusionListFactory $exclusionListFactory,
         AdaptableFileFinder $adaptableFileFinder,
         ParentBranchGuesser $parentBranchGuesser
     ) {
-        $this->blacklistFactory = $blacklistFactory;
+        $this->exclusionListFactory = $exclusionListFactory;
         $this->adaptableFileFinder = $adaptableFileFinder;
         $this->parentBranchGuesser = $parentBranchGuesser;
         parent::__construct();
@@ -70,7 +70,7 @@ class FindFilesToCheckCommand extends Command
                     . 'only. It tries to find the parent branch by automagic.'
                 ),
                 new InputOption(
-                    'blacklist-token',
+                    'exclusionlist-token',
                     'b',
                     InputOption::VALUE_REQUIRED,
                     'Name of the file which triggers the exclusion of the path',
@@ -108,19 +108,19 @@ class FindFilesToCheckCommand extends Command
     {
         $exclusionListInput = $input->getOption('exclusionList');
         $allowedFileEndings = $input->getOption('allowed-file-endings');
-        $blacklistTokenInput = $input->getOption('blacklist-token');
+        $exclusionListTokenInput = $input->getOption('exclusionlist-token');
         $whitelistTokenInput = $input->getOption('whitelist-token');
         $targetBranch = $input->getOption('auto-target')
             ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
             : $input->getOption('target');
 
         if ($exclusionListInput === true) {
-            $blacklist = $this->blacklistFactory->build($blacklistTokenInput);
-            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname() . '/', $blacklist);
+            $exclusionList = $this->exclusionListFactory->build($exclusionListTokenInput);
+            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname() . '/', $exclusionList);
         } else {
             $foundFiles = $this->adaptableFileFinder->findFiles(
                 $allowedFileEndings,
-                $blacklistTokenInput,
+                $exclusionListTokenInput,
                 $whitelistTokenInput,
                 $targetBranch
             )->getFiles();

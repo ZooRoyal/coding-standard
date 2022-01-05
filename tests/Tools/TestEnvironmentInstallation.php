@@ -97,7 +97,10 @@ class TestEnvironmentInstallation
         file_put_contents($this->installationPath . DIRECTORY_SEPARATOR . 'composer.json', $renderedComposerFile);
 
         (new Process(['git', 'init'], $this->installationPath))->mustRun();
-        (new Process(['composer', 'install'], $this->installationPath))
+        (new Process(
+            ['composer', 'install', '--no-interaction', '--no-progress', '--no-suggest'],
+            $this->installationPath
+        ))
             ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
         (new Process(

@@ -9,8 +9,8 @@ use PHPStan\DependencyInjection\NeonAdapter;
 use RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Filesystem\Filesystem;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 
 class PHPStanConfigGenerator
 {
@@ -113,7 +113,7 @@ class PHPStanConfigGenerator
      * Adds the list of files to be excluded to the config.
      *
      * @param array<string,array<string|int,string|array<string>>> $configValues
-     * @param array<EnhancedFileInfo> $exclusionList
+     * @param array<EnhancedFileInfo>                              $exclusionList
      *
      * @return array<string,array<string|int,string|array<string>>>
      */

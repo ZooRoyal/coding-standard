@@ -11,7 +11,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
 
 class ContainerFactoryTest extends TestCase
 {
@@ -68,7 +68,7 @@ class ContainerFactoryTest extends TestCase
         $mockedContainerBuilder->shouldReceive('useAnnotations')->once()->with(true);
         $mockedContainerBuilder->shouldReceive('useAutowiring')->once()->with(true);
         $mockedContainerBuilder->shouldReceive('addDefinitions')->once()
-            ->with(Matchers::endsWith('/../Config/phpdi.php'));
+            ->with(Matchers::endsWith('/phpdi.php'));
         $mockedContainerBuilder->shouldReceive('build')->once()
             ->withNoArgs()->andReturn($expectedContainer);
 

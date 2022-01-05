@@ -10,10 +10,10 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSStyleLint\TerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\TerminalCommandTestData;
 
 class TerminalCommandTest extends TestCase
@@ -22,7 +22,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
     private TerminalCommand $subject;
-    /** @var MockInterface|Environment */
+    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Environment\Environment */
     private Environment $mockedEnvironment;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;

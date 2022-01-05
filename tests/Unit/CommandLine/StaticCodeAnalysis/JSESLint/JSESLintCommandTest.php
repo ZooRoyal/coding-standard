@@ -7,8 +7,8 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\JSES
 use DI\Container;
 use Mockery;
 use Mockery\MockInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
-use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandFinder;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandNotFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\JSESLintCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\TerminalCommand;
 use Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\Generic\FixingToolCommandTest;
@@ -17,8 +17,8 @@ class JSESLintCommandTest extends FixingToolCommandTest
 {
     /** @var Container|MockInterface */
     private Container $mockedContainer;
-    /** @var MockInterface|TerminalCommandFinder */
-    private TerminalCommandFinder $mockedTerminalCommandFinder;
+    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandFinder */
+    private NpmCommandFinder $mockedTerminalCommandFinder;
 
     protected function setUp(): void
     {
@@ -28,7 +28,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
         $this->allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
         $this->mockedTerminalCommand = Mockery::mock(TerminalCommand::class);
         $this->mockedContainer = Mockery::mock(Container::class);
-        $this->mockedTerminalCommandFinder = Mockery::mock(TerminalCommandFinder::class);
+        $this->mockedTerminalCommandFinder = Mockery::mock(NpmCommandFinder::class);
 
         $this->mockedContainer->shouldReceive('make')->atLeast()->once()
             ->with(TerminalCommand::class)
@@ -74,7 +74,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
     public function executeSkipsCommandIfNotFound(): void
     {
         $this->mockedTerminalCommandFinder->shouldReceive('findTerminalCommand')->once()
-            ->andThrow(new TerminalCommandNotFoundException());
+            ->andThrow(new NpmCommandNotFoundException());
 
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with('<info>EsLint could not be found. To use this sniff please refer to the README.md</info>');

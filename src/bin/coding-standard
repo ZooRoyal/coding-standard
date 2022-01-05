@@ -4,7 +4,7 @@
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
 
 $autoloadFiles = [
     __DIR__ . '/../../../../autoload.php',

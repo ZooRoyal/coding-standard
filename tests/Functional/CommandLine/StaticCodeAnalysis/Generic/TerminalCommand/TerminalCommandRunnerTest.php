@@ -10,7 +10,7 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 

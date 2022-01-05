@@ -11,9 +11,9 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\CommitishComparator;
-use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\CommitishComparator;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class AdaptableFileFinderTest extends TestCase

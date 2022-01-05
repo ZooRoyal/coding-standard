@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\ApplicationFactory;
+use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ApplicationFactory;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\AllToolsCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\JSESLintCommand;
@@ -70,7 +70,9 @@ class ApplicationFactoryTest extends TestCase
     public function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(ApplicationFactory::class);
+        $buildFragments = $subjectFactory->buildSubject(
+            ApplicationFactory::class
+        );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
     }

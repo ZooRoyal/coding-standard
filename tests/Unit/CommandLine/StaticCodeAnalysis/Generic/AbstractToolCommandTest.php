@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 
 abstract class AbstractToolCommandTest extends TestCase
@@ -75,7 +76,7 @@ abstract class AbstractToolCommandTest extends TestCase
                     )
                 )
             ),
-            AbstractToolCommand::EVENT_DECORATE_TERMINAL_COMMAND
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
         );
         $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
             ->with($this->mockedTerminalCommand)->andReturn($expectedExitCode);

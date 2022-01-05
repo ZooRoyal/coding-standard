@@ -13,7 +13,7 @@ use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitCommandPreconditionCheckerTest extends TestCase

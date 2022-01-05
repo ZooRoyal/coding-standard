@@ -7,9 +7,9 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitChangeSetFactoryTest extends TestCase

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 
 interface FileFinderInterface
 {
@@ -15,7 +15,7 @@ interface FileFinderInterface
      */
     public function findFiles(
         array $allowedFileEndings = [],
-        string $blacklistToken = '',
+        string $exclusionListToken = '',
         string $whitelistToken = '',
         ?string $targetBranch = null
     ): GitChangeSet;

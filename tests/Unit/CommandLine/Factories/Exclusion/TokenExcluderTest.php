@@ -8,11 +8,11 @@ use Hamcrest\Matchers;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\TokenExcluder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class TokenExcluderTest extends TestCase

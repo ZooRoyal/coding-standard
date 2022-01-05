@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Library\CommitishComparator;
-use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\CommitishComparator;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
 
 /**
  * This class searches for files in Git. It decides for itself if it returns a diff to a branch or all relevant files.
@@ -42,7 +42,7 @@ class AdaptableFileFinder implements FileFinderInterface
      */
     public function findFiles(
         array $allowedFileEndings = [],
-        string $blacklistToken = '',
+        string $exclusionListToken = '',
         string $whitelistToken = '',
         ?string $targetBranch = null
     ): GitChangeSet {
@@ -56,7 +56,7 @@ class AdaptableFileFinder implements FileFinderInterface
             ? $this->allCheckableFileFinder
             : $this->diffCheckableFileFinder;
 
-        $result = $finder->findFiles($allowedFileEndings, $blacklistToken, $whitelistToken, $targetBranch);
+        $result = $finder->findFiles($allowedFileEndings, $exclusionListToken, $whitelistToken, $targetBranch);
 
         return $result;
     }

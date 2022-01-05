@@ -8,9 +8,9 @@ use DI\Annotation\Inject;
 use DI\Container;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Exceptions\TerminalCommandNotFoundException;
-use Zooroyal\CodingStandard\CommandLine\Library\TerminalCommandFinder;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\FixingToolCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandFinder;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandNotFoundException;
 
 class JSESLintCommand extends FixingToolCommand
 {
@@ -18,7 +18,7 @@ class JSESLintCommand extends FixingToolCommand
     protected string $exclusionListToken = '.dontSniffJS';
     /** @var array<string>  */
     protected array $allowedFileEndings = ['js', 'ts', 'jsx', 'tsx'];
-    private TerminalCommandFinder $terminalCommandFinder;
+    private NpmCommandFinder $terminalCommandFinder;
 
     /**
      * {@inheritDoc}
@@ -42,7 +42,7 @@ class JSESLintCommand extends FixingToolCommand
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('eslint');
-        } catch (TerminalCommandNotFoundException $exception) {
+        } catch (NpmCommandNotFoundException $exception) {
             $output->writeln('<info>EsLint could not be found. To use this sniff please refer to the README.md</info>');
             return 0;
         }
@@ -57,7 +57,7 @@ class JSESLintCommand extends FixingToolCommand
      *
      * @Inject
      */
-    public function injectDependenciesCommand(Container $container, TerminalCommandFinder $terminalCommandFinder): void
+    public function injectDependenciesCommand(Container $container, NpmCommandFinder $terminalCommandFinder): void
     {
         $this->terminalCommandFinder = $terminalCommandFinder;
         $this->terminalCommand = $container->make(TerminalCommand::class);

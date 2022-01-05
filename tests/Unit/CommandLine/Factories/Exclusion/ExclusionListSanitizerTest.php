@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\Exclusion;
 
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\ExclusionListSanitizer;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListSanitizer;
 
 class ExclusionListSanitizerTest extends TestCase
 {
@@ -35,7 +35,7 @@ class ExclusionListSanitizerTest extends TestCase
      *
      * @param array<string> $filePaths
      *
-     * @return array<EnhancedFileInfo>
+     * @return array<\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo>
      */
     private function prepareMockedEnhancedFileInfo(array $filePaths): array
     {

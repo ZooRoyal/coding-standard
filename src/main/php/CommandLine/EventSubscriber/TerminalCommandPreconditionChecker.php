@@ -7,7 +7,7 @@ namespace Zooroyal\CodingStandard\CommandLine\EventSubscriber;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 /**
  * Class TerminalCommandPreconditionChecker

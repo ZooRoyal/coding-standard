@@ -7,11 +7,11 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFilter;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class AllCheckableFileFinderTest extends TestCase

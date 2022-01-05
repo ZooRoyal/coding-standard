@@ -7,10 +7,10 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Factories\ExcluderInterface;
-use Zooroyal\CodingStandard\CommandLine\Factories\Excluders\ExclusionListSanitizer;
-use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\ExcluderInterface;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListSanitizer;
 
 class ExclusionListFactoryTest extends TestCase
 {
@@ -21,7 +21,7 @@ class ExclusionListFactoryTest extends TestCase
     private $mockedExcluder2;
     /** @var array<MockInterface|ExcluderInterface> */
     private array $mockedExcluders;
-    /** @var MockInterface|ExclusionListSanitizer */
+    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListSanitizer */
     private $mockedExclusionListSanitizer;
 
     protected function setUp(): void

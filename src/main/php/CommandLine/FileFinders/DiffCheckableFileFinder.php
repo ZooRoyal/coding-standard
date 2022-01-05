@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Factories\GitChangeSetFactory;
-use Zooroyal\CodingStandard\CommandLine\Library\GitChangeSetFilter;
-use Zooroyal\CodingStandard\CommandLine\Library\ProcessRunner;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFilter;
+use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
@@ -38,7 +38,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
      */
     public function findFiles(
         array $allowedFileEndings = [],
-        string $blacklistToken = '',
+        string $exclusionListToken = '',
         string $whitelistToken = '',
         ?string $targetBranch = null
     ): GitChangeSet {
@@ -50,7 +50,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         }
 
         $rawDiff = $this->findFilesInDiffToTarget($targetBranch);
-        $this->fileFilter->filter($rawDiff, $allowedFileEndings, $blacklistToken, $whitelistToken);
+        $this->fileFilter->filter($rawDiff, $allowedFileEndings, $exclusionListToken, $whitelistToken);
 
         return $rawDiff;
     }
