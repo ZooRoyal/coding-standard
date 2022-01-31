@@ -12,7 +12,7 @@ on:
 
 jobs:
   codestyle:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -73,7 +73,7 @@ jobs:
           exit $CS_EXIT
 
   tests:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     needs:
       - codestyle
     strategy:
