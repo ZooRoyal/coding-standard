@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
+namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
 
 use Hamcrest\Matchers;
 use Mockery;
@@ -43,7 +43,7 @@ class TerminalCommandRunnerTest extends TestCase
     public function runRelaysOutputOfCommand(): void
     {
         $this->mockedOutput->shouldReceive('write')->once()->with(
-            Matchers::startsWith('Reading ./composer.json'),
+            Matchers::containsString('<!DOCTYPE html>'),
             false,
             Output::OUTPUT_RAW
         );
@@ -51,7 +51,7 @@ class TerminalCommandRunnerTest extends TestCase
         $this->mockedOutput->shouldReceive('write')->atLeast()->once()
             ->with(Mockery::any(), false, Output::OUTPUT_RAW);
 
-        $this->mockedTerminalCommand->shouldReceive('toArray')->andReturn(['composer', 'status', '-vvv']);
+        $this->mockedTerminalCommand->shouldReceive('toArray')->andReturn(['curl', 'https://github.com']);
         $this->subject->run($this->mockedTerminalCommand);
     }
 
