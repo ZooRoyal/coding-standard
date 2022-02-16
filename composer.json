@@ -97,6 +97,13 @@
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
-    "process-timeout": 600
+    "process-timeout": 600,
+    "allow-plugins": {
+      "ocramius/package-versions": true,
+      "infection/extension-installer": true,
+      "mindplay/composer-locator": true,
+      "phpstan/extension-installer": true,
+      "dealerdirect/phpcodesniffer-composer-installer": true
+    }
   }
 }
