@@ -16,7 +16,8 @@
     <rule ref="PHPCompatibility"/>
 
     <!-- Custom Rule-->
-    <rule ref="../../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/Rdss/Standards/ZooRoyal"/>
 
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">

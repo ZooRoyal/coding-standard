@@ -1,33 +1,46 @@
 <?php
 
-class Car
+declare(strict_types=1);
+
+namespace Zooroyal\CodingStandard\CommandLine\ValueObjects;
+
+use SplFileInfo;
+use Webmozart\PathUtil\Path;
+
+class BadCopyPasteDetect extends SplFileInfo
 {
-    function Car()
+    private string $relativePathname;
+
+    public function __construct(string $pathname, string $basePath)
     {
-        $this->model = 'Tesla';
+        parent::__construct($pathname);
+        $this->relativePathname = Path::makeRelative($pathname, $basePath);
+        $this->relativePathname = empty($this->relativePathname) ? '.' : $this->relativePathname;
     }
-}
 
-// create an object
-$Lightning = new Car();
+    /**
+     * Returns the relative path name.
+     *
+     * This path contains the file name.
+     */
+    public function getRelativePathname(): string
+    {
+        return $this->relativePathname;
+    }
 
-// show object properties
-echo $Lightning->model;
+    /**
+     * Checks if the path name ends with the given suffix.
+     */
+    public function endsWith(string $suffix): bool
+    {
+        return str_ends_with($this->getPathname(), $suffix);
+    }
 
-$i = 'bla';
-
-// Switch Statement Example
-switch ($i) {
-    case 'free':
-        echo 'i is free';
-        break;
-    case 'code':
-        echo 'i is code';
-        break;
-    case 'camp':
-        echo 'i is camp';
-        break;
-    default:
-        echo 'i is freecodecamp';
-        break;
+    /**
+     * Checks if the path name starts with the given prefix.
+     */
+    public function startsWith(string $suffix): bool
+    {
+        return str_starts_with($this->getPathname(), $suffix);
+    }
 }

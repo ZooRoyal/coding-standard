@@ -16,18 +16,16 @@ class PHPStanConfigGenerator
 {
     private const TOOL_FUNCTIONS_FILE_MAPPING
         = [
-            'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
-            'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
-            'mockery/mockery' => '/library/helpers.php',
+            'hamcrest/hamcrest-php' => ['/hamcrest/Hamcrest.php'],
+            'sebastianknott/hamcrest-object-accessor' => ['/src/functions.php'],
+            'mockery/mockery' => ['/library/helpers.php'],
         ];
-
     private const STATIC_DIRECTORIES_TO_SCAN
         = [
             '/Plugins',
             '/custom/plugins',
             '/custom/project',
         ];
-
     private string $phpStanConfigPath;
 
     public function __construct(
@@ -92,13 +90,15 @@ class PHPStanConfigGenerator
      */
     private function addFunctionsFiles(array $configValues, OutputInterface $output): array
     {
-        foreach (self::TOOL_FUNCTIONS_FILE_MAPPING as $tool => $functionsFile) {
+        foreach (self::TOOL_FUNCTIONS_FILE_MAPPING as $tool => $functionsFiles) {
             try {
                 $toolPath = ComposerLocator::getPath($tool);
-                $configValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;
+                foreach ($functionsFiles as $functionsFile) {
+                    $configValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;
+                }
             } catch (RuntimeException) {
                 $output->writeln(
-                    '<info>' . $tool . ' not found. Skip loading ' . $functionsFile . '</info>',
+                    '<info>' . $tool . ' not found. Skip loading ' . implode(', ', $functionsFiles) . '.</info>',
                     OutputInterface::VERBOSITY_VERBOSE
                 );
             }
@@ -111,7 +111,7 @@ class PHPStanConfigGenerator
      * Adds the list of files to be excluded to the config.
      *
      * @param array<string,array<string|int,string|array<string>>> $configValues
-     * @param array<EnhancedFileInfo> $exclusionList
+     * @param array<EnhancedFileInfo>                              $exclusionList
      *
      * @return array<string,array<array<string|int,string>>>
      */

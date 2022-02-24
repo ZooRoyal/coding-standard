@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         composer_version: [2]
-        composer_parameters: ['--prefer-lowest', ' ']
+        composer_parameters: ['--prefer-lowest', '--prefer-stable']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

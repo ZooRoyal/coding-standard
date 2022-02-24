@@ -78,7 +78,13 @@
   "autoload-dev": {
     "psr-4": {
       "Zooroyal\\CodingStandard\\Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "vendor/squizlabs/php_codesniffer/autoload.php",
+      "vendor/squizlabs/php_codesniffer/src/Util/Tokens.php",
+      "vendor/squizlabs/php_codesniffer/src/Sniffs/Sniff.php",
+      "vendor/slevomat/coding-standard/autoload-bootstrap.php"
+    ]
   },
   "bin": [
     "src/bin/coding-standard",

@@ -87,12 +87,14 @@ class PHPStanConfigGeneratorTest extends TestCase
 
         $mockedEnhancedFileInfo->shouldReceive('getRealPath')->atLeast()->once()->andReturn($forgedFilePath);
 
-        $this->mockedOutput->shouldReceive('writeln')->once()->with(
-            '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERBOSE
-        );
-        $this->mockedOutput->shouldReceive('writeln')->once()->with(
-            '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php</info>',
+
+        $this->mockedOutput->shouldReceive('writeln')->times(4)->with(
+            H::anyOf(
+                '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
+                '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php.</info>',
+                '<info>squizlabs/php_codesniffer not found. Skip loading /autoload.php, /src/Util/Tokens.php.</info>',
+                '<info>slevomat/coding-standard not found. Skip loading /autoload-bootstrap.php.</info>',
+            ),
             OutputInterface::VERBOSITY_VERBOSE
         );
 

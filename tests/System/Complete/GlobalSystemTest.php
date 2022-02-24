@@ -80,7 +80,7 @@ class GlobalSystemTest extends AsyncTestCase
         $fixtureDirectory = dirname(__DIR__) . '/fixtures';
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
         $badPhpSnifferFilePath = dirname(__DIR__, 2)
-            . '/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/'
+            . '/Functional/Sniffs/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/'
             . 'Fixtures/FixtureIncorrectComments.php';
 
         $this->filesystem->mkdir($badCodeDirectory);
@@ -90,8 +90,8 @@ class GlobalSystemTest extends AsyncTestCase
             [$fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts'],
             [$fixtureDirectory . '/stylelint/BadCode.less', $badCodeDirectory . '/BadCode.less'],
             [$badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php'],
-            [$fixtureDirectory . '/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect1.php'],
-            [$fixtureDirectory . '/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect2.php'],
+            [$fixtureDirectory . '/complete/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect1.php'],
+            [$fixtureDirectory . '/complete/BadCopyPasteDetect.php', $badCodeDirectory . '/BadCopyPasteDetect2.php'],
             [$fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php'],
             [$fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php'],
             [$fixtureDirectory . '/complete/BadMessDetect.php', $badCodeDirectory . '/BadMessDetect.php'],
