@@ -20,7 +20,7 @@
         </include>
         <exclude>
             <file>./src/config</file>
-            <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
+            <directory>./src/main/php/Sniffs/PHPCodeSniffer</directory>
         </exclude>
         <report>
             <clover outputFile="/tmp/phpunit/clover.xml"/>

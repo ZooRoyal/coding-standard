@@ -8,6 +8,7 @@ composer.lock
 node_modules
 package-lock.json
 phpunit.xml
+infection.html
 infection.log
 rector.php
 tests/Functional/Plugin/Fixtures/ComposerTest/package.json

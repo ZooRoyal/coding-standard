@@ -20,9 +20,7 @@ class DisallowMixedReturnTypeHintSniff
 
     private const INVALID_TYPE_HINT = 'mixed';
 
-    /**
-     * @return array<int, (int|string)>
-     */
+    /** @return array<int|string> */
     public function register(): array
     {
         return [

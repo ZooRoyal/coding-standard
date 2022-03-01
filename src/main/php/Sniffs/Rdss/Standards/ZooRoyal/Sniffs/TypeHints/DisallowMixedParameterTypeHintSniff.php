@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\Sniffs\Rdss\Standards\ZooRoyal\Sniffs\TypeHints;
 
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
 use SlevomatCodingStandard\Helpers\DocCommentHelper;
 use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
@@ -17,20 +16,10 @@ use const T_FUNCTION;
 class DisallowMixedParameterTypeHintSniff
 {
     private const NAME = 'Zooroyal.TypeHints.DisallowMixedParameterTypeHint';
-
     private const ERROR_CODE = 'MixedParameterTypeHintUsed';
-
     private const INVALID_TYPE_HINT = 'mixed';
-
-    private const ERROR_MESSAGE_FUNCTION = 'uses "mixed" type hint for parameter %s, which is disallowed';
-
-    public function register(): array
-    {
-        return [
-            T_FUNCTION,
-            T_CLOSURE,
-        ];
-    }
+    private const ERROR_MESSAGE_FUNCTION
+        = 'uses "' . self::INVALID_TYPE_HINT . '" type hint for parameter %s, which is disallowed';
 
     public function process(File $phpcsFile, int $functionPointer): void
     {
@@ -52,6 +41,15 @@ class DisallowMixedParameterTypeHintSniff
             $parametersTypeHints,
             (int) $token['code'],
         );
+    }
+
+    /** @return array<int|string> */
+    public function register(): array
+    {
+        return [
+            T_FUNCTION,
+            T_CLOSURE,
+        ];
     }
 
     /**
@@ -90,7 +88,6 @@ class DisallowMixedParameterTypeHintSniff
                 $parameterName
             )
             : sprintf(
-                                                                                                                                                                                                                                                                           
                 'closure() ' . self::ERROR_MESSAGE_FUNCTION,
                 $parameterName
             );

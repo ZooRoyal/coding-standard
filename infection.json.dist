@@ -1,7 +1,7 @@
 {
     "timeout": 10,
-    "minMsi": 91,
-    "minCoveredMsi": 91,
+    "minMsi": 93,
+    "minCoveredMsi": 93,
     "source": {
         "directories": [
             "src\/main\/php"
@@ -11,7 +11,9 @@
         ]
     },
     "logs": {
-        "text": "infection.log"
+        "text": "infection.log",
+        "html": "infection.html",
+        "github": true
     },
     "mutators": {
         "@default": true
