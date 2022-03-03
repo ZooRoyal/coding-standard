@@ -10,12 +10,9 @@ class ParentBranchGuesser
 {
     /** @var string */
     private const GIT = 'git';
-    private ProcessRunner $processRunner;
-
     public function __construct(
-        ProcessRunner $processRunner
+        private ProcessRunner $processRunner,
     ) {
-        $this->processRunner = $processRunner;
     }
 
     /**

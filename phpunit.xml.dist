@@ -7,6 +7,7 @@
         resolveDependencies="true"
         stopOnRisky="true"
         timeoutForSmallTests="2"
+        timeoutForMediumTests="60"
         timeoutForLargeTests="180"
         verbose="false"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -19,7 +20,7 @@
         </include>
         <exclude>
             <file>./src/config</file>
-            <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
+            <directory>./src/main/php/Sniffs/PHPCodeSniffer</directory>
         </exclude>
         <report>
             <clover outputFile="/tmp/phpunit/clover.xml"/>

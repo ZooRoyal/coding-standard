@@ -12,6 +12,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontMessDetectPHP';
+
     /** @var array<string> */
     protected array $allowedFileEndings = ['php'];
 

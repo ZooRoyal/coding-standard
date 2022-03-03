@@ -8,21 +8,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class AllCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $gitChangeSetFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * AllCheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $gitChangeSetFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private ProcessRunner $processRunner,
+        private GitChangeSetFilter $gitChangeSetFilter,
+        private GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->gitChangeSetFilter = $gitChangeSetFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**

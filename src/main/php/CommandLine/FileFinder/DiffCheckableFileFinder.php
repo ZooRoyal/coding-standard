@@ -9,21 +9,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $fileFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * CheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $fileFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private ProcessRunner $processRunner,
+        private GitChangeSetFilter $fileFilter,
+        private GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->fileFilter = $fileFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**

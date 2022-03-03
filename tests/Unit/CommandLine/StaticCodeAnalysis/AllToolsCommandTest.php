@@ -41,8 +41,7 @@ class AllToolsCommandTest extends TestCase
     private OutputInterface $mockedOutput;
     /** @var MockInterface|Application */
     private Application $mockedApplication;
-    /** @var MockInterface|Command */
-    private $mockedCommand;
+    private MockInterface|Command $mockedCommand;
 
     protected function setUp(): void
     {
@@ -91,7 +90,7 @@ class AllToolsCommandTest extends TestCase
         array $commands,
         array $optionsAndValues,
         array $exitCodes,
-        int $finalResult
+        int $finalResult,
     ): void {
         $forgedOptionsCommand = ['wub' => 'egal', 'fixable' => 'superegal'];
 
@@ -194,7 +193,7 @@ class AllToolsCommandTest extends TestCase
         return Mockery::on(
             static function (ArrayInput $sut) use ($optionsAndValues): bool {
                 foreach ($optionsAndValues as $option => $value) {
-                    MatcherAssert::assertThat($sut->getParameterOption(['--' . $option], H::equalTo($value)));
+                    MatcherAssert::assertThat($sut->getParameterOption(['--' . $option]), H::equalTo($value));
                 }
                 return true;
             }

@@ -24,13 +24,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use ExclusionTrait, TargetTrait, VerboseTrait;
 
     private const TEMPLATE = 'php %1$s analyse %4$s--no-progress --error-format=github -c %2$s %3$s';
-    private PHPStanConfigGenerator $phpstanConfigGenerator;
-    private Environment $environment;
-
-    public function __construct(Environment $environment, PHPStanConfigGenerator $phpstanConfigGenerator)
+    public function __construct(private Environment $environment, private PHPStanConfigGenerator $phpstanConfigGenerator)
     {
-        $this->environment = $environment;
-        $this->phpstanConfigGenerator = $phpstanConfigGenerator;
     }
 
     /**

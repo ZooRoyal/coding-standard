@@ -19,8 +19,7 @@ class EnvironmentTest extends TestCase
     private Environment $subject;
     /** @var array<MockInterface>|array<mixed> */
     private array $subjectParameters;
-    /** @var MockInterface|EnhancedFileInfo  */
-    private $mockedEnhancedFileInfo;
+    private MockInterface|EnhancedFileInfo $mockedEnhancedFileInfo;
 
     protected function setUp(): void
     {

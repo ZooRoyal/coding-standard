@@ -29,8 +29,7 @@ class TerminalCommandTest extends TestCase
     private Environment $mockedEnvironment;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;
-    /** @var MockInterface|PHPStanConfigGenerator */
-    private $mockedConfigGenereator;
+    private MockInterface|PHPStanConfigGenerator $mockedConfigGenereator;
 
     protected function setUp(): void
     {

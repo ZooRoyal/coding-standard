@@ -12,11 +12,12 @@
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
 
-    <config name="testVersion" value="7.4-"/>
+    <config name="testVersion" value="8.0-"/>
     <rule ref="PHPCompatibility"/>
 
     <!-- Custom Rule-->
-    <rule ref="../../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/Rdss/Standards/ZooRoyal"/>
 
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">
@@ -112,7 +113,7 @@
 
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
-    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
+    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
     <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
         <properties>
@@ -137,7 +138,10 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
+    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
+    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
     <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
@@ -169,7 +173,6 @@
     <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
-
     <!--
         https://packagist.org/packages/bmitch/codor are planed for PHP > 7.0
 

@@ -32,11 +32,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     private const TEMPLATE
         = 'npx --no-install eslint %6$s%7$s--no-error-on-unmatched-pattern --config %1$s %3$s'
         . '--ignore-path %2$s %4$s%5$s';
-    private Environment $environment;
-
-    public function __construct(Environment $environment)
+    public function __construct(private Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**

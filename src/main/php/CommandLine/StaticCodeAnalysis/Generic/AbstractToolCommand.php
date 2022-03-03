@@ -20,7 +20,7 @@ abstract class AbstractToolCommand extends Command
 {
     protected string $exclusionListToken;
     /** @var array<string> */
-    protected array $allowedFileEndings;
+    protected array $allowedFileEndings = [];
     protected TerminalCommand $terminalCommand;
     protected string $terminalCommandName;
     private TerminalCommandRunner $terminalCommandRunner;
@@ -51,11 +51,11 @@ abstract class AbstractToolCommand extends Command
 
         try {
             $exitCode = $this->terminalCommandRunner->run($this->terminalCommand);
-        } catch (NoUsefulCommandFoundException $exception) {
+        } catch (NoUsefulCommandFoundException $noUsefulCommandFoundException) {
             $output->writeln('Skipping tool.');
             $output->writeln(
-                'Reason to skip tool: ' . $exception->getMessage() . PHP_EOL
-                . 'Code: ' . $exception->getCode(),
+                'Reason to skip tool: ' . $noUsefulCommandFoundException->getMessage() . PHP_EOL
+                . 'Code: ' . $noUsefulCommandFoundException->getCode(),
                 OutputInterface::VERBOSITY_VERBOSE
             );
             $exitCode = 0;
@@ -80,7 +80,7 @@ abstract class AbstractToolCommand extends Command
      */
     public function injectDependenciesToolCommand(
         TerminalCommandRunner $terminalCommandRunner,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
     ): void {
         $this->terminalCommandRunner = $terminalCommandRunner;
         $this->eventDispatcher = $eventDispatcher;

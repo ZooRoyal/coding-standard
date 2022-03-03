@@ -1,3 +1,4 @@
+.DS_Store
 .idea
 .phpunit.result.cache
 vendor
@@ -7,6 +8,7 @@ composer.lock
 node_modules
 package-lock.json
 phpunit.xml
+infection.html
 infection.log
 rector.php
 tests/Functional/Plugin/Fixtures/ComposerTest/package.json

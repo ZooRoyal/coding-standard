@@ -8,13 +8,11 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class NpmCommandFinder
 {
-    private ProcessRunner $processRunner;
     /**
      * TerminalCommandFinder constructor.
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     /**

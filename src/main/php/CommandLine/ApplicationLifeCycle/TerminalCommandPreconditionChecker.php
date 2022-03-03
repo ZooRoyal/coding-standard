@@ -18,7 +18,6 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
  */
 class TerminalCommandPreconditionChecker implements EventSubscriberInterface
 {
-    private ProcessRunner $processRunner;
     /** @var array<string,int> */
     private array $results = [];
     /** @var array<string> */
@@ -27,9 +26,8 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
     /**
      * TerminalCommandPreconditionChecker constructor.
      */
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     /**

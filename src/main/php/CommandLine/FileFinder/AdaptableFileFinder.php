@@ -11,24 +11,15 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
  */
 class AdaptableFileFinder implements FileFinderInterface
 {
-    private GitInputValidator $gitInputValidator;
-    private AllCheckableFileFinder $allCheckableFileFinder;
-    private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private CommitishComparator $commitishComparator;
-
     /**
      * AdaptableFileFinder constructor.
      */
     public function __construct(
-        GitInputValidator $gitInputValidator,
-        AllCheckableFileFinder $allCheckableFileFinder,
-        DiffCheckableFileFinder $diffCheckableFileFinder,
-        CommitishComparator $commitishComparator
+        private GitInputValidator $gitInputValidator,
+        private AllCheckableFileFinder $allCheckableFileFinder,
+        private DiffCheckableFileFinder $diffCheckableFileFinder,
+        private CommitishComparator $commitishComparator,
     ) {
-        $this->gitInputValidator = $gitInputValidator;
-        $this->allCheckableFileFinder = $allCheckableFileFinder;
-        $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->commitishComparator = $commitishComparator;
     }
 
 

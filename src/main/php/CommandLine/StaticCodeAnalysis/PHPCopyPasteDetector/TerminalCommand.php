@@ -29,13 +29,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
             'custom/plugins/ZRBannerSlider/ZRBannerSlider.php',
             'custom/plugins/ZRPreventShipping/ZRPreventShipping.php',
         ];
-    private Environment $environment;
-    private ProcessRunner $processRunner;
 
-    public function __construct(Environment $environment, ProcessRunner $processRunner)
+    public function __construct(private Environment $environment, private ProcessRunner $processRunner)
     {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
     }
 
     /**
@@ -74,7 +70,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
 
         if ($this->excludesFiles !== []) {
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname() . '/',
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
                 $this->excludesFiles
             );
         }
@@ -100,6 +96,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $extensionsString = '--suffix ' . implode(' --suffix ', $this->fileExtensions);
             $extensionsString .= ' ';
         }
+
         return $extensionsString;
     }
 
@@ -113,7 +110,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         return implode(
             ' ',
             array_map(
-                static fn(string $item) => '--exclude ' . $item,
+                static fn(string $item): string => '--exclude ' . $item,
                 $finderResultLines
             )
         ) . ' ';

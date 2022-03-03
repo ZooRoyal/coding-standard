@@ -15,14 +15,11 @@ use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListSanitizer;
 class ExclusionListFactoryTest extends TestCase
 {
     private ExclusionListFactory $subject;
-    /** @var MockInterface|ExcluderInterface */
-    private $mockedExcluder1;
-    /** @var MockInterface|ExcluderInterface */
-    private $mockedExcluder2;
+    private MockInterface|ExcluderInterface $mockedExcluder1;
+    private MockInterface|ExcluderInterface $mockedExcluder2;
     /** @var array<MockInterface|ExcluderInterface> */
     private array $mockedExcluders;
-    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListSanitizer */
-    private $mockedExclusionListSanitizer;
+    private MockInterface|ExclusionListSanitizer $mockedExclusionListSanitizer;
 
     protected function setUp(): void
     {

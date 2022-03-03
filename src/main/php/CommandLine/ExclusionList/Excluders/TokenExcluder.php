@@ -11,26 +11,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class TokenExcluder implements ExcluderInterface
 {
-    private Environment $environment;
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-    private CacheKeyGenerator $cacheKeyGenerator;
-    /** @var array<string,array<EnhancedFileInfo>> */
-    private array $cache = [];
-
     /**
      * TokenExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory,
-        CacheKeyGenerator $cacheKeyGenerator
+        private Environment $environment,
+        private ProcessRunner $processRunner,
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
-        $this->cacheKeyGenerator = $cacheKeyGenerator;
     }
 
     /**

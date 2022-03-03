@@ -81,7 +81,7 @@ class GlobalSystemTest extends AsyncTestCase
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
         $mockedPluginDirectory = $environmentDirectory . '/custom/plugins';
         $badPhpSnifferFilePath = dirname(__DIR__, 2)
-            . '/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/'
+            . '/Functional/Sniffs/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/'
             . 'Fixtures/FixtureIncorrectComments.php';
 
         $this->filesystem->mkdir($badCodeDirectory);
@@ -100,7 +100,7 @@ class GlobalSystemTest extends AsyncTestCase
             [$fixtureDirectory . '/complete/Installer2.php', $mockedPluginDirectory . '/b/Installer.php'],
             [$fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php'],
             [$fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php'],
-            [$fixtureDirectory . '/complete/BadMessDectect.php', $badCodeDirectory . '/BadMessDetect.php'],
+            [$fixtureDirectory . '/complete/BadMessDetect.php', $badCodeDirectory . '/BadMessDetect.php'],
         ];
 
         foreach ($copyFiles as $copyFile) {
@@ -153,10 +153,10 @@ class GlobalSystemTest extends AsyncTestCase
             );
         }
 
-        $startPromises = array_map(static fn($process) => $process->start(), $processes);
+        $startPromises = array_map(static fn(Process $process) => $process->start(), $processes);
         yield all($startPromises);
 
-        $endPromises = array_map(static fn($process) => $process->join(), $processes);
+        $endPromises = array_map(static fn(Process $process) => $process->join(), $processes);
         $exitCodes = yield all($endPromises);
 
         foreach ($exitCodes as $tool => $exitCode) {

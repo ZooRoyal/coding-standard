@@ -92,7 +92,7 @@ class DiffCheckableFileFinderTest extends TestCase
     private function setUpMockedObjects(
         string $forgedRootDirectory,
         string $targetBranch,
-        string $forgedRawDiffUnfilteredString
+        string $forgedRawDiffUnfilteredString,
     ): Container {
         $targetMergeBase = '123asdasdMergeBase123123asd';
 

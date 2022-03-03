@@ -12,18 +12,13 @@ use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
 
 class GitChangeSetFilter
 {
-    private ExclusionListFactory $exclusionListFactory;
-    private TokenExcluder $tokenExcluder;
-
     /**
      * FileFilter constructor.
      */
     public function __construct(
-        ExclusionListFactory $exclusionListFactory,
-        TokenExcluder $tokenExcluder
+        private ExclusionListFactory $exclusionListFactory,
+        private TokenExcluder $tokenExcluder,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
-        $this->tokenExcluder = $tokenExcluder;
     }
 
     /**
