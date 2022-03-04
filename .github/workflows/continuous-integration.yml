@@ -24,6 +24,10 @@ jobs:
         id: "determine-composer-cache-directory"
         run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
 
+      - name: "Determine npm cache directory"
+        id: "determine-npm-cache-directory"
+        run: "echo \"::set-output name=directory::$(npm config get cache)\""
+
       - name: Cache Composer Packages
         uses: actions/cache@v2
         env:
@@ -39,7 +43,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: "${{ steps.determine-npm-cache-directory.outputs.directory }}"
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
@@ -91,6 +95,10 @@ jobs:
         id: "determine-composer-cache-directory"
         run: "echo \"::set-output name=directory::$(composer config cache-dir)\""
 
+      - name: "Determine npm cache directory"
+        id: "determine-npm-cache-directory"
+        run: "echo \"::set-output name=directory::$(npm config get cache)\""
+
       - name: Cache Composer Packages
         uses: actions/cache@v2
         env:
@@ -107,7 +115,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: ~/.npm
+          path: "${{ steps.determine-npm-cache-directory.outputs.directory }}"
           key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-tests-${{ env.cache-name }}-
