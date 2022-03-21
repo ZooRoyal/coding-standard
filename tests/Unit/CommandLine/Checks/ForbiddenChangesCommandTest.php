@@ -16,7 +16,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Checks\ForbiddenChangesCommand;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
@@ -157,7 +157,7 @@ class ForbiddenChangesCommandTest extends TestCase
         $mockedInputInterface->shouldReceive('getOption')->atMost()->once()
             ->with('target')->andReturn($mockedTargetBranch);
 
-        $this->subjectParameters[Environment::class]->shouldReceive('guessParentBranchAsCommitHash')
+        $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
             ->atMost()->once()->withNoArgs()->andReturn($mockedTargetGuess);
 
         $mockedOutputInterface->shouldReceive('writeln')->once()

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Library;
 
-use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
@@ -190,49 +189,4 @@ class EnvironmentTest extends TestCase
         self::assertFalse($result);
     }
 
-    /**
-     * @test
-     */
-    public function guessParentBranchAsCommitHashFindParent(): void
-    {
-        $mockedBranch = 'myBranch';
-        $expectedHash = 'asdasqweqwe12312323234';
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', $mockedBranch)->andReturn('a');
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git', 'cat-file', '-t', H::either(H::containsString($mockedBranch))->andAlso(H::endsWith('^')))
-            ->andReturn('commit');
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', $mockedBranch . '^')->andReturn('a' . PHP_EOL . 'b');
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'rev-parse', $mockedBranch . '^')->andReturn($expectedHash);
-
-        $result = $this->subject->guessParentBranchAsCommitHash($mockedBranch);
-        self::assertSame($expectedHash, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function guessParentBranchAsCommitHashFindNoParent(): void
-    {
-        $mockedBranch = 'myBranch';
-        $expectedHash = 'asdasqweqwe12312323234';
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'branch', '-a', '--contains', $mockedBranch)->andReturn('a');
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with('git', 'cat-file', '-t', H::containsString($mockedBranch))->andReturn('blarb');
-
-        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
-            ->with('git', 'rev-parse', $mockedBranch)->andReturn($expectedHash);
-
-        $result = $this->subject->guessParentBranchAsCommitHash($mockedBranch);
-        self::assertSame($expectedHash, $result);
-    }
 }

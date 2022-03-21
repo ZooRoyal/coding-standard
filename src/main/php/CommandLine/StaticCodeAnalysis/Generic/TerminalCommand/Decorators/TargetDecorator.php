@@ -7,7 +7,7 @@ namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\Termina
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommandDecorator;
@@ -18,14 +18,14 @@ use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 class TargetDecorator implements TerminalCommandDecorator
 {
     private AdaptableFileFinder $adaptableFileFinder;
-    private Environment $environment;
+    private ParentBranchGuesser $parentBranchGuesser;
 
     public function __construct(
         AdaptableFileFinder $adaptableFileFinder,
-        Environment $environment
+        ParentBranchGuesser $parentBranchGuesser
     ) {
         $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->environment = $environment;
+        $this->parentBranchGuesser = $parentBranchGuesser;
     }
 
     /**
@@ -50,7 +50,7 @@ class TargetDecorator implements TerminalCommandDecorator
         }
 
         $targetBranch = $isAutoTarget
-            ? $this->environment->guessParentBranchAsCommitHash()
+            ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
             : $target;
 
         $allowedFileEndings = $genericEvent->getArgument(AbstractToolCommand::KEY_ALLOWED_FILE_ENDINGS);
