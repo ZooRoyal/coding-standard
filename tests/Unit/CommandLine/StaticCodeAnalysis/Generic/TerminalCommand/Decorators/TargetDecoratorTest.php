@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Decorators\TargetDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TargetableTerminalCommand;
@@ -88,7 +88,7 @@ class TargetDecoratorTest extends TestCase
         $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
         $mockedEnhancedFileInfos = [$mockedEnhancedFileInfo, $mockedEnhancedFileInfo];
 
-        $this->subjectParameters[Environment::class]->shouldReceive('guessParentBranchAsCommitHash')
+        $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
             ->withNoArgs()->andReturn($expectedTargetBranch);
 
         $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);

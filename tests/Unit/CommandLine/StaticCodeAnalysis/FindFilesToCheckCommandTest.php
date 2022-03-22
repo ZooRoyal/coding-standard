@@ -15,7 +15,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
@@ -135,7 +135,7 @@ class FindFilesToCheckCommandTest extends TestCase
             true
         );
 
-        $this->subjectParameters[Environment::class]->shouldReceive('guessParentBranchAsCommitHash')
+        $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
             ->once()->andReturn($mockedGuessedTargetBranch);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()

@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class ForbiddenChangesCommand extends Command
@@ -20,18 +20,18 @@ class ForbiddenChangesCommand extends Command
     /** @var string */
     private const WHITELIST_TOKEN = '.doChangeFiles';
     private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private Environment $environment;
+    private ParentBranchGuesser $parentBranchGuesser;
 
     /**
      * ForbiddenChangesCommand constructor.
      */
     public function __construct(
         DiffCheckableFileFinder $diffCheckableFileFinder,
-        Environment $environment
+        ParentBranchGuesser $parentBranchGuesser
     ) {
         parent::__construct();
         $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->environment = $environment;
+        $this->parentBranchGuesser = $parentBranchGuesser;
     }
 
     /**
@@ -76,7 +76,7 @@ class ForbiddenChangesCommand extends Command
     public function execute(InputInterface $input, OutputInterface $output)
     {
         $warning = $input->getOption('warn');
-        $targetBranch = $input->getOption('target') ?? $this->environment->guessParentBranchAsCommitHash();
+        $targetBranch = $input->getOption('target') ?? $this->parentBranchGuesser->guessParentBranchAsCommitHash();
 
         $output->writeln('Checking diff to ' . $targetBranch . ' for forbidden changes.');
 

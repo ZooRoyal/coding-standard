@@ -11,14 +11,14 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Factories\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 
 class FindFilesToCheckCommand extends Command
 {
     private ExclusionListFactory $blacklistFactory;
     private AdaptableFileFinder $adaptableFileFinder;
-    private Environment $environment;
+    private ParentBranchGuesser $parentBranchGuesser;
 
     /**
      * FindFilesToCheckCommand constructor.
@@ -26,11 +26,11 @@ class FindFilesToCheckCommand extends Command
     public function __construct(
         ExclusionListFactory $blacklistFactory,
         AdaptableFileFinder $adaptableFileFinder,
-        Environment $environment
+        ParentBranchGuesser $parentBranchGuesser
     ) {
         $this->blacklistFactory = $blacklistFactory;
         $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->environment = $environment;
+        $this->parentBranchGuesser = $parentBranchGuesser;
         parent::__construct();
     }
 
@@ -111,7 +111,7 @@ class FindFilesToCheckCommand extends Command
         $blacklistTokenInput = $input->getOption('blacklist-token');
         $whitelistTokenInput = $input->getOption('whitelist-token');
         $targetBranch = $input->getOption('auto-target')
-            ? $this->environment->guessParentBranchAsCommitHash()
+            ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
             : $input->getOption('target');
 
         if ($exclusionListInput === true) {
