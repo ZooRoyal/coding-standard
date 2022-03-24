@@ -20,6 +20,10 @@ class PHPStanConfigGenerator
             'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
             'mockery/mockery' => '/library/helpers.php',
         ];
+    private const DEVOPS_AUTOMATION_FUNCTIONS
+        = [
+            '/devops/automation/deployer/Functions/databaseLocal.php',
+        ];
     private const STATIC_DIRECTORIES_TO_SCAN
         = [
             '/Plugins',
@@ -106,6 +110,8 @@ class PHPStanConfigGenerator
                 );
             }
         }
+
+        $configValues = $this->addLocalFunctionsFiles($configValues);
         return $configValues;
     }
 
@@ -143,6 +149,25 @@ class PHPStanConfigGenerator
             }
 
             $configValues['parameters']['scanDirectories'][] = $absolutePath;
+        }
+        return $configValues;
+    }
+
+    /**
+     * Adds list of local bootstrap-files for devops-automation tasks in config
+     *
+     * @param array<string,array<string|int,string|array<string>>> $configValues
+     *
+     * @return array<string,array<string|int,string|array<string>>>
+     */
+    private function addLocalFunctionsFiles(array $configValues): array
+    {
+        foreach (self::DEVOPS_AUTOMATION_FUNCTIONS as $devopsFunctionFile) {
+            $devopsAutomationPath = $this->environment->getRootDirectory()->getRealPath() .
+                $devopsFunctionFile;
+            if ($this->filesystem->exists($devopsAutomationPath)) {
+                $configValues['parameters']['bootstrapFiles'][] = $devopsAutomationPath;
+            }
         }
         return $configValues;
     }

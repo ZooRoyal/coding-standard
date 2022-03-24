@@ -155,7 +155,9 @@ class PHPStanConfigGeneratorTest extends TestCase
             ->with($this->mockedRootDirectory . '/custom/plugins')->andReturn(false);
         $this->mockedFilesystem->shouldReceive('exists')->once()
             ->with($this->mockedRootDirectory . '/custom/project')->andReturn(true);
-
+        $this->mockedFilesystem->shouldReceive('exists')->once()
+            ->with($this->mockedRootDirectory . '/devops/automation/deployer/Functions/databaseLocal.php')
+            ->andReturn(true);
         $this->mockedFilesystem->shouldReceive('dumpFile')->once()
             ->with($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon', $forgedConfiguration);
     }
