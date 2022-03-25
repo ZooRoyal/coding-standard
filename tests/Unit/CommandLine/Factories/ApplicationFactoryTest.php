@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Application;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Zooroyal\CodingStandard\CommandLine\Checks\ForbiddenChangesCommand;
 use Zooroyal\CodingStandard\CommandLine\Factories\ApplicationFactory;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\AllToolsCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
@@ -42,7 +41,6 @@ class ApplicationFactoryTest extends TestCase
             JSESLintCommand::class,
             JSStyleLintCommand::class,
             AllToolsCommand::class,
-            ForbiddenChangesCommand::class,
         ];
 
     /**

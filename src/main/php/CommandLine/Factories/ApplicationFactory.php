@@ -7,7 +7,6 @@ namespace Zooroyal\CodingStandard\CommandLine\Factories;
 use DI\Container;
 use Symfony\Component\Console\Application;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Zooroyal\CodingStandard\CommandLine\Checks\ForbiddenChangesCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\AllToolsCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint\JSESLintCommand;
@@ -31,7 +30,6 @@ class ApplicationFactory
         = [
             AllToolsCommand::class,
             FindFilesToCheckCommand::class,
-            ForbiddenChangesCommand::class,
             PHPCodeSnifferCommand::class,
             PHPCopyPasteDetectorCommand::class,
             PHPParallelLintCommand::class,
