@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\CommitishComparator;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 
@@ -17,7 +17,7 @@ class AdaptableFileFinder implements FileFinderInterface
     private GitInputValidator $gitInputValidator;
     private AllCheckableFileFinder $allCheckableFileFinder;
     private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private Environment $environment;
+    private CommitishComparator $commitishComparator;
 
     /**
      * AdaptableFileFinder constructor.
@@ -26,12 +26,12 @@ class AdaptableFileFinder implements FileFinderInterface
         GitInputValidator $gitInputValidator,
         AllCheckableFileFinder $allCheckableFileFinder,
         DiffCheckableFileFinder $diffCheckableFileFinder,
-        Environment $environment
+        CommitishComparator $commitishComparator
     ) {
         $this->gitInputValidator = $gitInputValidator;
         $this->allCheckableFileFinder = $allCheckableFileFinder;
         $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->environment = $environment;
+        $this->commitishComparator = $commitishComparator;
     }
 
 
@@ -52,7 +52,7 @@ class AdaptableFileFinder implements FileFinderInterface
             throw new InvalidArgumentException('Target ' . $targetBranch . ' is no valid commit-ish.', 1553766210);
         }
 
-        $finder = $targetBranch === null || $this->environment->isLocalBranchEqualTo($targetBranch)
+        $finder = $targetBranch === null || $this->commitishComparator->isLocalBranchEqualTo($targetBranch)
             ? $this->allCheckableFileFinder
             : $this->diffCheckableFileFinder;
 

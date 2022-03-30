@@ -11,7 +11,7 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\Library\CommitishComparator;
 use Zooroyal\CodingStandard\CommandLine\Library\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\ValueObjects\GitChangeSet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -98,7 +98,7 @@ class AdaptableFileFinderTest extends TestCase
         $this->subjectParameters[GitInputValidator::class]->shouldReceive('isCommitishValid')
             ->with($targetBranchInput)->andReturn($isCommitishValid);
 
-        $this->subjectParameters[Environment::class]->shouldReceive('isLocalBranchEqualTo')
+        $this->subjectParameters[CommitishComparator::class]->shouldReceive('isLocalBranchEqualTo')
             ->with($targetBranchInput)->andReturn($isLocalBranch);
 
         $this->subjectParameters[$finder]->shouldReceive('findFiles')
