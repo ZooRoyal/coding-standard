@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Git;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target;
 
 use Hamcrest\Matchers as H;
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\Git\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\ParentBranchGuesser;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class ParentBranchGuesserTest extends TestCase
@@ -21,7 +21,9 @@ class ParentBranchGuesserTest extends TestCase
     protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(ParentBranchGuesser::class);
+        $buildFragments = $subjectFactory->buildSubject(
+            ParentBranchGuesser::class
+        );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
     }

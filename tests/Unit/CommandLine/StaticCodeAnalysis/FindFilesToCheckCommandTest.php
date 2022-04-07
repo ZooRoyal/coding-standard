@@ -17,8 +17,8 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
-use Zooroyal\CodingStandard\CommandLine\Git\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\FindFilesToCheckCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\ParentBranchGuesser;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 /**

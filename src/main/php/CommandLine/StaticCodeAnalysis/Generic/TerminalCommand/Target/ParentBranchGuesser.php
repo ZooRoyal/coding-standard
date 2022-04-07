@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\Git;
+namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target;
 
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
