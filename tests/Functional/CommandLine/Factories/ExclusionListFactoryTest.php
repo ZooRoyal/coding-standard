@@ -8,7 +8,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
-use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
 use function Safe\mkdir;
 use function Safe\rmdir;

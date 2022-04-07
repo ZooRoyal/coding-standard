@@ -11,7 +11,7 @@ use Hamcrest\Matchers as H;
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
-use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;

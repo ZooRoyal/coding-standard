@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\EventSubscriber;
+namespace Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle;
 
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\RuntimeException;

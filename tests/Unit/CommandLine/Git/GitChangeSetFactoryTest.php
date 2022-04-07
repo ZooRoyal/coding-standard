@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Git;
 
 use Mockery;
 use Mockery\MockInterface;

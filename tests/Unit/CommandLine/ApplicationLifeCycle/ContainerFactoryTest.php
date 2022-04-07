@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ApplicationLifeCycle;
 
 use DI\Container;
 use DI\ContainerBuilder;
@@ -11,7 +11,7 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use ReflectionClass;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
 
 class ContainerFactoryTest extends TestCase
 {

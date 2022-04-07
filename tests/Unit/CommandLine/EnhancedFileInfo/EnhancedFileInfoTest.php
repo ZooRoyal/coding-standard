@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\EnhancedFileInfo;
 
 use PHPUnit\Framework\TestCase;
 use SplFileInfo;

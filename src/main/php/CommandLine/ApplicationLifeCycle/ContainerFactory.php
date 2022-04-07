@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\DependencyInjection;
+namespace Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle;
 
 use DI\Container;
 use DI\ContainerBuilder;

@@ -10,7 +10,7 @@ use Hamcrest\Matchers as H;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
-use Zooroyal\CodingStandard\CommandLine\DependencyInjection\ContainerFactory;
+use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use function Safe\realpath;
 

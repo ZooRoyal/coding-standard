@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\Exclusion;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ExclusionList\Excluders;
 
 use Hamcrest\Matchers;
 use Mockery;

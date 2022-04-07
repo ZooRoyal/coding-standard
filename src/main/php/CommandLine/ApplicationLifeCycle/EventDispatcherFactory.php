@@ -2,12 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\DependencyInjection;
+namespace Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle;
 
 use DI\Container;
 use Symfony\Component\EventDispatcher\EventDispatcher;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\GitCommandPreconditionChecker;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixDecorator;

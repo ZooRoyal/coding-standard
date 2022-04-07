@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\EventSubscriber;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ApplicationLifeCycle;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
@@ -12,7 +12,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\ConsoleEvents;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Process\Process;
-use Zooroyal\CodingStandard\CommandLine\EventSubscriber\TerminalCommandPreconditionChecker;
+use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\TerminalCommandPreconditionChecker;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
