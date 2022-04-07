@@ -6,11 +6,9 @@ namespace Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders;
 
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 
 class StaticExcluder implements ExcluderInterface
 {
-    private Environment $environment;
     /** @var array<string> */
     private const PATHS_TO_EXCLUDE = [
         '.eslintrc.js',
@@ -29,10 +27,8 @@ class StaticExcluder implements ExcluderInterface
      * StaticExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
         EnhancedFileInfoFactory $enhancedFileInfoFactory
     ) {
-        $this->environment = $environment;
         $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
@@ -46,16 +42,7 @@ class StaticExcluder implements ExcluderInterface
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
-        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
-
-        $filteredDirectories = array_filter(
-            self::PATHS_TO_EXCLUDE,
-            static function ($value) use ($rootDirectory): bool {
-                return is_dir($rootDirectory . DIRECTORY_SEPARATOR . $value);
-            }
-        );
-
-        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(array_values($filteredDirectories));
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(array_values(self::PATHS_TO_EXCLUDE));
 
         return $result;
     }
