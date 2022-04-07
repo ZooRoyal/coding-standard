@@ -41,9 +41,9 @@ class Environment
     }
 
     /**
-     * Returns vendor path where coding-standard is installed.
+     * Returns vendor directory where coding-standard is installed.
      */
-    public function getVendorPath(): EnhancedFileInfo
+    public function getVendorDirectory(): EnhancedFileInfo
     {
         $vendorPath = ComposerLocator::getRootPath() . DIRECTORY_SEPARATOR . 'vendor';
         $enhancedFileInfo = $this->enhancedFileInfoFactory->buildFromPath($vendorPath);

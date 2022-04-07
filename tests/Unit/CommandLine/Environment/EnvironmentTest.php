@@ -62,13 +62,13 @@ class EnvironmentTest extends TestCase
      * @runInSeparateProcess
      * @preserveGlobalState  false
      */
-    public function getVendorPath(): void
+    public function getVendorDirectory(): void
     {
         $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromPath')->once()
             ->with(realpath(dirname(__DIR__, 4) . DIRECTORY_SEPARATOR . 'vendor'))
             ->andReturn($this->mockedEnhancedFileInfo);
 
-        $result = $this->subject->getVendorPath();
+        $result = $this->subject->getVendorDirectory();
 
         self::assertSame($this->mockedEnhancedFileInfo, $result);
     }

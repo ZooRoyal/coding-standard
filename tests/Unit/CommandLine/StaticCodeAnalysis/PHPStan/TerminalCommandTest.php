@@ -46,7 +46,7 @@ class TerminalCommandTest extends TestCase
             ->andReturn(self::FORGED_RELATIV_ROOT);
         $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->andReturn(self::FORGED_ABSOLUTE_ROOT);
-        $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
+        $this->mockedEnvironment->shouldReceive('getVendorDirectory->getRealPath')
             ->andReturn(self::FORGED_ABSOLUTE_VENDOR);
 
         $this->subject = new TerminalCommand($this->mockedEnvironment, $this->mockedConfigGenereator);

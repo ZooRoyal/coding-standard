@@ -37,7 +37,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $this->validateTargets();
 
-        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $vendorPath = $this->environment->getVendorDirectory()->getRealPath();
         $phpMessDetectorConfig = $this->environment->getPackageDirectory()->getRealPath()
             . '/config/phpmd/phpmd.xml';
 

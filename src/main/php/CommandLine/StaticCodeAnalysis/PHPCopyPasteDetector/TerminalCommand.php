@@ -40,7 +40,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     protected function compile(): void
     {
-        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $vendorPath = $this->environment->getVendorDirectory()->getRealPath();
 
         $terminalApplication = $vendorPath . '/bin/phpcpd';
 

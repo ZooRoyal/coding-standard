@@ -47,7 +47,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $this->validateTargets();
 
-        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $vendorPath = $this->environment->getVendorDirectory()->getRealPath();
         $phpCodeSnifferConfig = $this->environment->getPackageDirectory()->getRealPath()
             . '/config/phpcs/ZooRoyal/ruleset.xml';
 

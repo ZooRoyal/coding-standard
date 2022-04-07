@@ -40,7 +40,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $this->validateTargets();
 
-        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $vendorPath = $this->environment->getVendorDirectory()->getRealPath();
 
         $terminalApplication = $vendorPath . '/bin/parallel-lint';
 

@@ -42,7 +42,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
 
         $this->phpstanConfigGenerator->writeConfigFile($this->output, $this->excludesFiles);
 
-        $vendorPath = $this->environment->getVendorPath()->getRealPath();
+        $vendorPath = $this->environment->getVendorDirectory()->getRealPath();
 
         $terminalApplication = $vendorPath . '/bin/phpstan';
 
