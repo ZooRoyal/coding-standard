@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\Git;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
+use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class CommitishComparator

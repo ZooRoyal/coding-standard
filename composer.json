@@ -84,7 +84,7 @@
     "src/bin/coding-standard"
   ],
   "scripts": {
-    "post-update-cmd": "npm install",
+    "post-update-cmd": "npm update",
     "post-install-cmd": "npm install",
     "test": [
       "mkdir -p /tmp/phpunit",

@@ -7,7 +7,6 @@ namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class DiffCheckableFileFinder implements FileFinderInterface

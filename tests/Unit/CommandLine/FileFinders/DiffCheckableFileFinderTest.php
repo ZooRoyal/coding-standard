@@ -9,9 +9,9 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
 use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinders\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFilter;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 

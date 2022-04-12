@@ -2,13 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\Git;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use SplObjectStorage;
 use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 
 class GitChangeSetFilter
 {

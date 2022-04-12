@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Git\CommitishComparator;
 use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
 
