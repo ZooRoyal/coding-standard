@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Git;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinder;
 
 use Mockery;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
 
 class GitChangeSetTest extends TestCase
 {

@@ -2,18 +2,18 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinder;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AllCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\CommitishComparator;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
-use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\AllCheckableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\CommitishComparator;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\DiffCheckableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitInputValidator;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class AdaptableFileFinderTest extends TestCase

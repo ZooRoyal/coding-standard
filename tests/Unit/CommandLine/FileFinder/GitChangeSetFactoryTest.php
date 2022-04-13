@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Git;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinder;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSetFactory;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitChangeSetFactoryTest extends TestCase
@@ -21,7 +21,9 @@ class GitChangeSetFactoryTest extends TestCase
     protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
-        $buildFragments = $subjectFactory->buildSubject(GitChangeSetFactory::class);
+        $buildFragments = $subjectFactory->buildSubject(
+            GitChangeSetFactory::class
+        );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
     }

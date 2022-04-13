@@ -7,8 +7,8 @@ namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\Termina
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\TargetableInputFacet;
 

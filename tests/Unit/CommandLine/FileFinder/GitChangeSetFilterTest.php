@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\Tests\Unit\FileFinders;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinder;
 
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers;
@@ -13,8 +13,8 @@ use Symfony\Component\Console\Exception\LogicException;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\GitChangeSetFilter;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSetFilter;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class GitChangeSetFilterTest extends TestCase
@@ -141,7 +141,7 @@ class GitChangeSetFilterTest extends TestCase
         $this->expectException(LogicException::class);
         $this->expectExceptionCode('1553780055');
 
-        /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet $mockedFileList */
+        /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet $mockedFileList */
         $mockedFileList = Mockery::mock(GitChangeSet::class);
         $exclusionlistToken = 'stopMe';
         $whitelistToken = 'neverMind';

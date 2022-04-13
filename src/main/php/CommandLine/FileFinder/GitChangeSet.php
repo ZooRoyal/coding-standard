@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\Git;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinder;
 
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 

@@ -2,9 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
-
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinder;
 
 interface FileFinderInterface
 {

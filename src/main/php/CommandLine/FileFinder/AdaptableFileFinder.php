@@ -2,11 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinder;
 
 use Symfony\Component\Console\Exception\InvalidArgumentException;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
-use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
 
 /**
  * This class searches for files in Git. It decides for itself if it returns a diff to a branch or all relevant files.

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinders;
+namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\FileFinder;
 
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\CommitishComparator;
-use Zooroyal\CodingStandard\CommandLine\Git\GitInputValidator;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\CommitishComparator;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitInputValidator;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -22,7 +22,8 @@ class CommitishComparatorTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            \Zooroyal\CodingStandard\CommandLine\FileFinders\CommitishComparator::class);
+            CommitishComparator::class
+        );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
     }

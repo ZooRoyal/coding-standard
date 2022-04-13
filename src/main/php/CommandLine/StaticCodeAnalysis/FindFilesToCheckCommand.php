@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\AdaptableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\ParentBranchGuesser;
 
 class FindFilesToCheckCommand extends Command

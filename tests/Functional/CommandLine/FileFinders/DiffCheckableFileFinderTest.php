@@ -12,8 +12,8 @@ use Mockery;
 use PHPUnit\Framework\TestCase;
 use SebastianKnott\HamcrestObjectAccessor\HasProperty;
 use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
-use Zooroyal\CodingStandard\CommandLine\FileFinders\DiffCheckableFileFinder;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\DiffCheckableFileFinder;
+use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class DiffCheckableFileFinderTest extends TestCase

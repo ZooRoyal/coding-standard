@@ -2,10 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\CommandLine\FileFinders;
+namespace Zooroyal\CodingStandard\CommandLine\FileFinder;
 
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSet;
-use Zooroyal\CodingStandard\CommandLine\Git\GitChangeSetFactory;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class AllCheckableFileFinder implements FileFinderInterface
