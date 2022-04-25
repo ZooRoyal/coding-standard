@@ -92,7 +92,7 @@ class AdaptableFileFinderTest extends TestCase
     ): void {
         $mockedAllowedFileEndings = ['asdqwe'];
         $mockedBlacklistToken = 'qwegfasdfqwe';
-        $mockedWhitelistToken = '12123sdfasdf123123';
+        $mockedInclusionlistToken = '12123sdfasdf123123';
         $expectedResult = Mockery::mock(GitChangeSet::class);
 
         $this->subjectParameters[GitInputValidator::class]->shouldReceive('isCommitishValid')
@@ -102,13 +102,13 @@ class AdaptableFileFinderTest extends TestCase
             ->with($targetBranchInput)->andReturn($isLocalBranch);
 
         $this->subjectParameters[$finder]->shouldReceive('findFiles')
-            ->with($mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $targetBranchInput)
+            ->with($mockedAllowedFileEndings, $mockedBlacklistToken, $mockedInclusionlistToken, $targetBranchInput)
             ->andReturn($expectedResult);
 
         $result = $this->subject->findFiles(
             $mockedAllowedFileEndings,
             $mockedBlacklistToken,
-            $mockedWhitelistToken,
+            $mockedInclusionlistToken,
             $targetBranchInput
         );
 

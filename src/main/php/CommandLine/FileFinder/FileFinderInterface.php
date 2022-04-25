@@ -14,7 +14,7 @@ interface FileFinderInterface
     public function findFiles(
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $whitelistToken = '',
+        string $inclusionListToken = '',
         ?string $targetBranch = null
     ): GitChangeSet;
 }

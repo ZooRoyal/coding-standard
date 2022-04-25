@@ -36,7 +36,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
     public function findFiles(
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $whitelistToken = '',
+        string $inclusionListToken = '',
         ?string $targetBranch = null
     ): GitChangeSet {
         if ($targetBranch === null || $targetBranch === '') {
@@ -47,7 +47,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         }
 
         $rawDiff = $this->findFilesInDiffToTarget($targetBranch);
-        $this->fileFilter->filter($rawDiff, $allowedFileEndings, $exclusionListToken, $whitelistToken);
+        $this->fileFilter->filter($rawDiff, $allowedFileEndings, $exclusionListToken, $inclusionListToken);
 
         return $rawDiff;
     }

@@ -40,7 +40,7 @@ class AdaptableFileFinder implements FileFinderInterface
     public function findFiles(
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $whitelistToken = '',
+        string $inclusionListToken = '',
         ?string $targetBranch = null
     ): GitChangeSet {
         if ($targetBranch !== null
@@ -53,7 +53,7 @@ class AdaptableFileFinder implements FileFinderInterface
             ? $this->allCheckableFileFinder
             : $this->diffCheckableFileFinder;
 
-        $result = $finder->findFiles($allowedFileEndings, $exclusionListToken, $whitelistToken, $targetBranch);
+        $result = $finder->findFiles($allowedFileEndings, $exclusionListToken, $inclusionListToken, $targetBranch);
 
         return $result;
     }

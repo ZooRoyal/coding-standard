@@ -33,7 +33,7 @@ class AllCheckableFileFinder implements FileFinderInterface
     public function findFiles(
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $whitelistToken = '',
+        string $inclusionListToken = '',
         ?string $targetBranch = null
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));

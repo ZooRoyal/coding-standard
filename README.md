@@ -6,16 +6,22 @@
 
 # ZooRoyal Coding Standard
 
-This repository holds the necessary data to use the ZooRoyal coding standard. It incorporates
-* [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) and its configuration
+This repository holds the necessary data to use the ZooRoyal coding standard. 
+It incorporates
+* [PHP Code Sniffer](https://github.com/squizlabs/PHP_CodeSniffer) 
+  and its configuration
 * [PHP Mess Detector](https://github.com/phpmd/phpmd) and its configuration
 * [PHP Copy Paste Detector](https://github.com/sebastianbergmann/phpcpd)
 * [PHP-Parallel-Lint](https://github.com/JakubOnderka/PHP-Parallel-Lint)
-* [PHPStan - PHP Static Analysis Tool](https://github.com/phpstan/phpstan)
+* [PHPStan - PHP Static Analysis Tool](https://github.com/phpstan/phpstan) 
+  and its configuration
 * [ES-LINT](https://github.com/eslint/eslint) and its configuration
 * [STYLE-LINT](https://github.com/stylelint/stylelint) and its configuration
 
-Furthermore there is a php script in src/bin which is meant to be used in the .travis build file. It searches your source code for files to check by its static code analysis tools. Information about its usage can be found by calling it with -h option.
+In addition, there is a PHP script in src/bin to be used by a 
+continuous integration tool of your choice. It searches your source code to 
+find files to check with its static code analysis tools. Information about 
+its usage can be found by calling it with -h option.
 
 # Installation
 
@@ -127,3 +133,10 @@ This command computes the diff to the branch origin/master and searches for all 
 
 For examples just have a look an the .travis.yml
 
+# Extend the Coding Standard
+
+If you want to extend the Coding-Standard with your own tools there are two 
+tutorials available:
+
+* [How to add a new static code analysis tool](doc/howto/HowToAddANewTool.md)
+* [Adding new information to your TerminalCommand](doc/howto/HowToAddInformationSources.md)

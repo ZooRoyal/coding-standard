@@ -77,7 +77,7 @@ class FindFilesToCheckCommand extends Command
                     ''
                 ),
                 new InputOption(
-                    'whitelist-token',
+                    'inclusionlist-token',
                     'w',
                     InputOption::VALUE_REQUIRED,
                     'Name of the file which triggers the inclusion of the path',
@@ -109,7 +109,7 @@ class FindFilesToCheckCommand extends Command
         $exclusionListInput = $input->getOption('exclusionList');
         $allowedFileEndings = $input->getOption('allowed-file-endings');
         $exclusionListTokenInput = $input->getOption('exclusionlist-token');
-        $whitelistTokenInput = $input->getOption('whitelist-token');
+        $inclusionListTokenInput = $input->getOption('inclusionlist-token');
         $targetBranch = $input->getOption('auto-target')
             ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
             : $input->getOption('target');
@@ -121,7 +121,7 @@ class FindFilesToCheckCommand extends Command
             $foundFiles = $this->adaptableFileFinder->findFiles(
                 $allowedFileEndings,
                 $exclusionListTokenInput,
-                $whitelistTokenInput,
+                $inclusionListTokenInput,
                 $targetBranch
             )->getFiles();
             $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname(), $foundFiles);

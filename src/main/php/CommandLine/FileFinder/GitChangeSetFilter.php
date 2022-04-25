@@ -35,18 +35,18 @@ class GitChangeSetFilter
         GitChangeSet $gitChangeSet,
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $whitelistToken = ''
+        string $inclusionListToken = ''
     ): void {
-        $whitelist = [];
+        $inclusionlist = [];
         $deDuped = true;
 
-        if ($whitelistToken !== '') {
+        if ($inclusionListToken !== '') {
             $deDuped = false;
-            $whitelist = $this->tokenExcluder->getPathsToExclude([], ['token' => $whitelistToken]);
+            $inclusionlist = $this->tokenExcluder->getPathsToExclude([], ['token' => $inclusionListToken]);
         }
         $exclusionList = $this->exclusionListFactory->build($exclusionListToken, $deDuped);
 
-        $list = $this->mergeLists($exclusionList, $whitelist);
+        $list = $this->mergeLists($exclusionList, $inclusionlist);
         $files = $gitChangeSet->getFiles();
 
         $result = $this->applyFilters($allowedFileEndings, $files, $list);
@@ -58,24 +58,24 @@ class GitChangeSetFilter
      * Generate merged list.
      *
      * @param array<EnhancedFileInfo> $exclusionList
-     * @param array<EnhancedFileInfo> $whitelist
+     * @param array<EnhancedFileInfo> $inclusionlist
      *
      * @throws LogicException
      */
     private function mergeLists(
         array $exclusionList,
-        array $whitelist
+        array $inclusionlist
     ): SplObjectStorage {
-        if (count(array_intersect($exclusionList, $whitelist)) !== 0) {
-            throw new LogicException('Directories can\'t be black- and whitelisted at the same time', 1553780055);
+        if (count(array_intersect($exclusionList, $inclusionlist)) !== 0) {
+            throw new LogicException('Directories can\'t be black- and inclusionlisted at the same time', 1553780055);
         }
         $result = new SplObjectStorage();
 
         foreach ($exclusionList as $exclusionListItem) {
             $result->attach($exclusionListItem, false);
         }
-        foreach ($whitelist as $whitelistItem) {
-            $result->attach($whitelistItem, true);
+        foreach ($inclusionlist as $inclusionlistItem) {
+            $result->attach($inclusionlistItem, true);
         }
 
         return $result;

@@ -53,7 +53,7 @@ class DiffCheckableFileFinderTest extends TestCase
         $mockedTargetBranch = 'blaBranch';
         $mockedAllowedFileEndings = ['blaFilter'];
         $mockedBlacklistToken = 'blaStopword';
-        $mockedWhitelistToken = 'blaGO';
+        $mockedInclusionlistToken = 'blaGO';
         $mockedMergeBase = 'alsdkfujh178290346';
         $mockedFileDiff = 'composer.json' . "\n" . 'package.json' . "\n";
         $mockedFiles = ['composer.json', 'package.json'];
@@ -70,9 +70,14 @@ class DiffCheckableFileFinderTest extends TestCase
             ->with($mockedFiles, $mockedMergeBase)->andReturn($mockedChangeSet);
 
         $this->subjectParameters[GitChangeSetFilter::class]->shouldReceive('filter')
-            ->with($mockedChangeSet, $mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken)
+            ->with($mockedChangeSet, $mockedAllowedFileEndings, $mockedBlacklistToken, $mockedInclusionlistToken)
             ->andReturn($mockedFileDiff);
 
-        $this->subject->findFiles($mockedAllowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch);
+        $this->subject->findFiles(
+            $mockedAllowedFileEndings,
+            $mockedBlacklistToken,
+            $mockedInclusionlistToken,
+            $mockedTargetBranch
+        );
     }
 }

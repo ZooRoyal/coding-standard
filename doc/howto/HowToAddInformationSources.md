@@ -18,9 +18,12 @@ while compiling a TerminalCommand.
 
 ## The TerminalCommand interface
 
-First create an interface in 
-`Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand` 
-and name it appropriately. Let's call it `SuperInformedTerminalCommand.php`. 
+First create an interface in a sub-namespace of
+`Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComand` 
+and name it appropriately. 
+
+Let's call it `SuperInformedTerminalCommand.php` 
+in `Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComand\SuperInformation`. 
 This interface will tell a TerminalCommand what methods it needs to implement 
 to be super informed.
 
@@ -42,7 +45,7 @@ Well that was easy. Let's continue with the decorator.
 
 The TerminalCommandDecorator will actually inject your super cool information into 
 TerminalCommands. Place your new TerminalCommandDecorator in 
-`Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand` 
+`Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComand\SuperInformation` 
 and call it `SuperCoolInformationDecorator.php`.
 
 ```php
@@ -63,12 +66,12 @@ class SuperCoolInformationDecorator implements TerminalCommandDecorator
      * This method decorates the TerminalCommand contained in the generic event. 
      * It will read information from the surrounding infrastructure or the command input.
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
         // Check if the TerminalCommand want's to be super informed. Not 
         // only is it rude to tell people things they don't want to hear. 
         // It will also crash the coding-standard
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof SuperInformedTerminalCommand) {
             return;
@@ -85,8 +88,7 @@ class SuperCoolInformationDecorator implements TerminalCommandDecorator
 
 So you wrote your SuperCoolInformationDecorator. Nice! But you need to tell 
 the coding-standard about its existence. That is as easy as writing a name 
-on a list. Open `Zooroyal\CodingStandard\CommandLine\Factories
-\EventDispatcherFactory`
+on a list. Open `Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\EventDispatcherFactory`
 
 ```php
 class EventDispatcherFactory
@@ -116,10 +118,10 @@ Well. That was easy.
 Well... strictly speaking the trait is not needed for everything to work but 
 to make the life of other developers easier you should definitely consider it.
 
-The traits reside in `Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis
-\Generic\TerminalCommand\Traits` so let's add your trait there. As names are 
-important - to us. Coding-standard not so much - call your new trait 
-`SuperInformedTrait.php`
+The trait should reside next to your other code so let's add it right there in
+`Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\SuperInformation`
+As names are important &ndash; to us; Coding-Standard not so much &ndash; call your new 
+trait `SuperInformedTrait.php`
 
 ```php
 trait SuperInformedTrait

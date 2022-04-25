@@ -116,7 +116,7 @@ class FindFilesToCheckCommandTest extends TestCase
     {
         $allowedFileEndings = ['myFilter'];
         $mockedBlacklistToken = 'myStopword';
-        $mockedWhitelistToken = 'myGoword';
+        $mockedInclusionlistToken = 'myGoword';
         $mockedGuessedTargetBranch = 'auto/target';
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
@@ -128,7 +128,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $this->prepareMockedInputInterface(
             $mockedInputInterface,
             $mockedBlacklistToken,
-            $mockedWhitelistToken,
+            $mockedInclusionlistToken,
             $allowedFileEndings,
             null,
             false,
@@ -139,7 +139,7 @@ class FindFilesToCheckCommandTest extends TestCase
             ->once()->andReturn($mockedGuessedTargetBranch);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedGuessedTargetBranch)
+            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedInclusionlistToken, $mockedGuessedTargetBranch)
             ->andReturn($mockedGitChangeSet);
         $mockedGitChangeSet->shouldReceive('getFiles')->once()
             ->withNoArgs()->andReturn($this->expectedArray);
@@ -156,7 +156,7 @@ class FindFilesToCheckCommandTest extends TestCase
     {
         $mockedAllowedFileEndings = ['myFilter'];
         $mockedBlacklistToken = 'myStopword';
-        $mockedWhitelistToken = 'myGoword';
+        $mockedInclusionlistToken = 'myGoword';
         $mockedTargetBranch = 'mockedTarget';
         $mockedExclusiveFlag = true;
 
@@ -168,7 +168,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $this->prepareMockedInputInterface(
             $mockedInputInterface,
             $mockedBlacklistToken,
-            $mockedWhitelistToken,
+            $mockedInclusionlistToken,
             $mockedAllowedFileEndings,
             $mockedTargetBranch,
             $mockedExclusiveFlag
@@ -190,7 +190,7 @@ class FindFilesToCheckCommandTest extends TestCase
     {
         $allowedFileEndings = ['myFilter'];
         $mockedBlacklistToken = 'myStopword';
-        $mockedWhitelistToken = 'myGoword';
+        $mockedInclusionlistToken = 'myGoword';
         $mockedTargetBranch = '';
         $mockedExclusiveFlag = false;
 
@@ -204,14 +204,14 @@ class FindFilesToCheckCommandTest extends TestCase
         $this->prepareMockedInputInterface(
             $mockedInputInterface,
             $mockedBlacklistToken,
-            $mockedWhitelistToken,
+            $mockedInclusionlistToken,
             $allowedFileEndings,
             $mockedTargetBranch,
             $mockedExclusiveFlag
         );
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
-            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedWhitelistToken, $mockedTargetBranch)
+            ->with($allowedFileEndings, $mockedBlacklistToken, $mockedInclusionlistToken, $mockedTargetBranch)
             ->andReturn($mockedGitChangeSet);
         $mockedGitChangeSet->shouldReceive('getFiles')->once()
             ->withNoArgs()->andReturn($this->expectedArray);
@@ -229,7 +229,7 @@ class FindFilesToCheckCommandTest extends TestCase
     private function prepareMockedInputInterface(
         MockInterface $mockedInputInterface,
         string $mockedBlacklistToken,
-        string $mockedWhitelistToken,
+        string $mockedInclusionlistToken,
         array $allowedFileEndings,
         ?string $mockedTargetBranch = null,
         bool $mockedExclusiveFlag = false,
@@ -238,7 +238,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('exclusionlist-token')->andReturn($mockedBlacklistToken);
         $mockedInputInterface->shouldReceive('getOption')->once()
-            ->with('whitelist-token')->andReturn($mockedWhitelistToken);
+            ->with('inclusionlist-token')->andReturn($mockedInclusionlistToken);
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('allowed-file-endings')->andReturn($allowedFileEndings);
         if ($autoTargetValue) {

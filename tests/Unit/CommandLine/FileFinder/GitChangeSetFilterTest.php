@@ -43,11 +43,11 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterByBlacklistAndWhitelistWithoutFilter(): void
+    public function filterByBlacklistAndInclusionlistWithoutFilter(): void
     {
-        $whitelistedDirectory = $this->exclusionlistedDirectory . '/wumpe';
-        $whitelistedFile = $whitelistedDirectory . '/binNochDa';
-        $expectedResult = $this->prepareMockedEnhancedFileInfo(['wahwah', 'bla', $whitelistedFile]);
+        $inclusionlistedDirectory = $this->exclusionlistedDirectory . '/wumpe';
+        $inclusionlistedFile = $inclusionlistedDirectory . '/binNochDa';
+        $expectedResult = $this->prepareMockedEnhancedFileInfo(['wahwah', 'bla', $inclusionlistedFile]);
         $mockedFileList = new GitChangeSet(
             array_merge(
                 $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory . '/sowas']),
@@ -56,18 +56,18 @@ class GitChangeSetFilterTest extends TestCase
             'asdaqwe212123'
         );
         $exclusionlistToken = 'stopMe';
-        $whitelistToken = 'neverMind';
+        $inclusionListToken = 'neverMind';
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($exclusionlistToken, false)->andReturn(
                 $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory])
             );
         $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
-            ->once()->with([], ['token' => $whitelistToken])->andReturn(
-                $this->prepareMockedEnhancedFileInfo([$whitelistedDirectory])
+            ->once()->with([], ['token' => $inclusionListToken])->andReturn(
+                $this->prepareMockedEnhancedFileInfo([$inclusionlistedDirectory])
             );
 
-        $this->subject->filter($mockedFileList, [], $exclusionlistToken, $whitelistToken);
+        $this->subject->filter($mockedFileList, [], $exclusionlistToken, $inclusionListToken);
 
         MatcherAssert::assertThat(
             $mockedFileList->getFiles(),
@@ -136,7 +136,7 @@ class GitChangeSetFilterTest extends TestCase
     /**
      * @test
      */
-    public function filterThrowsExceptionIfBlackAndWhitelisted(): void
+    public function filterThrowsExceptionIfBlackAndInclusionlisted(): void
     {
         $this->expectException(LogicException::class);
         $this->expectExceptionCode('1553780055');
@@ -144,15 +144,15 @@ class GitChangeSetFilterTest extends TestCase
         /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet $mockedFileList */
         $mockedFileList = Mockery::mock(GitChangeSet::class);
         $exclusionlistToken = 'stopMe';
-        $whitelistToken = 'neverMind';
+        $inclusionListToken = 'neverMind';
         $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($exclusionlistToken, false)->andReturn([$mockedEnhancedFileInfo]);
         $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
-            ->once()->with([], ['token' => $whitelistToken])->andReturn([$mockedEnhancedFileInfo]);
+            ->once()->with([], ['token' => $inclusionListToken])->andReturn([$mockedEnhancedFileInfo]);
 
-        $this->subject->filter($mockedFileList, [], $exclusionlistToken, $whitelistToken);
+        $this->subject->filter($mockedFileList, [], $exclusionlistToken, $inclusionListToken);
     }
 
     /**
