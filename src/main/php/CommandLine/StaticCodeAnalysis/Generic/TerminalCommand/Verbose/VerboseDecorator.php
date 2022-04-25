@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 
 class VerboseDecorator extends TerminalCommandDecorator
@@ -13,16 +13,16 @@ class VerboseDecorator extends TerminalCommandDecorator
     /**
      * {@inheritDoc}
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof VerboseTerminalCommand) {
             return;
         }
 
-        $input = $genericEvent->getArgument(TerminalCommandDecorator::KEY_INPUT);
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
+        $input = $event->getInput();
+        $output = $event->getOutput();
 
         if ($input->getOption('verbose') === true) {
             $terminalCommand->addVerbosityLevel(OutputInterface::VERBOSITY_VERBOSE);

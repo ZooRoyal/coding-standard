@@ -11,7 +11,6 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
@@ -36,14 +35,14 @@ abstract class AbstractToolCommand extends Command
     {
         $output->writeln(PHP_EOL . '<comment>Running ' . $this->terminalCommandName . '</comment>');
 
-        $arguments = [
-            TerminalCommandDecorator::KEY_EXCLUSION_LIST_TOKEN => $this->exclusionListToken,
-            TerminalCommandDecorator::KEY_ALLOWED_FILE_ENDINGS => $this->allowedFileEndings,
-            TerminalCommandDecorator::KEY_INPUT => $input,
-            TerminalCommandDecorator::KEY_OUTPUT => $output,
-        ];
-
-        $event = new GenericEvent($this->terminalCommand, $arguments);
+        $event = new CodingStandardCommandEvent(
+            $this,
+            $input,
+            $output,
+            $this->terminalCommand,
+            $this->exclusionListToken,
+            $this->allowedFileEndings
+        );
         // @phpstan-ignore-next-line because there is a hack in the symfony/event-dispatcher-contract regarding dispatch
         $this->eventDispatcher->dispatch(
             $event,

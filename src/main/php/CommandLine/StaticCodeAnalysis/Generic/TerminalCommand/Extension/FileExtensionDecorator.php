@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 
 class FileExtensionDecorator extends TerminalCommandDecorator
@@ -13,16 +13,16 @@ class FileExtensionDecorator extends TerminalCommandDecorator
     /**
      * {@inheritDoc}
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof FileExtensionTerminalCommand) {
             return;
         }
 
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
-        $extensions = $genericEvent->getArgument(TerminalCommandDecorator::KEY_ALLOWED_FILE_ENDINGS);
+        $output = $event->getOutput();
+        $extensions = $event->getAllowedFileEndings();
 
         $output->writeln(
             '<info>Command will only check files with following extensions</info>',

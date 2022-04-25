@@ -9,13 +9,14 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\FileFinder\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\ParentBranchGuesser;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\TargetableInputFacet;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -32,8 +33,8 @@ class TargetDecoratorTest extends TestCase
     private array $subjectParameters;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand */
     private TargetTerminalCommand $mockedTerminalCommand;
-    /** @var MockInterface|GenericEvent */
-    private GenericEvent $mockedEvent;
+    /** @var MockInterface|DecorateEvent */
+    private DecorateEvent $mockedEvent;
     /** @var MockInterface|InputInterface */
     private InputInterface $mockedInput;
     /** @var MockInterface|OutputInterface */
@@ -44,19 +45,15 @@ class TargetDecoratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockedEvent = Mockery::mock(GenericEvent::class);
+        $this->mockedEvent = Mockery::mock(DecorateEvent::class);
         $this->mockedTerminalCommand = Mockery::mock(TargetTerminalCommand::class);
         $this->mockedInput = Mockery::mock(InputInterface::class);
         $this->mockedOutput = Mockery::mock(OutputInterface::class);
 
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_INPUT)->andReturn($this->mockedInput);
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_OUTPUT)->andReturn($this->mockedOutput);
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_ALLOWED_FILE_ENDINGS)->andReturn($this->forgedAllowedFileEndings);
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_EXCLUSION_LIST_TOKEN)->andReturn($this->forgedExclusionListToken);
+        $this->mockedEvent->shouldReceive('getInput')->andReturn($this->mockedInput);
+        $this->mockedEvent->shouldReceive('getOutput')->andReturn($this->mockedOutput);
+        $this->mockedEvent->shouldReceive('getAllowedFileEndings')->andReturn($this->forgedAllowedFileEndings);
+        $this->mockedEvent->shouldReceive('getExclusionListToken')->andReturn($this->forgedExclusionListToken);
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
@@ -92,7 +89,9 @@ class TargetDecoratorTest extends TestCase
         $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
             ->withNoArgs()->andReturn($expectedTargetBranch);
 
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
 
         $this->mockedInput->shouldReceive('getOption')->once()
             ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($forgedAutoTarget);
@@ -129,7 +128,9 @@ class TargetDecoratorTest extends TestCase
      */
     public function decorateShouldNotReactToNonTargetedInput(): void
     {
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
 
         $this->mockedInput->shouldReceive('getOption')->once()
             ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn(false);
@@ -148,8 +149,8 @@ class TargetDecoratorTest extends TestCase
      */
     public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
-        $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);
+        $mockedTerminalCommand = Mockery::mock(TerminalCommand::class);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn($mockedTerminalCommand);
 
         $this->mockedTerminalCommand->shouldReceive('addExclusions')->never();
 

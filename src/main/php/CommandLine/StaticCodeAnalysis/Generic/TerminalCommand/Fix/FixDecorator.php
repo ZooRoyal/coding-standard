@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix;
 
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\FixableInputFacet;
 
@@ -13,24 +13,21 @@ class FixDecorator extends TerminalCommandDecorator
     /**
      * {@inheritDoc}
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof FixTerminalCommand) {
             return;
         }
 
-        $input = $genericEvent->getArgument(TerminalCommandDecorator::KEY_INPUT);
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
-
-        $shouldBeFixing = $input->getOption(FixableInputFacet::OPTION_FIX);
+        $shouldBeFixing = $event->getInput()->getOption(FixableInputFacet::OPTION_FIX);
 
         if (!$shouldBeFixing) {
             return;
         }
 
-        $output->writeln('<info>Command will run in fixing mode.</info>' . PHP_EOL);
+        $event->getOutput()->writeln('<info>Command will run in fixing mode.</info>' . PHP_EOL);
 
         $terminalCommand->setFixingMode(true);
     }

@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 
 class ExclusionDecorator extends TerminalCommandDecorator
@@ -23,18 +23,18 @@ class ExclusionDecorator extends TerminalCommandDecorator
     /**
      * {@inheritDoc}
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof ExclusionTerminalCommand) {
             return;
         }
 
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
+        $output = $event->getOutput();
 
         $exclusionList = $this->exclusionListFactory
-            ->build($genericEvent->getArgument(TerminalCommandDecorator::KEY_EXCLUSION_LIST_TOKEN));
+            ->build($event->getExclusionListToken());
 
         $this->verboseOutputExclusionList($exclusionList, $output);
 

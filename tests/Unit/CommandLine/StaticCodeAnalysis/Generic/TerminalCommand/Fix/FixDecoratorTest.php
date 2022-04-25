@@ -9,9 +9,10 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\FixableInputFacet;
 
@@ -20,24 +21,22 @@ class FixDecoratorTest extends TestCase
     private FixDecorator $subject;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Fix\FixTerminalCommand */
     private FixTerminalCommand $mockedTerminalCommand;
-    /** @var MockInterface|GenericEvent */
-    private GenericEvent $mockedEvent;
+    /** @var MockInterface|DecorateEvent */
+    private DecorateEvent $mockedEvent;
     /** @var MockInterface|InputInterface */
-    private InputInterface$mockedInput;
+    private InputInterface $mockedInput;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;
 
     protected function setUp(): void
     {
-        $this->mockedEvent = Mockery::mock(GenericEvent::class);
+        $this->mockedEvent = Mockery::mock(DecorateEvent::class);
         $this->mockedTerminalCommand = Mockery::mock(FixTerminalCommand::class);
         $this->mockedInput = Mockery::mock(InputInterface::class);
         $this->mockedOutput = Mockery::mock(OutputInterface::class);
 
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_INPUT)->andReturn($this->mockedInput);
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_OUTPUT)->andReturn($this->mockedOutput);
+        $this->mockedEvent->shouldReceive('getInput')->andReturn($this->mockedInput);
+        $this->mockedEvent->shouldReceive('getOutput')->andReturn($this->mockedOutput);
 
         $this->subject = new FixDecorator();
     }
@@ -52,7 +51,9 @@ class FixDecoratorTest extends TestCase
      */
     public function decorateAddsFixingFlagToTerminalCommandIfTrue(): void
     {
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(true);
 
         $this->mockedOutput->shouldReceive('writeln')->once()
@@ -68,7 +69,9 @@ class FixDecoratorTest extends TestCase
      */
     public function decorateNotChangeFixingFlagIfFalse(): void
     {
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(false);
 
         $this->mockedOutput->shouldReceive('writeln')->never();
@@ -83,8 +86,8 @@ class FixDecoratorTest extends TestCase
      */
     public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
-        $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);
+        $mockedTerminalCommand = Mockery::mock(TerminalCommand::class);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn($mockedTerminalCommand);
 
         $this->mockedTerminalCommand->shouldReceive('addExclusions')->never();
 

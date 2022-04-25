@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 
 class MultiprocessDecorator extends TerminalCommandDecorator
@@ -19,9 +19,9 @@ class MultiprocessDecorator extends TerminalCommandDecorator
         $this->processRunner = $processRunner;
     }
 
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof MultiprocessTerminalCommand) {
             return;
@@ -29,8 +29,7 @@ class MultiprocessDecorator extends TerminalCommandDecorator
 
         $this->possibleProcesses ??= (int) $this->processRunner->runAsProcess('getconf _NPROCESSORS_ONLN');
 
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
-        $output->writeln(
+        $event->getOutput()->writeln(
             '<info>Command can use ' . $this->possibleProcesses . ' processes</info>' . PHP_EOL,
             OutputInterface::VERBOSITY_VERY_VERBOSE
         );

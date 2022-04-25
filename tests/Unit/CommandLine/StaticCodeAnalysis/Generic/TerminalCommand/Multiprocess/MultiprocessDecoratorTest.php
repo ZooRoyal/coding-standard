@@ -8,8 +8,8 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess\MultiprocessDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess\MultiprocessTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
@@ -17,8 +17,8 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class MultiprocessDecoratorTest extends TestCase
 {
-    /** @var MockInterface|GenericEvent */
-    private GenericEvent $mockedEvent;
+    /** @var MockInterface|DecorateEvent */
+    private DecorateEvent $mockedEvent;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess\MultiprocessTerminalCommand */
     private MultiprocessTerminalCommand $mockedTerminalCommand;
     /** @var MockInterface|OutputInterface */
@@ -29,12 +29,11 @@ class MultiprocessDecoratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockedEvent = Mockery::mock(GenericEvent::class);
+        $this->mockedEvent = Mockery::mock(DecorateEvent::class);
         $this->mockedTerminalCommand = Mockery::mock(MultiprocessTerminalCommand::class);
         $this->mockedOutput = Mockery::mock(OutputInterface::class);
 
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_OUTPUT)->andReturn($this->mockedOutput);
+        $this->mockedEvent->shouldReceive('getOutput')->andReturn($this->mockedOutput);
 
         $this->mockedProcessRunner = Mockery::mock(ProcessRunner::class);
 
@@ -52,7 +51,7 @@ class MultiprocessDecoratorTest extends TestCase
     public function decorateAddsFixingFlagToTerminalCommandIfTrue(): void
     {
         $forgedCpuCores = '23';
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
             ->with('getconf _NPROCESSORS_ONLN')->andReturn($forgedCpuCores);
@@ -74,7 +73,7 @@ class MultiprocessDecoratorTest extends TestCase
     public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
         $mockedTerminalCommand = Mockery::mock(TerminalCommand::class);
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn($mockedTerminalCommand);
 
         $this->mockedTerminalCommand->shouldReceive('setMaximalConcurrentProcesses')->never();
 

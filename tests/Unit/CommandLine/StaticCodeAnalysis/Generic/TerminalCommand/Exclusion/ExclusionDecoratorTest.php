@@ -9,11 +9,12 @@ use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
@@ -24,8 +25,8 @@ class ExclusionDecoratorTest extends TestCase
     private array $subjectParameters;
     /** @var MockInterface|ExclusionTerminalCommand */
     private ExclusionTerminalCommand $mockedTerminalCommand;
-    /** @var MockInterface|GenericEvent */
-    private GenericEvent $mockedEvent;
+    /** @var MockInterface|DecorateEvent */
+    private DecorateEvent $mockedEvent;
     /** @var MockInterface|InputInterface */
     private InputInterface $mockedInput;
     /** @var MockInterface|OutputInterface */
@@ -33,15 +34,13 @@ class ExclusionDecoratorTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->mockedEvent = Mockery::mock(GenericEvent::class);
+        $this->mockedEvent = Mockery::mock(DecorateEvent::class);
         $this->mockedTerminalCommand = Mockery::mock(ExclusionTerminalCommand::class);
         $this->mockedInput = Mockery::mock(InputInterface::class);
         $this->mockedOutput = Mockery::mock(OutputInterface::class);
 
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_INPUT)->andReturn($this->mockedInput);
-        $this->mockedEvent->shouldReceive('getArgument')
-            ->with(TerminalCommandDecorator::KEY_OUTPUT)->andReturn($this->mockedOutput);
+        $this->mockedEvent->shouldReceive('getInput')->andReturn($this->mockedInput);
+        $this->mockedEvent->shouldReceive('getOutput')->andReturn($this->mockedOutput);
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
@@ -66,9 +65,10 @@ class ExclusionDecoratorTest extends TestCase
         $mockedEnhancedFileInfo = Mockery::mock(EnhancedFileInfo::class);
         $mockedExclusionList = [$mockedEnhancedFileInfo];
 
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($this->mockedTerminalCommand);
-        $this->mockedEvent->shouldReceive('getArgument')->atLeast()->once()
-            ->with(TerminalCommandDecorator::KEY_EXCLUSION_LIST_TOKEN)->andReturn($forgedToken);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
+        $this->mockedEvent->shouldReceive('getExclusionListToken')->atLeast()->once()->andReturn($forgedToken);
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
             ->with($forgedToken)->andReturn($mockedExclusionList);
@@ -91,8 +91,8 @@ class ExclusionDecoratorTest extends TestCase
      */
     public function decorateShouldNotReactToOtherTerminalCommands(): void
     {
-        $mockedTerminalCommand = Mockery::mock(TerminalCommandDecorator::class);
-        $this->mockedEvent->shouldReceive('getSubject')->atLeast()->once()->andReturn($mockedTerminalCommand);
+        $mockedTerminalCommand = Mockery::mock(TerminalCommand::class);
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn($mockedTerminalCommand);
 
         $this->mockedTerminalCommand->shouldReceive('addExclusions')->never();
 

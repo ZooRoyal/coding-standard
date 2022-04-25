@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\FileFinder\AdaptableFileFinder;
 use Zooroyal\CodingStandard\CommandLine\FileFinder\GitChangeSet;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\DecorateEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFacet\TargetableInputFacet;
 
@@ -28,17 +28,15 @@ class TargetDecorator extends TerminalCommandDecorator
     /**
      * {@inheritDoc}
      */
-    public function decorate(GenericEvent $genericEvent): void
+    public function decorate(DecorateEvent $event): void
     {
-        $terminalCommand = $genericEvent->getSubject();
+        $terminalCommand = $event->getTerminalCommand();
 
         if (!$terminalCommand instanceof TargetTerminalCommand) {
             return;
         }
 
-        $input = $genericEvent->getArgument(TerminalCommandDecorator::KEY_INPUT);
-        $output = $genericEvent->getArgument(TerminalCommandDecorator::KEY_OUTPUT);
-
+        $input = $event->getInput();
         $isAutoTarget = $input->getOption(TargetableInputFacet::OPTION_AUTO_TARGET);
         $target = $input->getOption(TargetableInputFacet::OPTION_TARGET);
 
@@ -50,8 +48,8 @@ class TargetDecorator extends TerminalCommandDecorator
             ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
             : $target;
 
-        $allowedFileEndings = $genericEvent->getArgument(TerminalCommandDecorator::KEY_ALLOWED_FILE_ENDINGS);
-        $exclusionListToken = $genericEvent->getArgument(TerminalCommandDecorator::KEY_EXCLUSION_LIST_TOKEN);
+        $allowedFileEndings = $event->getAllowedFileEndings();
+        $exclusionListToken = $event->getExclusionListToken();
 
         $gitChangeSet = $this->adaptableFileFinder->findFiles(
             $allowedFileEndings,
@@ -61,7 +59,7 @@ class TargetDecorator extends TerminalCommandDecorator
         );
 
         $targets = $gitChangeSet->getFiles();
-        $this->writeOutput($output, $gitChangeSet, $targets);
+        $this->writeOutput($event->getOutput(), $gitChangeSet, $targets);
 
         $terminalCommand->addTargets($targets);
     }
