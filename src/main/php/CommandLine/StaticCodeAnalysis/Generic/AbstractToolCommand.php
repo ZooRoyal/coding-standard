@@ -49,6 +49,7 @@ abstract class AbstractToolCommand extends Command
         ];
 
         $event = new GenericEvent($this->terminalCommand, $arguments);
+        // @phpstan-ignore-next-line because there is a hack in the symfony/event-dispatcher-contract regarding dispatch
         $this->eventDispatcher->dispatch($event, self::EVENT_DECORATE_TERMINAL_COMMAND);
 
         try {

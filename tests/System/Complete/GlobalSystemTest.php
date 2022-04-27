@@ -60,7 +60,7 @@ class GlobalSystemTest extends AsyncTestCase
             yield call([$this->filesystem, 'dumpFile'], $badCodeDirectory . DIRECTORY_SEPARATOR . $dotFile, '');
         }
 
-        $result = yield from $this->runTools($environmentDirectory);
+        $result = yield from $this->runTools($environmentDirectory, false);
 
         MatcherAssert::assertThat('All Tools are satisfied.', $result, H::not(H::hasItems(H::greaterThan(0))));
     }
@@ -79,6 +79,7 @@ class GlobalSystemTest extends AsyncTestCase
 
         $fixtureDirectory = dirname(__DIR__) . '/fixtures';
         $badCodeDirectory = $environmentDirectory . DIRECTORY_SEPARATOR . 'BadCode';
+        $mockedPluginDirectory = $environmentDirectory . '/custom/plugins';
         $badPhpSnifferFilePath = dirname(__DIR__, 2)
             . '/Functional/PHPCodesniffer/Standards/ZooRoyal/Sniffs/Commenting/'
             . 'Fixtures/FixtureIncorrectComments.php';
@@ -92,6 +93,8 @@ class GlobalSystemTest extends AsyncTestCase
             [$badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php'],
             [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect1.php'],
             [__FILE__, $badCodeDirectory . '/BadCopyPasteDetect2.php'],
+            [$fixtureDirectory . '/complete/Installer.php', $mockedPluginDirectory . '/a/Installer.php'],
+            [$fixtureDirectory . '/complete/Installer2.php', $mockedPluginDirectory . '/b/Installer.php'],
             [$fixtureDirectory . '/complete/BadStan.php', $badCodeDirectory . '/BadStan.php'],
             [$fixtureDirectory . '/complete/badLint.php', $badCodeDirectory . '/badLint.php'],
             [$fixtureDirectory . '/complete/BadMessDectect.php', $badCodeDirectory . '/BadMessDetect.php'],
@@ -101,7 +104,7 @@ class GlobalSystemTest extends AsyncTestCase
             yield call([$this->filesystem, 'copy'], $copyFile[0], $copyFile[1]);
         }
 
-        $result = yield from $this->runTools($environmentDirectory);
+        $result = yield from $this->runTools($environmentDirectory, true);
 
         MatcherAssert::assertThat('All tools are not satisfied', $result, H::not(H::hasItems(0)));
     }
@@ -126,7 +129,7 @@ class GlobalSystemTest extends AsyncTestCase
      *
      * @return Generator<Promise>
      */
-    private function runTools(string $environmentDirectory): Generator
+    private function runTools(string $environmentDirectory, bool $errorsAreGood = false): Generator
     {
         $tools = [
             'sca:sniff',
@@ -138,6 +141,7 @@ class GlobalSystemTest extends AsyncTestCase
             'sca:eslint',
         ];
 
+        /** @var array<Process> $processes */
         $processes = [];
         foreach ($tools as $tool) {
             $processes[$tool] = new Process(
@@ -152,6 +156,26 @@ class GlobalSystemTest extends AsyncTestCase
         $endPromises = array_map(static fn($process) => $process->join(), $processes);
         $exitCodes = yield all($endPromises);
 
+        foreach ($exitCodes as $tool => $exitCode) {
+            if (($exitCode === 0) === $errorsAreGood) {
+                $process = $processes[$tool];
+
+                yield from $this->echoStream('Stderr', $process);
+                yield from $this->echoStream('Stdout', $process);
+            }
+        }
+
         return yield new Success($exitCodes);
+    }
+
+    private function echoStream(string $streamName, Process $process): Generator
+    {
+        echo PHP_EOL . PHP_EOL . 'UNEXPECTED TOOL ' . $streamName . ':' . PHP_EOL;
+        $buffer = '';
+        $streamMethod = 'get' . $streamName;
+        while (($chunk = yield $process->$streamMethod()->read()) !== null) {
+            $buffer .= $chunk;
+        }
+        echo $buffer;
     }
 }

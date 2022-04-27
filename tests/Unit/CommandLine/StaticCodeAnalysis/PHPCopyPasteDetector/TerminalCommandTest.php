@@ -70,10 +70,19 @@ class TerminalCommandTest extends TestCase
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')->once()
             ->with(
-                'find ' . self::FORGED_RELATIV_ROOT . ' -path \'' . self::FORGED_RELATIV_ROOT
-                . '/custom/plugins/*\' -name Installer.php -maxdepth 4'
+                'find',
+                self::FORGED_ABSOLUTE_ROOT,
+                '-path',
+                '*/custom/plugins/*',
+                '-name',
+                'Installer.php',
+                '-maxdepth',
+                '4'
             )
-            ->andReturn('blabla/Installer.php' . PHP_EOL . 'blubblub/Installer.php' . PHP_EOL);
+            ->andReturn(
+                self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php' . PHP_EOL
+                . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php' . PHP_EOL
+            );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
         $this->subject->addExclusions($data->getExcluded());
@@ -101,8 +110,9 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpcpd --fuzzy --suffix qweasd --suffix argh --exclude a/ --exclude b/ '
                             . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
-                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
-                            . '--exclude blubblub/Installer.php .',
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -117,7 +127,8 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpcpd --fuzzy --exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
                             . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
-                            . '--exclude blabla/Installer.php --exclude blubblub/Installer.php .',
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
                     ]
                 ),
             ],
@@ -127,8 +138,9 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpcpd --fuzzy --exclude a/ --exclude b/ '
                             . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
-                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
-                            . '--exclude blubblub/Installer.php .',
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
                         'excluded' => [
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
@@ -142,8 +154,9 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpcpd --fuzzy --suffix argh --suffix wub '
                             . '--exclude custom/plugins/ZRBannerSlider/ZRBannerSlider.php '
-                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php --exclude blabla/Installer.php '
-                            . '--exclude blubblub/Installer.php .',
+                            . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
+                            . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
                         'extensions' => ['argh', 'wub'],
                     ]
                 ),
