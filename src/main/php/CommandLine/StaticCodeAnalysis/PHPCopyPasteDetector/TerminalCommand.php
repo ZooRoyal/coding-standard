@@ -62,7 +62,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $excludesFilePaths = [];
         $finderResultLines = [];
-        $rootPath = $this->environment->getRootDirectory()->getRelativePathname();
+        $rootPath = $this->environment->getRootDirectory()->getRealPath();
 
         if ($this->excludesFiles !== []) {
             $excludesFilePaths = array_map(
@@ -71,9 +71,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
             );
         }
 
-        $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootPath . ' -path \'' . $rootPath . '/custom/plugins/*\' -name Installer.php -maxdepth 4'
-        );
+        $command = ['find', $rootPath, '-path', '*/custom/plugins/*', '-name', 'Installer.php', '-maxdepth', '4'];
+
+        $finderResult = $this->processRunner->runAsProcess(...$command);
 
         if (!empty($finderResult)) {
             $finderResultLines = explode(PHP_EOL, trim($finderResult));
