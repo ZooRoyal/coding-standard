@@ -37,7 +37,7 @@
     "phpmd/phpmd": "^2.9.1",
     "phpstan/extension-installer": "^1.1",
     "phpstan/phpstan": "^0.12.87",
-    "phpstan/phpstan-doctrine": "^0.12.13",
+    "phpstan/phpstan-doctrine": "^0.12.14",
     "phpstan/phpstan-mockery": "^0.12.12",
     "phpstan/phpstan-phpunit": "^0.12.17",
     "phpstan/phpstan-symfony": "^0.12.16",
