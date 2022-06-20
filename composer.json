@@ -61,7 +61,6 @@
     "brianium/paratest": "^v6.3.0",
     "infection/infection": ">=0.20",
     "mockery/mockery": "^1.4.2",
-    "php-http/mock-client": "^1.4",
     "phpunit/phpunit": "^9.5.2",
     "phpunit/php-code-coverage": "9.2.6",
     "roave/security-advisories": "dev-master",
@@ -78,8 +77,7 @@
     }
   },
   "bin": [
-    "src/bin/coding-standard",
-    "src/bin/github"
+    "src/bin/coding-standard"
   ],
   "scripts": {
     "post-update-cmd": "npm install",
