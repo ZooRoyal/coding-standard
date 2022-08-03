@@ -10,10 +10,12 @@ module.exports = {
         'standard',
         'plugin:jest/recommended',
         'plugin:jest/style',
+        'plugin:@stencil/recommended',
     ],
     parserOptions: {
         ecmaVersion: 2016,
         sourceType: 'module',
+        project: './tsconfig.json',
     },
     plugins: [
         'jest',
