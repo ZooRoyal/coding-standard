@@ -10,7 +10,6 @@ module.exports = {
         'standard',
         'plugin:jest/recommended',
         'plugin:jest/style',
-        'plugin:@stencil/recommended',
     ],
     parserOptions: {
         ecmaVersion: 2016,
@@ -29,6 +28,7 @@ module.exports = {
             ],
             extends: [
                 'plugin:@typescript-eslint/recommended',
+                'plugin:@stencil/recommended',
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': 2,
