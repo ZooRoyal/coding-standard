@@ -36,7 +36,9 @@ module.exports = {
                 'jsdoc/require-returns': 0,
                 'jsdoc/require-param': 0,
                 '@typescript-eslint/no-undef': 'off',
-                '@typescript-eslint/no-unused-vars-experimental': 'warn'
+                '@typescript-eslint/no-unused-vars-experimental': 'warn',
+                'no-undef': 'off',
+                'no-unused-vars-experimental': 'warn',
             },
         },
     ],
