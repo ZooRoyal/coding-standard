@@ -1,3 +1,6 @@
 node_modules/
 **/*.test.js
 **/*.config.js
+**/*.spec.ts*
+**/*.e2e.ts*
+.eslintrc.js

@@ -4,7 +4,7 @@
  * @license REWE Digital GmbH
  */
 
-module.exports = {
+ module.exports = {
     extends: [
         'eslint:recommended',
         'standard',
@@ -22,7 +22,7 @@ module.exports = {
     ],
     overrides: [
         {
-            files: ['*.ts', '*.tsx'],
+            files: ['*.ts'],
             plugins: [
                 '@typescript-eslint',
             ],
@@ -35,12 +35,25 @@ module.exports = {
                 'no-useless-constructor': 'off',
                 'jsdoc/require-returns': 0,
                 'jsdoc/require-param': 0,
+            },
+        },
+        {
+            files: ['*.tsx'],
+            plugins: [
+                '@typescript-eslint',
+            ],
+            extends: [
+                'plugin:@typescript-eslint/recommended',
+                'plugin:@stencil/recommended',
+            ],
+            rules: {
                 '@typescript-eslint/no-undef': 0,
-                '@typescript-eslint/no-unused-vars-experimental': 1,
-                '@typescript-eslint/no-unused-vars': 1,
+                '@typescript-eslint/no-unused-vars-experimental': 0,
+                '@typescript-eslint/no-unused-vars': 0,
                 'no-undef': 0,
-                'no-unused-vars-experimental': 1,
-                'no-unused-vars': 1,
+                'no-unused-vars-experimental': 0,
+                'no-unused-vars': 0,
+                'react/jsx-no-bind': 0,
             },
         },
     ],
