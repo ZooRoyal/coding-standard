@@ -15,6 +15,14 @@
     "max-empty-lines": 2,
     "selector-list-comma-newline-after": null,
     "declaration-empty-line-before": null,
-    "max-nesting-depth": 3
+    "max-nesting-depth": 3,
+    "selector-type-no-unknown": [
+      true,
+      {
+        "ignore": [
+          "custom-elements"
+        ]
+      }
+    ]
   }
 }
