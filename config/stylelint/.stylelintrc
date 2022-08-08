@@ -2,6 +2,7 @@
   "extends": [
     "stylelint-config-standard"
   ],
+  "ignoreFiles": ["Resources/*/dist/**/**/**"],
   "plugins": [
     "stylelint-scss"
   ],
