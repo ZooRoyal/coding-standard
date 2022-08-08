@@ -54,7 +54,18 @@
                 'no-unused-vars-experimental': 0,
                 'no-unused-vars': 0,
                 'react/jsx-no-bind': 0,
-                'jsdoc/check-tag-names': ['error', { definedTags: ['widgetName', 'widgetIcon', 'widgetFieldType'] }],
+                'jsdoc/check-tag-names': ['error', {
+                    definedTags: [
+                        'widgetName',
+                        'widgetIcon',
+                        'widgetFieldType',
+                        'widgetFieldLabel',
+                        'widgetFieldSupportText',
+                        'widgetFieldHelpTitle',
+                        'widgetFieldHelpText',
+                        'widgetFieldDefaultValue'
+                    ],
+                }],
             },
         },
     ],
