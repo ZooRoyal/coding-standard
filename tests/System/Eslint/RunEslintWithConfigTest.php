@@ -15,7 +15,7 @@ use function Safe\file_put_contents;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
-    private const EXPECTED_TS_PROBLEMS = '186 problems';
+    private const EXPECTED_TS_PROBLEMS = '187 problems';
     private const EXPECTED_JS_PROBLEMS = '185 problems';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
