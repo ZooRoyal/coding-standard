@@ -11,6 +11,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\ByteStream\buffer;
+use function Safe\file_put_contents;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
