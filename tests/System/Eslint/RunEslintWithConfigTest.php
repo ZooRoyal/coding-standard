@@ -113,10 +113,12 @@ class RunEslintWithConfigTest extends AsyncTestCase
         if ($environment->isInstalled() === false) {
             $environment->addComposerJson(
                 dirname(__DIR__)
-                . '/fixtures/eslint/composer-template.json'
+                    . '/fixtures/eslint/composer-template.json'
             )->installComposerInstance();
         }
-        return $environment->getInstallationPath();
+        $envInstallationPath = $environment->getInstallationPath();
+        file_put_contents($envInstallationPath . "/tsconfig.json", '{}');
+        return $envInstallationPath;
     }
 
     private function getEslintCommand(string $fileToCheck, string $testInstancePath): string
