@@ -4,7 +4,7 @@
  * @license REWE Digital GmbH
  */
 
- module.exports = {
+module.exports = {
     extends: [
         'eslint:recommended',
         'standard',
@@ -47,12 +47,6 @@
                 'plugin:@stencil/recommended',
             ],
             rules: {
-                '@typescript-eslint/no-undef': 0,
-                '@typescript-eslint/no-unused-vars-experimental': 0,
-                '@typescript-eslint/no-unused-vars': 0,
-                'no-undef': 0,
-                'no-unused-vars-experimental': 0,
-                'no-unused-vars': 0,
                 'react/jsx-no-bind': 0,
                 'jsdoc/check-tag-names': ['error', {
                     definedTags: [
