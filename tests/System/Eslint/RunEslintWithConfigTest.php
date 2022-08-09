@@ -118,7 +118,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
             )->installComposerInstance();
         }
         $envInstallationPath = $environment->getInstallationPath();
-        file_put_contents($envInstallationPath . "/tsconfig.json", '{}');
+        file_put_contents($envInstallationPath . '/tsconfig.json', '{}');
         return $envInstallationPath;
     }
 
