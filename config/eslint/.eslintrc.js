@@ -58,7 +58,7 @@ module.exports = {
                         'widgetFieldSupportText',
                         'widgetFieldHelpTitle',
                         'widgetFieldHelpText',
-                        'widgetFieldDefaultValue'
+                        'widgetFieldDefaultValue',
                     ],
                 }],
             },
