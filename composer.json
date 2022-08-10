@@ -74,13 +74,17 @@
   "autoload-dev": {
     "psr-4": {
       "Zooroyal\\CodingStandard\\Tests\\": "tests/"
-    }
+    },
+    "files": [
+      "vendor/squizlabs/php_codesniffer/autoload.php",
+      "vendor/squizlabs/php_codesniffer/src/Sniffs/Sniff.php"
+    ]
   },
   "bin": [
     "src/bin/coding-standard"
   ],
   "scripts": {
-    "post-update-cmd": "npm install",
+    "post-update-cmd": "npm update",
     "post-install-cmd": "npm install",
     "test": [
       "mkdir -p /tmp/phpunit",

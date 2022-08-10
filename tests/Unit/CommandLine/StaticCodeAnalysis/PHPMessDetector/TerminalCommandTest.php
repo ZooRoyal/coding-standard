@@ -9,10 +9,10 @@ use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\Library\Environment;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPMessDetector\TerminalCommand;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
 use Zooroyal\CodingStandard\Tests\Tools\TerminalCommandTestData;
 
 class TerminalCommandTest extends TestCase
@@ -38,7 +38,7 @@ class TerminalCommandTest extends TestCase
             ->andReturn(self::FORGED_RELATIV_ROOT);
         $this->mockedEnvironment->shouldReceive('getRootDirectory->getRealPath')
             ->andReturn(self::FORGED_ABSOLUTE_ROOT);
-        $this->mockedEnvironment->shouldReceive('getVendorPath->getRealPath')
+        $this->mockedEnvironment->shouldReceive('getVendorDirectory->getRealPath')
             ->andReturn(self::FORGED_ABSOLUTE_VENDOR);
 
         $this->subject = new TerminalCommand($this->mockedEnvironment);

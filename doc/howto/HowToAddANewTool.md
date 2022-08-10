@@ -145,7 +145,7 @@ You implemented and tested `SuperCoolToolCommand` and `TerminalCommand`... now w
 
 To let coding-standard know there is a fancy new tool in town the final task left to do is registering it to the system. Thank god that's easy
 
-Open the class `Zooroyal\CodingStandard\CommandLine\Factories\ApplicationFactory`.
+Open the class `Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ApplicationFactory`.
 
 ```php
 class ApplicationFactory

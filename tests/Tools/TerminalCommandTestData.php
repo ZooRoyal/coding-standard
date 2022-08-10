@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Zooroyal\CodingStandard\Tests\Tools;
 
 use Symfony\Component\Console\Output\OutputInterface;
-use Zooroyal\CodingStandard\CommandLine\ValueObjects\EnhancedFileInfo;
+use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 
 /**
  * The sole use of this class is to make TerminalCommandTests easier to mass produce.

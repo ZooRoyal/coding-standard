@@ -16,6 +16,7 @@ use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\AbstractToolCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 
 abstract class AbstractToolCommandTest extends TestCase
@@ -61,21 +62,13 @@ abstract class AbstractToolCommandTest extends TestCase
 
         $this->mockedEventDispatcher->shouldReceive('dispatch')->once()->with(
             H::allOf(
-                HasProperty::hasProperty(
-                    'subject',
-                    H::anInstanceOf($this->terminalCommandType)
-                ),
-                HasProperty::hasProperty(
-                    'arguments',
-                    H::allOf(
-                        H::hasItem($this->exclusionToken),
-                        H::hasItem($this->allowedFileEndings),
-                        H::hasItem($this->mockedInput),
-                        H::hasItem($this->mockedOutput),
-                    )
-                )
+                HasProperty::hasProperty('TerminalCommand', H::anInstanceOf($this->terminalCommandType)),
+                HasProperty::hasProperty('ExclusionListToken', $this->exclusionToken),
+                HasProperty::hasProperty('AllowedFileEndings', $this->allowedFileEndings),
+                HasProperty::hasProperty('Input', $this->mockedInput),
+                HasProperty::hasProperty('Output', $this->mockedOutput),
             ),
-            AbstractToolCommand::EVENT_DECORATE_TERMINAL_COMMAND
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
         );
         $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
             ->with($this->mockedTerminalCommand)->andReturn($expectedExitCode);
@@ -83,23 +76,6 @@ abstract class AbstractToolCommandTest extends TestCase
         $result = $this->subject->execute($this->mockedInput, $this->mockedOutput);
 
         self::assertSame($expectedExitCode, $result);
-    }
-
-    /**
-     * @test
-     */
-    public function executeWrappsException(): void
-    {
-        $this->expectException(Exception::class);
-        $this->expectExceptionCode(1617786765);
-        $this->expectExceptionMessage('Something went wrong while executing a terminal command.');
-
-        $this->mockedOutput->shouldIgnoreMissing();
-        $this->mockedEventDispatcher->shouldIgnoreMissing();
-        $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
-            ->with(Mockery::any())->andThrow(new Exception());
-
-        $this->subject->execute($this->mockedInput, $this->mockedOutput);
     }
 
     /**
@@ -128,5 +104,22 @@ abstract class AbstractToolCommandTest extends TestCase
 
         //exitcode auf 0 prüfen
         self::assertSame(0, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function executeWrappsException(): void
+    {
+        $this->expectException(Exception::class);
+        $this->expectExceptionCode(1617786765);
+        $this->expectExceptionMessage('Something went wrong while executing a terminal command.');
+
+        $this->mockedOutput->shouldIgnoreMissing();
+        $this->mockedEventDispatcher->shouldIgnoreMissing();
+        $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
+            ->with(Mockery::any())->andThrow(new Exception());
+
+        $this->subject->execute($this->mockedInput, $this->mockedOutput);
     }
 }

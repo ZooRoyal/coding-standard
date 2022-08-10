@@ -11,19 +11,13 @@ use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
-use Symfony\Component\EventDispatcher\GenericEvent;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\NoUsefulCommandFoundException;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandDecorator;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\TerminalCommandRunner;
 
 abstract class AbstractToolCommand extends Command
 {
-    /** @var string */
-    public const EVENT_DECORATE_TERMINAL_COMMAND = 'eventDecorateTerminalCommand';
-    public const KEY_EXCLUSION_LIST_TOKEN = 'exclusionListToken';
-    public const KEY_ALLOWED_FILE_ENDINGS = 'allowedFileEndings';
-    public const KEY_INPUT = 'input';
-    public const KEY_OUTPUT = 'output';
     protected string $exclusionListToken;
     /** @var array<string> */
     protected array $allowedFileEndings;
@@ -41,16 +35,19 @@ abstract class AbstractToolCommand extends Command
     {
         $output->writeln(PHP_EOL . '<comment>Running ' . $this->terminalCommandName . '</comment>');
 
-        $arguments = [
-            self::KEY_EXCLUSION_LIST_TOKEN => $this->exclusionListToken,
-            self::KEY_ALLOWED_FILE_ENDINGS => $this->allowedFileEndings,
-            self::KEY_INPUT => $input,
-            self::KEY_OUTPUT => $output,
-        ];
-
-        $event = new GenericEvent($this->terminalCommand, $arguments);
+        $event = new CodingStandardCommandEvent(
+            $this,
+            $input,
+            $output,
+            $this->terminalCommand,
+            $this->exclusionListToken,
+            $this->allowedFileEndings
+        );
         // @phpstan-ignore-next-line because there is a hack in the symfony/event-dispatcher-contract regarding dispatch
-        $this->eventDispatcher->dispatch($event, self::EVENT_DECORATE_TERMINAL_COMMAND);
+        $this->eventDispatcher->dispatch(
+            $event,
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
+        );
 
         try {
             $exitCode = $this->terminalCommandRunner->run($this->terminalCommand);
