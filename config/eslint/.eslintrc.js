@@ -14,6 +14,7 @@ module.exports = {
     parserOptions: {
         ecmaVersion: 2016,
         sourceType: 'module',
+        project: './tsconfig.json',
     },
     plugins: [
         'jest',
@@ -21,18 +22,44 @@ module.exports = {
     ],
     overrides: [
         {
-            files: '*.ts',
+            files: ['*.ts'],
             plugins: [
                 '@typescript-eslint',
             ],
             extends: [
                 'plugin:@typescript-eslint/recommended',
+                'plugin:@stencil/recommended',
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': 2,
                 'no-useless-constructor': 'off',
                 'jsdoc/require-returns': 0,
                 'jsdoc/require-param': 0,
+            },
+        },
+        {
+            files: ['*.tsx'],
+            plugins: [
+                '@typescript-eslint',
+            ],
+            extends: [
+                'plugin:@typescript-eslint/recommended',
+                'plugin:@stencil/recommended',
+            ],
+            rules: {
+                '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
+                'jsdoc/check-tag-names': ['error', {
+                    definedTags: [
+                        'widgetName',
+                        'widgetIcon',
+                        'widgetFieldType',
+                        'widgetFieldLabel',
+                        'widgetFieldSupportText',
+                        'widgetFieldHelpTitle',
+                        'widgetFieldHelpText',
+                        'widgetFieldDefaultValue',
+                    ],
+                }],
             },
         },
     ],
@@ -122,8 +149,8 @@ module.exports = {
         'comma-dangle': ['error', {
             arrays: 'always-multiline',
             objects: 'always-multiline',
-            imports: 'never',
-            exports: 'never',
+            imports: 'always-multiline',
+            exports: 'always-multiline',
             functions: 'never',
         }],
         'space-before-function-paren': ['error', {
