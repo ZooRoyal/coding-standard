@@ -48,7 +48,6 @@ module.exports = {
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
-                'react/jsx-no-bind': 0,
                 'jsdoc/check-tag-names': ['error', {
                     definedTags: [
                         'widgetName',
