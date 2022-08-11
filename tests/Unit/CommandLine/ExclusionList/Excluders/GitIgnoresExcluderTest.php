@@ -7,6 +7,7 @@ namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\ExclusionList\Excluders
 use Mockery;
 use Mockery\MockInterface;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
@@ -52,19 +53,21 @@ class GitIgnoresExcluderTest extends TestCase
             $forgedExcludedDirectories
         );
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git';
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d | git check-ignore --stdin';
 
-        $forgedCommandResult = $this->forgedRootDirectory
-            . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[0]
-            . DIRECTORY_SEPARATOR . '.git' . PHP_EOL
-            . $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
-            . DIRECTORY_SEPARATOR . '.git' . PHP_EOL;
+        $forgedCommandResult = '.' . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[0] . PHP_EOL
+            . '.' . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1] . PHP_EOL;
+
+        $expectedBuildFromArrayParameter = array_map(
+            static fn($value): string => '.' . DIRECTORY_SEPARATOR . $value,
+            $forgedExcludedDirectories
+        );
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')
             ->once()->with($expectedCommand)->andReturn($forgedCommandResult);
 
         $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
-            ->once()->with($forgedExcludedDirectories)->andReturn($expectedResult);
+            ->once()->with($expectedBuildFromArrayParameter)->andReturn($expectedResult);
 
         $result = $this->subject->getPathsToExclude([]);
 
@@ -77,34 +80,33 @@ class GitIgnoresExcluderTest extends TestCase
     public function getPathsToExcludeWithAlreadyExcluded(): void
     {
         $mockedEnhancedFileInfo1 = Mockery::mock(EnhancedFileInfo::class);
+        $mockedEnhancedFileInfo1RelativePath = 'asdasd';
+
         $mockedEnhancedFileInfo2 = Mockery::mock(EnhancedFileInfo::class);
-        $mockedEnhancedFileInfoRemaining = Mockery::mock(EnhancedFileInfo::class);
+        $mockedEnhancedFileInfo2RelativePath = 'qweqwe';
+
         $forgedAlreadyExcluded = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfo2];
-        $forgedExcludedDirectories = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfoRemaining];
-        $forgedRemainingPaths = [$mockedEnhancedFileInfoRemaining];
-        $expectedResult = [
-            new EnhancedFileInfo(
-                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfoRemaining,
-                $this->forgedRootDirectory
-            ),
-        ];
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git'
-            . ' -not -path "./' . $forgedAlreadyExcluded[0] . '" -not -path "./' . $forgedAlreadyExcluded[1] . '"';
+        $mockedEnhancedFileInfo1->shouldReceive('getRelativePathname')->withNoArgs()
+            ->andReturn($mockedEnhancedFileInfo1RelativePath);
+        $mockedEnhancedFileInfo2->shouldReceive('getRelativePathname')->withNoArgs()
+            ->andReturn($mockedEnhancedFileInfo2RelativePath);
 
-        $forgedCommandResult = $this->forgedRootDirectory
-            . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
-            . DIRECTORY_SEPARATOR . '.git' . PHP_EOL;
+        $expectedCommand = 'find ' . $this->forgedRootDirectory
+            . ' -type d '
+            . '-not -path "./' . $mockedEnhancedFileInfo1RelativePath . '/*" '
+            . '-not -path "./' . $mockedEnhancedFileInfo2RelativePath . '/*" '
+            . '| git check-ignore --stdin';
+
+        $forgedCommandResult = '';
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
 
         $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
-            ->once()->with($forgedRemainingPaths)->andReturn($expectedResult);
+            ->never();
 
-        $result = $this->subject->getPathsToExclude($forgedAlreadyExcluded);
-
-        self::assertSame($expectedResult, $result);
+        $this->subject->getPathsToExclude($forgedAlreadyExcluded);
     }
 
     /**
@@ -114,15 +116,33 @@ class GitIgnoresExcluderTest extends TestCase
     {
         $expectedResult = [];
 
-        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git';
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d | git check-ignore --stdin';
 
-        $forgedCommandResult = '';
+        $mockedException = Mockery::mock(ProcessFailedException::class);
+        $mockedException->shouldReceive('getProcess->getExitCode')->once()->andReturn(1);
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
-            ->with($expectedCommand)->andReturn($forgedCommandResult);
+            ->with($expectedCommand)->andThrows($mockedException);
 
         $result = $this->subject->getPathsToExclude([]);
 
         self::assertSame($expectedResult, $result);
+    }
+
+    /**
+     * @test
+     */
+    public function getPathsToExcludeFinderRethrowsRealProcessErrors(): void
+    {
+        $this->expectException(ProcessFailedException::class);
+        $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -type d | git check-ignore --stdin';
+
+        $mockedException = Mockery::mock(ProcessFailedException::class);
+        $mockedException->shouldReceive('getProcess->getExitCode')->once()->andReturn(2);
+
+        $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
+            ->with($expectedCommand)->andThrows($mockedException);
+
+        $this->subject->getPathsToExclude([]);
     }
 }

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders;
 
+use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
@@ -35,6 +36,8 @@ class GitIgnoresExcluder implements ExcluderInterface
      * @param array<mixed>            $config
      *
      * @return array<EnhancedFileInfo>
+     * @throws ProcessFailedException because it's only a problem if exitCode is not 0 or 1. We have to check for
+     *                                that and therefore intercept the exception.
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
@@ -52,7 +55,21 @@ class GitIgnoresExcluder implements ExcluderInterface
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
         $command = 'find ' . $rootDirectory . ' -type d' . $excludeParameters . ' | git check-ignore --stdin';
 
-        $rawIgnoredFoldersOutput = $this->processRunner->runAsProcess($command);
+        try {
+            $rawIgnoredFoldersOutput = $this->processRunner->runAsProcess($command);
+        } catch (ProcessFailedException $exception) {
+            $exitCode = $exception->getProcess()->getExitCode();
+            if ($exitCode !== 1) {
+                throw $exception;
+            }
+
+            $rawIgnoredFoldersOutput = '';
+        }
+        $rawIgnoredFoldersOutputTrimed = trim($rawIgnoredFoldersOutput);
+
+        if (empty($rawIgnoredFoldersOutputTrimed)) {
+            return [];
+        }
 
         $ignoredFolders = explode("\n", trim($rawIgnoredFoldersOutput));
 

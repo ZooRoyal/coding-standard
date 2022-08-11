@@ -14,9 +14,10 @@ class ProcessRunner
     public function createProcess(string $command, string ...$arguments): Process
     {
         $commandToProcess = $command;
-        if (! empty($arguments)){
+        if (! empty($arguments)) {
             $commandToProcess .= ' ' . implode(' ', $arguments);
         }
+
         $process = Process::fromShellCommandline($commandToProcess);
         $process->setTimeout(null);
         $process->setIdleTimeout(120);
