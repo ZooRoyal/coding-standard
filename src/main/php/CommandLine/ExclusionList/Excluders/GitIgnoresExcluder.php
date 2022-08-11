@@ -8,16 +8,15 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
-use function Safe\substr;
 
-class GitPathsExcluder implements ExcluderInterface
+class GitIgnoresExcluder implements ExcluderInterface
 {
     private Environment $environment;
     private ProcessRunner $processRunner;
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
 
     /**
-     * GitPathsExcluder constructor.
+     * GitIgnoresExcluder constructor.
      */
     public function __construct(
         Environment $environment,
@@ -30,10 +29,10 @@ class GitPathsExcluder implements ExcluderInterface
     }
 
     /**
-     * The methods search for Git submodules and returns their paths.
+     * This Method ask Git which directories should be ignored and returns them if they are found.
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
-     * @param array<mixed> $config
+     * @param array<mixed>            $config
      *
      * @return array<EnhancedFileInfo>
      */
@@ -41,26 +40,23 @@ class GitPathsExcluder implements ExcluderInterface
     {
         $excludeParameters = '';
         if (!empty($alreadyExcludedPaths)) {
-            $excludeParameters = ' -not -path "./' . implode('" -not -path "./', $alreadyExcludedPaths) . '"';
+            $alreadyExcludedPathsAsRelativPaths = array_map(
+                static fn($value): string => $value->getRelativePathname(),
+                $alreadyExcludedPaths
+            );
+            $excludeParameters = ' -not -path "./'
+                . implode('/*" -not -path "./', $alreadyExcludedPathsAsRelativPaths)
+                . '/*"';
         }
 
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
-        $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters
-        );
+        $command = 'find ' . $rootDirectory . ' -type d' . $excludeParameters . ' | git check-ignore --stdin';
 
-        if (empty($finderResult)) {
-            return [];
-        }
+        $rawIgnoredFoldersOutput = $this->processRunner->runAsProcess($command);
 
-        $rawExcludePathsByFileByGit = explode(PHP_EOL, trim($finderResult));
+        $ignoredFolders = explode("\n", trim($rawIgnoredFoldersOutput));
 
-        $relativeDirectories = array_map(
-            static fn($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
-            $rawExcludePathsByFileByGit
-        );
-
-        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($ignoredFolders);
 
         return $result;
     }

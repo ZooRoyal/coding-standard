@@ -11,6 +11,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ApplicationFactory;
 use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\EventDispatcherFactory;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\GitIgnoresExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\GitPathsExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\StaticExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
@@ -28,6 +29,7 @@ return [
             $result[] = $container->get(GitPathsExcluder::class);
             $result[] = $container->get(StaticExcluder::class);
             $result[] = $container->get(TokenExcluder::class);
+            $result[] = $container->get(GitIgnoresExcluder::class);
             return $result;
         }
     ),

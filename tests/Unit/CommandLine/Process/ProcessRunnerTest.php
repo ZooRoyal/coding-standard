@@ -37,7 +37,7 @@ class ProcessRunnerTest extends TestCase
     {
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
-        $overwrittenProcess->shouldReceive('__construct')->once()->with(['ls']);
+        $overwrittenProcess->shouldReceive('fromShellCommandline')->once()->with('ls')->andReturn($overwrittenProcess);
         $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(120);
         $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
 
@@ -64,13 +64,13 @@ class ProcessRunnerTest extends TestCase
         $commandInput = 'ls';
         $commandArgument1 = '-l';
         $commandArgument2 = '-a';
-        $commandOutput = ['ls', '-l', '-a'];
+        $commandOutput = 'ls -l -a';
 
         $expectedOutput = 'schlurbel';
         $expectedError = 'wurbel';
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
-        $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
+        $overwrittenProcess->shouldReceive('fromShellCommandline')->once()->with($commandOutput)->andReturn($overwrittenProcess);
         $overwrittenProcess->shouldReceive('mustRun')->once()->withNoArgs();
         $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(120);
         $overwrittenProcess->shouldReceive('setTimeout')->once()->with(null);
@@ -104,7 +104,7 @@ class ProcessRunnerTest extends TestCase
     public function runAsProcessReturningProcessObjectIsVersionStable(): void
     {
         $commandInput = 'ls -la';
-        $commandOutput = ['ls', '-la'];
+        $commandOutput = 'ls -la';
 
         $overwrittenProcess = Mockery::mock('overload:' . Process::class);
 
@@ -112,7 +112,7 @@ class ProcessRunnerTest extends TestCase
         $overwrittenProcess->shouldReceive('setIdleTimeout')->once()->with(120);
         $overwrittenProcess->shouldReceive('run')->once();
 
-        $overwrittenProcess->shouldReceive('__construct')->once()->with($commandOutput);
+        $overwrittenProcess->shouldReceive('fromShellCommandline')->once()->with($commandOutput)->andReturn($overwrittenProcess);
 
         $result = $this->subject->runAsProcessReturningProcessObject($commandInput);
 
