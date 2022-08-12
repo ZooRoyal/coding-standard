@@ -33,7 +33,7 @@ class GitPathsExcluder implements ExcluderInterface
      * The methods search for Git submodules and returns their paths.
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
-     * @param array<mixed>  $config
+     * @param array<mixed> $config
      *
      * @return array<EnhancedFileInfo>
      */

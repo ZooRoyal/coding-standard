@@ -9,9 +9,9 @@ use Amp\Process\Process;
 use Amp\Promise;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
+use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\ByteStream\buffer;
-use function Safe\file_put_contents;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
@@ -19,6 +19,13 @@ class RunEslintWithConfigTest extends AsyncTestCase
     private const EXPECTED_JS_PROBLEMS = '185 problems';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
+    private Filesystem $filesystem;
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+        $this->filesystem = new Filesystem();
+    }
 
     public static function tearDownAfterClass(): void
     {
@@ -114,20 +121,21 @@ class RunEslintWithConfigTest extends AsyncTestCase
         if ($environment->isInstalled() === false) {
             $environment->addComposerJson(
                 dirname(__DIR__)
-                    . '/fixtures/eslint/composer-template.json'
+                . '/fixtures/eslint/composer-template.json'
             )->installComposerInstance();
         }
         $envInstallationPath = $environment->getInstallationPath();
-        file_put_contents($envInstallationPath . '/tsconfig.json', '{}');
+        $this->filesystem->copy(
+            $envInstallationPath . '/vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/tsconfig.json',
+            $envInstallationPath . '/tsconfig.json'
+        );
         return $envInstallationPath;
     }
 
     private function getEslintCommand(string $fileToCheck, string $testInstancePath): string
     {
         return self::ESLINT_COMMAND
-            . $testInstancePath . DIRECTORY_SEPARATOR
             . self::ESLINT_CONFIG_FILE
-            . $testInstancePath . DIRECTORY_SEPARATOR
             . $fileToCheck;
     }
 }
