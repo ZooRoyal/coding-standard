@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\Tests\System\Complete;
 
+use Hamcrest\MatcherAssert;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 
 class ShopwareCompatibilityTest extends TestCase
@@ -24,10 +27,26 @@ class ShopwareCompatibilityTest extends TestCase
      */
     public function installingCodingStandardInShopwareContext(): void
     {
+        $filesystem = new Filesystem();
         $environment = TestEnvironmentInstallation::getInstance();
         $environment->addComposerJson(
             dirname(__DIR__)
             . '/fixtures/complete/shopware-composer-template.json'
         )->installComposerInstance();
+
+        $environmentDirectory = $environment->getInstallationPath();
+
+        $fixtureDirectory = dirname(__DIR__) . '/fixtures';
+
+        $filesystem->copy($fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/GoodPhp.php');
+
+        $process = new Process(
+            [$environmentDirectory . '/vendor/bin/coding-standard', 'sca:all'],
+            $environmentDirectory
+        );
+
+        $exitCode = $process->mustRun()->getExitCode();
+
+        MatcherAssert::assertThat('0', $exitCode);
     }
 }
