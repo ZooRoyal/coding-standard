@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo;
 
+use InvalidArgumentException;
 use SplFileInfo;
 use Webmozart\PathUtil\Path;
 
@@ -42,5 +43,20 @@ class EnhancedFileInfo extends SplFileInfo
     public function startsWith(string $suffix): bool
     {
         return str_starts_with($this->getPathname(), $suffix);
+    }
+
+    /**
+     * Checks if this EnhancedFileInfo represents a subdirectory of $directory.
+     *
+     * @throws InvalidArgumentException if parameter is not a directory.
+     */
+    public function isSubdirectoryOf(EnhancedFileInfo $directory): bool
+    {
+        if ($directory->isDir() !== true) {
+            throw new InvalidArgumentException('The EnhancedFileInfo '. $directory . ' is not a directory.',
+                1661515549);
+        }
+
+        return $this->startsWith($directory . '/');
     }
 }

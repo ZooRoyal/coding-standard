@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Zooroyal\CodingStandard\Tests\Unit\CommandLine\Factories\ExclusionList\Excluders;
+namespace Zooroyal\CodingStandard\Tests\Functional\CommandLine\ExclusionList\Excluders;
 
 use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
@@ -22,8 +22,18 @@ class ExclusionListSanitizerTest extends TestCase
      */
     public function sanitizeExclusionList(): void
     {
-        $expectedResult = $this->prepareMockedEnhancedFileInfo(['bla', 'schackalacka', 'bum/schackalacka']);
-        $input = array_merge($expectedResult, $this->prepareMockedEnhancedFileInfo(['bla', 'bla/blub',]));
+        $expectedResult = $this->prepareMockedEnhancedFileInfo([
+            __DIR__ . '/../../../fixtures/asd',
+            __DIR__ . '/../../../fixtures/asdqwe',
+            __DIR__ . '/../../../fixtures/yxc/asd',
+        ]);
+        $input = array_merge(
+            $expectedResult,
+            $this->prepareMockedEnhancedFileInfo([
+                __DIR__ . '/../../../fixtures/asd',
+                __DIR__ . '/../../../fixtures/asd/asdqwe',
+            ])
+        );
 
         $result = $this->subject->sanitizeExclusionList($input);
 
@@ -35,17 +45,13 @@ class ExclusionListSanitizerTest extends TestCase
      *
      * @param array<string> $filePaths
      *
-     * @return array<\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo>
+     * @return array<EnhancedFileInfo>
      */
     private function prepareMockedEnhancedFileInfo(array $filePaths): array
     {
-        $forgedRootDirectory = '/IAmRoot';
         $enhancedFileMocks = [];
         foreach ($filePaths as $filePath) {
-            $enhancedFileMocks[] = new EnhancedFileInfo(
-                $forgedRootDirectory . '/' . $filePath,
-                $forgedRootDirectory
-            );
+            $enhancedFileMocks[] = new EnhancedFileInfo($filePath, '/');
         }
         return $enhancedFileMocks;
     }
