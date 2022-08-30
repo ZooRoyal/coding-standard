@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\Tests\System\Complete;
 
-use Hamcrest\MatcherAssert;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
@@ -47,6 +46,6 @@ class ShopwareCompatibilityTest extends TestCase
 
         $exitCode = $process->mustRun()->getExitCode();
 
-        MatcherAssert::assertThat('0', $exitCode);
+        self::assertEquals(0, $exitCode);
     }
 }

@@ -53,8 +53,10 @@ class EnhancedFileInfo extends SplFileInfo
     public function isSubdirectoryOf(EnhancedFileInfo $directory): bool
     {
         if ($directory->isDir() !== true) {
-            throw new InvalidArgumentException('The EnhancedFileInfo '. $directory . ' is not a directory.',
-                1661515549);
+            throw new InvalidArgumentException(
+                'The EnhancedFileInfo '. $directory . ' is not a directory.',
+                1661515549
+            );
         }
 
         return $this->startsWith($directory . '/');
