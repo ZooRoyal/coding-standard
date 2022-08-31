@@ -14,8 +14,8 @@ class ExclusionListSanitizer
      * @param array<EnhancedFileInfo> $rawExcludePaths
      *
      * @example
-     *         Input: ['./a', './a/b', './a/b/c']
-     *         Output: ['./a']
+     *         Input: ['./a', './a/b', './a/b/c', '/ab']
+     *         Output: ['./a', '/ab']
      *         Explanation: As the second and the third directories are children of the first it would make
      *         no sense to exclude them "again". As the parent is excluded they are automatically
      *         excluded too.
@@ -37,7 +37,7 @@ class ExclusionListSanitizer
                     if ($key === $i) {
                         return true;
                     }
-                    return !$value->startsWith((string) $item);
+                    return !($value->isSubdirectoryOf($item) || $value->getPathname() === $item->getPathname());
                 },
                 ARRAY_FILTER_USE_BOTH
             );
