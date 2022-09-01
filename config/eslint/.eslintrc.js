@@ -58,6 +58,7 @@ module.exports = {
                         'widgetFieldHelpTitle',
                         'widgetFieldHelpText',
                         'widgetFieldDefaultValue',
+                        'widgetFieldIgnore',
                     ],
                 }],
             },
