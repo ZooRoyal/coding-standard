@@ -24,7 +24,7 @@ class EnhancedFileInfoFactory
     }
 
     /**
-     * Creates a EnhancedFileInfo from the fielPath. Expect exceptions if you try this with files which
+     * Creates a EnhancedFileInfo from the filePath. Expect exceptions if you try this with files which
      * do not exist on the Filesystem.
      *
      * SmartFileFactory does its best to  return the same instance of EnhancedFileInfo for a file.
