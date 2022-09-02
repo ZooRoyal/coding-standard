@@ -11,7 +11,6 @@ class StaticExcluder implements ExcluderInterface
 {
     /** @var array<string> */
     private const PATHS_TO_EXCLUDE = [
-        '.eslintrc.js',
         '.git',
         '.idea',
         '.vagrant',

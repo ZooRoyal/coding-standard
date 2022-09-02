@@ -17,13 +17,13 @@ class EnhancedFileInfoTest extends TestCase
     {
         $forgedBasePath = __DIR__;
         $forgedFilename = __FILE__;
-        $expectedRelativPathname = basename(__FILE__);
+        $expectedRelativePathname = basename(__FILE__);
 
         $subject = new EnhancedFileInfo($forgedFilename, $forgedBasePath);
         $result = $subject->getRelativePathname();
 
         self::assertInstanceOf(SplFileInfo::class, $subject);
-        self::assertSame($result, $expectedRelativPathname);
+        self::assertSame($result, $expectedRelativePathname);
     }
 
     /**

@@ -38,7 +38,6 @@ class StaticExcluderTest extends TestCase
     public function getPathsToExclude(): void
     {
         $expectedExclusionPaths = [
-            '.eslintrc.js',
             '.git',
             '.idea',
             '.vagrant',
