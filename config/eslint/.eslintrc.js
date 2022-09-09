@@ -3,7 +3,6 @@
  *
  * @license REWE Digital GmbH
  */
-
 module.exports = {
     extends: [
         'eslint:recommended',
@@ -12,7 +11,7 @@ module.exports = {
         'plugin:jest/style',
     ],
     parserOptions: {
-        ecmaVersion: 2016,
+        ecmaVersion: 11,
         sourceType: 'module',
         project: './tsconfig.json',
     },
@@ -171,10 +170,6 @@ module.exports = {
         'operator-linebreak': 2,
         'no-nested-ternary': 2,
         'no-unneeded-ternary': 2,
-        'standard/object-curly-even-spacing': [2, 'either'],
-        'standard/array-bracket-even-spacing': [2, 'either'],
-        'standard/computed-property-even-spacing': [2, 'even'],
-        'standard/no-callback-literal': [2, ['cb', 'callback']],
         // jest
         'jest/no-disabled-tests': 'warn',
         'jest/no-if': 'error',
@@ -185,9 +180,7 @@ module.exports = {
         // jsdoc,
         'jsdoc/check-access': 0,
         'jsdoc/check-alignment': 2,
-        'jsdoc/check-examples': 2,
         'jsdoc/check-indentation': 0,
-        'jsdoc/check-line-alignment': 2,
         'jsdoc/check-param-names': 2,
         'jsdoc/check-property-names': 2,
         'jsdoc/check-syntax': 2,
@@ -203,7 +196,6 @@ module.exports = {
         'jsdoc/no-types': 0,
         'jsdoc/no-undefined-types': 0,
         'jsdoc/require-description': 2,
-        'jsdoc/require-description-complete-sentence': 2,
         'jsdoc/require-example': 0,
         'jsdoc/require-file-overview': 0,
         'jsdoc/require-hyphen-before-param-description': 0,
