@@ -12,15 +12,18 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Exclusion\ExclusionTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionTrait;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
+use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     ExclusionTerminalCommand,
-    FileExtensionTerminalCommand
+    FileExtensionTerminalCommand,
+    TargetTerminalCommand
 {
-    use ExclusionTrait, FileExtensionTrait;
+    use ExclusionTrait, FileExtensionTrait, TargetTrait;
 
-    private const TEMPLATE = 'php %1$s --fuzzy %3$s%2$s .';
+    private const TEMPLATE = 'php %1$s --fuzzy %3$s%2$s%4$s';
     private const STATIC_EXCLUDES
         = [
             'custom/plugins/ZRBannerSlider/ZRBannerSlider.php',
@@ -48,7 +51,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
             self::TEMPLATE,
             $terminalApplication,
             $this->buildExcludingString(),
-            $this->buildExtensionsString()
+            $this->buildExtensionsString(),
+            $this->buildTargetingString()
         );
 
         $this->command = $sprintfCommand;
@@ -60,6 +64,10 @@ class TerminalCommand extends AbstractTerminalCommand implements
      */
     private function buildExcludingString(): string
     {
+        if (!$this->useExclusions()) {
+            return '';
+        }
+
         $excludesFilePaths = [];
         $finderResultLines = [];
         $rootPath = $this->environment->getRootDirectory()->getRealPath();
@@ -108,6 +116,54 @@ class TerminalCommand extends AbstractTerminalCommand implements
                 static fn(string $item) => '--exclude ' . $item,
                 $finderResultLines
             )
+        ) . ' ';
+    }
+
+    /**
+     * This method returns the string representation of the targeted files list. This is a tricky one because we need
+     * to filter out targets which are excluded by the exclusion rule.
+     */
+    private function buildTargetingString(): string
+    {
+        if ($this->useExclusions()) {
+            return '.';
+        }
+
+        $filteredTargetedFiles = [];
+
+        foreach ($this->targetedFiles as $targetedFile) {
+            if ($targetedFile->getFilename() === 'Installer.php'
+                && str_contains($targetedFile->getPath(), '/custom/plugins/')
+            ) {
+                continue;
+            }
+
+            foreach ($this->excludesFiles as $excludesFile) {
+                if ($targetedFile->startsWith($excludesFile->getPathname())) {
+                    continue 2;
+                }
+            }
+            foreach (self::STATIC_EXCLUDES as $staticExclude) {
+                if ($targetedFile->startsWith(
+                    $this->environment->getRootDirectory()->getRealPath() . '/' . $staticExclude
+                )) {
+                    continue 2;
+                }
+            }
+            $filteredTargetedFiles[] = $targetedFile;
+        }
+
+        $targetedFilePaths = array_map(
+            static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
+            $filteredTargetedFiles
         );
+        $targetingString = implode(' ', $targetedFilePaths);
+
+        return $targetingString;
+    }
+
+    private function useExclusions(): bool
+    {
+        return empty($this->targetedFiles);
     }
 }

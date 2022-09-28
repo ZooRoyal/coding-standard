@@ -87,7 +87,10 @@ class GlobalSystemTest extends AsyncTestCase
         $this->filesystem->mkdir($badCodeDirectory);
 
         $copyFiles = [
+            [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/custom/plugins/blubblub/Installer.php'],
+            [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/custom/plugins/blabla/Installer.php'],
             [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/GoodPhp.php'],
+            [$fixtureDirectory . '/complete/GoodPhp2.php', $environmentDirectory . '/GoodPhp2.php'],
             [$fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts'],
             [$fixtureDirectory . '/stylelint/BadCode.less', $badCodeDirectory . '/BadCode.less'],
             [$badPhpSnifferFilePath, $badCodeDirectory . '/BadSniffer.php'],
@@ -168,9 +171,13 @@ class GlobalSystemTest extends AsyncTestCase
         return yield new Success($exitCodes);
     }
 
+    /**
+     * Writes unexpected tool output to test log.
+     */
     private function echoStream(string $streamName, Process $process): Generator
     {
-        echo PHP_EOL . PHP_EOL . 'UNEXPECTED TOOL ' . $streamName . ':' . PHP_EOL;
+        echo PHP_EOL . PHP_EOL . 'UNEXPECTED TOOL ' . TestEnvironmentInstallation::getInstance()->getInstallationPath()
+            . ':' . $streamName . ':' . PHP_EOL;
         $buffer = '';
         $streamMethod = 'get' . $streamName;
         while (($chunk = yield $process->$streamMethod()->read()) !== null) {

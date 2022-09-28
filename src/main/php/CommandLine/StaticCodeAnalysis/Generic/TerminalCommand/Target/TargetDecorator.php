@@ -31,25 +31,29 @@ class TargetDecorator extends TerminalCommandDecorator
     public function decorate(DecorateEvent $event): void
     {
         $terminalCommand = $event->getTerminalCommand();
-
         if (!$terminalCommand instanceof TargetTerminalCommand) {
             return;
         }
 
+        $targetBranch = null;
         $input = $event->getInput();
-        $isAutoTarget = $input->getOption(TargetableInputFacet::OPTION_AUTO_TARGET);
-        $target = $input->getOption(TargetableInputFacet::OPTION_TARGET);
-
-        if (!$isAutoTarget && !$target) {
-            return;
-        }
-
-        $targetBranch = $isAutoTarget
-            ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
-            : $target;
-
         $allowedFileEndings = $event->getAllowedFileEndings();
         $exclusionListToken = $event->getExclusionListToken();
+        $hasTargetOption = $input->hasOption(TargetableInputFacet::OPTION_AUTO_TARGET)
+            || $input->hasOption(TargetableInputFacet::OPTION_TARGET);
+
+        if ($hasTargetOption) {
+            $isAutoTarget = $input->getOption(TargetableInputFacet::OPTION_AUTO_TARGET);
+            $target = $input->getOption(TargetableInputFacet::OPTION_TARGET);
+
+            if (!$isAutoTarget && !$target) {
+                return;
+            }
+
+            $targetBranch = $isAutoTarget
+                ? $this->parentBranchGuesser->guessParentBranchAsCommitHash()
+                : $target;
+        }
 
         $gitChangeSet = $this->adaptableFileFinder->findFiles(
             $allowedFileEndings,
@@ -60,7 +64,6 @@ class TargetDecorator extends TerminalCommandDecorator
 
         $targets = $gitChangeSet->getFiles();
         $this->writeOutput($event->getOutput(), $gitChangeSet, $targets);
-
         $terminalCommand->addTargets($targets);
     }
 
@@ -72,13 +75,21 @@ class TargetDecorator extends TerminalCommandDecorator
      */
     private function writeOutput(OutputInterface $output, GitChangeSet $gitChangeSet, array $targets): void
     {
+        $commitHash = $gitChangeSet->getCommitHash();
+
+        if ($commitHash === '') {
+            $message = '<info>No Target was specified so all applicable files are targeted</info>';
+        } else {
+            $message = '<info>Checking diff to ' . $gitChangeSet->getCommitHash() . '</info>';
+        }
+
         $output->writeln(
-            '<info>Checking diff to ' . $gitChangeSet->getCommitHash() . '</info>',
+            $message,
             OutputInterface::VERBOSITY_NORMAL
         );
 
         $output->writeln(
-            '<info>Following files will be checked</info>',
+            '<info>Following files will be targeted</info>',
             OutputInterface::VERBOSITY_VERBOSE
         );
 
