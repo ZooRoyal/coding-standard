@@ -93,12 +93,10 @@ class TargetDecoratorTest extends TestCase
             $this->mockedTerminalCommand
         );
 
-        $this->mockedInput->shouldReceive('getOption')->once()
-            ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($forgedAutoTarget);
-        $this->mockedInput->shouldReceive('getOption')->once()
-            ->with(TargetableInputFacet::OPTION_TARGET)->andReturn($forgedTarget);
+        $this->prepareMockedInputHasOption(true, true);
+        $this->prepareMockedInputGetOption($forgedAutoTarget, $forgedTarget);
 
-        $this->prepareOutput($forgedCommitHash, $forgedRealPath);
+        $this->prepareTargetedOutput($forgedCommitHash, [$forgedRealPath, $forgedRealPath]);
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
             ->with($this->forgedAllowedFileEndings, $this->forgedExclusionListToken, '', $expectedTargetBranch)
@@ -126,16 +124,14 @@ class TargetDecoratorTest extends TestCase
     /**
      * @test
      */
-    public function decorateShouldNotReactToNonTargetedInput(): void
+    public function decorateShouldNotReactToEmptyTargetedInput(): void
     {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
             $this->mockedTerminalCommand
         );
 
-        $this->mockedInput->shouldReceive('getOption')->once()
-            ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn(false);
-        $this->mockedInput->shouldReceive('getOption')->once()
-            ->with(TargetableInputFacet::OPTION_TARGET)->andReturn(false);
+        $this->prepareMockedInputHasOption(true, true);
+        $this->prepareMockedInputGetOption(false, false);
 
         $this->mockedOutput->shouldReceive('writeln')->never();
 
@@ -170,16 +166,134 @@ class TargetDecoratorTest extends TestCase
     }
 
     /**
-     * Prepares the mocked output for a diffed run.
+     * Data provider for decorateOnlyTargetsIfTargetOptionsPresent
+     *
+     * @return array<string,array<string,bool>>
      */
-    private function prepareOutput(string $forgedCommitHash, string $forgedRealPath): void
+    public function decorateOnlyTargetsIfTargetOptionsPresentDataProvider(): array
+    {
+        return [
+            'only auto' => ['auto' => true, 'target' => false],
+            'only target' => ['auto' => false, 'target' => true],
+            'auto and target' => ['auto' => true, 'target' => true],
+        ];
+    }
+
+    /**
+     * @test
+     * @dataProvider decorateOnlyTargetsIfTargetOptionsPresentDataProvider
+     */
+    public function decorateOnlyTargetsIfTargetOptionsPresent(bool $auto, bool $target): void
+    {
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
+
+        $this->mockedInput->shouldIgnoreMissing();
+
+        $this->prepareMockedInputHasOption($auto, $target);
+
+        $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')->never();
+
+        $this->mockedOutput->shouldReceive('writeln')->never();
+
+        $this->mockedTerminalCommand->shouldReceive('addTargets')->never();
+
+        $this->subject->decorate($this->mockedEvent);
+    }
+
+    /**
+     * @test
+     */
+    public function decorateAllTargetsIfNoOptionPresent(): void
+    {
+        $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
+
+        $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
+            $this->mockedTerminalCommand
+        );
+
+        $this->mockedInput->shouldIgnoreMissing();
+
+        $this->prepareMockedInputHasOption(false, false);
+
+        $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')->never();
+
+        $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
+            ->with($this->forgedAllowedFileEndings, $this->forgedExclusionListToken, '', null)
+            ->andReturn($mockedGitChangeSet);
+
+        $mockedGitChangeSet->shouldReceive('getCommitHash')->atLeast()->once()->andReturn('');
+        $mockedGitChangeSet->shouldReceive('getFiles')->atLeast()->once()->andReturn([]);
+
+        $this->prepareNonTargetedOutput([]);
+
+        $this->mockedTerminalCommand->shouldReceive('addTargets')->once()->with([]);
+
+        $this->subject->decorate($this->mockedEvent);
+    }
+
+    /**
+     * Prepares the mocked output for a not targeted diffed run.
+     *
+     * @param array<string> $forgedRealPaths
+     */
+    private function prepareNonTargetedOutput(array $forgedRealPaths): void
+    {
+        $this->mockedOutput->shouldReceive('writeln')->once()
+            ->with(
+                '<info>No Target was specified so all applicable files are targeted</info>',
+                OutputInterface::VERBOSITY_NORMAL
+            );
+        $this->prepareOutput($forgedRealPaths);
+    }
+
+    /**
+     * Prepares the mocked output for a targeted diffed run.
+     *
+     * @param array<string> $forgedRealPaths
+     */
+    private function prepareTargetedOutput(string $forgedCommitHash, array $forgedRealPaths): void
     {
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with('<info>Checking diff to ' . $forgedCommitHash . '</info>', OutputInterface::VERBOSITY_NORMAL);
+        $this->prepareOutput($forgedRealPaths);
+    }
+
+    /**
+     * Prepares the mocked output for a diffed run.
+     *
+     * @param array<string> $forgedRealPaths
+     */
+    private function prepareOutput(array $forgedRealPaths): void
+    {
         $this->mockedOutput->shouldReceive('writeln')->once()
-            ->with('<info>Following files will be checked</info>', OutputInterface::VERBOSITY_VERBOSE);
-        $this->mockedOutput->shouldReceive('writeln')->twice()
-            ->with($forgedRealPath, OutputInterface::VERBOSITY_VERBOSE);
+            ->with('<info>Following files will be targeted</info>', OutputInterface::VERBOSITY_VERBOSE);
+        foreach ($forgedRealPaths as $forgedRealPath) {
+            $this->mockedOutput->shouldReceive('writeln')->once()
+                ->with($forgedRealPath, OutputInterface::VERBOSITY_VERBOSE);
+        }
         $this->mockedOutput->shouldReceive('writeln')->once()->with('');
+    }
+
+    private function prepareMockedInputHasOption(bool $auto, bool $target): void
+    {
+        $this->mockedInput->shouldReceive('hasOption')
+            ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($auto);
+        $this->mockedInput->shouldReceive('hasOption')
+            ->with(TargetableInputFacet::OPTION_TARGET)->andReturn($target);
+    }
+
+    /**
+     * Prepare mocked Input to return given values when asked.
+     *
+     * @param string|bool $forgedTarget
+     */
+    private function prepareMockedInputGetOption(bool $forgedAutoTarget, $forgedTarget): void
+    {
+        $this->mockedInput->shouldReceive('getOption')->once()
+            ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($forgedAutoTarget);
+        $this->mockedInput->shouldReceive('getOption')->once()
+            ->with(TargetableInputFacet::OPTION_TARGET)->andReturn($forgedTarget);
     }
 }
