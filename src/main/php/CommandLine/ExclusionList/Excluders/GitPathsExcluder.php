@@ -15,6 +15,9 @@ class GitPathsExcluder implements ExcluderInterface
     private Environment $environment;
     private ProcessRunner $processRunner;
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+    private CacheKeyGenerator $cacheKeyGenerator;
+    /** @var array<string,array<EnhancedFileInfo>> */
+    private array $cache = [];
 
     /**
      * GitPathsExcluder constructor.
@@ -22,23 +25,31 @@ class GitPathsExcluder implements ExcluderInterface
     public function __construct(
         Environment $environment,
         ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        CacheKeyGenerator $cacheKeyGenerator
     ) {
         $this->environment = $environment;
         $this->processRunner = $processRunner;
         $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
+        $this->cacheKeyGenerator = $cacheKeyGenerator;
     }
 
     /**
      * The methods search for Git submodules and returns their paths.
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
-     * @param array<mixed> $config
+     * @param array<mixed>            $config
      *
      * @return array<EnhancedFileInfo>
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
+        $cacheKey = $this->cacheKeyGenerator->generateCacheKey($alreadyExcludedPaths);
+
+        if (!empty($this->cache[$cacheKey])) {
+            return $this->cache[$cacheKey];
+        }
+
         $excludeParameters = '';
         if (!empty($alreadyExcludedPaths)) {
             $excludeParameters = ' -not -path "./' . implode('" -not -path "./', $alreadyExcludedPaths) . '"';
@@ -50,6 +61,7 @@ class GitPathsExcluder implements ExcluderInterface
         );
 
         if (empty($finderResult)) {
+            $this->cache[$cacheKey] = [];
             return [];
         }
 
@@ -62,6 +74,7 @@ class GitPathsExcluder implements ExcluderInterface
 
         $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);
 
+        $this->cache[$cacheKey] = $result;
         return $result;
     }
 }

@@ -10,17 +10,20 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory
 class StaticExcluder implements ExcluderInterface
 {
     /** @var array<string> */
-    private const PATHS_TO_EXCLUDE = [
-        '.git',
-        '.idea',
-        '.vagrant',
-        'node_modules',
-        'vendor',
-        'bower_components',
-        '.pnpm',
-        '.pnpm-store',
-    ];
+    private const PATHS_TO_EXCLUDE
+        = [
+            '.git',
+            '.idea',
+            '.vagrant',
+            'node_modules',
+            'vendor',
+            'bower_components',
+            '.pnpm',
+            '.pnpm-store',
+        ];
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+    /** @var array<EnhancedFileInfo> */
+    private array $cache = [];
 
     /**
      * StaticExcluder constructor.
@@ -41,8 +44,13 @@ class StaticExcluder implements ExcluderInterface
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
+        if (!empty($this->cache)) {
+            return $this->cache;
+        }
+
         $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(array_values(self::PATHS_TO_EXCLUDE));
 
+        $this->cache = $result;
         return $result;
     }
 }
