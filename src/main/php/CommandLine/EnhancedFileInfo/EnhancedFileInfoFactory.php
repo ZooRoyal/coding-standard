@@ -51,7 +51,7 @@ class EnhancedFileInfoFactory
 
     /**
      * Creates EnhancedFileInfo for each path given in $filePath. If a path references a file
-     * which does not exists on the filesystem the EnhancedFileInfo will not be created and
+     * which does not exist on the filesystem the EnhancedFileInfo will not be created, and
      * you will *NOT* be informed about this.
      *
      * @param array<string> $pathNames

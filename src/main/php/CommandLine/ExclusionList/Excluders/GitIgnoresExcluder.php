@@ -4,38 +4,31 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders;
 
-use Symfony\Component\Process\Exception\ProcessFailedException;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
-use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
-use function Safe\sprintf;
 
 class GitIgnoresExcluder implements ExcluderInterface
 {
-    private const FIND_COMMAND = 'find %s -type d%s';
-    private const GIT_CHECK_COMMAND = 'git check-ignore --stdin';
-    private const EXCLUDE_PARAMS = ' -not -path %s/*';
-    private const PARAMS_SEPARATOR = '/* -not -path ';
-    private Environment $environment;
+    private const GIT_LS_FILES_COMMAND = 'git ls-files -io --exclude-standard --directory';
     private ProcessRunner $processRunner;
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+    /** @var array<EnhancedFileInfo> */
+    private array $cache = [];
 
     /**
      * GitIgnoresExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
         ProcessRunner $processRunner,
         EnhancedFileInfoFactory $enhancedFileInfoFactory
     ) {
-        $this->environment = $environment;
         $this->processRunner = $processRunner;
         $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
-     * This Method ask Git which directories should be ignored and returns them if they are found.
+     * This Method ask Git which folders should be ignored and returns them if they are found.
      *
      * @param array<EnhancedFileInfo> $alreadyExcludedPaths
      * @param array<mixed>            $config
@@ -44,63 +37,40 @@ class GitIgnoresExcluder implements ExcluderInterface
      */
     public function getPathsToExclude(array $alreadyExcludedPaths, array $config = []): array
     {
-        $rawFoundFolders = $this->findFoldersNotYetExcluded($alreadyExcludedPaths);
-        $rawIgnoredFoldersOutput = $this->filterForDirectoriesKnownToGit($rawFoundFolders);
+        if (!empty($this->cache)) {
+            return $this->cache;
+        }
 
-        if (empty($rawIgnoredFoldersOutput)) {
+        $rawIgnoredFoldersAndFilesString = $this->processRunner->runAsProcess(self::GIT_LS_FILES_COMMAND);
+
+        if (empty($rawIgnoredFoldersAndFilesString)) {
             return [];
         }
-        $ignoredFolders = explode("\n", $rawIgnoredFoldersOutput);
-        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($ignoredFolders);
+        $rawIgnoredFoldersAndFiles = explode("\n", $rawIgnoredFoldersAndFilesString);
+        $rawIgnoredFolders = $this->filterForFolders($rawIgnoredFoldersAndFiles);
+        $ignoredFolders = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(
+            $rawIgnoredFolders
+        );
 
-        return $result;
+        $this->cache = $ignoredFolders;
+        return $ignoredFolders;
     }
 
     /**
-     * Uses find command to get all directories.
+     * Filters out everything which is not a Folder.
      *
-     * @param array<EnhancedFileInfo> $alreadyExcludedPaths
-     */
-    private function findFoldersNotYetExcluded(array $alreadyExcludedPaths): string
-    {
-        $excludeParameters = '';
-        $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
-        if (!empty($alreadyExcludedPaths)) {
-            $excludeParameters = sprintf(
-                self::EXCLUDE_PARAMS,
-                implode(
-                    self::PARAMS_SEPARATOR,
-                    $alreadyExcludedPaths
-                )
-            );
-        }
-
-        $findCommand = sprintf(self::FIND_COMMAND, $rootDirectory, $excludeParameters);
-
-        $rawFoundFolders = $this->processRunner->runAsProcess($findCommand);
-        return $rawFoundFolders;
-    }
-
-    /**
-     * Get all directories which are known to git and deemed to be ignored.
+     * @param array<string> $rawIgnoredFoldersAndFiles
      *
-     * @throws ProcessFailedException because it's only a problem if exitCode is not 0 or 1. We have to check for
-     *                                that and therefore intercept the exception.
+     * @return array<string>
      */
-    private function filterForDirectoriesKnownToGit(string $rawFoundFolders): string
+    private function filterForFolders(array $rawIgnoredFoldersAndFiles): array
     {
-        $checkProcess = $this->processRunner->createProcess(self::GIT_CHECK_COMMAND);
-
-        $rawIgnoredFoldersOutput = '';
-        try {
-            $checkProcess->setInput($rawFoundFolders);
-            $rawIgnoredFoldersOutput = trim($checkProcess->mustRun()->getOutput());
-        } catch (ProcessFailedException $exception) {
-            $exitCode = $exception->getProcess()->getExitCode();
-            if ($exitCode !== 1) {
-                throw $exception;
+        $ignoredFolders = [];
+        foreach ($rawIgnoredFoldersAndFiles as $ignoredFoldersAndFile) {
+            if (mb_substr($ignoredFoldersAndFile, -1) === '/') {
+                $ignoredFolders[] = $ignoredFoldersAndFile;
             }
         }
-        return $rawIgnoredFoldersOutput;
+        return $ignoredFolders;
     }
 }

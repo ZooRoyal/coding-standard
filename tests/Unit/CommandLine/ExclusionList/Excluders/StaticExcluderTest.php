@@ -56,4 +56,30 @@ class StaticExcluderTest extends TestCase
         $result = $this->subject->getPathsToExclude([]);
         self::assertSame($forgedResult, $result);
     }
+
+    /**
+     * @test
+     */
+    public function getPathsToExcludeWithWorkingCache(): void
+    {
+        $expectedExclusionPaths = [
+            '.git',
+            '.idea',
+            '.vagrant',
+            'node_modules',
+            'vendor',
+            'bower_components',
+            '.pnpm',
+            '.pnpm-store',
+        ];
+
+        $forgedResult = [Mockery::mock(EnhancedFileInfo::class)];
+
+        $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
+            ->once()->with($expectedExclusionPaths)->andReturn($forgedResult);
+
+        $this->subject->getPathsToExclude([]);
+        $result = $this->subject->getPathsToExclude([]);
+        self::assertSame($forgedResult, $result);
+    }
 }

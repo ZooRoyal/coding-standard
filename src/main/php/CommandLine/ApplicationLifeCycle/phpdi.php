@@ -26,10 +26,10 @@ return [
 
     'excluders' => factory(
         static function (Container $container) {
-            $result[] = $container->get(GitPathsExcluder::class);
             $result[] = $container->get(StaticExcluder::class);
-            $result[] = $container->get(TokenExcluder::class);
             $result[] = $container->get(GitIgnoresExcluder::class);
+            $result[] = $container->get(GitPathsExcluder::class);
+            $result[] = $container->get(TokenExcluder::class);
             return $result;
         }
     ),

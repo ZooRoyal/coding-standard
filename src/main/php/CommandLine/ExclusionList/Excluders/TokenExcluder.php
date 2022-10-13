@@ -8,13 +8,15 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
-use function Safe\substr;
 
 class TokenExcluder implements ExcluderInterface
 {
     private Environment $environment;
     private ProcessRunner $processRunner;
     private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+    private CacheKeyGenerator $cacheKeyGenerator;
+    /** @var array<string,array<EnhancedFileInfo>> */
+    private array $cache = [];
 
     /**
      * TokenExcluder constructor.
@@ -22,11 +24,13 @@ class TokenExcluder implements ExcluderInterface
     public function __construct(
         Environment $environment,
         ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        CacheKeyGenerator $cacheKeyGenerator
     ) {
         $this->environment = $environment;
         $this->processRunner = $processRunner;
         $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
+        $this->cacheKeyGenerator = $cacheKeyGenerator;
     }
 
     /**
@@ -43,6 +47,13 @@ class TokenExcluder implements ExcluderInterface
         if (!isset($config['token'])) {
             return [];
         }
+
+        $cacheKey = $this->cacheKeyGenerator->generateCacheKey($alreadyExcludedPaths, $config);
+
+        if (!empty($this->cache[$cacheKey])) {
+            return $this->cache[$cacheKey];
+        }
+
         $token = $config['token'];
 
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
@@ -56,24 +67,16 @@ class TokenExcluder implements ExcluderInterface
         );
 
         if (empty($finderResult)) {
+            $this->cache[$cacheKey] = [];
             return [];
         }
 
         $rawExcludePathsByToken = explode(PHP_EOL, trim($finderResult));
         $absoluteDirectories = array_map('dirname', $rawExcludePathsByToken);
-        $relativeDirectories = array_map(
-            static function ($value) use ($rootDirectory) {
-                $rootDirectoryLength = strlen($rootDirectory);
-                if (strlen($value) === $rootDirectoryLength) {
-                    return '.';
-                }
-                return substr($value, strlen($rootDirectory) + 1);
-            },
-            $absoluteDirectories
-        );
 
-        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);
+        $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($absoluteDirectories);
 
+        $this->cache[$cacheKey] = $result;
         return $result;
     }
 }

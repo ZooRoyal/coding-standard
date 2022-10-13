@@ -11,6 +11,7 @@ use PHPUnit\Framework\TestCase;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
+use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\CacheKeyGenerator;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
@@ -48,6 +49,9 @@ class TokenExcluderTest extends TestCase
 
         $forgedConfig = ['token' => 'bla'];
 
+        $this->subjectParameters[CacheKeyGenerator::class]->shouldReceive('generateCacheKey')->once()
+            ->with([], $forgedConfig)->andReturn('asdasdqweqwe12123');
+
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with(Matchers::stringValue())->andReturn('');
 
@@ -65,8 +69,6 @@ class TokenExcluderTest extends TestCase
         $mockedEnhancedFileInfo2 = Mockery::mock(EnhancedFileInfo::class);
         $mockedEnhancedFileInfoRemaining = Mockery::mock(EnhancedFileInfo::class);
         $forgedAlreadyExcluded = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfo2];
-        $forgedExcludedDirectories = [$mockedEnhancedFileInfo1, $mockedEnhancedFileInfoRemaining];
-        $forgedRemainingPaths = [$mockedEnhancedFileInfoRemaining];
         $expectedResult = [
             new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfo1,
@@ -79,17 +81,23 @@ class TokenExcluderTest extends TestCase
         $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token']
             . ' -not -path "./' . $forgedAlreadyExcluded[0] . '" -not -path "./' . $forgedAlreadyExcluded[1] . '"';
 
-        $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
+        $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfoRemaining
             . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+
+        $this->subjectParameters[CacheKeyGenerator::class]->shouldReceive('generateCacheKey')
+            ->with($forgedAlreadyExcluded, $forgedConfig)->andReturn('asdasdqweqwe12123');
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
 
         $this->subjectParameters[EnhancedFileInfoFactory::class]->shouldReceive('buildFromArrayOfPaths')
-            ->once()->with($forgedRemainingPaths)->andReturn($expectedResult);
+            ->once()->with([$this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfoRemaining])
+            ->andReturn($expectedResult);
 
+        $result1 = $this->subject->getPathsToExclude($forgedAlreadyExcluded, $forgedConfig);
         $result = $this->subject->getPathsToExclude($forgedAlreadyExcluded, $forgedConfig);
 
+        self::assertSame($result1, $result);
         self::assertSame($expectedResult, $result);
     }
 
@@ -98,17 +106,22 @@ class TokenExcluderTest extends TestCase
      */
     public function getPathsToExcludeWithDontFilesInRoot(): void
     {
-        $forgedExcludedDirectories = ['.'];
-        $expectedResult = [new EnhancedFileInfo(
-            $this->forgedRootDirectory,
-            $this->forgedRootDirectory
-        )];
+        $forgedExcludedDirectories = [$this->forgedRootDirectory];
+        $expectedResult = [
+            new EnhancedFileInfo(
+                $this->forgedRootDirectory,
+                $this->forgedRootDirectory
+            ),
+        ];
 
         $forgedConfig = ['token' => 'bla'];
 
         $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token'];
 
         $forgedCommandResult = $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+
+        $this->subjectParameters[CacheKeyGenerator::class]->shouldReceive('generateCacheKey')->once()
+            ->with([], $forgedConfig)->andReturn('asdasdqweqwe12123');
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
@@ -126,10 +139,13 @@ class TokenExcluderTest extends TestCase
      */
     public function getPathsToExcludeWithoutAlreadyExcluded(): void
     {
-        $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
+        $forgedExcludedDirectories = [
+            $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'asdasd',
+            $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
+        ];
         $expectedResult = array_map(
             fn($paths) => new EnhancedFileInfo(
-                $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $paths,
+                $paths,
                 $this->forgedRootDirectory
             ),
             $forgedExcludedDirectories
@@ -139,11 +155,11 @@ class TokenExcluderTest extends TestCase
 
         $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -name ' . $forgedConfig['token'];
 
-        $forgedCommandResult = $this->forgedRootDirectory
-            . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[0]
-            . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL
-            . $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $forgedExcludedDirectories[1]
-            . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+        $forgedCommandResult = $forgedExcludedDirectories[0] . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL
+            . $forgedExcludedDirectories[1] . DIRECTORY_SEPARATOR . $forgedConfig['token'] . PHP_EOL;
+
+        $this->subjectParameters[CacheKeyGenerator::class]->shouldReceive('generateCacheKey')->once()
+            ->with([], $forgedConfig)->andReturn('asdasdqweqwe12123');
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')->once()
             ->with($expectedCommand)->andReturn($forgedCommandResult);
