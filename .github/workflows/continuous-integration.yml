@@ -7,7 +7,7 @@ on:
     branches:
       - master
   schedule:
-    - cron: "0 0 * * 0"
+    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -17,15 +17,15 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: "Validate composer.json and composer.lock"
-        run: "composer validate --strict"
+      - name: 'Validate composer.json and composer.lock'
+        run: 'composer validate --strict'
 
-      - name: "Determine composer cache directory"
-        id: "determine-composer-cache-directory"
+      - name: 'Determine composer cache directory'
+        id: 'determine-composer-cache-directory'
         run: 'echo "::set-output name=directory::$(composer config cache-dir)"'
 
-      - name: "Determine npm cache directory"
-        id: "determine-npm-cache-directory"
+      - name: 'Determine npm cache directory'
+        id: 'determine-npm-cache-directory'
         run: 'echo "::set-output name=directory::$(npm config get cache)"'
 
       - name: Cache Composer Packages
@@ -33,7 +33,7 @@ jobs:
         env:
           cache-name: cache-composer
         with:
-          path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+          path: '${{ steps.determine-composer-cache-directory.outputs.directory }}'
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
@@ -43,7 +43,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: "${{ steps.determine-npm-cache-directory.outputs.directory }}"
+          path: '${{ steps.determine-npm-cache-directory.outputs.directory }}'
           key: ${{ runner.os }}-codestyle-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-codestyle-${{ env.cache-name }}-
@@ -51,7 +51,7 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@e04e1d97f0c0481c6e1ba40f8a538454fe5d7709
         with:
-          php-version: "7.4"
+          php-version: '7.4'
           tools: cs2pr, composer
         env:
           fail-fast: true
@@ -59,7 +59,7 @@ jobs:
       - name: Install npm and Node
         uses: actions/setup-node@v1
         with:
-          node-version: "10.19.0"
+          node-version: '10.19.0'
 
       - name: Install composer dependencies
         env:
@@ -83,20 +83,20 @@ jobs:
     strategy:
       matrix:
         composer_version: [1, 2]
-        composer_parameters: ["--prefer-lowest", " "]
+        composer_parameters: ['--prefer-lowest', ' ']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
 
-      - name: "Validate composer.json and composer.lock"
-        run: "composer validate --strict"
+      - name: 'Validate composer.json and composer.lock'
+        run: 'composer validate --strict'
 
-      - name: "Determine composer cache directory"
-        id: "determine-composer-cache-directory"
+      - name: 'Determine composer cache directory'
+        id: 'determine-composer-cache-directory'
         run: 'echo "::set-output name=directory::$(composer config cache-dir)"'
 
-      - name: "Determine npm cache directory"
-        id: "determine-npm-cache-directory"
+      - name: 'Determine npm cache directory'
+        id: 'determine-npm-cache-directory'
         run: 'echo "::set-output name=directory::$(npm config get cache)"'
 
       - name: Cache Composer Packages
@@ -105,7 +105,7 @@ jobs:
           cache-name: cache-composer
           matrix-entries: ${{ matrix.composer_version }}-${{ matrix.composer_parameters }}
         with:
-          path: "${{ steps.determine-composer-cache-directory.outputs.directory }}"
+          path: '${{ steps.determine-composer-cache-directory.outputs.directory }}'
           key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ env.matrix-entries }}-${{ hashFiles('**/composer.json') }}
           restore-keys: |
             ${{ runner.os }}-tests-${{ env.cache-name }}-${{ env.matrix-entries }}-
@@ -115,7 +115,7 @@ jobs:
         env:
           cache-name: cache-node-modules
         with:
-          path: "${{ steps.determine-npm-cache-directory.outputs.directory }}"
+          path: '${{ steps.determine-npm-cache-directory.outputs.directory }}'
           key: ${{ runner.os }}-tests-${{ env.cache-name }}-${{ hashFiles('**/package.json') }}
           restore-keys: |
             ${{ runner.os }}-tests-${{ env.cache-name }}-
@@ -123,7 +123,7 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@e04e1d97f0c0481c6e1ba40f8a538454fe5d7709
         with:
-          php-version: "7.4"
+          php-version: '7.4'
           tools: composer:${{ matrix.composer_version }}
           extensions: xdebug-2.9.8
         env:
@@ -132,7 +132,7 @@ jobs:
       - name: Install npm and Node
         uses: actions/setup-node@v1
         with:
-          node-version: "10.19.0"
+          node-version: '10.19.0'
 
       - name: Install composer dependencies
         env:
