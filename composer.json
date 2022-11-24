@@ -98,7 +98,7 @@
   "config": {
     "optimize-autoloader": true,
     "sort-packages": true,
-    "process-timeout": 600,
+    "process-timeout": 1200,
     "allow-plugins": {
       "ocramius/package-versions": true,
       "infection/extension-installer": true,
