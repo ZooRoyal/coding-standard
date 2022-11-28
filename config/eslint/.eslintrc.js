@@ -48,6 +48,7 @@ module.exports = {
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
+                '@stencil/decorators-context': 0, // We need to wait on a PR to be merged to fix this https://github.com/ionic-team/stencil-eslint/issues/60
                 'jsdoc/check-tag-names': ['error', {
                     definedTags: [
                         'widgetName',
