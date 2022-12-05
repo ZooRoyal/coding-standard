@@ -16,20 +16,16 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
     },
-    plugins: [
-        'jest',
-        'jsdoc',
-    ],
+    plugins: ['jest', 'jsdoc'],
     overrides: [
         {
             files: ['*.ts'],
-            plugins: [
-                '@typescript-eslint',
-            ],
+            plugins: ['@typescript-eslint'],
             extends: [
                 'plugin:@typescript-eslint/recommended',
                 // 'plugin:@stencil/recommended',
             ],
+            parser: '@typescript-eslint/parser',
             rules: {
                 '@typescript-eslint/no-unused-vars': 2,
                 'no-useless-constructor': 'off',
@@ -39,28 +35,34 @@ module.exports = {
         },
         {
             files: ['*.tsx'],
-            plugins: [
-                '@typescript-eslint',
-            ],
+            plugins: ['@typescript-eslint'],
             extends: [
                 'plugin:@typescript-eslint/recommended',
                 // 'plugin:@stencil/recommended',
             ],
+            parser: '@typescript-eslint/parser',
             rules: {
-                '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
-                'jsdoc/check-tag-names': ['error', {
-                    definedTags: [
-                        'widgetName',
-                        'widgetIcon',
-                        'widgetFieldType',
-                        'widgetFieldLabel',
-                        'widgetFieldSupportText',
-                        'widgetFieldHelpTitle',
-                        'widgetFieldHelpText',
-                        'widgetFieldDefaultValue',
-                        'widgetFieldIgnore',
-                    ],
-                }],
+                '@typescript-eslint/no-unused-vars': [
+                    'error',
+                    { varsIgnorePattern: '^h$' },
+                ],
+                // '@stencil/decorators-context': 0, // We need to wait on a PR to be merged to fix this https://github.com/ionic-team/stencil-eslint/issues/60
+                'jsdoc/check-tag-names': [
+                    'error',
+                    {
+                        definedTags: [
+                            'widgetName',
+                            'widgetIcon',
+                            'widgetFieldType',
+                            'widgetFieldLabel',
+                            'widgetFieldSupportText',
+                            'widgetFieldHelpTitle',
+                            'widgetFieldHelpText',
+                            'widgetFieldDefaultValue',
+                            'widgetFieldIgnore',
+                        ],
+                    },
+                ],
             },
         },
     ],
@@ -91,20 +93,12 @@ module.exports = {
         'new-cap': 1,
         'no-caller': 2,
         'no-eq-null': 2,
-        indent: [
-            'error',
-            4,
-        ],
-        'linebreak-style': [
-            'error',
-            'unix',
-        ],
-        quotes: [
-            'error',
-            'single',
-        ],
+        indent: ['error', 4],
+        'linebreak-style': ['error', 'unix'],
+        quotes: ['error', 'single'],
         'max-len': [
-            'error', {
+            'error',
+            {
                 code: 130,
                 ignoreTemplateLiterals: true,
                 ignoreUrls: true,
@@ -138,27 +132,36 @@ module.exports = {
         'no-unused-vars': 2,
         radix: 2,
         'no-trailing-spaces': 0,
-        'require-jsdoc': ['error', {
-            require: {
-                FunctionDeclaration: true,
-                MethodDefinition: true,
-                ClassDeclaration: true,
-                ArrowFunctionExpression: true,
-                FunctionExpression: true,
+        'require-jsdoc': [
+            'error',
+            {
+                require: {
+                    FunctionDeclaration: true,
+                    MethodDefinition: true,
+                    ClassDeclaration: true,
+                    ArrowFunctionExpression: true,
+                    FunctionExpression: true,
+                },
             },
-        }],
-        'comma-dangle': ['error', {
-            arrays: 'always-multiline',
-            objects: 'always-multiline',
-            imports: 'always-multiline',
-            exports: 'always-multiline',
-            functions: 'never',
-        }],
-        'space-before-function-paren': ['error', {
-            anonymous: 'always',
-            named: 'never',
-            asyncArrow: 'always',
-        }],
+        ],
+        'comma-dangle': [
+            'error',
+            {
+                arrays: 'always-multiline',
+                objects: 'always-multiline',
+                imports: 'always-multiline',
+                exports: 'always-multiline',
+                functions: 'never',
+            },
+        ],
+        'space-before-function-paren': [
+            'error',
+            {
+                anonymous: 'always',
+                named: 'never',
+                asyncArrow: 'always',
+            },
+        ],
         // es6
         'arrow-spacing': ['error', { before: true, after: true }],
         'no-confusing-arrow': ['error', { allowParens: false }],
@@ -222,4 +225,4 @@ module.exports = {
         'jsdoc/require-returns-type': 2,
         'jsdoc/valid-types': 2,
     },
-};
+}
