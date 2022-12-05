@@ -18,7 +18,7 @@ module.exports = {
     plugins: ['jest', 'jsdoc'],
     overrides: [
         {
-            files: ['*.ts'],
+            files: ['*.ts', '*.tsx'],
             plugins: ['@typescript-eslint'],
             extends: [
                 'plugin:@typescript-eslint/recommended',
@@ -30,16 +30,27 @@ module.exports = {
                 'no-useless-constructor': 'off',
                 'jsdoc/require-returns': 0,
                 'jsdoc/require-param': 0,
+                'new-cap': [
+                    'error',
+                    {
+                        capIsNewExceptions: [
+                            'Component',
+                            'Prop',
+                            'State',
+                            'Method',
+                            'Event',
+                            'EventEmitter',
+                            'Element',
+                            'Host',
+                            'Watch',
+                            'Mount',
+                        ],
+                    },
+                ],
             },
         },
         {
             files: ['*.tsx'],
-            plugins: ['@typescript-eslint'],
-            extends: [
-                'plugin:@typescript-eslint/recommended',
-                // 'plugin:@stencil/recommended',
-            ],
-            parser: '@typescript-eslint/parser',
             rules: {
                 '@typescript-eslint/no-unused-vars': [
                     'error',
@@ -176,8 +187,7 @@ module.exports = {
         'object-curly-spacing': [2, 'always'],
         'array-bracket-spacing': [2, 'always'],
         'computed-property-spacing': [2, 'always'],
-        'n/*': 0,
-        'n/no-callback-literal': 2,
+        'n/no-callback-literal': 0, // TODO: Fix 'n/no-callback-literal': [2, ['cb', 'callback']],
         // jest
         'jest/no-disabled-tests': 'warn',
         'jest/no-if': 'error',
@@ -188,7 +198,7 @@ module.exports = {
         // jsdoc,
         'jsdoc/check-access': 0,
         'jsdoc/check-alignment': 2,
-        'jsdoc/check-examples': 2,
+        'jsdoc/check-examples': 0, // TODO: Wait for https://github.com/eslint/eslint/issues/14745 to be fixed
         'jsdoc/check-indentation': 0,
         'jsdoc/check-line-alignment': 2,
         'jsdoc/check-param-names': 2,
