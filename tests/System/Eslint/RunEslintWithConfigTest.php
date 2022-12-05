@@ -15,8 +15,8 @@ use function Amp\ByteStream\buffer;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
-    private const EXPECTED_TS_PROBLEMS = '187 problems';
-    private const EXPECTED_JS_PROBLEMS = '185 problems';
+    private const EXPECTED_TS_PROBLEMS = '130 problems';
+    private const EXPECTED_JS_PROBLEMS = '110 problems';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
     private Filesystem $filesystem;
@@ -121,7 +121,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
         if ($environment->isInstalled() === false) {
             $environment->addComposerJson(
                 dirname(__DIR__)
-                . '/fixtures/eslint/composer-template.json'
+                    . '/fixtures/eslint/composer-template.json'
             )->installComposerInstance();
         }
         $envInstallationPath = $environment->getInstallationPath();
