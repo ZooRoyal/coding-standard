@@ -7,6 +7,7 @@
 module.exports = {
     extends: [
         'eslint:recommended',
+        'plugin:n/recommended',
         'plugin:jest/recommended',
         'plugin:jest/style',
     ],
@@ -173,10 +174,11 @@ module.exports = {
         'operator-linebreak': 2,
         'no-nested-ternary': 2,
         'no-unneeded-ternary': 2,
-        'object-curly-even-spacing': [2, 'either'],
-        'array-bracket-even-spacing': [2, 'either'],
-        'computed-property-even-spacing': [2, 'even'],
-        'no-callback-literal': [2, ['cb', 'callback']],
+        'object-curly-spacing': [2, 'always'],
+        'array-bracket-spacing': [2, 'always'],
+        'computed-property-spacing': [2, 'always'],
+        'n/*': 0,
+        'n/no-callback-literal': 2,
         // jest
         'jest/no-disabled-tests': 'warn',
         'jest/no-if': 'error',
