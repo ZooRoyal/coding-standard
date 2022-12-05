@@ -28,7 +28,7 @@ module.exports = {
             ],
             extends: [
                 'plugin:@typescript-eslint/recommended',
-                'plugin:@stencil/recommended',
+                // 'plugin:@stencil/recommended',
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': 2,
@@ -44,7 +44,7 @@ module.exports = {
             ],
             extends: [
                 'plugin:@typescript-eslint/recommended',
-                'plugin:@stencil/recommended',
+                // 'plugin:@stencil/recommended',
             ],
             rules: {
                 '@typescript-eslint/no-unused-vars': ['error', { varsIgnorePattern: '^h$' }],
