@@ -7,7 +7,6 @@
 module.exports = {
     extends: [
         'eslint:recommended',
-        'plugin:n/recommended',
         'plugin:jest/recommended',
         'plugin:jest/style',
     ],
