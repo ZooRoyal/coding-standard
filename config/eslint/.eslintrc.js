@@ -182,15 +182,7 @@ module.exports = {
         'no-nested-ternary': 2,
         'no-unneeded-ternary': 2,
         'object-curly-spacing': [2, 'always'],
-        'array-bracket-spacing': [
-            2,
-            'always',
-            {
-                singleValue: false,
-                objectsInArrays: false,
-                arraysInArrays: false,
-            },
-        ],
+        'array-bracket-spacing': [2, 'never'],
         'computed-property-spacing': [2, 'never'],
         'n/no-callback-literal': 0,
         'prefer-const': 2,
