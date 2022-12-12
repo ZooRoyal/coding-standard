@@ -191,7 +191,7 @@ module.exports = {
                 arraysInArrays: false,
             },
         ],
-        'computed-property-spacing': [2, 'always'],
+        'computed-property-spacing': [2, 'never'],
         'n/no-callback-literal': 0,
         'prefer-const': 2,
         'no-multi-spaces': 2,
