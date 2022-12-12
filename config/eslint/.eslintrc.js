@@ -208,7 +208,7 @@ module.exports = {
         // jsdoc,
         'jsdoc/check-access': 0,
         'jsdoc/check-alignment': 2,
-        'jsdoc/check-examples': 0, // TODO: Wait for https://github.com/eslint/eslint/issues/14745 to be fixed
+        'jsdoc/check-examples': 0,
         'jsdoc/check-indentation': 0,
         'jsdoc/check-line-alignment': 2,
         'jsdoc/check-param-names': 2,
