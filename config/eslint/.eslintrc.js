@@ -5,6 +5,7 @@
  */
 
 module.exports = {
+    plugins: ['jest', 'jsdoc'],
     extends: [
         'eslint:recommended',
         'plugin:jest/recommended',
@@ -15,7 +16,6 @@ module.exports = {
         sourceType: 'module',
         project: './tsconfig.json',
     },
-    plugins: ['jest', 'jsdoc'],
     overrides: [
         {
             files: ['*.ts', '*.tsx'],
@@ -76,6 +76,7 @@ module.exports = {
     env: {
         browser: true,
         jquery: true,
+        es6: true,
         'jest/globals': true,
     },
     globals: {
@@ -181,9 +182,20 @@ module.exports = {
         'no-nested-ternary': 2,
         'no-unneeded-ternary': 2,
         'object-curly-spacing': [2, 'always'],
-        'array-bracket-spacing': [2, 'always'],
+        'array-bracket-spacing': [2, 'never'],
         'computed-property-spacing': [2, 'always'],
-        'n/no-callback-literal': 0, // TODO: Fix 'n/no-callback-literal': [2, ['cb', 'callback']],
+        'n/no-callback-literal': 0,
+        'prefer-const': 2,
+        'no-multi-spaces': 2,
+        'spaced-comment': 2,
+        'no-multiple-empty-lines': [2, { max: 1 }],
+        'key-spacing': 2,
+        'lines-between-class-members': [
+            2,
+            'always',
+            { exceptAfterSingleLine: true },
+        ],
+        'no-self-compare': 2,
         // jest
         'jest/no-disabled-tests': 'warn',
         'jest/no-if': 'error',
@@ -191,6 +203,8 @@ module.exports = {
         'jest/no-identical-title': 'error',
         'jest/prefer-to-have-length': 'warn',
         'jest/valid-expect': 'error',
+        'jest/expect-expect': 'warn',
+        'jest/no-export': 'error',
         // jsdoc,
         'jsdoc/check-access': 0,
         'jsdoc/check-alignment': 2,
