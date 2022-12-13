@@ -84,8 +84,8 @@
     "src/bin/coding-standard"
   ],
   "scripts": {
-    "post-update-cmd": "npm update",
-    "post-install-cmd": "npm install",
+    "post-update-cmd": "npx pnpm install",
+    "post-install-cmd": "npx pnpm install",
     "test": [
       "mkdir -p /tmp/phpunit",
       "paratest -p$(getconf _NPROCESSORS_ONLN)"
