@@ -1,13 +1,9 @@
 ---
-name: Continuous Integration
-
 on:
   pull_request:
   push:
     branches:
       - master
-  schedule:
-    - cron: '0 0 * * 0'
   workflow_dispatch:
 
 jobs:
@@ -59,7 +55,7 @@ jobs:
       - name: Install npm and Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.19.0'
+          node-version: '14.20'
 
       - name: Install composer dependencies
         env:
@@ -132,7 +128,7 @@ jobs:
       - name: Install npm and Node
         uses: actions/setup-node@v1
         with:
-          node-version: '10.19.0'
+          node-version: '14.20'
 
       - name: Install composer dependencies
         env:
