@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPStan;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\Container;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TargetableToolsCommand;
 
@@ -12,8 +12,7 @@ class PHPStanCommand extends TargetableToolsCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontStanPHP';
-
-    /** @var array<string>  */
+    /** @var array<string> */
     protected array $allowedFileEndings = ['.php'];
 
     /**
@@ -36,9 +35,8 @@ class PHPStanCommand extends TargetableToolsCommand
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesCommand(Container $container): void
     {
         $this->terminalCommand = $container->make(TerminalCommand::class);

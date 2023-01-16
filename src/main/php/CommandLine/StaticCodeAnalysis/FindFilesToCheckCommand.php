@@ -17,7 +17,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 class FindFilesToCheckCommand extends Command
 {
     public function __construct(
-        private ExclusionListFactory $blacklistFactory,
+        private ExclusionListFactory $exclusionListFactory,
         private AdaptableFileFinder $adaptableFileFinder,
         private ParentBranchGuesser $parentBranchGuesser,
     ) {

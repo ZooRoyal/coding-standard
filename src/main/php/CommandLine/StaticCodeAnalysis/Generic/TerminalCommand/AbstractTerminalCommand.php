@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Exception;
 use Stringable;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -50,9 +50,8 @@ abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesAbstractTerminalCommand(OutputInterface $output): void
     {
         $this->output = $output;

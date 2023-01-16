@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSStyleLint;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\Container;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -55,9 +55,8 @@ class JSStyleLintCommand extends FixingToolCommand
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesCommand(Container $container, NpmCommandFinder $terminalCommandFinder): void
     {
         $this->terminalCommandFinder = $terminalCommandFinder;

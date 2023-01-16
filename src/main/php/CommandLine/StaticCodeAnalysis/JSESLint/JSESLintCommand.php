@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\JSESLint;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\Container;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -42,7 +42,7 @@ class JSESLintCommand extends FixingToolCommand
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('eslint');
-        } catch (TerminalCommandNotFoundException) {
+        } catch (NpmCommandNotFoundException) {
             $output->writeln('<info>EsLint could not be found. To use this sniff please refer to the README.md</info>');
             return 0;
         }
@@ -54,9 +54,8 @@ class JSESLintCommand extends FixingToolCommand
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesCommand(Container $container, NpmCommandFinder $terminalCommandFinder): void
     {
         $this->terminalCommandFinder = $terminalCommandFinder;

@@ -11,6 +11,9 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class TokenExcluder implements ExcluderInterface
 {
+    /** @var array<string,array<EnhancedFileInfo>> */
+    private array $cache = [];
+
     /**
      * TokenExcluder constructor.
      */
@@ -18,6 +21,7 @@ class TokenExcluder implements ExcluderInterface
         private Environment $environment,
         private ProcessRunner $processRunner,
         private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private CacheKeyGenerator $cacheKeyGenerator,
     ) {
     }
 

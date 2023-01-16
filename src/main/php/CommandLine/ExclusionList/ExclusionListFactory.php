@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\ExclusionList;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\ExcluderInterface;
 
@@ -16,11 +16,11 @@ class ExclusionListFactory
      * BlacklistFactory constructor.
      *
      * @param array<ExcluderInterface> $excluders
-     *
-     * @Inject({"excluders" = "excluders"})
      */
-    public function __construct(private array $excluders, private ExclusionListSanitizer $exclusionListSanitizer)
-    {
+    public function __construct(
+        #[Inject('excluders')] private array $excluders,
+        private ExclusionListSanitizer $exclusionListSanitizer,
+    ) {
     }
 
     /**

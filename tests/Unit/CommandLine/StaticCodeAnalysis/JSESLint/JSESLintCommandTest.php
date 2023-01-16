@@ -15,10 +15,8 @@ use Zooroyal\CodingStandard\Tests\Unit\CommandLine\StaticCodeAnalysis\Generic\Fi
 
 class JSESLintCommandTest extends FixingToolCommandTest
 {
-    /** @var Container|MockInterface */
-    private Container $mockedContainer;
-    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\NpmAppFinder\NpmCommandFinder */
-    private NpmCommandFinder $mockedTerminalCommandFinder;
+    private Container|MockInterface $mockedContainer;
+    private NpmCommandFinder|MockInterface $mockedTerminalCommandFinder;
 
     protected function setUp(): void
     {

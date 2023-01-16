@@ -15,7 +15,7 @@
   "authors": [
     {
       "name": "Sebastian Knott",
-      "email": "s.knott@zooroyal.de"
+      "email": "sebastian.knott@rewe-digital.com"
     }
   ],
   "support": {
@@ -24,20 +24,19 @@
     "source": "https://github.com/ZooRoyal/coding-standard"
   },
   "require": {
-    "php": "^8.0",
+    "php": "^8.0.0",
     "composer/package-versions-deprecated": "^1.8",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
-    "doctrine/annotations": "^1.10",
+    "doctrine/annotations": "^1.14.2",
     "mindplay/composer-locator": "^2.1.4",
     "nyholm/psr7": "^1.4",
-    "ocramius/proxy-manager": "^2.13",
-    "php-di/php-di": "^6.3",
+    "php-di/php-di": "^7.0.1",
     "php-parallel-lint/php-console-highlighter": "^0.5",
     "php-parallel-lint/php-parallel-lint": "^1.2",
     "phpcompatibility/php-compatibility": "^9.3 >=9.3.5",
     "phpmd/phpmd": "^2.11.0",
     "phpstan/extension-installer": "^1.1",
-    "phpstan/phpstan": "^1.0",
+    "phpstan/phpstan": "~1.2.0",
     "phpstan/phpstan-doctrine": "^1.0",
     "phpstan/phpstan-mockery": "^1.0",
     "phpstan/phpstan-phpunit": "^1.0",

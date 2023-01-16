@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -75,9 +75,8 @@ abstract class AbstractToolCommand extends Command
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesToolCommand(
         TerminalCommandRunner $terminalCommandRunner,
         EventDispatcherInterface $eventDispatcher,

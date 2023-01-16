@@ -37,7 +37,7 @@ class ContainerFactory
     public static function getUnboundContainerInstance(): Container
     {
         $builder = new ContainerBuilder();
-        $builder->useAnnotations(true);
+        $builder->useAttributes(true);
         $builder->useAutowiring(true);
         $builder->addDefinitions(__DIR__ . '/phpdi.php');
         return $builder->build();

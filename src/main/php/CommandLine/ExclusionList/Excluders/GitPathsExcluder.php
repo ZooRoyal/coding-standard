@@ -12,6 +12,9 @@ use function Safe\substr;
 
 class GitPathsExcluder implements ExcluderInterface
 {
+    /** @var array<string,array<EnhancedFileInfo>> */
+    private array $cache = [];
+
     /**
      * GitPathsExcluder constructor.
      */
@@ -19,6 +22,7 @@ class GitPathsExcluder implements ExcluderInterface
         private Environment $environment,
         private ProcessRunner $processRunner,
         private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private CacheKeyGenerator $cacheKeyGenerator,
     ) {
     }
 
