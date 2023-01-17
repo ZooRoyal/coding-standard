@@ -14,15 +14,10 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 class TargetDecorator extends TerminalCommandDecorator
 {
-    private AdaptableFileFinder $adaptableFileFinder;
-    private ParentBranchGuesser $parentBranchGuesser;
-
     public function __construct(
-        AdaptableFileFinder $adaptableFileFinder,
-        ParentBranchGuesser $parentBranchGuesser
+        private AdaptableFileFinder $adaptableFileFinder,
+        private ParentBranchGuesser $parentBranchGuesser,
     ) {
-        $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->parentBranchGuesser = $parentBranchGuesser;
     }
 
     /**

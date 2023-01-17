@@ -32,7 +32,7 @@ class AdaptableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if ($targetBranch !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranch)

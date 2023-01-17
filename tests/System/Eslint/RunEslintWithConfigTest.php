@@ -15,8 +15,8 @@ use function Amp\ByteStream\buffer;
 
 class RunEslintWithConfigTest extends AsyncTestCase
 {
-    private const EXPECTED_TS_PROBLEMS = '183 problems';
-    private const EXPECTED_JS_PROBLEMS = '183 problems';
+    private const EXPECTED_TS_PROBLEMS = '184 errors';
+    private const EXPECTED_JS_PROBLEMS = '184 errors';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
     private Filesystem $filesystem;

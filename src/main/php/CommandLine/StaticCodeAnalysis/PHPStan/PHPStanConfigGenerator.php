@@ -25,6 +25,7 @@ class PHPStanConfigGenerator
             '/Plugins',
             '/custom/plugins',
             '/custom/project',
+            '/vendor',
         ];
     private string $phpStanConfigPath;
 

@@ -27,7 +27,7 @@ class AllCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
         $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');

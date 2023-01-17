@@ -79,7 +79,7 @@ class CacheKeyGeneratorTest extends TestCase
         array $files1,
         array $files2,
         array $config1,
-        array $config2
+        array $config2,
     ): void {
         $result = $this->subject->generateCacheKey($files1, $config1);
         $result1 = $this->subject->generateCacheKey($files2, $config2);

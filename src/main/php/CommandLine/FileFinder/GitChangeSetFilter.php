@@ -30,7 +30,7 @@ class GitChangeSetFilter
         GitChangeSet $gitChangeSet,
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $inclusionListToken = ''
+        string $inclusionListToken = '',
     ): void {
         $inclusionlist = [];
         $deDuped = true;
@@ -59,7 +59,7 @@ class GitChangeSetFilter
      */
     private function mergeLists(
         array $exclusionList,
-        array $inclusionlist
+        array $inclusionlist,
     ): SplObjectStorage {
         if (count(array_intersect($exclusionList, $inclusionlist)) !== 0) {
             throw new LogicException('Directories can\'t be black- and inclusionlisted at the same time', 1553780055);

@@ -42,7 +42,7 @@ class JSStyleLintCommand extends FixingToolCommand
     {
         try {
             $this->terminalCommandFinder->findTerminalCommand('stylelint');
-        } catch (NpmCommandNotFoundException $exception) {
+        } catch (NpmCommandNotFoundException) {
             $output->writeln('<info>Stylelint could not be found. To use this sniff please refer to the README.md</info>');
             return 0;
         }

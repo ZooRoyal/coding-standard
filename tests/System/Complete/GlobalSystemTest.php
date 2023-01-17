@@ -12,9 +12,11 @@ use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Process\Process as SymfonyProcess;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\call;
 use function Amp\Promise\all;
+use function Amp\Promise\timeout;
 
 class GlobalSystemTest extends AsyncTestCase
 {
@@ -87,8 +89,14 @@ class GlobalSystemTest extends AsyncTestCase
         $this->filesystem->mkdir($badCodeDirectory);
 
         $copyFiles = [
-            [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/custom/plugins/blubblub/Installer.php'],
-            [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/custom/plugins/blabla/Installer.php'],
+            [
+                $fixtureDirectory . '/complete/GoodPhp.php',
+                $environmentDirectory . '/custom/plugins/blubblub/Installer.php',
+            ],
+            [
+                $fixtureDirectory . '/complete/GoodPhp.php',
+                $environmentDirectory . '/custom/plugins/blabla/Installer.php',
+            ],
             [$fixtureDirectory . '/complete/GoodPhp.php', $environmentDirectory . '/GoodPhp.php'],
             [$fixtureDirectory . '/complete/GoodPhp2.php', $environmentDirectory . '/GoodPhp2.php'],
             [$fixtureDirectory . '/eslint/BadCode.ts', $badCodeDirectory . '/BadCode.ts'],
@@ -139,7 +147,7 @@ class GlobalSystemTest extends AsyncTestCase
             'sca:mess',
             'sca:para',
             'sca:copy',
-            'sca:stan',
+                        'sca:stan',
             'sca:style',
             'sca:eslint',
         ];
@@ -157,7 +165,7 @@ class GlobalSystemTest extends AsyncTestCase
         yield all($startPromises);
 
         $endPromises = array_map(static fn(Process $process) => $process->join(), $processes);
-        $exitCodes = yield all($endPromises);
+        $exitCodes = yield timeout(all($endPromises), 30000);
 
         foreach ($exitCodes as $tool => $exitCode) {
             if (($exitCode === 0) === $errorsAreGood) {
@@ -167,6 +175,15 @@ class GlobalSystemTest extends AsyncTestCase
                 yield from $this->echoStream('Stdout', $process);
             }
         }
+
+//        $symfonyProcess = new SymfonyProcess([
+//            $environmentDirectory . '/vendor/bin/coding-standard',
+//            $tool,
+//        ], $environmentDirectory);
+//
+//        $symfonyProcess->setTimeout(30);
+//        $symfonyProcess->mustRun();
+//        $exitCode['sca:phpstan'] = $symfonyProcess->getExitCode();
 
         return yield new Success($exitCodes);
     }

@@ -102,7 +102,7 @@ class EnhancedFileInfoTest extends TestCase
     public function isSubdirectoryOfReturnsCorrectValues(
         string $directory,
         string $subdirectory,
-        bool $expectation
+        bool $expectation,
     ): void {
         $object = new EnhancedFileInfo($directory, '/');
         $subject = new EnhancedFileInfo($subdirectory, '/');

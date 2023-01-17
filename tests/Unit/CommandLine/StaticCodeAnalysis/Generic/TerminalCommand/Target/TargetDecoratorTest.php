@@ -72,13 +72,11 @@ class TargetDecoratorTest extends TestCase
      * @test
      *
      * @dataProvider decorateAddsTargetsToTerminalCommandDataProvider
-     *
-     * @param string|false $forgedTarget
      */
     public function decorateAddsTargetsToTerminalCommand(
         bool $forgedAutoTarget,
-        $forgedTarget,
-        ?string $expectedTargetBranch
+        string|null $forgedTarget,
+        ?string $expectedTargetBranch,
     ): void {
         $forgedRealPath = 'asdasd';
         $forgedCommitHash = 'asdasdwqeqwe';
@@ -286,10 +284,8 @@ class TargetDecoratorTest extends TestCase
 
     /**
      * Prepare mocked Input to return given values when asked.
-     *
-     * @param string|bool $forgedTarget
      */
-    private function prepareMockedInputGetOption(bool $forgedAutoTarget, $forgedTarget): void
+    private function prepareMockedInputGetOption(bool $forgedAutoTarget, string|false|null $forgedTarget): void
     {
         $this->mockedInput->shouldReceive('getOption')->once()
             ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($forgedAutoTarget);

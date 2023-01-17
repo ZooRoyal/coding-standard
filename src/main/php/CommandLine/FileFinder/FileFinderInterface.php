@@ -15,6 +15,6 @@ interface FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet;
 }

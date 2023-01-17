@@ -30,7 +30,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if ($targetBranch === null || $targetBranch === '') {
             throw new InvalidArgumentException(

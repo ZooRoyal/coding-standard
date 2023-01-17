@@ -21,7 +21,6 @@ class StaticExcluder implements ExcluderInterface
             '.pnpm',
             '.pnpm-store',
         ];
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
     /** @var array<EnhancedFileInfo> */
     private array $cache = [];
 
@@ -29,9 +28,8 @@ class StaticExcluder implements ExcluderInterface
      * StaticExcluder constructor.
      */
     public function __construct(
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
