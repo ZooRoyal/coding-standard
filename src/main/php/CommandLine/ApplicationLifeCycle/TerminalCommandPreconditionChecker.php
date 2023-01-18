@@ -18,15 +18,16 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
  */
 class TerminalCommandPreconditionChecker implements EventSubscriberInterface
 {
-    /** @var array<string,int> */
-    private array $results = [];
     /** @var array<string> */
     private const COMMANDS = ['git', 'find'];
+
+    /** @var array<string,int> */
+    private array $results = [];
 
     /**
      * TerminalCommandPreconditionChecker constructor.
      */
-    public function __construct(private ProcessRunner $processRunner)
+    public function __construct(private readonly ProcessRunner $processRunner)
     {
     }
 
@@ -58,7 +59,7 @@ class TerminalCommandPreconditionChecker implements EventSubscriberInterface
             if ($this->results[$command] !== 0) {
                 throw new RuntimeException(
                     'The coding-standard CLI needs ' . $command . ' to be installed and findable by \'which\'.',
-                    1613124231
+                    1613124231,
                 );
             }
         }

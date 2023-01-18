@@ -18,13 +18,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
  */
 class GitCommandPreconditionChecker implements EventSubscriberInterface
 {
-    private ?int $exitCode = null;
     private const COMMAND = 'git rev-parse --git-dir';
+
+    private ?int $exitCode = null;
 
     /**
      * CommandPreconditionChecker constructor.
      */
-    public function __construct(private ProcessRunner $processRunner)
+    public function __construct(private readonly ProcessRunner $processRunner)
     {
     }
 
@@ -55,7 +56,7 @@ class GitCommandPreconditionChecker implements EventSubscriberInterface
         if ($this->exitCode !== 0) {
             throw new RuntimeException(
                 'The coding-standard CLI can\'t be used outside of a git context.',
-                1612348705
+                1612348705,
             );
         }
     }

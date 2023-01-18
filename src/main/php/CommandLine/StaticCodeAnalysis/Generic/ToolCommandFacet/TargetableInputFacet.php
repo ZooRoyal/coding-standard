@@ -28,16 +28,16 @@ class TargetableInputFacet implements ToolCommandInputFacet
                     InputOption::VALUE_REQUIRED,
                     'Finds Files which have changed since the current branch parted from the target branch '
                     . 'only. The Value has to be a commit-ish.',
-                    null
+                    null,
                 ),
                 new InputOption(
                     self::OPTION_AUTO_TARGET,
                     'a',
                     InputOption::VALUE_NONE,
                     'Finds Files which have changed since the current branch parted from the parent branch '
-                    . 'only. It tries to find the parent branch by automagic.'
+                    . 'only. It tries to find the parent branch by automagic.',
                 ),
-            ]
+            ],
         );
     }
 }

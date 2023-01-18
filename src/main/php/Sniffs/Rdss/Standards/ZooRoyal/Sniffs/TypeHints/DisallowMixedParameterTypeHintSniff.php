@@ -68,7 +68,7 @@ class DisallowMixedParameterTypeHintSniff
                 $phpcsFile->addError(
                     $this->getErrorMessage($phpcsFile, $functionPointer, $parameterName, $token),
                     $functionPointer,
-                    self::ERROR_CODE
+                    self::ERROR_CODE,
                 );
             }
         }
@@ -85,11 +85,11 @@ class DisallowMixedParameterTypeHintSniff
                 '%s %s() ' . self::ERROR_MESSAGE_FUNCTION,
                 FunctionHelper::getTypeLabel($phpcsFile, $functionPointer),
                 FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
-                $parameterName
+                $parameterName,
             )
             : sprintf(
                 'closure() ' . self::ERROR_MESSAGE_FUNCTION,
-                $parameterName
+                $parameterName,
             );
     }
 }

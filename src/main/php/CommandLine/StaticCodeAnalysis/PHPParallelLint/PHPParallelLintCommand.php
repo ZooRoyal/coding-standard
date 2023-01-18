@@ -25,7 +25,7 @@ class PHPParallelLintCommand extends TargetableToolsCommand
         $this->setDescription('Run Parallel-Lint on PHP files.');
         $this->setHelp(
             'This tool executes Parallel-Lint on a certain set of PHP files of this project. It '
-            . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.'
+            . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.',
         );
         $this->terminalCommandName = 'PHP Parallel Lint';
     }

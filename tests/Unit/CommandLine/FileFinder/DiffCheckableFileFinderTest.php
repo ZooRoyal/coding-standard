@@ -77,7 +77,7 @@ class DiffCheckableFileFinderTest extends TestCase
             $mockedAllowedFileEndings,
             $mockedBlacklistToken,
             $mockedInclusionlistToken,
-            $mockedTargetBranch
+            $mockedTargetBranch,
         );
     }
 }

@@ -11,9 +11,9 @@ use Symfony\Component\Process\Process;
 
 class DocCommentSniffTest extends TestCase
 {
+    private static string $vendorDir;
     /** @var array<string> */
     private array $commandPrefix;
-    private static string $vendorDir;
 
     public static function setUpBeforeClass(): void
     {

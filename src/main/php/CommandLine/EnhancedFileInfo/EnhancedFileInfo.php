@@ -55,7 +55,7 @@ class EnhancedFileInfo extends SplFileInfo
         if ($directory->isDir() !== true) {
             throw new InvalidArgumentException(
                 'The EnhancedFileInfo '. $directory . ' is not a directory.',
-                1661515549
+                1661515549,
             );
         }
 

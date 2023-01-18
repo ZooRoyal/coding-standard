@@ -32,10 +32,11 @@ class EventDispatcherFactory
             VerboseDecorator::class,
             MultiprocessDecorator::class,
         ];
+
     /**
      * EventDispatcherFactory constructor.
      */
-    public function __construct(private Container $container)
+    public function __construct(private readonly Container $container)
     {
     }
 

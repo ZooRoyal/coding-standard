@@ -55,7 +55,7 @@ class TokenExcluder implements ExcluderInterface
             $excludeParameters = ' -not -path "./' . implode('" -not -path "./', $alreadyExcludedPaths) . '"';
         }
         $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootDirectory . ' -name ' . $token . $excludeParameters
+            'find ' . $rootDirectory . ' -name ' . $token . $excludeParameters,
         );
 
         if (empty($finderResult)) {

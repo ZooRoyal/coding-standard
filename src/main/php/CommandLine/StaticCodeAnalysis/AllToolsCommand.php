@@ -15,7 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 class AllToolsCommand extends Command
 {
     /** @var array<InputOption> */
-    private array $injectedOptions = [];
+    private array $injectedOptions;
 
     public function __construct(
         FixableInputFacet $fixableFacet,
@@ -24,7 +24,7 @@ class AllToolsCommand extends Command
     ) {
         $this->injectedOptions = array_merge(
             $fixableFacet->getInputDefinition()->getOptions(),
-            $targetableFacet->getInputDefinition()->getOptions()
+            $targetableFacet->getInputDefinition()->getOptions(),
         );
         parent::__construct($name);
     }
@@ -35,7 +35,7 @@ class AllToolsCommand extends Command
         $this->setDescription('Run all static code analysis tools.');
         $this->setHelp(
             'This tool executes all static code analysis tools on files of this project. '
-            . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.'
+            . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.',
         );
         $this->getDefinition()->setOptions($this->injectedOptions);
     }
@@ -52,8 +52,8 @@ class AllToolsCommand extends Command
 
         $inputOptions = array_filter(
             $unfilteredInputOptions,
-            static fn($value, $key) => !array_key_exists($key, $defaultOptionValues) || $defaultOptionValues[$key] !== $value,
-            ARRAY_FILTER_USE_BOTH
+            static fn ($value, $key) => !array_key_exists($key, $defaultOptionValues) || $defaultOptionValues[$key] !== $value,
+            ARRAY_FILTER_USE_BOTH,
         );
 
         $resultingExitCode = $this->executeSubcommands($inputOptions, $input, $output);

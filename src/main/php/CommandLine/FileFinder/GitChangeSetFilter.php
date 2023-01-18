@@ -16,8 +16,8 @@ class GitChangeSetFilter
      * FileFilter constructor.
      */
     public function __construct(
-        private ExclusionListFactory $exclusionListFactory,
-        private TokenExcluder $tokenExcluder,
+        private readonly ExclusionListFactory $exclusionListFactory,
+        private readonly TokenExcluder $tokenExcluder,
     ) {
     }
 
@@ -111,7 +111,7 @@ class GitChangeSetFilter
                         }
                     }
                     return false;
-                }
+                },
             );
         }
     }
@@ -138,7 +138,7 @@ class GitChangeSetFilter
                     }
                 }
                 return $result;
-            }
+            },
         );
         $result = array_values($result);
     }

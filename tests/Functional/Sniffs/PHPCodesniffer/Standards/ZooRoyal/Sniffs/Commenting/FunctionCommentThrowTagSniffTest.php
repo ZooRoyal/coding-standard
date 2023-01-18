@@ -11,9 +11,9 @@ use Symfony\Component\Process\Process;
 
 class FunctionCommentThrowTagSniffTest extends TestCase
 {
+    private static string $vendorDir;
     /** @var array<string> */
     private array $commandPrefix;
-    private static string $vendorDir;
 
     public static function setUpBeforeClass(): void
     {
@@ -65,7 +65,7 @@ class FunctionCommentThrowTagSniffTest extends TestCase
         self::assertMatchesRegularExpression('/at least 2 @throws/', $output);
         self::assertMatchesRegularExpression(
             '/ZooRoyal\.Commenting\.FunctionCommentThrowTag\.WrongNumber/',
-            $output
+            $output,
         );
     }
 }

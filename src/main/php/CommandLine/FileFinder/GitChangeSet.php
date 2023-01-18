@@ -16,7 +16,7 @@ class GitChangeSet
      *
      * @param array<EnhancedFileInfo> $files
      */
-    public function __construct(private array $files, private string $commitHash = '')
+    public function __construct(private array $files, private readonly string $commitHash = '')
     {
     }
 

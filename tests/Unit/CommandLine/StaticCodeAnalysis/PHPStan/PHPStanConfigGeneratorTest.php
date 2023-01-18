@@ -47,7 +47,7 @@ class PHPStanConfigGeneratorTest extends TestCase
         $this->subject = new PHPStanConfigGenerator(
             $this->mockedNeonAdapter,
             $this->mockedFilesystem,
-            $mockedEnvironment
+            $mockedEnvironment,
         );
     }
 
@@ -92,7 +92,7 @@ class PHPStanConfigGeneratorTest extends TestCase
                 '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
                 '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php.</info>',
             ),
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
         $this->mockedNeonAdapter->shouldReceive('dump')->once()
@@ -112,12 +112,12 @@ class PHPStanConfigGeneratorTest extends TestCase
     ): Matcher {
         $includesMatcher = H::hasKeyValuePair(
             'includes',
-            H::hasItem($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon' . '.dist')
+            H::hasItem($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon' . '.dist'),
         );
 
         $functionsMatcher = H::hasKeyValuePair(
             'bootstrapFiles',
-            H::hasItems($forgedHamcrestPath . '/hamcrest/Hamcrest.php', $forgedMockeryPath . '/library/helpers.php')
+            H::hasItems($forgedHamcrestPath . '/hamcrest/Hamcrest.php', $forgedMockeryPath . '/library/helpers.php'),
         );
 
         $excludesMatcher = H::hasKeyValuePair('excludePaths', H::hasItem($forgedFilePath));
@@ -126,12 +126,12 @@ class PHPStanConfigGeneratorTest extends TestCase
             H::allOf(
                 H::hasItem($this->mockedRootDirectory . '/Plugins'),
                 H::hasItem($this->mockedRootDirectory . '/custom/project'),
-            )
+            ),
         );
 
         $parametersMatcher = H::hasKeyValuePair(
             'parameters',
-            H::allOf($functionsMatcher, $excludesMatcher, $staticDirectoriesMatcher)
+            H::allOf($functionsMatcher, $excludesMatcher, $staticDirectoriesMatcher),
         );
 
         $matcher = H::allOf(

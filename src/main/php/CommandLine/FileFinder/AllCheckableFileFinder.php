@@ -12,9 +12,9 @@ class AllCheckableFileFinder implements FileFinderInterface
      * AllCheckableFileFinder constructor.
      */
     public function __construct(
-        private ProcessRunner $processRunner,
-        private GitChangeSetFilter $gitChangeSetFilter,
-        private GitChangeSetFactory $gitChangeSetFactory,
+        private readonly ProcessRunner $processRunner,
+        private readonly GitChangeSetFilter $gitChangeSetFilter,
+        private readonly GitChangeSetFactory $gitChangeSetFactory,
     ) {
     }
 
@@ -30,7 +30,7 @@ class AllCheckableFileFinder implements FileFinderInterface
         ?string $targetBranch = null,
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
-        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');
+        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit);
 
         $this->gitChangeSetFilter->filter($gitChangeSet, $allowedFileEndings, $exclusionListToken);
 

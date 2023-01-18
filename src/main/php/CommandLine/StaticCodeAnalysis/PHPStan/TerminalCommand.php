@@ -14,7 +14,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
-use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     ExclusionTerminalCommand,
@@ -24,8 +23,11 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use ExclusionTrait, TargetTrait, VerboseTrait;
 
     private const TEMPLATE = 'php %1$s analyse %4$s--no-progress --error-format=github -c %2$s %3$s';
-    public function __construct(private Environment $environment, private PHPStanConfigGenerator $phpstanConfigGenerator)
-    {
+
+    public function __construct(
+        private readonly Environment $environment,
+        private readonly PHPStanConfigGenerator $phpstanConfigGenerator,
+    ) {
     }
 
     /**
@@ -78,8 +80,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } else {

@@ -41,12 +41,12 @@ abstract class AbstractToolCommand extends Command
             $output,
             $this->terminalCommand,
             $this->exclusionListToken,
-            $this->allowedFileEndings
+            $this->allowedFileEndings,
         );
         // @phpstan-ignore-next-line because there is a hack in the symfony/event-dispatcher-contract regarding dispatch
         $this->eventDispatcher->dispatch(
             $event,
-            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND,
         );
 
         try {
@@ -56,14 +56,14 @@ abstract class AbstractToolCommand extends Command
             $output->writeln(
                 'Reason to skip tool: ' . $noUsefulCommandFoundException->getMessage() . PHP_EOL
                 . 'Code: ' . $noUsefulCommandFoundException->getCode(),
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
             $exitCode = 0;
         } catch (Exception $exception) {
             throw new RuntimeException(
                 'Something went wrong while executing a terminal command.',
                 1617786765,
-                $exception
+                $exception,
             );
         }
 

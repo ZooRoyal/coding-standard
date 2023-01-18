@@ -39,7 +39,7 @@ class JSStyleLintCommandTest extends FixingToolCommandTest
         $this->subject = new JSStyleLintCommand($this->mockedFixableInputFacet, $this->mockedTargetableInputFacet);
         $this->subject->injectDependenciesToolCommand(
             $this->mockedTerminalCommandRunner,
-            $this->mockedEventDispatcher
+            $this->mockedEventDispatcher,
         );
         $this->subject->injectDependenciesCommand($this->mockedContainer, $this->mockedTerminalCommandFinder);
     }
@@ -74,7 +74,7 @@ class JSStyleLintCommandTest extends FixingToolCommandTest
         self::assertSame(
             'This tool executes STYLELINT on a certain set of Less files of this project.'
             . 'Add a .dontSniffLESS file to <LESS-DIRECTORIES> that should be ignored.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 

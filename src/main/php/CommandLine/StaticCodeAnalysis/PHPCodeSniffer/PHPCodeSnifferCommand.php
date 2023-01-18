@@ -22,7 +22,7 @@ class PHPCodeSnifferCommand extends FixingToolCommand
         $this->setDescription('Run PHP-CS on PHP files.');
         $this->setHelp(
             'This tool executes PHP-CS on a certain set of PHP files of this project. '
-            . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.'
+            . 'It ignores files which are in directories with a .dontSniffPHP file. Subdirectories are ignored too.',
         );
         $this->terminalCommandName = 'PHP Code Sniffer';
     }

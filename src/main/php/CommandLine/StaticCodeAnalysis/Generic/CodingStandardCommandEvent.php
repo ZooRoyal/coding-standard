@@ -18,9 +18,9 @@ class CodingStandardCommandEvent extends ConsoleEvent implements DecorateEvent
         ?Command $command,
         InputInterface $input,
         OutputInterface $output,
-        private TerminalCommand $terminalCommand,
-        private string $exclusionListToken,
-        private array $allowedFileEndings,
+        private readonly TerminalCommand $terminalCommand,
+        private readonly string $exclusionListToken,
+        private readonly array $allowedFileEndings,
     ) {
         parent::__construct($command, $input, $output);
     }

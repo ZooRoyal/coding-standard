@@ -68,7 +68,7 @@ abstract class AbstractToolCommandTest extends TestCase
                 HasProperty::hasProperty('Input', $this->mockedInput),
                 HasProperty::hasProperty('Output', $this->mockedOutput),
             ),
-            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND,
         );
         $this->mockedTerminalCommandRunner->shouldReceive('run')->once()
             ->with($this->mockedTerminalCommand)->andReturn($expectedExitCode);
@@ -94,7 +94,7 @@ abstract class AbstractToolCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 'Reason to skip tool: ' . $localMassage . PHP_EOL . 'Code: ' . $localCode,
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
 
         $this->mockedTerminalCommandRunner->shouldReceive('run')->once()

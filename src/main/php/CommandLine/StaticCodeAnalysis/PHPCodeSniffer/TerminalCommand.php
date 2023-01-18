@@ -20,7 +20,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
-use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     FixTerminalCommand,
@@ -33,7 +32,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use TargetTrait, FixTrait, ExclusionTrait, FileExtensionTrait, VerboseTrait, MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s %5$s%6$s--parallel=%7$d -p --standard=%2$s %3$s%4$s';
-    public function __construct(private Environment $environment)
+
+    public function __construct(private readonly Environment $environment)
     {
     }
 
@@ -104,8 +104,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = '--ignore=';
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRealPath(),
-                $this->excludesFiles
+                static fn (EnhancedFileInfo $item) => $item->getRealPath(),
+                $this->excludesFiles,
             );
             $excludingString .= implode(',', $excludesFilePaths);
             $excludingString .= ' ';
@@ -120,8 +120,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } else {

@@ -8,7 +8,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 abstract class TargetableToolsCommand extends AbstractToolCommand
 {
-    public function __construct(private TargetableInputFacet $targetableFacet, string $name = null)
+    public function __construct(private readonly TargetableInputFacet $targetableFacet, ?string $name = null)
     {
         parent::__construct($name);
     }

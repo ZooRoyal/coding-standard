@@ -12,7 +12,7 @@ class GitInputValidator
     /**
      * GitInputValidator constructor.
      */
-    public function __construct(private ProcessRunner $processRunner)
+    public function __construct(private readonly ProcessRunner $processRunner)
     {
     }
 

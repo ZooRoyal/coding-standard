@@ -15,9 +15,9 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
 
     private const FIXTURE_DIRECTORY = 'tests/Functional/Sniffs/Rdss/Standards/ZooRoyal/Sniffs/TypeHints/Fixtures/Parameter/';
 
+    private static string $vendorDir;
     /** @var array<string> */
     private array $commandPrefix;
-    private static string $vendorDir;
 
     public static function setUpBeforeClass(): void
     {
@@ -65,7 +65,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
         self::assertMatchesRegularExpression('/FOUND 5 ERRORS AFFECTING 3 LINES/', $output);
         self::assertMatchesRegularExpression(
             '/ZooRoyal.TypeHints.DisallowMixedParameterTypeHint.MixedParameterTypeHintUsed/',
-            $output
+            $output,
         );
         self::assertMatchesRegularExpression('/uses "mixed" type hint for parameter \$testArray/', $output);
         self::assertMatchesRegularExpression('/uses "mixed" type hint for parameter \$testString/', $output);

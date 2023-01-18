@@ -109,7 +109,7 @@ class AdaptableFileFinderTest extends TestCase
             $mockedAllowedFileEndings,
             $mockedBlacklistToken,
             $mockedInclusionlistToken,
-            $targetBranchInput
+            $targetBranchInput,
         );
 
         self::assertSame($expectedResult, $result);

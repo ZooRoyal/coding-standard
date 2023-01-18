@@ -19,8 +19,8 @@ class Environment
     private const GIT = 'git';
 
     public function __construct(
-        private ProcessRunner $processRunner,
-        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
     }
 

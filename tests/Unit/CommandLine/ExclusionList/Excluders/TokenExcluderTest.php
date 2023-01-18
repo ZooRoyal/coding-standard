@@ -72,7 +72,7 @@ class TokenExcluderTest extends TestCase
         $expectedResult = [
             new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfo1,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
         ];
 
@@ -110,7 +110,7 @@ class TokenExcluderTest extends TestCase
         $expectedResult = [
             new EnhancedFileInfo(
                 $this->forgedRootDirectory,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
         ];
 
@@ -144,11 +144,11 @@ class TokenExcluderTest extends TestCase
             $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
         ];
         $expectedResult = array_map(
-            fn($paths) => new EnhancedFileInfo(
+            fn ($paths) => new EnhancedFileInfo(
                 $paths,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
-            $forgedExcludedDirectories
+            $forgedExcludedDirectories,
         );
 
         $forgedConfig = ['token' => 'bla'];

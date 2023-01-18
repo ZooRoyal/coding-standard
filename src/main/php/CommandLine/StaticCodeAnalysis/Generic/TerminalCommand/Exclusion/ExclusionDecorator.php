@@ -13,7 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 class ExclusionDecorator extends TerminalCommandDecorator
 {
     public function __construct(
-        private ExclusionListFactory $exclusionListFactory,
+        private readonly ExclusionListFactory $exclusionListFactory,
     ) {
     }
 

@@ -12,7 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory
 class GitChangeSetFactory
 {
     public function __construct(
-        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
     }
 

@@ -15,7 +15,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess\MultiprocessTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
-use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     TargetTerminalCommand,
@@ -26,7 +25,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use TargetTrait, ExclusionTrait, FileExtensionTrait, MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
-    public function __construct(private Environment $environment)
+
+    public function __construct(private readonly Environment $environment)
     {
     }
 
@@ -63,8 +63,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = ' ';
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => '--exclude ' . $item->getRelativePathname() . '/',
-                $this->excludesFiles
+                static fn (EnhancedFileInfo $item) => '--exclude ' . $item->getRelativePathname() . '/',
+                $this->excludesFiles,
             );
             $excludingString .= implode(' ', $excludesFilePaths);
         }
@@ -78,8 +78,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = ' ' . implode(' ', $targetedFilePaths);
         } else {

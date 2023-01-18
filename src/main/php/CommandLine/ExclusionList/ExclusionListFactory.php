@@ -12,19 +12,21 @@ class ExclusionListFactory
 {
     /** @var array<string,array<EnhancedFileInfo>> */
     private array $exclusionListCache = [];
+
     /**
      * BlacklistFactory constructor.
      *
      * @param array<ExcluderInterface> $excluders
      */
+    #[Inject(['excluders' => 'excluders'])]
     public function __construct(
-        #[Inject('excluders')] private array $excluders,
-        private ExclusionListSanitizer $exclusionListSanitizer,
+        private readonly array $excluders,
+        private readonly ExclusionListSanitizer $exclusionListSanitizer,
     ) {
     }
 
     /**
-     * This function computes a exclusionlist of directories which should not be checked.
+     * This function computes an exclusion list of directories which should not be checked.
      *
      * @return array<EnhancedFileInfo>
      */

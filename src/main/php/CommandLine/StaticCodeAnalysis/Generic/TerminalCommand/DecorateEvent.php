@@ -14,11 +14,19 @@ interface DecorateEvent
 
     public function getExclusionListToken(): string;
 
-    /** @return InputInterface */
+    /**
+     * This annotation is needed for compatibility to symfony/console:4
+     *
+     * @return InputInterface
+     */
     // phpcs:ignore
     public function getInput();
 
-    /** @return OutputInterface */
+    /**
+     * This annotation is needed for compatibility to symfony/console:4
+     *
+     * @return OutputInterface
+     */
     // phpcs:ignore
     public function getOutput();
 

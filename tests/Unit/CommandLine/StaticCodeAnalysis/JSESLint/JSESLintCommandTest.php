@@ -37,7 +37,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
         $this->subject = new JSESLintCommand($this->mockedFixableInputFacet, $this->mockedTargetableInputFacet);
         $this->subject->injectDependenciesToolCommand(
             $this->mockedTerminalCommandRunner,
-            $this->mockedEventDispatcher
+            $this->mockedEventDispatcher,
         );
         $this->subject->injectDependenciesCommand($this->mockedContainer, $this->mockedTerminalCommandFinder);
     }
@@ -52,7 +52,7 @@ class JSESLintCommandTest extends FixingToolCommandTest
         self::assertSame(
             'This tool executes ESLINT on a certain set of JS files of this project.'
             . ' Add a .dontSniffJS file to <JS-DIRECTORIES> that should be ignored.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 

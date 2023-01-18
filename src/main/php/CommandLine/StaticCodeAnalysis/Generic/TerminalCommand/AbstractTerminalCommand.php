@@ -19,18 +19,6 @@ abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
     private bool $compiled = false;
 
     /**
-     * Returns the command as sting. This string is supposed to work as input to a
-     * *NIX terminal.
-     */
-    public function __toString(): string
-    {
-        if (!$this->compiled) {
-            $this->runCompilation();
-        }
-        return $this->command;
-    }
-
-    /**
      * Returns the command as array. Every part of the command is in its own array item.
      *
      * @example find ./ -name "asd" -> ['find', './', '-name', '"asd"']
@@ -70,7 +58,7 @@ abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
     {
         $this->output->writeln(
             '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . $this->command . PHP_EOL,
-            OutputInterface::VERBOSITY_VERY_VERBOSE
+            OutputInterface::VERBOSITY_VERY_VERBOSE,
         );
     }
 
@@ -91,5 +79,17 @@ abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
             throw new RuntimeException('Something went wrong compiling a command', 1616426291, $exception);
         }
         $this->postCompile();
+    }
+
+    /**
+     * Returns the command as sting. This string is supposed to work as input to a
+     * *NIX terminal.
+     */
+    public function __toString(): string
+    {
+        if (!$this->compiled) {
+            $this->runCompilation();
+        }
+        return $this->command;
     }
 }

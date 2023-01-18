@@ -26,7 +26,7 @@ class FileExtensionDecorator extends TerminalCommandDecorator
 
         $output->writeln(
             '<info>Command will only check files with following extensions</info>',
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
         $output->writeln(implode(' ', $extensions) . PHP_EOL, OutputInterface::VERBOSITY_VERBOSE);
 

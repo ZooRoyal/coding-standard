@@ -39,7 +39,7 @@ class CodingStandardCommandEventTest extends TestCase
             $this->mockedOutputInterface,
             $this->mockedterminalCommand,
             $this->forgedExclusionListToken,
-            $this->forgedallowedFileEndings
+            $this->forgedallowedFileEndings,
         );
     }
 

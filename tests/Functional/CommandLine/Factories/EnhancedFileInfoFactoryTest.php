@@ -16,12 +16,12 @@ use function Safe\realpath;
 
 class EnhancedFileInfoFactoryTest extends TestCase
 {
+    private static string $DiSe = DIRECTORY_SEPARATOR;
     private EnhancedFileInfoFactory $subject;
     private string $absolutFilePath;
     private string $relativeFilePath;
     private string $relativeFilePath2;
     private string $rootDirectory;
-    private static string $DiSe = DIRECTORY_SEPARATOR;
 
     public function setUp(): void
     {
@@ -77,7 +77,7 @@ class EnhancedFileInfoFactoryTest extends TestCase
             . self::$DiSe
             . '..'
             . self::$DiSe
-            . $this->relativeFilePath
+            . $this->relativeFilePath,
         );
 
         self::assertSame($this->absolutFilePath, $result->getRealPath());
@@ -96,8 +96,8 @@ class EnhancedFileInfoFactoryTest extends TestCase
             $result,
             HasProperty::hasProperty(
                 'RealPath',
-                realpath($this->absolutFilePath)
-            )
+                realpath($this->absolutFilePath),
+            ),
         );
     }
 
@@ -126,7 +126,7 @@ class EnhancedFileInfoFactoryTest extends TestCase
                 '.' . self::$DiSe . $this->relativeFilePath,
                 $this->relativeFilePath2,
                 $this->absolutFilePath,
-            ]
+            ],
         );
 
         MatcherAssert::assertThat(
@@ -135,17 +135,17 @@ class EnhancedFileInfoFactoryTest extends TestCase
                 H::hasItem(
                     HasProperty::hasProperty(
                         'RealPath',
-                        realpath($this->absolutFilePath)
-                    )
+                        realpath($this->absolutFilePath),
+                    ),
                 ),
                 H::hasItem(
                     HasProperty::hasProperty(
                         'RealPath',
-                        $this->rootDirectory . self::$DiSe . 'composer.json'
-                    )
+                        $this->rootDirectory . self::$DiSe . 'composer.json',
+                    ),
                 ),
-                H::arrayWithSize(2)
-            )
+                H::arrayWithSize(2),
+            ),
         );
     }
 
@@ -160,7 +160,7 @@ class EnhancedFileInfoFactoryTest extends TestCase
             [
                 $this->absolutFilePath,
                 'asdasd',
-            ]
+            ],
         );
 
         MatcherAssert::assertThat(
@@ -169,11 +169,11 @@ class EnhancedFileInfoFactoryTest extends TestCase
                 H::hasItem(
                     HasProperty::hasProperty(
                         'RealPath',
-                        realpath($this->absolutFilePath)
-                    )
+                        realpath($this->absolutFilePath),
+                    ),
                 ),
-                H::arrayWithSize(1)
-            )
+                H::arrayWithSize(1),
+            ),
         );
     }
 

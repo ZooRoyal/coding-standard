@@ -2,7 +2,6 @@
   "version": "0.0.1",
   "require-dev":  {
     "zooroyal/coding-standard": "@dev",
-    "php-http/mock-client": "*",
     "shopware/shopware": "^5.7"
   },
   "repositories":{

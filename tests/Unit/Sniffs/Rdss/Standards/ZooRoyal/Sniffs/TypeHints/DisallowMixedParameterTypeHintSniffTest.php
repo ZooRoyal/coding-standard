@@ -63,7 +63,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
         $mockedTypeHint2->expects()->getTypeHint()->andReturn('mixed');
 
         $mockedFunctionHelper->expects()->getTypeLabel($mockedFile, $forgedFunctionPointer)->andReturn(
-            $forgedTypeLabel
+            $forgedTypeLabel,
         );
         $mockedFunctionHelper->expects()->getFullyQualifiedName($mockedFile, $forgedFunctionPointer)
             ->andReturn($forgedFQN);
@@ -71,7 +71,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
         $mockedFile->expects()->addError(
             H::containsString($forgedErrorMessage),
             $forgedFunctionPointer,
-            'MixedParameterTypeHintUsed'
+            'MixedParameterTypeHintUsed',
         );
 
         $this->subject->process($mockedFile, $forgedFunctionPointer);
@@ -116,7 +116,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
         /** @var MockInterface|DocCommentHelper $mockedDocCommentHelper */
         $mockedDocCommentHelper = Mockery::mock('overload:' . DocCommentHelper::class);
         $mockedDocCommentHelper->expects()->hasInheritdocAnnotation($mockedFile, $forgedFunctionPointer)->andReturn(
-            true
+            true,
         );
 
         $this->subject->process($mockedFile, $forgedFunctionPointer);

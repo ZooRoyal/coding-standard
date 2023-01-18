@@ -31,7 +31,7 @@ trait VerboseTrait
         if (!in_array($verbosityLevel, $this->allowedValues, true)) {
             throw new InvalidArgumentException(
                 'Only verbosity settings from OutputInterface constants are allowed',
-                1617802684
+                1617802684,
             );
         }
         $this->verbosityLevel = $verbosityLevel;

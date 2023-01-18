@@ -20,7 +20,6 @@ class GitIgnoresExcluderTest extends TestCase
     /** @var array<MockInterface> */
     private array $subjectParameters;
 
-
     protected function setUp(): void
     {
         $subjectFactory = new SubjectFactory();
@@ -43,11 +42,11 @@ class GitIgnoresExcluderTest extends TestCase
     {
         $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
         $expectedResult = array_map(
-            fn($path) => new EnhancedFileInfo(
+            fn ($path) => new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $path . DIRECTORY_SEPARATOR,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
-            $forgedExcludedDirectories
+            $forgedExcludedDirectories,
         );
 
         $expectedCommand = 'git ls-files -io --exclude-standard --directory';
@@ -56,8 +55,8 @@ class GitIgnoresExcluderTest extends TestCase
             . 'asd.js' . PHP_EOL;
 
         $expectedBuildFromArrayParameter = array_map(
-            static fn($value): string =>  $value .DIRECTORY_SEPARATOR,
-            $forgedExcludedDirectories
+            static fn ($value): string => $value .DIRECTORY_SEPARATOR,
+            $forgedExcludedDirectories,
         );
 
         $this->subjectParameters[ProcessRunner::class]->shouldReceive('runAsProcess')

@@ -15,10 +15,10 @@ class AdaptableFileFinder implements FileFinderInterface
      * AdaptableFileFinder constructor.
      */
     public function __construct(
-        private GitInputValidator $gitInputValidator,
-        private AllCheckableFileFinder $allCheckableFileFinder,
-        private DiffCheckableFileFinder $diffCheckableFileFinder,
-        private CommitishComparator $commitishComparator,
+        private readonly GitInputValidator $gitInputValidator,
+        private readonly AllCheckableFileFinder $allCheckableFileFinder,
+        private readonly DiffCheckableFileFinder $diffCheckableFileFinder,
+        private readonly CommitishComparator $commitishComparator,
     ) {
     }
 

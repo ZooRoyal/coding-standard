@@ -51,27 +51,27 @@ class GitChangeSetFilterTest extends TestCase
         $mockedFileList = new GitChangeSet(
             array_merge(
                 $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory . '/sowas']),
-                $expectedResult
+                $expectedResult,
             ),
-            'asdaqwe212123'
+            'asdaqwe212123',
         );
         $exclusionlistToken = 'stopMe';
         $inclusionListToken = 'neverMind';
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
             ->once()->with($exclusionlistToken, false)->andReturn(
-                $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory])
+                $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory]),
             );
         $this->subjectParameters[TokenExcluder::class]->shouldReceive('getPathsToExclude')
             ->once()->with([], ['token' => $inclusionListToken])->andReturn(
-                $this->prepareMockedEnhancedFileInfo([$inclusionlistedDirectory])
+                $this->prepareMockedEnhancedFileInfo([$inclusionlistedDirectory]),
             );
 
         $this->subject->filter($mockedFileList, [], $exclusionlistToken, $inclusionListToken);
 
         MatcherAssert::assertThat(
             $mockedFileList->getFiles(),
-            Matchers::arrayContainingInAnyOrder(...$expectedResult)
+            Matchers::arrayContainingInAnyOrder(...$expectedResult),
         );
     }
 
@@ -84,7 +84,7 @@ class GitChangeSetFilterTest extends TestCase
         $expectedResult = $this->prepareMockedEnhancedFileInfo(['wahwah', 'bla']);
         $mockedInput = array_merge(
             $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory . '/sowas']),
-            $expectedResult
+            $expectedResult,
         );
         $forgedBlacklistedDirectories = $this->prepareMockedEnhancedFileInfo([$this->exclusionlistedDirectory]);
         $forgedGitChangeSet = new GitChangeSet($mockedInput, 'asdaqwe212123');
@@ -108,7 +108,7 @@ class GitChangeSetFilterTest extends TestCase
             [
                 'asd' . $mockedFilter[0],
                 'qweqweq' . $mockedFilter[1],
-            ]
+            ],
         );
         $mockedFileList = new GitChangeSet(
             array_merge(
@@ -116,11 +116,11 @@ class GitChangeSetFilterTest extends TestCase
                     [
                         $this->exclusionlistedDirectory . '/mussWeg',
                         $mockedFilter[1] . 'FalsePositive',
-                    ]
+                    ],
                 ),
-                $expectedResult
+                $expectedResult,
             ),
-            'asdaqwe212123'
+            'asdaqwe212123',
         );
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')
@@ -129,7 +129,7 @@ class GitChangeSetFilterTest extends TestCase
         $this->subject->filter($mockedFileList, $mockedFilter);
         MatcherAssert::assertThat(
             $mockedFileList->getFiles(),
-            Matchers::arrayContainingInAnyOrder(...$expectedResult)
+            Matchers::arrayContainingInAnyOrder(...$expectedResult),
         );
     }
 
@@ -160,7 +160,7 @@ class GitChangeSetFilterTest extends TestCase
      *
      * @param array<string> $filePaths
      *
-     * @return array<MockInterface|\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo>
+     * @return array<MockInterface|EnhancedFileInfo>
      */
     private function prepareMockedEnhancedFileInfo(array $filePaths): array
     {
@@ -172,9 +172,9 @@ class GitChangeSetFilterTest extends TestCase
             $mockedEnhancedFileInfo->shouldReceive('getRealPath')
                 ->withNoArgs()->andReturn($this->mockedRootDirectory . '/' . $filePath);
             $mockedEnhancedFileInfo->shouldReceive('endsWith')
-                ->andReturnUsing(fn($suffix) => str_ends_with($this->mockedRootDirectory . '/' . $filePath, $suffix));
+                ->andReturnUsing(fn ($suffix) => str_ends_with($this->mockedRootDirectory . '/' . $filePath, $suffix));
             $mockedEnhancedFileInfo->shouldReceive('startsWith')
-                ->andReturnUsing(fn($prefix) => str_starts_with($this->mockedRootDirectory . '/' . $filePath, $prefix));
+                ->andReturnUsing(fn ($prefix) => str_starts_with($this->mockedRootDirectory . '/' . $filePath, $prefix));
             $enhancedFileMocks[] = $mockedEnhancedFileInfo;
         }
         return $enhancedFileMocks;

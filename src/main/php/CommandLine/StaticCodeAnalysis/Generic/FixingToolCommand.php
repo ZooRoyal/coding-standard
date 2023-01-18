@@ -10,7 +10,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 abstract class FixingToolCommand extends TargetableToolsCommand
 {
     public function __construct(
-        private FixableInputFacet $fixableFacet,
+        private readonly FixableInputFacet $fixableFacet,
         TargetableInputFacet $targetableFacet,
         ?string $name = null,
     ) {

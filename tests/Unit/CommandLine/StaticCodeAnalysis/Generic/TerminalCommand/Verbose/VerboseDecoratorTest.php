@@ -56,7 +56,7 @@ class VerboseDecoratorTest extends TestCase
         int $quietRuns,
     ): void {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->mockedInput->shouldReceive('getOption')->atLeast()->once()->with('verbose')->andReturn($isVerbose);

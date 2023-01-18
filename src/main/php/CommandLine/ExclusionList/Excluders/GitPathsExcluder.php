@@ -8,7 +8,6 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory;
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
-use function Safe\substr;
 
 class GitPathsExcluder implements ExcluderInterface
 {
@@ -49,7 +48,7 @@ class GitPathsExcluder implements ExcluderInterface
 
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
         $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters
+            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters,
         );
 
         if (empty($finderResult)) {
@@ -60,8 +59,8 @@ class GitPathsExcluder implements ExcluderInterface
         $rawExcludePathsByFileByGit = explode(PHP_EOL, trim($finderResult));
 
         $relativeDirectories = array_map(
-            static fn($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
-            $rawExcludePathsByFileByGit
+            static fn ($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
+            $rawExcludePathsByFileByGit,
         );
 
         $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);

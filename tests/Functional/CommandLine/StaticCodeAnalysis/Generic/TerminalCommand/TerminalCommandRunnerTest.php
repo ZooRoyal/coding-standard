@@ -45,7 +45,7 @@ class TerminalCommandRunnerTest extends TestCase
         $this->mockedOutput->shouldReceive('write')->once()->with(
             Matchers::containsString('"feed"'),
             false,
-            Output::OUTPUT_RAW
+            Output::OUTPUT_RAW,
         );
 
         $this->mockedOutput->shouldReceive('write')->atLeast()->once()

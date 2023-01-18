@@ -18,7 +18,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
-use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     TargetTerminalCommand,
@@ -34,7 +33,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     /**
      * TerminalCommand constructor.
      */
-    public function __construct(private Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
     }
 
@@ -85,8 +84,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = ' --ignore-pattern=';
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
-                $this->excludesFiles
+                static fn (EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
+                $this->excludesFiles,
             );
             $excludingString .= implode(' --ignore-pattern=', $excludesFilePaths);
         }
@@ -101,8 +100,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn (EnhancedFileInfo $item): string => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } elseif ($this->fileExtensions !== []) {

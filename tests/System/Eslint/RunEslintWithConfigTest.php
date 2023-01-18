@@ -19,6 +19,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
     private const EXPECTED_JS_PROBLEMS = '184 errors';
     private const ESLINT_COMMAND = 'npx --no-install eslint --config ';
     private const ESLINT_CONFIG_FILE = 'vendor/zooroyal/coding-standard/config/eslint/.eslintrc.js ';
+
     private Filesystem $filesystem;
 
     protected function setUp(): void
@@ -45,7 +46,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
 
         $command = $this->getEslintCommand(
             'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.js',
-            $testInstancePath
+            $testInstancePath,
         );
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
@@ -74,7 +75,7 @@ class RunEslintWithConfigTest extends AsyncTestCase
 
         $command = $this->getEslintCommand(
             'vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/BadCode.ts',
-            $testInstancePath
+            $testInstancePath,
         );
         $commandArray = explode(' ', $command);
         $process = new Process($commandArray, $testInstancePath);
@@ -121,13 +122,13 @@ class RunEslintWithConfigTest extends AsyncTestCase
         if ($environment->isInstalled() === false) {
             $environment->addComposerJson(
                 dirname(__DIR__)
-                    . '/fixtures/eslint/composer-template.json'
+                    . '/fixtures/eslint/composer-template.json',
             )->installComposerInstance();
         }
         $envInstallationPath = $environment->getInstallationPath();
         $this->filesystem->copy(
             $envInstallationPath . '/vendor/zooroyal/coding-standard/tests/System/fixtures/eslint/tsconfig.json',
-            $envInstallationPath . '/tsconfig.json'
+            $envInstallationPath . '/tsconfig.json',
         );
         return $envInstallationPath;
     }

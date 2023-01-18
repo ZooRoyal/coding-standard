@@ -27,12 +27,13 @@ class PHPStanConfigGenerator
             '/custom/project',
             '/vendor',
         ];
+
     private string $phpStanConfigPath;
 
     public function __construct(
-        private NeonAdapter $neonAdapter,
-        private Filesystem $filesystem,
-        private Environment $environment,
+        private readonly NeonAdapter $neonAdapter,
+        private readonly Filesystem $filesystem,
+        private readonly Environment $environment,
     ) {
         $this->phpStanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
     }
@@ -54,7 +55,7 @@ class PHPStanConfigGenerator
     {
         $output->writeln(
             '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
         $configValues = $this->generateConfig($output, $exclusionList);
@@ -100,7 +101,7 @@ class PHPStanConfigGenerator
             } catch (RuntimeException) {
                 $output->writeln(
                     '<info>' . $tool . ' not found. Skip loading ' . implode(', ', $functionsFiles) . '.</info>',
-                    OutputInterface::VERBOSITY_VERBOSE
+                    OutputInterface::VERBOSITY_VERBOSE,
                 );
             }
         }
@@ -119,7 +120,7 @@ class PHPStanConfigGenerator
     private function addExcludedFiles(array $configValues, array $exclusionList): array
     {
         $directoryExcludedFilesStrings = array_map(
-            static fn(EnhancedFileInfo $file): string => $file->getRealPath(),
+            static fn (EnhancedFileInfo $file): string => $file->getRealPath(),
             $exclusionList,
         );
         $configValues['parameters']['excludePaths'] = $directoryExcludedFilesStrings;

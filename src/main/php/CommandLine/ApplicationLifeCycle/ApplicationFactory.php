@@ -38,12 +38,13 @@ class ApplicationFactory
             JSESLintCommand::class,
             JSStyleLintCommand::class,
         ];
+
     /**
      * ApplicationFactory constructor.
      */
     public function __construct(
-        private Container $container,
-        private EventDispatcherInterface $eventDispatcher,
+        private readonly Container $container,
+        private readonly EventDispatcherInterface $eventDispatcher,
     ) {
     }
 

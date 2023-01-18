@@ -35,7 +35,7 @@ trait TargetTrait
         if ($this->targetedFiles === []) {
             throw new NoUsefulCommandFoundException(
                 'It makes no sense to sniff no files.',
-                1620831304
+                1620831304,
             );
         }
     }

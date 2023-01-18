@@ -18,7 +18,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
-use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
     FixTerminalCommand,
@@ -32,7 +31,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     private const TEMPLATE
         = 'npx --no-install eslint %6$s%7$s--no-error-on-unmatched-pattern --config %1$s %3$s'
         . '--ignore-path %2$s %4$s%5$s';
-    public function __construct(private Environment $environment)
+
+    public function __construct(private readonly Environment $environment)
     {
     }
 
@@ -95,8 +95,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = '--ignore-pattern ';
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->excludesFiles
+                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                $this->excludesFiles,
             );
             $excludingString .= implode(' --ignore-pattern ', $excludesFilePaths);
             $excludingString .= ' ';
@@ -111,8 +111,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } else {

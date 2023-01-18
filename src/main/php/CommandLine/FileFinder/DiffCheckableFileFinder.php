@@ -13,9 +13,9 @@ class DiffCheckableFileFinder implements FileFinderInterface
      * CheckableFileFinder constructor.
      */
     public function __construct(
-        private ProcessRunner $processRunner,
-        private GitChangeSetFilter $fileFilter,
-        private GitChangeSetFactory $gitChangeSetFactory,
+        private readonly ProcessRunner $processRunner,
+        private readonly GitChangeSetFilter $fileFilter,
+        private readonly GitChangeSetFactory $gitChangeSetFactory,
     ) {
     }
 
@@ -35,7 +35,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
         if ($targetBranch === null || $targetBranch === '') {
             throw new InvalidArgumentException(
                 'Finding a diff makes no sense without a target branch.',
-                1553857649
+                1553857649,
             );
         }
 
@@ -57,7 +57,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
             'diff',
             '--name-only',
             '--diff-filter=d',
-            $mergeBase
+            $mergeBase,
         );
 
         $rawDiffUnfiltered = explode("\n", trim($rawDiffUnfilteredString));

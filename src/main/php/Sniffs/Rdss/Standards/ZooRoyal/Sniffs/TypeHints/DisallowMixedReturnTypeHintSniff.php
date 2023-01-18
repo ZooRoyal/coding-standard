@@ -70,7 +70,7 @@ class DisallowMixedReturnTypeHintSniff
                 FunctionHelper::getFullyQualifiedName($phpcsFile, $functionPointer),
             ),
             $functionPointer,
-            self::ERROR_CODE
+            self::ERROR_CODE,
         );
     }
 
@@ -82,7 +82,7 @@ class DisallowMixedReturnTypeHintSniff
         $phpcsFile->addError(
             'closure() uses "mixed" return type hint which is disallowed',
             $closurePointer,
-            self::ERROR_CODE
+            self::ERROR_CODE,
         );
     }
 }

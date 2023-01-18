@@ -32,7 +32,7 @@ class ExclusionListSanitizerTest extends TestCase
             $this->prepareMockedEnhancedFileInfo([
                 __DIR__ . '/../../../fixtures/asd',
                 __DIR__ . '/../../../fixtures/asd/asdqwe',
-            ])
+            ]),
         );
 
         $result = $this->subject->sanitizeExclusionList($input);

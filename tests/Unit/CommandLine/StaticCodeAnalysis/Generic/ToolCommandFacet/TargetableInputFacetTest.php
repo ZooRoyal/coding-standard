@@ -21,7 +21,7 @@ class TargetableInputFacetTest extends TestCase
         self::assertSame(
             'Finds Files which have changed since the current branch parted from the target branch '
             . 'only. The Value has to be a commit-ish.',
-            $targetOption->getDescription()
+            $targetOption->getDescription(),
         );
         self::assertTrue($targetOption->isValueRequired());
 
@@ -31,7 +31,7 @@ class TargetableInputFacetTest extends TestCase
         self::assertSame(
             'Finds Files which have changed since the current branch parted from the parent branch '
             . 'only. It tries to find the parent branch by automagic.',
-            $autoTargetOption->getDescription()
+            $autoTargetOption->getDescription(),
         );
         self::assertFalse($autoTargetOption->acceptValue());
     }

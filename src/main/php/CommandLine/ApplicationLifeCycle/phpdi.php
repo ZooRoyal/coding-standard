@@ -31,6 +31,6 @@ return [
             $result[] = $container->get(GitPathsExcluder::class);
             $result[] = $container->get(TokenExcluder::class);
             return $result;
-        }
+        },
     ),
 ];

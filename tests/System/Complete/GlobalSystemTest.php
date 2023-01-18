@@ -12,7 +12,6 @@ use Generator;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Process\Process as SymfonyProcess;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
 use function Amp\call;
 use function Amp\Promise\all;
@@ -129,7 +128,7 @@ class GlobalSystemTest extends AsyncTestCase
         if ($environment->isInstalled() === false) {
             $environment->addComposerJson(
                 dirname(__DIR__)
-                . '/fixtures/complete/composer-template.json'
+                . '/fixtures/complete/composer-template.json',
             )->installComposerInstance();
         }
         return $environment->getInstallationPath();
@@ -147,7 +146,7 @@ class GlobalSystemTest extends AsyncTestCase
             'sca:mess',
             'sca:para',
             'sca:copy',
-                        'sca:stan',
+            'sca:stan',
             'sca:style',
             'sca:eslint',
         ];
@@ -157,14 +156,14 @@ class GlobalSystemTest extends AsyncTestCase
         foreach ($tools as $tool) {
             $processes[$tool] = new Process(
                 [$environmentDirectory . '/vendor/bin/coding-standard', $tool],
-                $environmentDirectory
+                $environmentDirectory,
             );
         }
 
-        $startPromises = array_map(static fn(Process $process) => $process->start(), $processes);
+        $startPromises = array_map(static fn (Process $process) => $process->start(), $processes);
         yield all($startPromises);
 
-        $endPromises = array_map(static fn(Process $process) => $process->join(), $processes);
+        $endPromises = array_map(static fn (Process $process) => $process->join(), $processes);
         $exitCodes = yield timeout(all($endPromises), 30000);
 
         foreach ($exitCodes as $tool => $exitCode) {
@@ -175,15 +174,6 @@ class GlobalSystemTest extends AsyncTestCase
                 yield from $this->echoStream('Stdout', $process);
             }
         }
-
-//        $symfonyProcess = new SymfonyProcess([
-//            $environmentDirectory . '/vendor/bin/coding-standard',
-//            $tool,
-//        ], $environmentDirectory);
-//
-//        $symfonyProcess->setTimeout(30);
-//        $symfonyProcess->mustRun();
-//        $exitCode['sca:phpstan'] = $symfonyProcess->getExitCode();
 
         return yield new Success($exitCodes);
     }

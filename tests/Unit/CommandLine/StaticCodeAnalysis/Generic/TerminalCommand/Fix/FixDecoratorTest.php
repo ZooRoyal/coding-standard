@@ -52,7 +52,7 @@ class FixDecoratorTest extends TestCase
     public function decorateAddsFixingFlagToTerminalCommandIfTrue(): void
     {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(true);
 
@@ -70,7 +70,7 @@ class FixDecoratorTest extends TestCase
     public function decorateNotChangeFixingFlagIfFalse(): void
     {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
         $this->mockedInput->shouldReceive('getOption')->once()->with(FixableInputFacet::OPTION_FIX)->andReturn(false);
 

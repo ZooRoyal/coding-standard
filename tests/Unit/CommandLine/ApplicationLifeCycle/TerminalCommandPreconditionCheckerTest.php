@@ -52,8 +52,8 @@ class TerminalCommandPreconditionCheckerTest extends TestCase
                 [
                     'checkForTerminalCommands',
                     100,
-                ]
-            )
+                ],
+            ),
         );
     }
 

@@ -86,7 +86,7 @@ class FindFilesToCheckCommandTest extends TestCase
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value): bool {
+                    static function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();
@@ -95,13 +95,13 @@ class FindFilesToCheckCommandTest extends TestCase
                             H::allOf(
                                 H::arrayWithSize(6),
                                 H::everyItem(
-                                    H::anInstanceOf(InputOption::class)
-                                )
-                            )
+                                    H::anInstanceOf(InputOption::class),
+                                ),
+                            ),
                         );
                         return true;
-                    }
-                )
+                    },
+                ),
             )->andReturnSelf();
 
         $localSubject->configure();
@@ -130,7 +130,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $allowedFileEndings,
             null,
             false,
-            true
+            true,
         );
 
         $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
@@ -169,7 +169,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInclusionlistToken,
             $mockedAllowedFileEndings,
             $mockedTargetBranch,
-            $mockedExclusiveFlag
+            $mockedExclusiveFlag,
         );
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
@@ -205,7 +205,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInclusionlistToken,
             $allowedFileEndings,
             $mockedTargetBranch,
-            $mockedExclusiveFlag
+            $mockedExclusiveFlag,
         );
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()

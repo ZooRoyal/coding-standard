@@ -21,6 +21,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_PACKAGE_DIRECTORY = '/packageDirectory';
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
+
     private TerminalCommand $subject;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Environment\Environment */
     private Environment $mockedEnvironment;
@@ -67,9 +68,9 @@ class TerminalCommandTest extends TestCase
             ->with(
                 Matchers::startsWith(
                     '<info>Compiled TerminalCommand to following string</info>'
-                    . PHP_EOL . $data->getExpectedCommand()
+                    . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
@@ -114,7 +115,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/d', self::FORGED_ABSOLUTE_ROOT),
                         ],
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -123,7 +124,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
                             . ' --allow-empty-input --config='
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc',
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -136,7 +137,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/a', self::FORGED_ABSOLUTE_ROOT),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/b', self::FORGED_ABSOLUTE_ROOT),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'extensions' => [
@@ -145,7 +146,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'npx --no-install stylelint **/*.{asdqwe,qweasd} --allow-empty-input --config='
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc',
                         'extensions' => ['asdqwe', 'qweasd'],
-                    ]
+                    ],
                 ),
             ],
             'fixing' => [
@@ -155,7 +156,7 @@ class TerminalCommandTest extends TestCase
                             . ' --fix --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'fixingMode' => true,
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -167,7 +168,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/c', self::FORGED_ABSOLUTE_ROOT),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/d', self::FORGED_ABSOLUTE_ROOT),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'verbosity quiet' => [
@@ -177,7 +178,7 @@ class TerminalCommandTest extends TestCase
                             . ' --quiet --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
-                    ]
+                    ],
                 ),
             ],
             'verbosity verbose' => [
@@ -187,7 +188,7 @@ class TerminalCommandTest extends TestCase
                             . ' --formatter verbose --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity very verbose' => [
@@ -198,7 +199,7 @@ class TerminalCommandTest extends TestCase
                             . '/config/stylelint/.stylelintrc',
                         'fixingMode' => false,
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity debug verbose' => [
@@ -208,7 +209,7 @@ class TerminalCommandTest extends TestCase
                             . ' --formatter verbose --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_DEBUG,
-                    ]
+                    ],
                 ),
             ],
 

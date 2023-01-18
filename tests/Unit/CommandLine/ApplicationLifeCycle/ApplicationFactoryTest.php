@@ -71,7 +71,7 @@ class ApplicationFactoryTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            ApplicationFactory::class
+            ApplicationFactory::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];

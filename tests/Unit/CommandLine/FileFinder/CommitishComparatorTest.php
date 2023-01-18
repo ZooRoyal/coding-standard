@@ -22,7 +22,7 @@ class CommitishComparatorTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            CommitishComparator::class
+            CommitishComparator::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];

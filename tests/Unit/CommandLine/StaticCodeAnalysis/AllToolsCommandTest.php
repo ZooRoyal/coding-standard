@@ -109,7 +109,7 @@ class AllToolsCommandTest extends TestCase
             ->andReturnUsing(
                 static function ($parameter) use ($optionsAndValues) {
                     return $optionsAndValues[$parameter];
-                }
+                },
             );
 
         $this->mockedOutput->shouldReceive('writeln')->once()
@@ -117,7 +117,7 @@ class AllToolsCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->times(count(array_filter($exitCodes)))
             ->with(
                 H::allOf(H::startsWith('<error>Exitcode:'), H::endsWith('</error>')),
-                OutputInterface::OUTPUT_NORMAL
+                OutputInterface::OUTPUT_NORMAL,
             );
 
         $result = $this->subject->execute($this->mockedInput, $this->mockedOutput);
@@ -158,7 +158,7 @@ class AllToolsCommandTest extends TestCase
         self::assertSame(
             'This tool executes all static code analysis tools on files of this project. '
             . 'It ignores files which are in directories with a .dont<toolshortcut> file. Subdirectories are ignored too.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 
@@ -179,7 +179,7 @@ class AllToolsCommandTest extends TestCase
 
         MatcherAssert::assertThat(
             $inputOptions,
-            H::allOf(H::hasItem($this->forgedFixableOption), H::hasItem($this->forgedFixableOption))
+            H::allOf(H::hasItem($this->forgedFixableOption), H::hasItem($this->forgedFixableOption)),
         );
     }
 
@@ -196,7 +196,7 @@ class AllToolsCommandTest extends TestCase
                     MatcherAssert::assertThat($sut->getParameterOption(['--' . $option]), H::equalTo($value));
                 }
                 return true;
-            }
+            },
         );
     }
 }

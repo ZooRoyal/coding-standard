@@ -53,7 +53,7 @@ class ExtensionDecoratorTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 '<info>Command will only check files with following extensions</info>',
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(implode(' ', $forgedAllowedFileEndings) . PHP_EOL, OutputInterface::VERBOSITY_VERBOSE);

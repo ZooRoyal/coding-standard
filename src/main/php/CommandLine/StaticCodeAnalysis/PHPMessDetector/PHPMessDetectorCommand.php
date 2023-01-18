@@ -26,7 +26,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
         $this->setDescription('Run PHP-MD on PHP files.');
         $this->setHelp(
             'This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files which are in '
-            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.'
+            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.',
         );
         $this->terminalCommandName = 'PHP Mess Detector';
     }

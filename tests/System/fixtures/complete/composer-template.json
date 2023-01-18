@@ -1,11 +1,8 @@
 {
   "version": "0.0.1",
   "require-dev":  {
-    "php": "^8.0",
-    "zooroyal/coding-standard": "@dev",
-    "php-http/mock-client": "*",
-    "slim/psr7": "*",
-    "php-http/curl-client": "*"
+    "php": "^8.1",
+    "zooroyal/coding-standard": "@dev"
   },
   "repositories":{
     "localRepo":{

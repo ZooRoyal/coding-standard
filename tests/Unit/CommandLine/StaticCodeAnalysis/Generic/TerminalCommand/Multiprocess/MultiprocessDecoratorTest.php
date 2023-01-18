@@ -59,7 +59,7 @@ class MultiprocessDecoratorTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 '<info>Command can use ' . $forgedCpuCores . ' processes</info>' . PHP_EOL,
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->mockedTerminalCommand->shouldReceive('setMaximalConcurrentProcesses')->once()->with($forgedCpuCores);

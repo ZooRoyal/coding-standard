@@ -22,7 +22,7 @@ class ParentBranchGuesserTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            ParentBranchGuesser::class
+            ParentBranchGuesser::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];

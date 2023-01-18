@@ -25,7 +25,7 @@ class PHPStanCommand extends TargetableToolsCommand
         $this->setDescription('Run PHPStan on PHP files.');
         $this->setHelp(
             'This tool executes PHPStan on a certain set of PHP files of this project.'
-            . 'It ignores files which are in directories with a .dontStanPHP file. Subdirectories are ignored too.'
+            . 'It ignores files which are in directories with a .dontStanPHP file. Subdirectories are ignored too.',
         );
         $this->terminalCommandName = 'PHPStan';
     }

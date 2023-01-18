@@ -13,7 +13,7 @@ class MultiprocessDecorator extends TerminalCommandDecorator
 {
     private ?int $possibleProcesses = null;
 
-    public function __construct(private ProcessRunner $processRunner)
+    public function __construct(private readonly ProcessRunner $processRunner)
     {
     }
 
@@ -29,7 +29,7 @@ class MultiprocessDecorator extends TerminalCommandDecorator
 
         $event->getOutput()->writeln(
             '<info>Command can use ' . $this->possibleProcesses . ' processes</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERY_VERBOSE
+            OutputInterface::VERBOSITY_VERY_VERBOSE,
         );
 
         $terminalCommand->setMaximalConcurrentProcesses($this->possibleProcesses);

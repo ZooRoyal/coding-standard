@@ -16,6 +16,7 @@ class ContainerFactory
      */
     private function __construct()
     {
+        //This method is empty as the declarations only purpose is to set the constructor private.
     }
 
     /**

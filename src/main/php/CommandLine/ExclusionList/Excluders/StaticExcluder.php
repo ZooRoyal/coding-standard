@@ -21,6 +21,7 @@ class StaticExcluder implements ExcluderInterface
             '.pnpm',
             '.pnpm-store',
         ];
+
     /** @var array<EnhancedFileInfo> */
     private array $cache = [];
 

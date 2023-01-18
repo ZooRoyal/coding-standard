@@ -21,6 +21,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
     private const FORGED_ABSOLUTE_VENDOR = '/vendor';
+
     private TerminalCommand $subject;
     /** @var MockInterface|Environment */
     private Environment $mockedEnvironment;
@@ -60,9 +61,9 @@ class TerminalCommandTest extends TestCase
             ->with(
                 Matchers::startsWith(
                     '<info>Compiled TerminalCommand to following string</info>'
-                    . PHP_EOL . $data->getExpectedCommand()
+                    . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
@@ -110,7 +111,7 @@ class TerminalCommandTest extends TestCase
                         'excluded' => [$mockedEnhancedFileInfoExcluded1, $mockedEnhancedFileInfoExcluded1],
                         'extensions' => ['qweasd', 'argh'],
                         'targets' => [$mockedEnhancedFileInfoTarget1, $mockedEnhancedFileInfoTarget1],
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -119,7 +120,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR . '/bin/phpmd '
                             . self::FORGED_ABSOLUTE_ROOT . ' text ' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpmd/phpmd.xml',
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -129,7 +130,7 @@ class TerminalCommandTest extends TestCase
                             . self::FORGED_ABSOLUTE_ROOT . ' text ' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpmd/phpmd.xml --exclude a,b',
                         'excluded' => [$mockedEnhancedFileInfoExcluded2, $mockedEnhancedFileInfoExcluded2],
-                    ]
+                    ],
                 ),
             ],
             'extensions' => [
@@ -139,7 +140,7 @@ class TerminalCommandTest extends TestCase
                             . self::FORGED_ABSOLUTE_ROOT . ' text ' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpmd/phpmd.xml --suffixes asdqwe,qweasd',
                         'extensions' => ['asdqwe', 'qweasd'],
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -148,7 +149,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR . '/bin/phpmd c,d text ' .
                             self::FORGED_PACKAGE_DIRECTORY . '/config/phpmd/phpmd.xml',
                         'targets' => [$mockedEnhancedFileInfoTarget2, $mockedEnhancedFileInfoTarget2],
-                    ]
+                    ],
                 ),
             ],
         ];

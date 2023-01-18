@@ -44,7 +44,7 @@ class ExclusionDecoratorTest extends TestCase
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            ExclusionDecorator::class
+            ExclusionDecorator::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
@@ -66,7 +66,7 @@ class ExclusionDecoratorTest extends TestCase
         $mockedExclusionList = [$mockedEnhancedFileInfo];
 
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
         $this->mockedEvent->shouldReceive('getExclusionListToken')->atLeast()->once()->andReturn($forgedToken);
 

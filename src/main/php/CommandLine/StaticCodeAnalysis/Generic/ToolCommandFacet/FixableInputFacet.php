@@ -22,9 +22,9 @@ class FixableInputFacet implements ToolCommandInputFacet
                     self::OPTION_FIX,
                     'f',
                     InputOption::VALUE_NONE,
-                    'Runs tool to try to fix violations automagically.'
+                    'Runs tool to try to fix violations automagically.',
                 ),
-            ]
+            ],
         );
     }
 }

@@ -34,7 +34,7 @@ class PHPCopyPasteDetectorCommandTest extends AbstractToolCommandTest
         $this->subject = new PHPCopyPasteDetectorCommand();
         $this->subject->injectDependenciesToolCommand(
             $this->mockedTerminalCommandRunner,
-            $this->mockedEventDispatcher
+            $this->mockedEventDispatcher,
         );
         $this->subject->injectDependenciesCommand($this->mockedContainer);
     }
@@ -49,7 +49,7 @@ class PHPCopyPasteDetectorCommandTest extends AbstractToolCommandTest
         self::assertSame(
             'This tool executes PHP-CPD on a certain set of PHP files of this project. It ignores '
             . 'files which are in directories with a .dontCopyPasteDetectPHP file. Subdirectories are ignored too.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 }

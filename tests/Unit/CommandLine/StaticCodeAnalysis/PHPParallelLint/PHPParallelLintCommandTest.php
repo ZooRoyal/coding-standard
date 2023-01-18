@@ -34,7 +34,7 @@ class PHPParallelLintCommandTest extends TargetableToolsCommandTest
         $this->subject = new PHPParallelLintCommand($this->mockedTargetableInputFacet);
         $this->subject->injectDependenciesToolCommand(
             $this->mockedTerminalCommandRunner,
-            $this->mockedEventDispatcher
+            $this->mockedEventDispatcher,
         );
         $this->subject->injectDependenciesCommand($this->mockedContainer);
     }
@@ -49,7 +49,7 @@ class PHPParallelLintCommandTest extends TargetableToolsCommandTest
         self::assertSame(
             'This tool executes Parallel-Lint on a certain set of PHP files of this project. It '
             . 'ignores files which are in directories with a .dontLintPHP file. Subdirectories are ignored too.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 }

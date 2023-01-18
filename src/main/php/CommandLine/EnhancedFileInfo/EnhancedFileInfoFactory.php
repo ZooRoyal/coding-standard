@@ -65,7 +65,7 @@ class EnhancedFileInfoFactory
                     return null;
                 }
             },
-            $pathNames
+            $pathNames,
         );
         $enhancedFileInfos = array_filter($enhancedFileInfoInstancesOrNull);
         return array_unique($enhancedFileInfos);

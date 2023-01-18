@@ -15,8 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 class AbstractTerminalCommandTest extends TestCase
 {
     private MockInterface|AbstractTerminalCommand $subject;
-    /** @var MockInterface|OutputInterface */
-    private OutputInterface $mockedOutput;
+    private MockInterface|OutputInterface $mockedOutput;
 
     protected function setUp(): void
     {
@@ -41,7 +40,7 @@ class AbstractTerminalCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . PHP_EOL,
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->__toString();
@@ -57,7 +56,7 @@ class AbstractTerminalCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . PHP_EOL,
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->toArray();
@@ -78,7 +77,7 @@ class AbstractTerminalCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->never()
             ->with(
                 '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . PHP_EOL,
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->toArray();

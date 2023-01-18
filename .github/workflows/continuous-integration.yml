@@ -47,7 +47,7 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@e04e1d97f0c0481c6e1ba40f8a538454fe5d7709
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           tools:  cs2pr, composer
         env:
           fail-fast: true
@@ -69,7 +69,7 @@ jobs:
           set +e
           src/bin/coding-standard sca:all
           CS_EXIT=$?
-          trap "cs2pr /tmp/checkstyle" EXIT
+          trap "cs2pr ./tmp/checkstyle" EXIT
           exit $CS_EXIT
 
   tests:
@@ -119,7 +119,7 @@ jobs:
       - name: Setup PHP and Composer
         uses: shivammathur/setup-php@e04e1d97f0c0481c6e1ba40f8a538454fe5d7709
         with:
-          php-version: '8.0'
+          php-version: '8.1'
           tools:  composer:${{ matrix.composer_version }}
           extensions: xdebug
         env:

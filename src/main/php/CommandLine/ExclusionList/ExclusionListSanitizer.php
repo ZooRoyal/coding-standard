@@ -39,7 +39,7 @@ class ExclusionListSanitizer
                     }
                     return !($value->isSubdirectoryOf($item) || $value->getPathname() === $item->getPathname());
                 },
-                ARRAY_FILTER_USE_BOTH
+                ARRAY_FILTER_USE_BOTH,
             );
         }
         $filteredArray = array_values($filteredArray);

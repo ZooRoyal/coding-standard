@@ -69,20 +69,20 @@ class DiffCheckableFileFinderTest extends TestCase
                             [
                                 HasProperty::hasProperty(
                                     'getRealPath',
-                                    $forgedRootDirectory . '/' . $this->forgedFileSet[0]
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[0],
                                 ),
                                 HasProperty::hasProperty(
                                     'getRealPath',
-                                    $forgedRootDirectory . '/' . $this->forgedFileSet[1]
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[1],
                                 ),
                                 HasProperty::hasProperty(
                                     'getRealPath',
-                                    $forgedRootDirectory . '/' . $this->forgedFileSet[2]
+                                    $forgedRootDirectory . '/' . $this->forgedFileSet[2],
                                 ),
-                            ]
-                        )
-                    )
-                )
+                            ],
+                        ),
+                    ),
+                ),
         );
     }
 
