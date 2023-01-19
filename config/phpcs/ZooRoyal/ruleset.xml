@@ -11,8 +11,11 @@
     <rule ref="PSR2">
         <exclude name="PSR2.Classes.ClassDeclaration"/>
     </rule>
+    <rule ref="PSR12"/>
 
-    <config name="testVersion" value="8.2-"/>
+
+    <config name="testVersion" value="7.4-"/>
+    <rule ref="PHPCompatibility"/>
 
     <!-- Custom Rule-->
     <rule ref="../../../src/main/php/Sniffs/PHPCodeSniffer/Standards/ZooRoyal"/>
@@ -116,7 +119,7 @@
     <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
-    <rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>
+    <!--<rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>-->
     <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
         <properties>
             <property name="groups" type="array">
@@ -175,13 +178,20 @@
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
-    <rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>
-    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration"/>
+    <!--<rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>-->
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
+        <properties>
+            <property name="spacesCountAfterKeyword" value="0"/>
+            <property name="spacesCountBeforeArrow" value="1"/>
+            <property name="spacesCountAfterArrow" value="1"/>
+            <property name="allowMultiLine" type="bool" value="false"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
     <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
-    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>
-    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>
-    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>-->
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>-->
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>-->
     <rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
@@ -213,9 +223,33 @@
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
     <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+        <properties>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+        <properties>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+        <properties>
+            <property name="enableStaticTypeHint" type="bool" value="false"/>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableNeverTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
     <!--
         https://packagist.org/packages/bmitch/codor are planed for PHP > 7.0
