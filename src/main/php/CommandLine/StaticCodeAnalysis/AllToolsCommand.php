@@ -52,7 +52,7 @@ class AllToolsCommand extends Command
 
         $inputOptions = array_filter(
             $unfilteredInputOptions,
-            static fn ($value, $key) => !array_key_exists($key, $defaultOptionValues) || $defaultOptionValues[$key] !== $value,
+            static fn($value, $key) => !array_key_exists($key, $defaultOptionValues) || $defaultOptionValues[$key] !== $value,
             ARRAY_FILTER_USE_BOTH,
         );
 

@@ -20,7 +20,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     FileExtensionTerminalCommand,
     TargetTerminalCommand
 {
-    use ExclusionTrait, FileExtensionTrait, TargetTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use TargetTrait;
 
     private const TEMPLATE = 'php %1$s --fuzzy %3$s%2$s%4$s';
     private const STATIC_EXCLUDES
@@ -69,7 +71,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
 
         if ($this->excludesFiles !== []) {
             $excludesFilePaths = array_map(
-                static fn (EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
                 $this->excludesFiles,
             );
         }
@@ -109,7 +111,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         return implode(
             ' ',
             array_map(
-                static fn (string $item): string => '--exclude ' . $item,
+                static fn(string $item): string => '--exclude ' . $item,
                 $finderResultLines,
             ),
         ) . ' ';
@@ -128,7 +130,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         $filteredTargetedFiles = $this->getFilteredTargetFiles();
 
         $targetedFilePaths = array_map(
-            static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+            static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
             $filteredTargetedFiles,
         );
         $targetingString = implode(' ', $targetedFilePaths);
@@ -153,7 +155,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
         foreach ($this->targetedFiles as $targetedFile) {
             /** @var EnhancedFileInfo $targetedFile */
 
-            if ($this->isInstaller($targetedFile)
+            if (
+                $this->isInstaller($targetedFile)
                 || $this->isDynamicallyExcluded($targetedFile)
                 || $this->isStaticallyExcluded($targetedFile)
             ) {
@@ -168,7 +171,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     private function isInstaller(EnhancedFileInfo $targetedFile): bool
     {
         $isInstaller = false;
-        if ($targetedFile->getFilename() === 'Installer.php'
+        if (
+            $targetedFile->getFilename() === 'Installer.php'
             && str_contains($targetedFile->getPath(), '/custom/plugins/')
         ) {
             $isInstaller = true;
@@ -191,9 +195,11 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         $isStaticallyExcluded = false;
         foreach (self::STATIC_EXCLUDES as $staticExclude) {
-            if ($targetedFile->startsWith(
-                $this->environment->getRootDirectory()->getRealPath() . '/' . $staticExclude,
-            )) {
+            if (
+                $targetedFile->startsWith(
+                    $this->environment->getRootDirectory()->getRealPath() . '/' . $staticExclude,
+                )
+            ) {
                 $isStaticallyExcluded = true;
             }
         }

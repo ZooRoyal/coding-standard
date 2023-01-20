@@ -172,9 +172,9 @@ class GitChangeSetFilterTest extends TestCase
             $mockedEnhancedFileInfo->shouldReceive('getRealPath')
                 ->withNoArgs()->andReturn($this->mockedRootDirectory . '/' . $filePath);
             $mockedEnhancedFileInfo->shouldReceive('endsWith')
-                ->andReturnUsing(fn ($suffix) => str_ends_with($this->mockedRootDirectory . '/' . $filePath, $suffix));
+                ->andReturnUsing(fn($suffix) => str_ends_with($this->mockedRootDirectory . '/' . $filePath, $suffix));
             $mockedEnhancedFileInfo->shouldReceive('startsWith')
-                ->andReturnUsing(fn ($prefix) => str_starts_with($this->mockedRootDirectory . '/' . $filePath, $prefix));
+                ->andReturnUsing(fn($prefix) => str_starts_with($this->mockedRootDirectory . '/' . $filePath, $prefix));
             $enhancedFileMocks[] = $mockedEnhancedFileInfo;
         }
         return $enhancedFileMocks;

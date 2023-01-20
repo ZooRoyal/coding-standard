@@ -59,7 +59,7 @@ class GitPathsExcluder implements ExcluderInterface
         $rawExcludePathsByFileByGit = explode(PHP_EOL, trim($finderResult));
 
         $relativeDirectories = array_map(
-            static fn ($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
+            static fn($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
             $rawExcludePathsByFileByGit,
         );
 

@@ -22,7 +22,10 @@ class TerminalCommand extends AbstractTerminalCommand implements
     FileExtensionTerminalCommand,
     MultiprocessTerminalCommand
 {
-    use TargetTrait, ExclusionTrait, FileExtensionTrait, MultiprocessTrait;
+    use TargetTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
 
@@ -63,7 +66,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = ' ';
             $excludesFilePaths = array_map(
-                static fn (EnhancedFileInfo $item) => '--exclude ' . $item->getRelativePathname() . '/',
+                static fn(EnhancedFileInfo $item) => '--exclude ' . $item->getRelativePathname() . '/',
                 $this->excludesFiles,
             );
             $excludingString .= implode(' ', $excludesFilePaths);
@@ -78,7 +81,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles,
             );
             $targetingString = ' ' . implode(' ', $targetedFilePaths);
@@ -93,7 +96,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         $extensionList = implode(',', $this->fileExtensions);
 
         if ($extensionList !== '') {
-            $extensionList = ' -e '.$extensionList;
+            $extensionList = ' -e ' . $extensionList;
         }
 
         return $extensionList;

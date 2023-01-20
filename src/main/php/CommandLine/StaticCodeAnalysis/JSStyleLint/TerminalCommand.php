@@ -26,7 +26,11 @@ class TerminalCommand extends AbstractTerminalCommand implements
     FileExtensionTerminalCommand,
     VerboseTerminalCommand
 {
-    use TargetTrait, FixTrait, ExclusionTrait, FileExtensionTrait, VerboseTrait;
+    use TargetTrait;
+    use FixTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use VerboseTrait;
 
     private const TEMPLATE = 'npx --no-install stylelint %3$s %4$s%5$s--allow-empty-input --config=%1$s%2$s';
 
@@ -84,7 +88,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = ' --ignore-pattern=';
             $excludesFilePaths = array_map(
-                static fn (EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
                 $this->excludesFiles,
             );
             $excludingString .= implode(' --ignore-pattern=', $excludesFilePaths);
@@ -100,7 +104,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn (EnhancedFileInfo $item): string => $item->getRelativePathname(),
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname(),
                 $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);

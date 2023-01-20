@@ -44,7 +44,7 @@ class DisallowMixedReturnTypeHintSniffTest extends TestCase
      */
     public function itShouldReportNoErrors(): void
     {
-        $this->commandPrefix[] = self::FIXTURE_DIRECTORY. 'FixtureNoMixedReturnTypeHints.php';
+        $this->commandPrefix[] = self::FIXTURE_DIRECTORY . 'FixtureNoMixedReturnTypeHints.php';
         $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->mustRun();
         $subject->wait();
@@ -57,7 +57,7 @@ class DisallowMixedReturnTypeHintSniffTest extends TestCase
      */
     public function itShouldReportErrorsForExistingMixedTypes(): void
     {
-        $this->commandPrefix[] = self::FIXTURE_DIRECTORY. 'FixtureWithMixedReturnTypeHints.php';
+        $this->commandPrefix[] = self::FIXTURE_DIRECTORY . 'FixtureWithMixedReturnTypeHints.php';
         $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->run();
         $subject->wait();

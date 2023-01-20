@@ -106,7 +106,7 @@ class FindFilesToCheckCommand extends Command
 
         if ($exclusionListInput === true) {
             $exclusionList = $this->exclusionListFactory->build($exclusionListTokenInput);
-            $result = array_map(static fn (EnhancedFileInfo $file) => $file->getRelativePathname() . '/', $exclusionList);
+            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname() . '/', $exclusionList);
         } else {
             $foundFiles = $this->adaptableFileFinder->findFiles(
                 $allowedFileEndings,
@@ -114,7 +114,7 @@ class FindFilesToCheckCommand extends Command
                 $inclusionListTokenInput,
                 $targetBranch,
             )->getFiles();
-            $result = array_map(static fn (EnhancedFileInfo $file): string => $file->getRelativePathname(), $foundFiles);
+            $result = array_map(static fn(EnhancedFileInfo $file): string => $file->getRelativePathname(), $foundFiles);
         }
 
         $output->writeln(implode(PHP_EOL, $result));

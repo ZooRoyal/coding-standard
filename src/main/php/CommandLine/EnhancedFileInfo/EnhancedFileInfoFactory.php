@@ -7,6 +7,7 @@ namespace Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo;
 use InvalidArgumentException;
 use Webmozart\PathUtil\Path;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
+
 use function Safe\fileinode;
 
 class EnhancedFileInfoFactory

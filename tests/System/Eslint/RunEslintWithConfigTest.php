@@ -11,6 +11,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
+
 use function Amp\ByteStream\buffer;
 
 class RunEslintWithConfigTest extends AsyncTestCase

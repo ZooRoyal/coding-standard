@@ -136,5 +136,4 @@ class CommitishComparatorTest extends TestCase
         $result = $this->subject->isLocalBranchEqualTo($mockedBranchName);
         self::assertFalse($result);
     }
-
 }

@@ -144,7 +144,7 @@ class TokenExcluderTest extends TestCase
             $this->forgedRootDirectory . DIRECTORY_SEPARATOR . 'qweqwe',
         ];
         $expectedResult = array_map(
-            fn ($paths) => new EnhancedFileInfo(
+            fn($paths) => new EnhancedFileInfo(
                 $paths,
                 $this->forgedRootDirectory,
             ),

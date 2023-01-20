@@ -34,7 +34,8 @@ class AdaptableFileFinder implements FileFinderInterface
         string $inclusionListToken = '',
         ?string $targetBranch = null,
     ): GitChangeSet {
-        if ($targetBranch !== null
+        if (
+            $targetBranch !== null
             && !$this->gitInputValidator->isCommitishValid($targetBranch)
         ) {
             throw new InvalidArgumentException('Target ' . $targetBranch . ' is no valid commit-ish.', 1553766210);

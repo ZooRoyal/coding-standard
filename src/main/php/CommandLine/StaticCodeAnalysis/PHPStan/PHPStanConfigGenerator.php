@@ -120,7 +120,7 @@ class PHPStanConfigGenerator
     private function addExcludedFiles(array $configValues, array $exclusionList): array
     {
         $directoryExcludedFilesStrings = array_map(
-            static fn (EnhancedFileInfo $file): string => $file->getRealPath(),
+            static fn(EnhancedFileInfo $file): string => $file->getRealPath(),
             $exclusionList,
         );
         $configValues['parameters']['excludePaths'] = $directoryExcludedFilesStrings;

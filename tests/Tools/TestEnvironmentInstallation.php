@@ -8,6 +8,7 @@ use BadMethodCallException;
 use RuntimeException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Process\Process;
+
 use function Safe\file_get_contents;
 use function Safe\file_put_contents;
 use function Safe\json_decode;

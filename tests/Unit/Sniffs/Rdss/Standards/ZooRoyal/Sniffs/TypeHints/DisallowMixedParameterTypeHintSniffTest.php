@@ -14,6 +14,7 @@ use SlevomatCodingStandard\Helpers\FunctionHelper;
 use SlevomatCodingStandard\Helpers\SuppressHelper;
 use SlevomatCodingStandard\Helpers\TypeHint;
 use Zooroyal\CodingStandard\Sniffs\Rdss\Standards\ZooRoyal\Sniffs\TypeHints\DisallowMixedParameterTypeHintSniff;
+
 use const T_CLOSURE;
 use const T_FUNCTION;
 

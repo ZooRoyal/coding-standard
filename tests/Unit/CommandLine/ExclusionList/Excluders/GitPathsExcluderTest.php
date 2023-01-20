@@ -47,7 +47,7 @@ class GitPathsExcluderTest extends TestCase
         $forgedExcludedDirectories = ['asdasd', 'qweqwe'];
         $forgedCacheKey = 'asdasdqweqwe12123';
         $expectedResult = array_map(
-            fn ($paths) => new EnhancedFileInfo(
+            fn($paths) => new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $paths,
                 $this->forgedRootDirectory,
             ),

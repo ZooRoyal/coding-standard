@@ -44,7 +44,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
      */
     public function itShouldReportNoErrors(): void
     {
-        $this->commandPrefix[] = self::FIXTURE_DIRECTORY. 'FixtureNoMixedParameterTypeHints.php';
+        $this->commandPrefix[] = self::FIXTURE_DIRECTORY . 'FixtureNoMixedParameterTypeHints.php';
         $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->mustRun();
         $subject->wait();
@@ -57,7 +57,7 @@ class DisallowMixedParameterTypeHintSniffTest extends TestCase
      */
     public function itShouldReportErrorsForExistingMixedTypes(): void
     {
-        $this->commandPrefix[] = self::FIXTURE_DIRECTORY. 'FixtureWithMixedParameterTypeHints.php';
+        $this->commandPrefix[] = self::FIXTURE_DIRECTORY . 'FixtureWithMixedParameterTypeHints.php';
         $subject = new Process($this->commandPrefix, self::$vendorDir . '/../');
         $subject->run();
         $subject->wait();

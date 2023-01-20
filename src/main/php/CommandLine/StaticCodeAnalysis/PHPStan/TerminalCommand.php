@@ -20,7 +20,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     TargetTerminalCommand,
     VerboseTerminalCommand
 {
-    use ExclusionTrait, TargetTrait, VerboseTrait;
+    use ExclusionTrait;
+    use TargetTrait;
+    use VerboseTrait;
 
     private const TEMPLATE = 'php %1$s analyse %4$s--no-progress --error-format=github -c %2$s %3$s';
 
@@ -80,7 +82,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn (EnhancedFileInfo $item) => $item->getRelativePathname(),
+                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
                 $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);

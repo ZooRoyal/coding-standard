@@ -13,6 +13,7 @@ use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
 use Symfony\Component\Filesystem\Filesystem;
 use Zooroyal\CodingStandard\Tests\Tools\TestEnvironmentInstallation;
+
 use function Amp\call;
 use function Amp\Promise\all;
 use function Amp\Promise\timeout;
@@ -160,10 +161,10 @@ class GlobalSystemTest extends AsyncTestCase
             );
         }
 
-        $startPromises = array_map(static fn (Process $process) => $process->start(), $processes);
+        $startPromises = array_map(static fn(Process $process) => $process->start(), $processes);
         yield all($startPromises);
 
-        $endPromises = array_map(static fn (Process $process) => $process->join(), $processes);
+        $endPromises = array_map(static fn(Process $process) => $process->join(), $processes);
         $exitCodes = yield timeout(all($endPromises), 30000);
 
         foreach ($exitCodes as $tool => $exitCode) {
