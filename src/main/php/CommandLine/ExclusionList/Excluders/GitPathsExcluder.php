@@ -18,10 +18,10 @@ class GitPathsExcluder implements ExcluderInterface
      * GitPathsExcluder constructor.
      */
     public function __construct(
-        private Environment $environment,
-        private ProcessRunner $processRunner,
-        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
-        private CacheKeyGenerator $cacheKeyGenerator,
+        private readonly Environment $environment,
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly CacheKeyGenerator $cacheKeyGenerator,
     ) {
     }
 

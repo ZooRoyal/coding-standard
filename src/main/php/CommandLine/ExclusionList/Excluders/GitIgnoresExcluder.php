@@ -19,8 +19,8 @@ class GitIgnoresExcluder implements ExcluderInterface
      * GitIgnoresExcluder constructor.
      */
     public function __construct(
-        private ProcessRunner $processRunner,
-        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
     }
 

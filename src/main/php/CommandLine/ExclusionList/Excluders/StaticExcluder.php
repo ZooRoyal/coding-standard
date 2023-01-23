@@ -29,7 +29,7 @@ class StaticExcluder implements ExcluderInterface
      * StaticExcluder constructor.
      */
     public function __construct(
-        private EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
     }
 
