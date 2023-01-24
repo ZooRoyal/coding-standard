@@ -16,30 +16,26 @@ class PHPStanConfigGenerator
 {
     private const TOOL_FUNCTIONS_FILE_MAPPING
         = [
-            'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
-            'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
-            'mockery/mockery' => '/library/helpers.php',
-            'deployer/deployer' => '/src/functions.php',
+            'hamcrest/hamcrest-php' => ['/hamcrest/Hamcrest.php'],
+            'sebastianknott/hamcrest-object-accessor' => ['/src/functions.php'],
+            'mockery/mockery' => ['/library/helpers.php'],
+            'deployer/deployer' => ['/src/functions.php'],
         ];
     private const STATIC_DIRECTORIES_TO_SCAN
         = [
             '/Plugins',
             '/custom/plugins',
             '/custom/project',
+            '/vendor',
         ];
-    private NeonAdapter $neonAdapter;
-    private Filesystem $filesystem;
+
     private string $phpStanConfigPath;
-    private Environment $environment;
 
     public function __construct(
-        NeonAdapter $neonAdapter,
-        Filesystem $filesystem,
-        Environment $environment
+        private readonly NeonAdapter $neonAdapter,
+        private readonly Filesystem $filesystem,
+        private readonly Environment $environment,
     ) {
-        $this->neonAdapter = $neonAdapter;
-        $this->filesystem = $filesystem;
-        $this->environment = $environment;
         $this->phpStanConfigPath = $environment->getPackageDirectory()->getRealPath() . '/config/phpstan/phpstan.neon';
     }
 
@@ -60,11 +56,12 @@ class PHPStanConfigGenerator
     {
         $output->writeln(
             '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
         $configValues = $this->generateConfig($output, $exclusionList);
 
+        /** @phpstan-ignore-next-line */
         $onTheFlyConfig = $this->neonAdapter->dump($configValues);
         $this->filesystem->dumpFile($this->phpStanConfigPath, $onTheFlyConfig);
     }
@@ -92,21 +89,24 @@ class PHPStanConfigGenerator
      *
      * @param array<string,array<string>> $configValues
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<string|int,array<string>>>
      */
     private function addFunctionsFiles(array $configValues, OutputInterface $output): array
     {
-        foreach (self::TOOL_FUNCTIONS_FILE_MAPPING as $tool => $functionsFile) {
+        foreach (self::TOOL_FUNCTIONS_FILE_MAPPING as $tool => $functionsFiles) {
             try {
                 $toolPath = ComposerLocator::getPath($tool);
-                $configValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;
-            } catch (RuntimeException $exception) {
+                foreach ($functionsFiles as $functionsFile) {
+                    $configValues['parameters']['bootstrapFiles'][] = $toolPath . $functionsFile;
+                }
+            } catch (RuntimeException) {
                 $output->writeln(
-                    '<info>' . $tool . ' not found. Skip loading ' . $functionsFile . '</info>',
-                    OutputInterface::VERBOSITY_VERBOSE
+                    '<info>' . $tool . ' not found. Skip loading ' . implode(', ', $functionsFiles) . '.</info>',
+                    OutputInterface::VERBOSITY_VERBOSE,
                 );
             }
         }
+
         return $configValues;
     }
 
@@ -116,15 +116,15 @@ class PHPStanConfigGenerator
      * @param array<string,array<string|int,string|array<string>>> $configValues
      * @param array<EnhancedFileInfo>                              $exclusionList
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<array<string|int,string>>>
      */
     private function addExcludedFiles(array $configValues, array $exclusionList): array
     {
         $directoryExcludedFilesStrings = array_map(
-            static fn(EnhancedFileInfo $file) => $file->getRealPath(),
-            $exclusionList
+            static fn(EnhancedFileInfo $file): string => $file->getRealPath(),
+            $exclusionList,
         );
-        $configValues['parameters']['excludes_analyse'] = $directoryExcludedFilesStrings;
+        $configValues['parameters']['excludePaths'] = $directoryExcludedFilesStrings;
         return $configValues;
     }
 
@@ -133,7 +133,7 @@ class PHPStanConfigGenerator
      *
      * @param array<string,array<string|int,string|array<string>>> $configValues
      *
-     * @return array<string,array<string|int,string|array<string>>>
+     * @return array<string,array<string|int,array<string>>>
      */
     private function addStaticDirectoriesToScan(array $configValues): array
     {
@@ -145,6 +145,7 @@ class PHPStanConfigGenerator
 
             $configValues['parameters']['scanDirectories'][] = $absolutePath;
         }
+
         return $configValues;
     }
 }

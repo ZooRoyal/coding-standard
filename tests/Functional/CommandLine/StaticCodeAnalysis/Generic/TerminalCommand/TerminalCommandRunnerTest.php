@@ -43,15 +43,15 @@ class TerminalCommandRunnerTest extends TestCase
     public function runRelaysOutputOfCommand(): void
     {
         $this->mockedOutput->shouldReceive('write')->once()->with(
-            Matchers::containsString('<!DOCTYPE html>'),
+            Matchers::containsString('"feed"'),
             false,
-            Output::OUTPUT_RAW
+            Output::OUTPUT_RAW,
         );
 
         $this->mockedOutput->shouldReceive('write')->atLeast()->once()
             ->with(Mockery::any(), false, Output::OUTPUT_RAW);
 
-        $this->mockedTerminalCommand->shouldReceive('toArray')->andReturn(['curl', 'https://github.com']);
+        $this->mockedTerminalCommand->shouldReceive('toArray')->andReturn(['curl', 'https://lipsum.com/feed/json']);
         $this->subject->run($this->mockedTerminalCommand);
     }
 

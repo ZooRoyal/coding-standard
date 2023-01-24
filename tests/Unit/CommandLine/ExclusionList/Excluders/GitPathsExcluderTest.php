@@ -49,9 +49,9 @@ class GitPathsExcluderTest extends TestCase
         $expectedResult = array_map(
             fn($paths) => new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $paths,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
-            $forgedExcludedDirectories
+            $forgedExcludedDirectories,
         );
 
         $expectedCommand = 'find ' . $this->forgedRootDirectory . ' -mindepth 2 -name .git';
@@ -91,7 +91,7 @@ class GitPathsExcluderTest extends TestCase
         $expectedResult = [
             new EnhancedFileInfo(
                 $this->forgedRootDirectory . DIRECTORY_SEPARATOR . $mockedEnhancedFileInfoRemaining,
-                $this->forgedRootDirectory
+                $this->forgedRootDirectory,
             ),
         ];
 

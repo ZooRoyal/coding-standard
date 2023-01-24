@@ -64,7 +64,7 @@ class ContainerFactoryTest extends TestCase
         $expectedContainer = Mockery::mock(Container::class);
         $mockedContainerBuilder = Mockery::mock('overload:' . ContainerBuilder::class);
 
-        $mockedContainerBuilder->shouldReceive('useAnnotations')->once()->with(true);
+        $mockedContainerBuilder->shouldReceive('useAttributes')->once()->with(true);
         $mockedContainerBuilder->shouldReceive('useAutowiring')->once()->with(true);
         $mockedContainerBuilder->shouldReceive('addDefinitions')->once()
             ->with(Matchers::endsWith('/phpdi.php'));

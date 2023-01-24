@@ -23,7 +23,7 @@ class NpmCommandFinderTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            NpmCommandFinder::class
+            NpmCommandFinder::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
@@ -68,7 +68,7 @@ class NpmCommandFinderTest extends TestCase
         $mockedProcess->shouldReceive('getExitCode')->once()->withNoArgs()->andReturn(127);
 
         $this->expectException(
-            NpmCommandNotFoundException::class
+            NpmCommandNotFoundException::class,
         );
         $this->expectExceptionCode(1595949828);
         $this->expectErrorMessageMatches('/^Bnlablalbal could not be found in path or by npm.*/');

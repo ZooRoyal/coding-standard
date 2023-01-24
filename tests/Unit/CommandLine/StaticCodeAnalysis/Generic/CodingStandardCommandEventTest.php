@@ -17,17 +17,13 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 class CodingStandardCommandEventTest extends TestCase
 {
     private CodingStandardCommandEvent $subject;
-    /** @var MockInterface|Command */
-    private $mockedCommand;
-    /** @var MockInterface|InputInterface */
-    private $mockedInputInterface;
-    /** @var MockInterface|OutputInterface */
-    private $mockedOutputInterface;
+    private MockInterface|Command $mockedCommand;
+    private MockInterface|InputInterface $mockedInputInterface;
+    private MockInterface|OutputInterface $mockedOutputInterface;
     private string $forgedExclusionListToken;
     /** @var array<string> */
     private array $forgedallowedFileEndings;
-    /** @var MockInterface|TerminalCommand */
-    private $mockedterminalCommand;
+    private MockInterface|TerminalCommand $mockedterminalCommand;
 
     protected function setUp(): void
     {
@@ -43,7 +39,7 @@ class CodingStandardCommandEventTest extends TestCase
             $this->mockedOutputInterface,
             $this->mockedterminalCommand,
             $this->forgedExclusionListToken,
-            $this->forgedallowedFileEndings
+            $this->forgedallowedFileEndings,
         );
     }
 

@@ -16,17 +16,13 @@ use function Safe\realpath;
  */
 class Environment
 {
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
     /** @var string */
     private const GIT = 'git';
 
     public function __construct(
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**

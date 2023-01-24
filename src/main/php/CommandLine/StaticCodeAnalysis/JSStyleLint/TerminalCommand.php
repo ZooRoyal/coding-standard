@@ -35,14 +35,12 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use VerboseTrait;
 
     private const TEMPLATE = 'npx --no-install stylelint %3$s %4$s%5$s--allow-empty-input --config=%1$s%2$s';
-    private Environment $environment;
 
     /**
      * TerminalCommand constructor.
      */
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**
@@ -79,6 +77,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         } elseif ($this->verbosityLevel < OutputInterface::VERBOSITY_NORMAL) {
             $verbosityString = '--quiet ';
         }
+
         return $verbosityString;
     }
 
@@ -91,11 +90,12 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->excludesFiles !== []) {
             $excludingString = ' --ignore-pattern=';
             $excludesFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname() . '/',
-                $this->excludesFiles
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname() . '/',
+                $this->excludesFiles,
             );
             $excludingString .= implode(' --ignore-pattern=', $excludesFilePaths);
         }
+
         return $excludingString;
     }
 
@@ -106,8 +106,8 @@ class TerminalCommand extends AbstractTerminalCommand implements
     {
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
-                static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                static fn(EnhancedFileInfo $item): string => $item->getRelativePathname(),
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } elseif ($this->fileExtensions !== []) {
@@ -115,6 +115,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         } else {
             $targetingString = '.';
         }
+
         return $targetingString;
     }
 

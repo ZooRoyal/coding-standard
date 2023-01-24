@@ -26,11 +26,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use FileExtensionTrait;
 
     private const TEMPLATE = 'php %1$s %2$s text %3$s%5$s%4$s';
-    private Environment $environment;
 
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**
@@ -69,7 +67,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $excludingString = ' --exclude ';
             $excludesFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRealPath(),
-                $this->excludesFiles
+                $this->excludesFiles,
             );
             $excludingString .= implode(',', $excludesFilePaths);
         }
@@ -84,7 +82,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRealPath(),
-                $this->targetedFiles
+                $this->targetedFiles,
             );
             $targetingString = implode(',', $targetedFilePaths);
         } else {

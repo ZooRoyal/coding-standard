@@ -9,21 +9,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class DiffCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $fileFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * CheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $fileFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private readonly ProcessRunner $processRunner,
+        private readonly GitChangeSetFilter $fileFilter,
+        private readonly GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->fileFilter = $fileFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
@@ -37,12 +30,12 @@ class DiffCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if ($targetBranch === null || $targetBranch === '') {
             throw new InvalidArgumentException(
                 'Finding a diff makes no sense without a target branch.',
-                1553857649
+                1553857649,
             );
         }
 
@@ -64,7 +57,7 @@ class DiffCheckableFileFinder implements FileFinderInterface
             'diff',
             '--name-only',
             '--diff-filter=d',
-            $mergeBase
+            $mergeBase,
         );
 
         $rawDiffUnfiltered = explode("\n", trim($rawDiffUnfilteredString));

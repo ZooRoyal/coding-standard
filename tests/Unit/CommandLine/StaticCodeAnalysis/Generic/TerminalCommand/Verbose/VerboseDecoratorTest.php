@@ -53,10 +53,10 @@ class VerboseDecoratorTest extends TestCase
         bool $isVerbose,
         bool $isQuiet,
         int $verboseRuns,
-        int $quietRuns
+        int $quietRuns,
     ): void {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->mockedInput->shouldReceive('getOption')->atLeast()->once()->with('verbose')->andReturn($isVerbose);

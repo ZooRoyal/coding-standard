@@ -13,25 +13,16 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class CodingStandardCommandEvent extends ConsoleEvent implements DecorateEvent
 {
-    private string $exclusionListToken;
-    /** @var array<string> */
-    private array $allowedFileEndings;
-    private TerminalCommand $terminalCommand;
-
     /** @param array<string> $allowedFileEndings */
     public function __construct(
         ?Command $command,
         InputInterface $input,
         OutputInterface $output,
-        TerminalCommand $terminalCommand,
-        string $exclusionListToken,
-        array $allowedFileEndings
+        private readonly TerminalCommand $terminalCommand,
+        private readonly string $exclusionListToken,
+        private readonly array $allowedFileEndings,
     ) {
         parent::__construct($command, $input, $output);
-
-        $this->terminalCommand = $terminalCommand;
-        $this->exclusionListToken = $exclusionListToken;
-        $this->allowedFileEndings = $allowedFileEndings;
     }
 
     /** @return array<string> */

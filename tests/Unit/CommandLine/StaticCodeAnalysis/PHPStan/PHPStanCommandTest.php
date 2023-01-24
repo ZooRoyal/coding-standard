@@ -34,7 +34,7 @@ class PHPStanCommandTest extends TargetableToolsCommandTest
         $this->subject = new PHPStanCommand($this->mockedTargetableInputFacet);
         $this->subject->injectDependenciesToolCommand(
             $this->mockedTerminalCommandRunner,
-            $this->mockedEventDispatcher
+            $this->mockedEventDispatcher,
         );
         $this->subject->injectDependenciesCommand($this->mockedContainer);
     }
@@ -49,7 +49,7 @@ class PHPStanCommandTest extends TargetableToolsCommandTest
         self::assertSame(
             'This tool executes PHPStan on a certain set of PHP files of this project.'
             . 'It ignores files which are in directories with a .dontStanPHP file. Subdirectories are ignored too.',
-            $this->subject->getHelp()
+            $this->subject->getHelp(),
         );
     }
 }

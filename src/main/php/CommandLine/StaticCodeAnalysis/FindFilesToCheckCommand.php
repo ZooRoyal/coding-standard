@@ -16,21 +16,11 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class FindFilesToCheckCommand extends Command
 {
-    private ExclusionListFactory $exclusionListFactory;
-    private AdaptableFileFinder $adaptableFileFinder;
-    private ParentBranchGuesser $parentBranchGuesser;
-
-    /**
-     * FindFilesToCheckCommand constructor.
-     */
     public function __construct(
-        ExclusionListFactory $exclusionListFactory,
-        AdaptableFileFinder $adaptableFileFinder,
-        ParentBranchGuesser $parentBranchGuesser
+        private readonly ExclusionListFactory $exclusionListFactory,
+        private readonly AdaptableFileFinder $adaptableFileFinder,
+        private readonly ParentBranchGuesser $parentBranchGuesser,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
-        $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->parentBranchGuesser = $parentBranchGuesser;
         parent::__construct();
     }
 
@@ -60,28 +50,28 @@ class FindFilesToCheckCommand extends Command
                     InputOption::VALUE_REQUIRED,
                     'Finds files which have changed since the current branch parted from the target branch '
                     . 'only. The Value has to be a commit-ish.',
-                    null
+                    null,
                 ),
                 new InputOption(
                     'auto-target',
                     'a',
                     InputOption::VALUE_NONE,
                     'Finds Files which have changed since the current branch parted from the parent branch '
-                    . 'only. It tries to find the parent branch by automagic.'
+                    . 'only. It tries to find the parent branch by automagic.',
                 ),
                 new InputOption(
                     'exclusionlist-token',
                     'b',
                     InputOption::VALUE_REQUIRED,
                     'Name of the file which triggers the exclusion of the path',
-                    ''
+                    '',
                 ),
                 new InputOption(
                     'inclusionlist-token',
                     'w',
                     InputOption::VALUE_REQUIRED,
                     'Name of the file which triggers the inclusion of the path',
-                    ''
+                    '',
                 ),
                 new InputOption(
                     'allowed-file-endings',
@@ -89,15 +79,15 @@ class FindFilesToCheckCommand extends Command
                     InputOption::VALUE_REQUIRED | InputOption::VALUE_IS_ARRAY,
                     'Only list files with appropriate file endings. For example .php for PHP-Files. '
                     . 'You may give multiple',
-                    []
+                    [],
                 ),
                 new InputOption(
                     'exclusionList',
                     'e',
                     InputOption::VALUE_NONE,
-                    'Gathers list of directories which should be excluded'
+                    'Gathers list of directories which should be excluded',
                 ),
-            ]
+            ],
         );
     }
 
@@ -122,9 +112,9 @@ class FindFilesToCheckCommand extends Command
                 $allowedFileEndings,
                 $exclusionListTokenInput,
                 $inclusionListTokenInput,
-                $targetBranch
+                $targetBranch,
             )->getFiles();
-            $result = array_map(static fn(EnhancedFileInfo $file) => $file->getRelativePathname(), $foundFiles);
+            $result = array_map(static fn(EnhancedFileInfo $file): string => $file->getRelativePathname(), $foundFiles);
         }
 
         $output->writeln(implode(PHP_EOL, $result));

@@ -30,7 +30,7 @@ class ShopwareCompatibilityTest extends TestCase
         $environment = TestEnvironmentInstallation::getInstance();
         $environment->addComposerJson(
             dirname(__DIR__)
-            . '/fixtures/complete/shopware-composer-template.json'
+            . '/fixtures/complete/shopware-composer-template.json',
         )->installComposerInstance();
 
         $environmentDirectory = $environment->getInstallationPath();
@@ -41,7 +41,7 @@ class ShopwareCompatibilityTest extends TestCase
 
         $process = new Process(
             [$environmentDirectory . '/vendor/bin/coding-standard', 'sca:all'],
-            $environmentDirectory
+            $environmentDirectory,
         );
 
         $exitCode = $process->setIdleTimeout(120)->setTimeout(240)->mustRun()->getExitCode();

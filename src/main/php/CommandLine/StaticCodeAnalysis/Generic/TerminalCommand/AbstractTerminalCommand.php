@@ -4,30 +4,19 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Exception;
+use Stringable;
 use Symfony\Component\Console\Exception\RuntimeException;
 use Symfony\Component\Console\Output\OutputInterface;
 
-abstract class AbstractTerminalCommand implements TerminalCommand
+abstract class AbstractTerminalCommand implements TerminalCommand, Stringable
 {
     /** @var array<string> */
     protected array $commandParts = [];
     protected string $command = '';
     protected OutputInterface $output;
     private bool $compiled = false;
-
-    /**
-     * Returns the command as sting. This string is supposed to work as input to a
-     * *NIX terminal.
-     */
-    public function __toString(): string
-    {
-        if (!$this->compiled) {
-            $this->runCompilation();
-        }
-        return $this->command;
-    }
 
     /**
      * Returns the command as array. Every part of the command is in its own array item.
@@ -49,9 +38,8 @@ abstract class AbstractTerminalCommand implements TerminalCommand
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesAbstractTerminalCommand(OutputInterface $output): void
     {
         $this->output = $output;
@@ -70,7 +58,7 @@ abstract class AbstractTerminalCommand implements TerminalCommand
     {
         $this->output->writeln(
             '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . $this->command . PHP_EOL,
-            OutputInterface::VERBOSITY_VERY_VERBOSE
+            OutputInterface::VERBOSITY_VERY_VERBOSE,
         );
     }
 
@@ -85,11 +73,23 @@ abstract class AbstractTerminalCommand implements TerminalCommand
         $this->compiled = true;
         try {
             $this->compile();
-        } catch (NoUsefulCommandFoundException $exception) {
-            throw $exception;
+        } catch (NoUsefulCommandFoundException $noUsefulCommandFoundException) {
+            throw $noUsefulCommandFoundException;
         } catch (Exception $exception) {
             throw new RuntimeException('Something went wrong compiling a command', 1616426291, $exception);
         }
         $this->postCompile();
+    }
+
+    /**
+     * Returns the command as sting. This string is supposed to work as input to a
+     * *NIX terminal.
+     */
+    public function __toString(): string
+    {
+        if (!$this->compiled) {
+            $this->runCompilation();
+        }
+        return $this->command;
     }
 }

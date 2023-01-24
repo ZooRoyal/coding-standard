@@ -9,13 +9,11 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 class CommitishComparator
 {
     private ?string $localHeadHash = null;
-    private GitInputValidator $gitInputValidator;
-    private ProcessRunner $processRunner;
 
-    public function __construct(GitInputValidator $gitInputValidator, ProcessRunner $processRunner)
-    {
-        $this->gitInputValidator = $gitInputValidator;
-        $this->processRunner = $processRunner;
+    public function __construct(
+        private readonly GitInputValidator $gitInputValidator,
+        private readonly ProcessRunner $processRunner,
+    ) {
     }
 
     /**

@@ -11,24 +11,15 @@ use Symfony\Component\Console\Exception\InvalidArgumentException;
  */
 class AdaptableFileFinder implements FileFinderInterface
 {
-    private GitInputValidator $gitInputValidator;
-    private AllCheckableFileFinder $allCheckableFileFinder;
-    private DiffCheckableFileFinder $diffCheckableFileFinder;
-    private CommitishComparator $commitishComparator;
-
     /**
      * AdaptableFileFinder constructor.
      */
     public function __construct(
-        GitInputValidator $gitInputValidator,
-        AllCheckableFileFinder $allCheckableFileFinder,
-        DiffCheckableFileFinder $diffCheckableFileFinder,
-        CommitishComparator $commitishComparator
+        private readonly GitInputValidator $gitInputValidator,
+        private readonly AllCheckableFileFinder $allCheckableFileFinder,
+        private readonly DiffCheckableFileFinder $diffCheckableFileFinder,
+        private readonly CommitishComparator $commitishComparator,
     ) {
-        $this->gitInputValidator = $gitInputValidator;
-        $this->allCheckableFileFinder = $allCheckableFileFinder;
-        $this->diffCheckableFileFinder = $diffCheckableFileFinder;
-        $this->commitishComparator = $commitishComparator;
     }
 
 
@@ -41,7 +32,7 @@ class AdaptableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         if (
             $targetBranch !== null

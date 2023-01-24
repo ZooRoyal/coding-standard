@@ -11,8 +11,7 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 class GitIgnoresExcluder implements ExcluderInterface
 {
     private const GIT_LS_FILES_COMMAND = 'git ls-files -io --exclude-standard --directory';
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
+
     /** @var array<EnhancedFileInfo> */
     private array $cache = [];
 
@@ -20,11 +19,9 @@ class GitIgnoresExcluder implements ExcluderInterface
      * GitIgnoresExcluder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
     }
 
     /**
@@ -49,7 +46,7 @@ class GitIgnoresExcluder implements ExcluderInterface
         $rawIgnoredFoldersAndFiles = explode("\n", $rawIgnoredFoldersAndFilesString);
         $rawIgnoredFolders = $this->filterForFolders($rawIgnoredFoldersAndFiles);
         $ignoredFolders = $this->enhancedFileInfoFactory->buildFromArrayOfPaths(
-            $rawIgnoredFolders
+            $rawIgnoredFolders,
         );
 
         $this->cache = $ignoredFolders;

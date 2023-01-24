@@ -11,15 +11,11 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory
  */
 class GitChangeSetFactory
 {
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-
-    /**
-     * GitChangeSetFactory constructor.
-     */
-    public function __construct(EnhancedFileInfoFactory $enhancedFileInfoFactory)
-    {
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
+    public function __construct(
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
+    ) {
     }
+
     /**
      * Build provides GitChangeSet instances.
      *

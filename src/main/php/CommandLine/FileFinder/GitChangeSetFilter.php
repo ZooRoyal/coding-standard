@@ -12,18 +12,13 @@ use Zooroyal\CodingStandard\CommandLine\ExclusionList\ExclusionListFactory;
 
 class GitChangeSetFilter
 {
-    private ExclusionListFactory $exclusionListFactory;
-    private TokenExcluder $tokenExcluder;
-
     /**
      * FileFilter constructor.
      */
     public function __construct(
-        ExclusionListFactory $exclusionListFactory,
-        TokenExcluder $tokenExcluder
+        private readonly ExclusionListFactory $exclusionListFactory,
+        private readonly TokenExcluder $tokenExcluder,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
-        $this->tokenExcluder = $tokenExcluder;
     }
 
     /**
@@ -35,7 +30,7 @@ class GitChangeSetFilter
         GitChangeSet $gitChangeSet,
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
-        string $inclusionListToken = ''
+        string $inclusionListToken = '',
     ): void {
         $inclusionlist = [];
         $deDuped = true;
@@ -64,7 +59,7 @@ class GitChangeSetFilter
      */
     private function mergeLists(
         array $exclusionList,
-        array $inclusionlist
+        array $inclusionlist,
     ): SplObjectStorage {
         if (count(array_intersect($exclusionList, $inclusionlist)) !== 0) {
             throw new LogicException('Directories can\'t be black- and inclusionlisted at the same time', 1553780055);
@@ -116,7 +111,7 @@ class GitChangeSetFilter
                         }
                     }
                     return false;
-                }
+                },
             );
         }
     }
@@ -143,7 +138,7 @@ class GitChangeSetFilter
                     }
                 }
                 return $result;
-            }
+            },
         );
         $result = array_values($result);
     }

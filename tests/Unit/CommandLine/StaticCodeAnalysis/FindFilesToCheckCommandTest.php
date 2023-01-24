@@ -31,11 +31,9 @@ class FindFilesToCheckCommandTest extends TestCase
     /** @var array<MockInterface>|array<mixed> */
     private array $subjectParameters;
     private FindFilesToCheckCommand $subject;
-    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo */
-    private $forgedBlacklistDirectory1;
-    /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo */
-    private $forgedBlacklistDirectory2;
-    /** @var array<int,MockInterface|\Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo> */
+    private MockInterface|EnhancedFileInfo $forgedBlacklistDirectory1;
+    private MockInterface|EnhancedFileInfo $forgedBlacklistDirectory2;
+    /** @var array<int,MockInterface|EnhancedFileInfo> */
     private array $expectedArray;
     private string $expectedResult1 = 'phpunit.xml.dist';
     private string $expectedResult2 = 'composer.json';
@@ -80,15 +78,15 @@ class FindFilesToCheckCommandTest extends TestCase
         /** @var MockInterface|FindFilesToCheckCommand $localSubject */
         $localSubject = Mockery::mock(FindFilesToCheckCommand::class, $this->subjectParameters)->makePartial();
 
-        $localSubject->shouldReceive('setName')->once()->with('find-files');
+        $localSubject->shouldReceive('setName')->once()->with('find-files')->andReturnSelf();
         $localSubject->shouldReceive('setDescription')->once()
-            ->with('Finds files for code style checks.');
+            ->with('Finds files for code style checks.')->andReturnSelf();
         $localSubject->shouldReceive('setHelp')->once()
-            ->with('This tool finds files, which should be considered for code style checks.');
+            ->with('This tool finds files, which should be considered for code style checks.')->andReturnSelf();
         $localSubject->shouldReceive('setDefinition')->once()
             ->with(
                 Mockery::on(
-                    function ($value): bool {
+                    static function ($value): bool {
                         MatcherAssert::assertThat($value, H::anInstanceOf(InputDefinition::class));
                         /** @var InputDefinition $value */
                         $options = $value->getOptions();
@@ -97,14 +95,14 @@ class FindFilesToCheckCommandTest extends TestCase
                             H::allOf(
                                 H::arrayWithSize(6),
                                 H::everyItem(
-                                    H::anInstanceOf(InputOption::class)
-                                )
-                            )
+                                    H::anInstanceOf(InputOption::class),
+                                ),
+                            ),
                         );
                         return true;
-                    }
-                )
-            );
+                    },
+                ),
+            )->andReturnSelf();
 
         $localSubject->configure();
     }
@@ -132,7 +130,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $allowedFileEndings,
             null,
             false,
-            true
+            true,
         );
 
         $this->subjectParameters[ParentBranchGuesser::class]->shouldReceive('guessParentBranchAsCommitHash')
@@ -171,7 +169,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInclusionlistToken,
             $mockedAllowedFileEndings,
             $mockedTargetBranch,
-            $mockedExclusiveFlag
+            $mockedExclusiveFlag,
         );
 
         $this->subjectParameters[ExclusionListFactory::class]->shouldReceive('build')->once()
@@ -207,7 +205,7 @@ class FindFilesToCheckCommandTest extends TestCase
             $mockedInclusionlistToken,
             $allowedFileEndings,
             $mockedTargetBranch,
-            $mockedExclusiveFlag
+            $mockedExclusiveFlag,
         );
 
         $this->subjectParameters[AdaptableFileFinder::class]->shouldReceive('findFiles')->once()
@@ -233,7 +231,7 @@ class FindFilesToCheckCommandTest extends TestCase
         array $allowedFileEndings,
         ?string $mockedTargetBranch = null,
         bool $mockedExclusiveFlag = false,
-        bool $autoTargetValue = false
+        bool $autoTargetValue = false,
     ): void {
         $mockedInputInterface->shouldReceive('getOption')->once()
             ->with('exclusionlist-token')->andReturn($mockedBlacklistToken);

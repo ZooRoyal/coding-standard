@@ -21,6 +21,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
     private const FORGED_ABSOLUTE_VENDOR = '/vendor';
+
     private TerminalCommand $subject;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Environment\Environment */
     private Environment $mockedEnvironment;
@@ -62,9 +63,9 @@ class TerminalCommandTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 Matchers::startsWith(
-                    '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . $data->getExpectedCommand()
+                    '<info>Compiled TerminalCommand to following string</info>' . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->mockedProcessRunner->shouldReceive('runAsProcess')
@@ -76,11 +77,11 @@ class TerminalCommandTest extends TestCase
                 '-name',
                 'Installer.php',
                 '-maxdepth',
-                '4'
+                '4',
             )
             ->andReturn(
                 self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php' . PHP_EOL
-                . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php' . PHP_EOL
+                . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php' . PHP_EOL,
             );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
@@ -119,25 +120,25 @@ class TerminalCommandTest extends TestCase
                         'targets' => [
                             new EnhancedFileInfo(
                                 self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php',
-                                self::FORGED_ABSOLUTE_ROOT
+                                self::FORGED_ABSOLUTE_ROOT,
                             ),
                             new EnhancedFileInfo(
                                 self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php',
-                                self::FORGED_ABSOLUTE_ROOT
+                                self::FORGED_ABSOLUTE_ROOT,
                             ),
                             new EnhancedFileInfo(
                                 self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/ZRBannerSlider/ZRBannerSlider.php',
-                                self::FORGED_ABSOLUTE_ROOT
+                                self::FORGED_ABSOLUTE_ROOT,
                             ),
                             new EnhancedFileInfo(
                                 self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/ZRPreventShipping/ZRPreventShipping.php',
-                                self::FORGED_ABSOLUTE_ROOT
+                                self::FORGED_ABSOLUTE_ROOT,
                             ),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/b/c', self::FORGED_ABSOLUTE_ROOT),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/c', self::FORGED_ABSOLUTE_ROOT),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/d', self::FORGED_ABSOLUTE_ROOT),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -148,7 +149,7 @@ class TerminalCommandTest extends TestCase
                             . '--exclude custom/plugins/ZRPreventShipping/ZRPreventShipping.php '
                             . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
                             . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -164,7 +165,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'extensions' => [
@@ -177,7 +178,7 @@ class TerminalCommandTest extends TestCase
                             . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blabla/Installer.php '
                             . '--exclude ' . self::FORGED_ABSOLUTE_ROOT . '/custom/plugins/blubblub/Installer.php .',
                         'extensions' => ['argh', 'wub'],
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -189,7 +190,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
         ];

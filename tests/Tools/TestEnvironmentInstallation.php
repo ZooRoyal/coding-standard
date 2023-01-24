@@ -100,7 +100,7 @@ class TestEnvironmentInstallation
         (new Process(['git', 'init'], $this->installationPath))->mustRun();
         (new Process(
             ['composer', 'install', '--no-interaction', '--no-progress', '--no-suggest'],
-            $this->installationPath
+            $this->installationPath,
         ))
             ->setIdleTimeout(240)->setTimeout(480)->mustRun();
         $this->filesystem->remove($this->installationPath . '/vendor/zooroyal/coding-standard/node_modules');
@@ -113,7 +113,7 @@ class TestEnvironmentInstallation
                 'install',
                 'vendor/zooroyal/coding-standard',
             ],
-            $this->installationPath
+            $this->installationPath,
         ))
             ->setIdleTimeout(60)->setTimeout(120)->mustRun();
         $this->isInstalled = true;

@@ -22,7 +22,7 @@ class GitChangeSetFactoryTest extends TestCase
     {
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            GitChangeSetFactory::class
+            GitChangeSetFactory::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];

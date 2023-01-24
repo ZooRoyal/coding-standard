@@ -10,12 +10,10 @@ class ParentBranchGuesser
 {
     /** @var string */
     private const GIT = 'git';
-    private ProcessRunner $processRunner;
 
     public function __construct(
-        ProcessRunner $processRunner
+        private readonly ProcessRunner $processRunner,
     ) {
-        $this->processRunner = $processRunner;
     }
 
     /**
@@ -48,12 +46,12 @@ class ParentBranchGuesser
             'branch',
             '-a',
             '--contains',
-            $targetCommit
+            $targetCommit,
         );
 
         $numberOfContainingBranches = substr_count(
             $process,
-            PHP_EOL
+            PHP_EOL,
         );
 
         return $numberOfContainingBranches;

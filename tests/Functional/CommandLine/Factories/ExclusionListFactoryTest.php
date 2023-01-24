@@ -48,17 +48,17 @@ class ExclusionListFactoryTest extends TestCase
             H::hasItems(
                 HasProperty::hasProperty(
                     'getRelativePathname',
-                    'tests/Functional/CommandLine/Factories/Fixtures/gitExclude'
+                    'tests/Functional/CommandLine/Factories/Fixtures/gitExclude',
                 ),
                 HasProperty::hasProperty(
                     'getRelativePathname',
-                    'tests/Functional/CommandLine/Factories/Fixtures/StopWordTest'
+                    'tests/Functional/CommandLine/Factories/Fixtures/StopWordTest',
                 ),
                 HasProperty::hasProperty(
                     'getRelativePathname',
-                    'vendor'
-                )
-            )
+                    'vendor',
+                ),
+            ),
         );
     }
 }

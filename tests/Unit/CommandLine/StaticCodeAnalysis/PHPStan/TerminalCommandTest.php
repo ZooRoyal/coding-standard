@@ -24,13 +24,13 @@ class TerminalCommandTest extends TestCase
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
     private const FORGED_ABSOLUTE_VENDOR = '/vendor';
     private const FORGED_ABSOLUTE_CONFIG = '/configpath';
+
     private TerminalCommand $subject;
     /** @var MockInterface|Environment */
     private Environment $mockedEnvironment;
     /** @var MockInterface|OutputInterface */
     private OutputInterface $mockedOutput;
-    /** @var MockInterface|PHPStanConfigGenerator */
-    private $mockedConfigGenereator;
+    private MockInterface|PHPStanConfigGenerator $mockedConfigGenereator;
 
     protected function setUp(): void
     {
@@ -80,9 +80,9 @@ class TerminalCommandTest extends TestCase
             ->with(
                 Matchers::startsWith(
                     '<info>Compiled TerminalCommand to following string</info>'
-                    . PHP_EOL . $data->getExpectedCommand()
+                    . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->mockedConfigGenereator->shouldReceive('writeConfigFile')->once()
@@ -138,7 +138,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -146,7 +146,7 @@ class TerminalCommandTest extends TestCase
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpstan analyse --no-progress --error-format=github -c /configpath .',
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -158,7 +158,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -170,7 +170,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
 
@@ -180,7 +180,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpstan analyse -q --no-progress --error-format=github -c /configpath .',
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
-                    ]
+                    ],
                 ),
             ],
             'verbosity verbose' => [
@@ -189,7 +189,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpstan analyse -v --no-progress --error-format=github -c /configpath .',
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity very verbose' => [
@@ -199,7 +199,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpstan analyse -vv --no-progress --error-format=github -c /configpath .',
                         'fixingMode' => false,
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity debug verbose' => [
@@ -208,7 +208,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpstan analyse -vvv --no-progress --error-format=github -c /configpath .',
                         'verbosityLevel' => OutputInterface::VERBOSITY_DEBUG,
-                    ]
+                    ],
                 ),
             ],
         ];

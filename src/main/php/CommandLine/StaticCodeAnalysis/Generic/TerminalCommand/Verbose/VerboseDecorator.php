@@ -28,7 +28,7 @@ class VerboseDecorator extends TerminalCommandDecorator
             $terminalCommand->addVerbosityLevel(OutputInterface::VERBOSITY_VERBOSE);
             $output->writeln(
                 '<info>Command will be executed verbosely</info>' . PHP_EOL,
-                OutputInterface::VERBOSITY_VERBOSE
+                OutputInterface::VERBOSITY_VERBOSE,
             );
         } elseif ($input->getOption('quiet') === true) {
             $terminalCommand->addVerbosityLevel(OutputInterface::VERBOSITY_QUIET);

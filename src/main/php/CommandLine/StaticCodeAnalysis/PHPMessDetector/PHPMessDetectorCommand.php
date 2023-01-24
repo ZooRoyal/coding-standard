@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\PHPMessDetector;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use DI\Container;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TargetableToolsCommand;
 
@@ -12,6 +12,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
 {
     /** @var string string */
     protected string $exclusionListToken = '.dontMessDetectPHP';
+
     /** @var array<string> */
     protected array $allowedFileEndings = ['php'];
 
@@ -25,7 +26,7 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
         $this->setDescription('Run PHP-MD on PHP files.');
         $this->setHelp(
             'This tool executes PHP-MD on a certain set of PHP files of this project. It ignores files which are in '
-            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.'
+            . 'directories with a .dontMessDetectPHP file. Subdirectories are ignored too.',
         );
         $this->terminalCommandName = 'PHP Mess Detector';
     }
@@ -35,9 +36,8 @@ class PHPMessDetectorCommand extends TargetableToolsCommand
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesCommand(Container $container): void
     {
         $this->terminalCommand = $container->make(TerminalCommand::class);

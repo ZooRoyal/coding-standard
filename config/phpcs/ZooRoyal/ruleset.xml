@@ -5,7 +5,7 @@
     </description>
 
     <arg name="report" value="full"/>
-    <arg name="report-checkstyle" value="/tmp/checkstyle"/>
+    <arg name="report-checkstyle" value="../../../tmp/checkstyle"/>
 
     <!-- Referenced Rulesets -->
     <rule ref="PSR1" />
@@ -15,7 +15,8 @@
     <rule ref="PHPCompatibility"/>
 
     <!-- Custom Rule-->
-    <rule ref="../../../src/main/php/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/PHPCodeSniffer/Standards/ZooRoyal"/>
+    <rule ref="../../../src/main/php/Sniffs/Rdss/Standards/ZooRoyal"/>
 
     <!-- Individual Rules -->
     <rule ref="Squiz.PHP.CommentedOutCode">
@@ -110,8 +111,38 @@
     <rule ref="PEAR.WhiteSpace.ScopeClosingBrace"/>
 
     <rule ref="SlevomatCodingStandard.Arrays.TrailingArrayComma"/>
+    <rule ref="SlevomatCodingStandard.Attributes.DisallowAttributesJoining"/>
+    <rule ref="SlevomatCodingStandard.Attributes.DisallowMultipleAttributesPerLine"/>
+    <rule ref="SlevomatCodingStandard.Classes.BackedEnumTypeSpacing"/>
     <rule ref="SlevomatCodingStandard.Classes.ClassConstantVisibility"/>
-    <rule ref="SlevomatCodingStandard.Classes.UnusedPrivateElements"/>
+    <rule ref="SlevomatCodingStandard.Classes.ClassMemberSpacing"/>
+    <!--<rule ref="SlevomatCodingStandard.Classes.RequireConstructorPropertyPromotion"/>-->
+    <rule ref="SlevomatCodingStandard.Classes.ClassStructure">
+        <properties>
+            <property name="groups" type="array">
+                <element value="uses"/>
+
+                <element value="enum cases"/>
+
+                <element value="public constants"/>
+                <element value="protected constants"/>
+                <element value="private constants"/>
+
+                <element value="static properties"/>
+                <element value="public properties"/>
+                <element value="protected properties"/>
+                <element value="private properties"/>
+
+                <element value="constructor"/>
+                <element value="methods"/>
+                <element value="magic methods"/>
+            </property>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Classes.ModernClassNameReference"/>
+    <rule ref="SlevomatCodingStandard.Classes.PropertyDeclaration"/>
+    <rule ref="SlevomatCodingStandard.Commenting.DeprecatedAnnotationDeclaration"/>
+    <rule ref="SlevomatCodingStandard.Commenting.DisallowCommentAfterCode"/>
     <rule ref="SlevomatCodingStandard.Commenting.EmptyComment"/>
     <rule ref="SlevomatCodingStandard.Commenting.ForbiddenAnnotations">
         <properties>
@@ -131,14 +162,38 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Commenting.UselessFunctionDocComment"/>
+    <rule ref="SlevomatCodingStandard.Complexity.Cognitive">
+        <properties>
+            <property name="maxComplexity" value="10"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.ControlStructures.AssignmentInCondition"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.DisallowContinueWithoutIntegerOperandInSwitch"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.DisallowYodaComparison"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.LanguageConstructWithParentheses"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.NewWithParentheses"/>
     <rule ref="SlevomatCodingStandard.ControlStructures.RequireNullCoalesceEqualOperator"/>
+    <rule ref="SlevomatCodingStandard.ControlStructures.UselessIfConditionWithReturn"/>
     <rule ref="SlevomatCodingStandard.Exceptions.DeadCatch"/>
+    <!--<rule ref="SlevomatCodingStandard.Exceptions.RequireNonCapturingCatch"/>-->
+    <rule ref="SlevomatCodingStandard.Functions.ArrowFunctionDeclaration">
+        <properties>
+            <property name="spacesCountAfterKeyword" value="0"/>
+            <property name="spacesCountBeforeArrow" value="1"/>
+            <property name="spacesCountAfterArrow" value="1"/>
+            <property name="allowMultiLine" type="bool" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
+    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>-->
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>-->
+<!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>-->
+    <rule ref="SlevomatCodingStandard.Functions.StaticClosure"/>
     <rule ref="SlevomatCodingStandard.Functions.StrictCall"/>
     <rule ref="SlevomatCodingStandard.Namespaces.AlphabeticallySortedUses"/>
     <rule ref="SlevomatCodingStandard.Namespaces.DisallowGroupUse"/>
+    <rule ref="SlevomatCodingStandard.Namespaces.MultipleUsesPerLine"/>
     <rule ref="SlevomatCodingStandard.Namespaces.ReferenceUsedNamesOnly">
         <properties>
             <property name="allowPartialUses" type="bool" value="true"/>
@@ -153,8 +208,8 @@
     </rule>
     <rule ref="SlevomatCodingStandard.Namespaces.UseDoesNotStartWithBackslash"/>
     <rule ref="SlevomatCodingStandard.Namespaces.UseFromSameNamespace"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
     <rule ref="SlevomatCodingStandard.Operators.DisallowEqualOperators"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.DisallowArrayTypeHintSyntax"/>
     <rule ref="SlevomatCodingStandard.TypeHints.DeclareStrictTypes">
         <properties>
             <property name="newlinesCountBetweenOpenTagAndDeclare" type="int" value="2"/>
@@ -163,12 +218,36 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.LongTypeHints"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.NullableTypeForNullDefaultValue"/>
     <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHintSpacing"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint"/>
-    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint"/>
+    <rule ref="SlevomatCodingStandard.TypeHints.ParameterTypeHint">
+        <properties>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.PropertyTypeHint">
+        <properties>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHint">
+        <properties>
+            <property name="enableStaticTypeHint" type="bool" value="false"/>
+            <property name="enableMixedTypeHint" type="bool" value="false"/>
+            <property name="enableUnionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableIntersectionTypeHint" type="bool" value="false"/>
+            <property name="enableNeverTypeHint" type="bool" value="false"/>
+            <property name="enableStandaloneNullTrueFalseTypeHints" type="bool" value="false"/>
+        </properties>
+    </rule>
     <rule ref="SlevomatCodingStandard.TypeHints.ReturnTypeHintSpacing"/>
-
     <!--
         https://packagist.org/packages/bmitch/codor are planed for PHP > 7.0
 

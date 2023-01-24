@@ -14,15 +14,10 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\ToolCommandFa
 
 class TargetDecorator extends TerminalCommandDecorator
 {
-    private AdaptableFileFinder $adaptableFileFinder;
-    private ParentBranchGuesser $parentBranchGuesser;
-
     public function __construct(
-        AdaptableFileFinder $adaptableFileFinder,
-        ParentBranchGuesser $parentBranchGuesser
+        private readonly AdaptableFileFinder $adaptableFileFinder,
+        private readonly ParentBranchGuesser $parentBranchGuesser,
     ) {
-        $this->adaptableFileFinder = $adaptableFileFinder;
-        $this->parentBranchGuesser = $parentBranchGuesser;
     }
 
     /**
@@ -59,7 +54,7 @@ class TargetDecorator extends TerminalCommandDecorator
             $allowedFileEndings,
             $exclusionListToken,
             '',
-            $targetBranch
+            $targetBranch,
         );
 
         $targets = $gitChangeSet->getFiles();
@@ -85,12 +80,12 @@ class TargetDecorator extends TerminalCommandDecorator
 
         $output->writeln(
             $message,
-            OutputInterface::VERBOSITY_NORMAL
+            OutputInterface::VERBOSITY_NORMAL,
         );
 
         $output->writeln(
             '<info>Following files will be targeted</info>',
-            OutputInterface::VERBOSITY_VERBOSE
+            OutputInterface::VERBOSITY_VERBOSE,
         );
 
         foreach ($targets as $target) {

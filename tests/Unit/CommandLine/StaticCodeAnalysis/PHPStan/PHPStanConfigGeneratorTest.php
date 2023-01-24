@@ -47,11 +47,11 @@ class PHPStanConfigGeneratorTest extends TestCase
         $this->subject = new PHPStanConfigGenerator(
             $this->mockedNeonAdapter,
             $this->mockedFilesystem,
-            $mockedEnvironment
+            $mockedEnvironment,
         );
     }
 
-    protected function tearDown(): void
+    protected function assertPostConditions(): void
     {
         Mockery::close();
     }
@@ -87,16 +87,15 @@ class PHPStanConfigGeneratorTest extends TestCase
 
         $mockedEnhancedFileInfo->shouldReceive('getRealPath')->atLeast()->once()->andReturn($forgedFilePath);
 
-        $this->mockedOutput->shouldReceive('writeln')->once()->with(
-            '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERBOSE
+        $this->mockedOutput->shouldReceive('writeln')->times(2)->with(
+            H::anyOf(
+                '<info>Writing new PHPStan configuration.</info>' . PHP_EOL,
+                '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php.</info>',
+            ),
+            OutputInterface::VERBOSITY_VERBOSE,
         );
         $this->mockedOutput->shouldReceive('writeln')->once()->with(
-            '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php</info>',
-            OutputInterface::VERBOSITY_VERBOSE
-        );
-        $this->mockedOutput->shouldReceive('writeln')->once()->with(
-            '<info>deployer/deployer not found. Skip loading /src/functions.php</info>',
+            '<info>deployer/deployer not found. Skip loading /src/functions.php.</info>',
             OutputInterface::VERBOSITY_VERBOSE
         );
 
@@ -113,30 +112,30 @@ class PHPStanConfigGeneratorTest extends TestCase
     private function buildConfigMatcher(
         string $forgedHamcrestPath,
         string $forgedMockeryPath,
-        string $forgedFilePath
+        string $forgedFilePath,
     ): Matcher {
         $includesMatcher = H::hasKeyValuePair(
             'includes',
-            H::hasItem($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon' . '.dist')
+            H::hasItem($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon' . '.dist'),
         );
 
         $functionsMatcher = H::hasKeyValuePair(
             'bootstrapFiles',
-            H::hasItems($forgedHamcrestPath . '/hamcrest/Hamcrest.php', $forgedMockeryPath . '/library/helpers.php')
+            H::hasItems($forgedHamcrestPath . '/hamcrest/Hamcrest.php', $forgedMockeryPath . '/library/helpers.php'),
         );
 
-        $excludesMatcher = H::hasKeyValuePair('excludes_analyse', H::hasItem($forgedFilePath));
+        $excludesMatcher = H::hasKeyValuePair('excludePaths', H::hasItem($forgedFilePath));
         $staticDirectoriesMatcher = H::hasKeyValuePair(
             'scanDirectories',
             H::allOf(
                 H::hasItem($this->mockedRootDirectory . '/Plugins'),
                 H::hasItem($this->mockedRootDirectory . '/custom/project'),
-            )
+            ),
         );
 
         $parametersMatcher = H::hasKeyValuePair(
             'parameters',
-            H::allOf($functionsMatcher, $excludesMatcher, $staticDirectoriesMatcher)
+            H::allOf($functionsMatcher, $excludesMatcher, $staticDirectoriesMatcher),
         );
 
         $matcher = H::allOf(
@@ -159,6 +158,8 @@ class PHPStanConfigGeneratorTest extends TestCase
             ->with($this->mockedRootDirectory . '/custom/plugins')->andReturn(false);
         $this->mockedFilesystem->shouldReceive('exists')->once()
             ->with($this->mockedRootDirectory . '/custom/project')->andReturn(true);
+        $this->mockedFilesystem->shouldReceive('exists')->once()
+            ->with($this->mockedRootDirectory . '/vendor')->andReturn(true);
 
         $this->mockedFilesystem->shouldReceive('dumpFile')->once()
             ->with($this->mockedPackageDirectory . '/config/phpstan/phpstan.neon', $forgedConfiguration);
@@ -170,7 +171,7 @@ class PHPStanConfigGeneratorTest extends TestCase
     private function prepareMockedComposerLocator(
         MockInterface $mockedComposerLocator,
         string $forgedHamcrestPath,
-        string $forgedMockeryPath
+        string $forgedMockeryPath,
     ): void {
         $mockedComposerLocator->shouldReceive('getPath')->once()
             ->with('hamcrest/hamcrest-php')->andReturn($forgedHamcrestPath);

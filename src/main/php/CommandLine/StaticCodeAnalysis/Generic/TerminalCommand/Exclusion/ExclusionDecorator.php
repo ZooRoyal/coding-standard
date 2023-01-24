@@ -12,12 +12,9 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class ExclusionDecorator extends TerminalCommandDecorator
 {
-    private ExclusionListFactory $exclusionListFactory;
-
     public function __construct(
-        ExclusionListFactory $exclusionListFactory
+        private readonly ExclusionListFactory $exclusionListFactory,
     ) {
-        $this->exclusionListFactory = $exclusionListFactory;
     }
 
     /**

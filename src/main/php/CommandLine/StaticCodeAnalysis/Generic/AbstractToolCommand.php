@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Exception\RuntimeException;
@@ -20,7 +20,7 @@ abstract class AbstractToolCommand extends Command
 {
     protected string $exclusionListToken;
     /** @var array<string> */
-    protected array $allowedFileEndings;
+    protected array $allowedFileEndings = [];
     protected TerminalCommand $terminalCommand;
     protected string $terminalCommandName;
     private TerminalCommandRunner $terminalCommandRunner;
@@ -41,29 +41,29 @@ abstract class AbstractToolCommand extends Command
             $output,
             $this->terminalCommand,
             $this->exclusionListToken,
-            $this->allowedFileEndings
+            $this->allowedFileEndings,
         );
         // @phpstan-ignore-next-line because there is a hack in the symfony/event-dispatcher-contract regarding dispatch
         $this->eventDispatcher->dispatch(
             $event,
-            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND
+            TerminalCommandDecorator::EVENT_DECORATE_TERMINAL_COMMAND,
         );
 
         try {
             $exitCode = $this->terminalCommandRunner->run($this->terminalCommand);
-        } catch (NoUsefulCommandFoundException $exception) {
+        } catch (NoUsefulCommandFoundException $noUsefulCommandFoundException) {
             $output->writeln('Skipping tool.');
             $output->writeln(
-                'Reason to skip tool: ' . $exception->getMessage() . PHP_EOL
-                . 'Code: ' . $exception->getCode(),
-                OutputInterface::VERBOSITY_VERBOSE
+                'Reason to skip tool: ' . $noUsefulCommandFoundException->getMessage() . PHP_EOL
+                . 'Code: ' . $noUsefulCommandFoundException->getCode(),
+                OutputInterface::VERBOSITY_VERBOSE,
             );
             $exitCode = 0;
         } catch (Exception $exception) {
             throw new RuntimeException(
                 'Something went wrong while executing a terminal command.',
                 1617786765,
-                $exception
+                $exception,
             );
         }
 
@@ -75,12 +75,11 @@ abstract class AbstractToolCommand extends Command
      * It's annotated for use with PHP-DI.
      *
      * @see http://php-di.org/doc/annotations.html
-     *
-     * @Inject
      */
+    #[Inject]
     public function injectDependenciesToolCommand(
         TerminalCommandRunner $terminalCommandRunner,
-        EventDispatcherInterface $eventDispatcher
+        EventDispatcherInterface $eventDispatcher,
     ): void {
         $this->terminalCommandRunner = $terminalCommandRunner;
         $this->eventDispatcher = $eventDispatcher;

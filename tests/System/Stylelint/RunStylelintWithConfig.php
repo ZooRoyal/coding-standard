@@ -28,7 +28,7 @@ class RunStylelintWithConfig extends AsyncTestCase
                 __DIR__ . '/../../../node_modules/.bin/stylelint',
                 '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
                 __DIR__ . '/../fixtures/stylelint/BadCode.less',
-            ]
+            ],
         );
         yield $process->start();
         $output = yield buffer($process->getStdout());
@@ -51,7 +51,7 @@ class RunStylelintWithConfig extends AsyncTestCase
                 __DIR__ . '/../../../node_modules/.bin/stylelint',
                 '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
                 __DIR__ . '/../fixtures/stylelint/BadCode.scss',
-            ]
+            ],
         );
 
         yield $process->start();
@@ -76,7 +76,7 @@ class RunStylelintWithConfig extends AsyncTestCase
                 __DIR__ . '/../../../node_modules/.bin/stylelint',
                 '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
                 __DIR__ . '/../fixtures/stylelint/BadCode.sass',
-            ]
+            ],
         );
 
         yield $process->start();
@@ -101,7 +101,7 @@ class RunStylelintWithConfig extends AsyncTestCase
                 __DIR__ . '/../../../node_modules/.bin/stylelint',
                 '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
                 __DIR__ . '/../fixtures/stylelint/BadCssCode.css',
-            ]
+            ],
         );
 
         yield $process->start();

@@ -13,5 +13,6 @@ infection.html
 rector.php
 tests/Functional/Plugin/Fixtures/ComposerTest/package.json
 tests/Functional/Plugin/Fixtures/ComposerTest/package-lock.json
-tmp
+tmp/*
+!tmp/.keep
 pnpm-lock.yaml

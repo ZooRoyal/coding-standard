@@ -37,11 +37,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     private const TEMPLATE
         = 'npx --no-install eslint %6$s%7$s--no-error-on-unmatched-pattern --config %1$s %3$s'
         . '--ignore-path %2$s %4$s%5$s';
-    private Environment $environment;
 
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**
@@ -104,7 +102,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $excludingString = '--ignore-pattern ';
             $excludesFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->excludesFiles
+                $this->excludesFiles,
             );
             $excludingString .= implode(' --ignore-pattern ', $excludesFilePaths);
             $excludingString .= ' ';
@@ -120,7 +118,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } else {

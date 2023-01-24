@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\ExclusionList;
 
-use DI\Annotation\Inject;
+use DI\Attribute\Inject;
 use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfo;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\ExcluderInterface;
 
@@ -12,25 +12,21 @@ class ExclusionListFactory
 {
     /** @var array<string,array<EnhancedFileInfo>> */
     private array $exclusionListCache = [];
-    /** @var array<ExcluderInterface> */
-    private array $excluders;
-    private ExclusionListSanitizer $exclusionListSanitizer;
 
     /**
      * BlacklistFactory constructor.
      *
      * @param array<ExcluderInterface> $excluders
-     *
-     * @Inject({"excluders" = "excluders"})
      */
-    public function __construct(array $excluders, ExclusionListSanitizer $exclusionListSanitizer)
-    {
-        $this->excluders = $excluders;
-        $this->exclusionListSanitizer = $exclusionListSanitizer;
+    #[Inject(['excluders' => 'excluders'])]
+    public function __construct(
+        private readonly array $excluders,
+        private readonly ExclusionListSanitizer $exclusionListSanitizer,
+    ) {
     }
 
     /**
-     * This function computes a exclusionlist of directories which should not be checked.
+     * This function computes an exclusion list of directories which should not be checked.
      *
      * @return array<EnhancedFileInfo>
      */

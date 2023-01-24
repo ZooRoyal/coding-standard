@@ -8,21 +8,14 @@ use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class AllCheckableFileFinder implements FileFinderInterface
 {
-    private ProcessRunner $processRunner;
-    private GitChangeSetFilter $gitChangeSetFilter;
-    private GitChangeSetFactory $gitChangeSetFactory;
-
     /**
      * AllCheckableFileFinder constructor.
      */
     public function __construct(
-        ProcessRunner $processRunner,
-        GitChangeSetFilter $gitChangeSetFilter,
-        GitChangeSetFactory $gitChangeSetFactory
+        private readonly ProcessRunner $processRunner,
+        private readonly GitChangeSetFilter $gitChangeSetFilter,
+        private readonly GitChangeSetFactory $gitChangeSetFactory,
     ) {
-        $this->processRunner = $processRunner;
-        $this->gitChangeSetFilter = $gitChangeSetFilter;
-        $this->gitChangeSetFactory = $gitChangeSetFactory;
     }
 
     /**
@@ -34,10 +27,10 @@ class AllCheckableFileFinder implements FileFinderInterface
         array $allowedFileEndings = [],
         string $exclusionListToken = '',
         string $inclusionListToken = '',
-        ?string $targetBranch = null
+        ?string $targetBranch = null,
     ): GitChangeSet {
         $filesFromGit = explode("\n", trim($this->processRunner->runAsProcess('git', 'ls-files')));
-        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit, '');
+        $gitChangeSet = $this->gitChangeSetFactory->build($filesFromGit);
 
         $this->gitChangeSetFilter->filter($gitChangeSet, $allowedFileEndings, $exclusionListToken);
 

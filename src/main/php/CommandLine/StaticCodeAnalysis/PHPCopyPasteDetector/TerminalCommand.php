@@ -32,13 +32,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
             'custom/plugins/ZRBannerSlider/ZRBannerSlider.php',
             'custom/plugins/ZRPreventShipping/ZRPreventShipping.php',
         ];
-    private Environment $environment;
-    private ProcessRunner $processRunner;
 
-    public function __construct(Environment $environment, ProcessRunner $processRunner)
+    public function __construct(private readonly Environment $environment, private readonly ProcessRunner $processRunner)
     {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
     }
 
     /**

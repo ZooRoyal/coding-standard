@@ -21,6 +21,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_ROOT = '/RootDirectory';
     private const FORGED_ABSOLUTE_VENDOR = '/vendor';
+
     private TerminalCommand $subject;
     /** @var MockInterface|\Zooroyal\CodingStandard\CommandLine\Environment\Environment */
     private Environment $mockedEnvironment;
@@ -60,9 +61,9 @@ class TerminalCommandTest extends TestCase
             ->with(
                 Matchers::startsWith(
                     '<info>Compiled TerminalCommand to following string</info>'
-                    . PHP_EOL . $data->getExpectedCommand()
+                    . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
@@ -117,7 +118,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
                         'processes' => 5,
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -125,7 +126,7 @@ class TerminalCommandTest extends TestCase
                     [
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/parallel-lint -j 1 .',
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -137,7 +138,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/a', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/b', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'extensions' => [
@@ -146,7 +147,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/parallel-lint -j 1 -e ts,js .',
                         'extensions' => ['ts', 'js'],
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -158,7 +159,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'processes' => [
@@ -167,7 +168,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/parallel-lint -j 17 .',
                         'processes' => 17,
-                    ]
+                    ],
                 ),
             ],
         ];

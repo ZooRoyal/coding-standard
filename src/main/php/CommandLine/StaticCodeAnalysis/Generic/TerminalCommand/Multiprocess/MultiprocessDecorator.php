@@ -11,12 +11,10 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class MultiprocessDecorator extends TerminalCommandDecorator
 {
-    private ProcessRunner $processRunner;
     private ?int $possibleProcesses = null;
 
-    public function __construct(ProcessRunner $processRunner)
+    public function __construct(private readonly ProcessRunner $processRunner)
     {
-        $this->processRunner = $processRunner;
     }
 
     public function decorate(DecorateEvent $event): void
@@ -31,7 +29,7 @@ class MultiprocessDecorator extends TerminalCommandDecorator
 
         $event->getOutput()->writeln(
             '<info>Command can use ' . $this->possibleProcesses . ' processes</info>' . PHP_EOL,
-            OutputInterface::VERBOSITY_VERY_VERBOSE
+            OutputInterface::VERBOSITY_VERY_VERBOSE,
         );
 
         $terminalCommand->setMaximalConcurrentProcesses($this->possibleProcesses);

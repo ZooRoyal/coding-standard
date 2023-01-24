@@ -16,9 +16,6 @@ class EnhancedFileInfoFactory
     private array $filePool = [];
     private string $rootDirectory;
 
-    /**
-     * EnhancedFileInfoFactory constructor.
-     */
     public function __construct(ProcessRunner $processRunner)
     {
         $this->rootDirectory = $processRunner->runAsProcess('git', 'rev-parse', '--show-toplevel');
@@ -62,15 +59,14 @@ class EnhancedFileInfoFactory
     public function buildFromArrayOfPaths(array $pathNames): array
     {
         $enhancedFileInfoInstancesOrNull = array_map(
-            /* @phpstan-ignore-next-line */
             function ($value): ?EnhancedFileInfo {
                 try {
                     return $this->buildFromPath($value);
-                } catch (InvalidArgumentException $invalidArgumentException) {
+                } catch (InvalidArgumentException) {
                     return null;
                 }
             },
-            $pathNames
+            $pathNames,
         );
         $enhancedFileInfos = array_filter($enhancedFileInfoInstancesOrNull);
         return array_unique($enhancedFileInfos);

@@ -30,11 +30,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
-    private Environment $environment;
 
-    public function __construct(Environment $environment)
+    public function __construct(private readonly Environment $environment)
     {
-        $this->environment = $environment;
     }
 
     /**
@@ -71,7 +69,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
             $excludingString = ' ';
             $excludesFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => '--exclude ' . $item->getRelativePathname() . '/',
-                $this->excludesFiles
+                $this->excludesFiles,
             );
             $excludingString .= implode(' ', $excludesFilePaths);
         }
@@ -86,7 +84,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                $this->targetedFiles,
             );
             $targetingString = ' ' . implode(' ', $targetedFilePaths);
         } else {

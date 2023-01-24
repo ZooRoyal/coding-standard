@@ -13,10 +13,6 @@ use function Safe\substr;
 
 class GitPathsExcluder implements ExcluderInterface
 {
-    private Environment $environment;
-    private ProcessRunner $processRunner;
-    private EnhancedFileInfoFactory $enhancedFileInfoFactory;
-    private CacheKeyGenerator $cacheKeyGenerator;
     /** @var array<string,array<EnhancedFileInfo>> */
     private array $cache = [];
 
@@ -24,15 +20,11 @@ class GitPathsExcluder implements ExcluderInterface
      * GitPathsExcluder constructor.
      */
     public function __construct(
-        Environment $environment,
-        ProcessRunner $processRunner,
-        EnhancedFileInfoFactory $enhancedFileInfoFactory,
-        CacheKeyGenerator $cacheKeyGenerator
+        private readonly Environment $environment,
+        private readonly ProcessRunner $processRunner,
+        private readonly EnhancedFileInfoFactory $enhancedFileInfoFactory,
+        private readonly CacheKeyGenerator $cacheKeyGenerator,
     ) {
-        $this->environment = $environment;
-        $this->processRunner = $processRunner;
-        $this->enhancedFileInfoFactory = $enhancedFileInfoFactory;
-        $this->cacheKeyGenerator = $cacheKeyGenerator;
     }
 
     /**
@@ -58,7 +50,7 @@ class GitPathsExcluder implements ExcluderInterface
 
         $rootDirectory = $this->environment->getRootDirectory()->getRealPath();
         $finderResult = $this->processRunner->runAsProcess(
-            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters
+            'find ' . $rootDirectory . ' -mindepth 2 -name .git' . $excludeParameters,
         );
 
         if (empty($finderResult)) {
@@ -70,7 +62,7 @@ class GitPathsExcluder implements ExcluderInterface
 
         $relativeDirectories = array_map(
             static fn($value): string => substr(dirname($value), strlen($rootDirectory) + 1),
-            $rawExcludePathsByFileByGit
+            $rawExcludePathsByFileByGit,
         );
 
         $result = $this->enhancedFileInfoFactory->buildFromArrayOfPaths($relativeDirectories);

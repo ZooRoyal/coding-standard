@@ -57,7 +57,7 @@ class TargetDecoratorTest extends TestCase
 
         $subjectFactory = new SubjectFactory();
         $buildFragments = $subjectFactory->buildSubject(
-            TargetDecorator::class
+            TargetDecorator::class,
         );
         $this->subject = $buildFragments['subject'];
         $this->subjectParameters = $buildFragments['parameters'];
@@ -72,13 +72,11 @@ class TargetDecoratorTest extends TestCase
      * @test
      *
      * @dataProvider decorateAddsTargetsToTerminalCommandDataProvider
-     *
-     * @param string|false $forgedTarget
      */
     public function decorateAddsTargetsToTerminalCommand(
         bool $forgedAutoTarget,
-        $forgedTarget,
-        ?string $expectedTargetBranch
+        string|null $forgedTarget,
+        ?string $expectedTargetBranch,
     ): void {
         $forgedRealPath = 'asdasd';
         $forgedCommitHash = 'asdasdwqeqwe';
@@ -90,7 +88,7 @@ class TargetDecoratorTest extends TestCase
             ->withNoArgs()->andReturn($expectedTargetBranch);
 
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->prepareMockedInputHasOption(true, true);
@@ -127,7 +125,7 @@ class TargetDecoratorTest extends TestCase
     public function decorateShouldNotReactToEmptyTargetedInput(): void
     {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->prepareMockedInputHasOption(true, true);
@@ -186,7 +184,7 @@ class TargetDecoratorTest extends TestCase
     public function decorateOnlyTargetsIfTargetOptionsPresent(bool $auto, bool $target): void
     {
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->mockedInput->shouldIgnoreMissing();
@@ -210,7 +208,7 @@ class TargetDecoratorTest extends TestCase
         $mockedGitChangeSet = Mockery::mock(GitChangeSet::class);
 
         $this->mockedEvent->shouldReceive('getTerminalCommand')->atLeast()->once()->andReturn(
-            $this->mockedTerminalCommand
+            $this->mockedTerminalCommand,
         );
 
         $this->mockedInput->shouldIgnoreMissing();
@@ -243,7 +241,7 @@ class TargetDecoratorTest extends TestCase
         $this->mockedOutput->shouldReceive('writeln')->once()
             ->with(
                 '<info>No Target was specified so all applicable files are targeted</info>',
-                OutputInterface::VERBOSITY_NORMAL
+                OutputInterface::VERBOSITY_NORMAL,
             );
         $this->prepareOutput($forgedRealPaths);
     }
@@ -286,10 +284,8 @@ class TargetDecoratorTest extends TestCase
 
     /**
      * Prepare mocked Input to return given values when asked.
-     *
-     * @param string|bool $forgedTarget
      */
-    private function prepareMockedInputGetOption(bool $forgedAutoTarget, $forgedTarget): void
+    private function prepareMockedInputGetOption(bool $forgedAutoTarget, string|false|null $forgedTarget): void
     {
         $this->mockedInput->shouldReceive('getOption')->once()
             ->with(TargetableInputFacet::OPTION_AUTO_TARGET)->andReturn($forgedAutoTarget);

@@ -18,7 +18,7 @@ use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
 
 class AdaptableFileFinderTest extends TestCase
 {
-    /** @var array<MockInterface>|array<mixed> */
+    /** @var array<MockInterface> */
     private array $subjectParameters;
     private AdaptableFileFinder $subject;
 
@@ -88,7 +88,7 @@ class AdaptableFileFinderTest extends TestCase
         ?string $targetBranchInput,
         bool $isCommitishValid,
         bool $isLocalBranch,
-        string $finder
+        string $finder,
     ): void {
         $mockedAllowedFileEndings = ['asdqwe'];
         $mockedBlacklistToken = 'qwegfasdfqwe';
@@ -109,7 +109,7 @@ class AdaptableFileFinderTest extends TestCase
             $mockedAllowedFileEndings,
             $mockedBlacklistToken,
             $mockedInclusionlistToken,
-            $targetBranchInput
+            $targetBranchInput,
         );
 
         self::assertSame($expectedResult, $result);

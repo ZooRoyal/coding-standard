@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand;
 
-use Symfony\Component\Console\Output\Output;
 use Symfony\Component\Console\Output\OutputInterface;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 
 class TerminalCommandRunner
 {
-    private ProcessRunner $processRunner;
-    private OutputInterface $output;
-
-    public function __construct(ProcessRunner $processRunner, OutputInterface $output)
+    public function __construct(private readonly ProcessRunner $processRunner, private readonly OutputInterface $output)
     {
-        $this->processRunner = $processRunner;
-        $this->output = $output;
     }
 
     public function run(TerminalCommand $terminalCommand): ?int
@@ -28,12 +22,12 @@ class TerminalCommandRunner
                 $errorIncrement = $process->getIncrementalErrorOutput();
                 $outputIncrement = $process->getIncrementalOutput();
                 if (!empty($errorIncrement)) {
-                    $output->write($errorIncrement, false, Output::OUTPUT_RAW);
+                    $output->write($errorIncrement, false, OutputInterface::OUTPUT_RAW);
                 }
                 if (!empty($outputIncrement)) {
-                    $output->write($outputIncrement, false, Output::OUTPUT_RAW);
+                    $output->write($outputIncrement, false, OutputInterface::OUTPUT_RAW);
                 }
-            }
+            },
         );
         $process->wait();
 

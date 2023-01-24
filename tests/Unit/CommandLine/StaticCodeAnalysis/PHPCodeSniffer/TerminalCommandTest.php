@@ -21,6 +21,7 @@ class TerminalCommandTest extends TestCase
     private const FORGED_PACKAGE_DIRECTORY = '/packageDirectory';
     private const FORGED_RELATIV_ROOT = '.';
     private const FORGED_ABSOLUTE_VENDOR = '/vendor';
+
     private TerminalCommand $subject;
     /** @var MockInterface|Environment */
     private Environment $mockedEnvironment;
@@ -69,9 +70,9 @@ class TerminalCommandTest extends TestCase
             ->with(
                 Matchers::startsWith(
                     '<info>Compiled TerminalCommand to following string</info>'
-                    . PHP_EOL . $data->getExpectedCommand()
+                    . PHP_EOL . $data->getExpectedCommand(),
                 ),
-                OutputInterface::VERBOSITY_VERY_VERBOSE
+                OutputInterface::VERBOSITY_VERY_VERBOSE,
             );
 
         $this->subject->addAllowedFileExtensions($data->getExtensions());
@@ -123,7 +124,7 @@ class TerminalCommandTest extends TestCase
                         ],
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
                         'processes' => 7,
-                    ]
+                    ],
                 ),
             ],
             'empty optionals' => [
@@ -132,7 +133,7 @@ class TerminalCommandTest extends TestCase
                         'expectedCommand' => 'php ' . self::FORGED_ABSOLUTE_VENDOR
                             . '/bin/phpcs -s --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
-                    ]
+                    ],
                 ),
             ],
             'excluding' => [
@@ -142,7 +143,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcs -s --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml --ignore=a,b ' . self::FORGED_RELATIV_ROOT,
                         'excluded' => [$mockedEnhancedFileInfo2, $mockedEnhancedFileInfo2],
-                    ]
+                    ],
                 ),
             ],
             'extensions' => [
@@ -153,7 +154,7 @@ class TerminalCommandTest extends TestCase
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/phpcs/ZooRoyal/ruleset.xml '
                             . self::FORGED_RELATIV_ROOT,
                         'extensions' => ['asdqwe', 'qweasd'],
-                    ]
+                    ],
                 ),
             ],
             'fixing' => [
@@ -163,7 +164,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcbf --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'fixingMode' => true,
-                    ]
+                    ],
                 ),
             ],
             'targeted' => [
@@ -176,7 +177,7 @@ class TerminalCommandTest extends TestCase
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/c', self::FORGED_ABSOLUTE_VENDOR),
                             new EnhancedFileInfo(self::FORGED_ABSOLUTE_VENDOR . '/d', self::FORGED_ABSOLUTE_VENDOR),
                         ],
-                    ]
+                    ],
                 ),
             ],
             'verbosity quiet' => [
@@ -186,7 +187,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcs -s -q --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
-                    ]
+                    ],
                 ),
             ],
             'verbosity verbose' => [
@@ -196,7 +197,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcs -s -v --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity very verbose' => [
@@ -207,7 +208,7 @@ class TerminalCommandTest extends TestCase
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'fixingMode' => false,
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERY_VERBOSE,
-                    ]
+                    ],
                 ),
             ],
             'verbosity debug verbose' => [
@@ -217,7 +218,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcs -s -vvv --parallel=1 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'verbosityLevel' => OutputInterface::VERBOSITY_DEBUG,
-                    ]
+                    ],
                 ),
             ],
             'processes' => [
@@ -227,7 +228,7 @@ class TerminalCommandTest extends TestCase
                             . '/bin/phpcs -s --parallel=28 -p --standard=' . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/phpcs/ZooRoyal/ruleset.xml ' . self::FORGED_RELATIV_ROOT,
                         'processes' => 28,
-                    ]
+                    ],
                 ),
             ],
 

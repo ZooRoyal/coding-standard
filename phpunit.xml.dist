@@ -7,26 +7,27 @@
         resolveDependencies="true"
         stopOnRisky="true"
         timeoutForSmallTests="2"
+        timeoutForMediumTests="60"
         timeoutForLargeTests="180"
         verbose="false"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.3/phpunit.xsd">
     <coverage
             processUncoveredFiles="true"
-            cacheDirectory="/tmp/phpunit/coverage-cache">
+            cacheDirectory="tmp/phpunit/coverage-cache">
         <include>
             <directory suffix=".php">./src</directory>
         </include>
         <exclude>
             <file>./src/config</file>
-            <directory>./src/main/php/PHPCodeSniffer/Standards/ZooRoyal/Sniffs/Commenting</directory>
+            <directory>./src/main/php/Sniffs/PHPCodeSniffer</directory>
         </exclude>
         <report>
-            <clover outputFile="/tmp/phpunit/clover.xml"/>
-            <crap4j outputFile="/tmp/phpunit/crap4j.xml" threshold="50"/>
-            <html outputDirectory="/tmp/phpunit/html-coverage" lowUpperBound="50" highLowerBound="90"/>
+            <clover outputFile="tmp/phpunit/clover.xml"/>
+            <crap4j outputFile="tmp/phpunit/crap4j.xml" threshold="50"/>
+            <html outputDirectory="tmp/phpunit/html-coverage" lowUpperBound="50" highLowerBound="90"/>
             <text outputFile="php://stdout" showUncoveredFiles="true" showOnlySummary="true"/>
-            <xml outputDirectory="/tmp/phpunit/coverage-xml"/>
+            <xml outputDirectory="tmp/phpunit/coverage-xml"/>
         </report>
     </coverage>
     <testsuites>
@@ -43,7 +44,7 @@
         </testsuite>
     </testsuites>
     <logging>
-        <junit outputFile="/tmp/phpunit/junit.xml"/>
+        <junit outputFile="tmp/phpunit/junit.xml"/>
     </logging>
     <php>
         <env name="COMPOSER_MEMORY_LIMIT" value="-1" force="true" />

@@ -27,13 +27,11 @@ class TerminalCommand extends AbstractTerminalCommand implements
     use VerboseTrait;
 
     private const TEMPLATE = 'php %1$s analyse %4$s--no-progress --error-format=github -c %2$s %3$s';
-    private PHPStanConfigGenerator $phpstanConfigGenerator;
-    private Environment $environment;
 
-    public function __construct(Environment $environment, PHPStanConfigGenerator $phpstanConfigGenerator)
-    {
-        $this->environment = $environment;
-        $this->phpstanConfigGenerator = $phpstanConfigGenerator;
+    public function __construct(
+        private readonly Environment $environment,
+        private readonly PHPStanConfigGenerator $phpstanConfigGenerator,
+    ) {
     }
 
     /**
@@ -87,7 +85,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         if ($this->targetedFiles !== null) {
             $targetedFilePaths = array_map(
                 static fn(EnhancedFileInfo $item) => $item->getRelativePathname(),
-                $this->targetedFiles
+                $this->targetedFiles,
             );
             $targetingString = implode(' ', $targetedFilePaths);
         } else {
