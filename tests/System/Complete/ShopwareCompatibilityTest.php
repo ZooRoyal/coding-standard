@@ -44,7 +44,7 @@ class ShopwareCompatibilityTest extends TestCase
             $environmentDirectory
         );
 
-        $exitCode = $process->mustRun()->getExitCode();
+        $exitCode = $process->setIdleTimeout(120)->setTimeout(240)->mustRun()->getExitCode();
 
         self::assertEquals(0, $exitCode);
     }

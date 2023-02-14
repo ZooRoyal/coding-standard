@@ -95,6 +95,10 @@ class PHPStanConfigGeneratorTest extends TestCase
             '<info>sebastianknott/hamcrest-object-accessor not found. Skip loading /src/functions.php</info>',
             OutputInterface::VERBOSITY_VERBOSE
         );
+        $this->mockedOutput->shouldReceive('writeln')->once()->with(
+            '<info>deployer/deployer not found. Skip loading /src/functions.php</info>',
+            OutputInterface::VERBOSITY_VERBOSE
+        );
 
         $this->mockedNeonAdapter->shouldReceive('dump')->once()
             ->with($this->buildConfigMatcher($forgedHamcrestPath, $forgedMockeryPath, $forgedFilePath))
@@ -170,6 +174,8 @@ class PHPStanConfigGeneratorTest extends TestCase
     ): void {
         $mockedComposerLocator->shouldReceive('getPath')->once()
             ->with('hamcrest/hamcrest-php')->andReturn($forgedHamcrestPath);
+        $mockedComposerLocator->shouldReceive('getPath')->once()
+            ->with('deployer/deployer')->andThrow(new RuntimeException());
         $mockedComposerLocator->shouldReceive('getPath')->once()
             ->with('sebastianknott/hamcrest-object-accessor')->andThrow(new RuntimeException());
         $mockedComposerLocator->shouldReceive('getPath')->once()

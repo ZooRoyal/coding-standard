@@ -19,6 +19,7 @@ class PHPStanConfigGenerator
             'hamcrest/hamcrest-php' => '/hamcrest/Hamcrest.php',
             'sebastianknott/hamcrest-object-accessor' => '/src/functions.php',
             'mockery/mockery' => '/library/helpers.php',
+            'deployer/deployer' => '/src/functions.php',
         ];
     private const STATIC_DIRECTORIES_TO_SCAN
         = [

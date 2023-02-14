@@ -1,8 +1,7 @@
 {
   "version": "0.0.1",
   "require-dev":  {
-    "zooroyal/coding-standard": "@dev",
-    "php-http/mock-client": "*"
+    "zooroyal/coding-standard": "@dev"
   },
   "repositories":{
     "localRepo":{
