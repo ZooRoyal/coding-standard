@@ -25,6 +25,7 @@
   },
   "require": {
     "php": "^7.4",
+    "composer-runtime-api": "^2.0",
     "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
     "doctrine/annotations": "^1.10",
     "mindplay/composer-locator": "^2.1.4",
