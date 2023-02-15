@@ -78,7 +78,7 @@ jobs:
       - codestyle
     strategy:
       matrix:
-        composer_version: [1, 2]
+        composer_version: [2]
         composer_parameters: ['--prefer-lowest', ' ']
     steps:
       - name: Checkout repository
