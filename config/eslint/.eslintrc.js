@@ -41,6 +41,7 @@ module.exports = {
                             'Host',
                             'Watch',
                             'Mount',
+                            'Listen',
                         ],
                     },
                 ],
