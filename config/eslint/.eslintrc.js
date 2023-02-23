@@ -42,7 +42,7 @@ module.exports = {
                             'Watch',
                             'Mount',
                             'Listen',
-                            'Resource'
+                            'Resource',
                         ],
                     },
                 ],
