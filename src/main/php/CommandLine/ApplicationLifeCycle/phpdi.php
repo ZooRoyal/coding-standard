@@ -15,6 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\GitIgnoresExclud
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\GitPathsExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\StaticExcluder;
 use Zooroyal\CodingStandard\CommandLine\ExclusionList\Excluders\TokenExcluder;
+
 use function DI\factory;
 use function DI\get;
 

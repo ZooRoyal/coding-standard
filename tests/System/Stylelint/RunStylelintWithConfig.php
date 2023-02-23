@@ -9,6 +9,7 @@ use Amp\Process\Process;
 use Amp\Promise;
 use Hamcrest\MatcherAssert;
 use Hamcrest\Matchers as H;
+
 use function Amp\ByteStream\buffer;
 
 class RunStylelintWithConfig extends AsyncTestCase

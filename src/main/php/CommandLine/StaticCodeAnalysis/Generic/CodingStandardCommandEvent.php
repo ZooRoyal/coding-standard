@@ -49,5 +49,4 @@ class CodingStandardCommandEvent extends ConsoleEvent implements DecorateEvent
     {
         return $this->terminalCommand;
     }
-
 }

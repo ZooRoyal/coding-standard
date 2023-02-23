@@ -13,6 +13,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Extension\FileExtensionTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
+
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
@@ -20,7 +21,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     FileExtensionTerminalCommand,
     ExclusionTerminalCommand
 {
-    use TargetTrait, ExclusionTrait, FileExtensionTrait;
+    use TargetTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
 
     private const TEMPLATE = 'php %1$s %2$s text %3$s%5$s%4$s';
     private Environment $environment;

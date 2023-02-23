@@ -135,7 +135,7 @@ class ExclusionListFactoryTest extends TestCase
     private function prepareMockedEnhancedFileInfo(array $filePaths): array
     {
         $enhancedFileMocks = [];
-        for ($i=0, $iMax = count($filePaths); $i < $iMax; $i++) {
+        for ($i = 0, $iMax = count($filePaths); $i < $iMax; $i++) {
             $enhancedFileMocks[] = Mockery::mock(EnhancedFileInfo::class);
         }
         return $enhancedFileMocks;

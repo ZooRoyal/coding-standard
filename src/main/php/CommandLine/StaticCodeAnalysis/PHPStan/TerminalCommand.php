@@ -14,6 +14,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
+
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
@@ -21,7 +22,9 @@ class TerminalCommand extends AbstractTerminalCommand implements
     TargetTerminalCommand,
     VerboseTerminalCommand
 {
-    use ExclusionTrait, TargetTrait, VerboseTrait;
+    use ExclusionTrait;
+    use TargetTrait;
+    use VerboseTrait;
 
     private const TEMPLATE = 'php %1$s analyse %4$s--no-progress --error-format=github -c %2$s %3$s';
     private PHPStanConfigGenerator $phpstanConfigGenerator;

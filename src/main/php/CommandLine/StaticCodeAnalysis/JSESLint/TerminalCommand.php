@@ -18,6 +18,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
+
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
@@ -27,7 +28,11 @@ class TerminalCommand extends AbstractTerminalCommand implements
     VerboseTerminalCommand,
     FileExtensionTerminalCommand
 {
-    use TargetTrait, FixTrait, ExclusionTrait, FileExtensionTrait, VerboseTrait;
+    use TargetTrait;
+    use FixTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use VerboseTrait;
 
     private const TEMPLATE
         = 'npx --no-install eslint %6$s%7$s--no-error-on-unmatched-pattern --config %1$s %3$s'

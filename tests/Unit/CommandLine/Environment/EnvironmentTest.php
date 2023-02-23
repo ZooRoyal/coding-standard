@@ -12,6 +12,7 @@ use Zooroyal\CodingStandard\CommandLine\EnhancedFileInfo\EnhancedFileInfoFactory
 use Zooroyal\CodingStandard\CommandLine\Environment\Environment;
 use Zooroyal\CodingStandard\CommandLine\Process\ProcessRunner;
 use Zooroyal\CodingStandard\Tests\Tools\SubjectFactory;
+
 use function Safe\realpath;
 
 class EnvironmentTest extends TestCase
@@ -85,5 +86,4 @@ class EnvironmentTest extends TestCase
 
         self::assertSame($this->mockedEnhancedFileInfo, $result);
     }
-
 }

@@ -20,6 +20,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Verbose\VerboseTrait;
+
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
@@ -30,7 +31,12 @@ class TerminalCommand extends AbstractTerminalCommand implements
     VerboseTerminalCommand,
     MultiprocessTerminalCommand
 {
-    use TargetTrait, FixTrait, ExclusionTrait, FileExtensionTrait, VerboseTrait, MultiprocessTrait;
+    use TargetTrait;
+    use FixTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use VerboseTrait;
+    use MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s %5$s%6$s--parallel=%7$d -p --standard=%2$s %3$s%4$s';
     private Environment $environment;
