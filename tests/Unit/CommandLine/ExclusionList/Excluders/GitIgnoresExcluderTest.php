@@ -51,12 +51,12 @@ class GitIgnoresExcluderTest extends TestCase
         );
 
         $expectedCommand = 'git ls-files -io --exclude-standard --directory';
-        $forgedCommandResult = $forgedExcludedDirectories[0]. DIRECTORY_SEPARATOR . PHP_EOL
+        $forgedCommandResult = $forgedExcludedDirectories[0] . DIRECTORY_SEPARATOR . PHP_EOL
             . $forgedExcludedDirectories[1] . DIRECTORY_SEPARATOR . PHP_EOL
             . 'asd.js' . PHP_EOL;
 
         $expectedBuildFromArrayParameter = array_map(
-            static fn($value): string =>  $value .DIRECTORY_SEPARATOR,
+            static fn($value): string =>  $value . DIRECTORY_SEPARATOR,
             $forgedExcludedDirectories
         );
 

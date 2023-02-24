@@ -15,6 +15,7 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Multiprocess\MultiprocessTrait;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTerminalCommand;
 use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalCommand\Target\TargetTrait;
+
 use function Safe\sprintf;
 
 class TerminalCommand extends AbstractTerminalCommand implements
@@ -23,7 +24,10 @@ class TerminalCommand extends AbstractTerminalCommand implements
     FileExtensionTerminalCommand,
     MultiprocessTerminalCommand
 {
-    use TargetTrait, ExclusionTrait, FileExtensionTrait, MultiprocessTrait;
+    use TargetTrait;
+    use ExclusionTrait;
+    use FileExtensionTrait;
+    use MultiprocessTrait;
 
     private const TEMPLATE = 'php %1$s -j %5$d%2$s%3$s%4$s';
     private Environment $environment;
@@ -96,7 +100,7 @@ class TerminalCommand extends AbstractTerminalCommand implements
         $extensionList = implode(',', $this->fileExtensions);
 
         if ($extensionList !== '') {
-            $extensionList = ' -e '.$extensionList;
+            $extensionList = ' -e ' . $extensionList;
         }
 
         return $extensionList;

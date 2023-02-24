@@ -10,7 +10,6 @@ use Zooroyal\CodingStandard\CommandLine\StaticCodeAnalysis\Generic\TerminalComma
 
 class NoUsefulCommandFoundExceptionTest extends TestCase
 {
-
     /**
      * @test
      */

@@ -15,7 +15,6 @@ use Zooroyal\CodingStandard\CommandLine\ApplicationLifeCycle\ContainerFactory;
 
 class ContainerFactoryTest extends TestCase
 {
-
     protected function tearDown(): void
     {
         Mockery::close();
@@ -63,7 +62,7 @@ class ContainerFactoryTest extends TestCase
     public function getContainerInstanceConfiguresContainer(): void
     {
         $expectedContainer = Mockery::mock(Container::class);
-        $mockedContainerBuilder = Mockery::mock('overload:'. ContainerBuilder::class);
+        $mockedContainerBuilder = Mockery::mock('overload:' . ContainerBuilder::class);
 
         $mockedContainerBuilder->shouldReceive('useAnnotations')->once()->with(true);
         $mockedContainerBuilder->shouldReceive('useAutowiring')->once()->with(true);

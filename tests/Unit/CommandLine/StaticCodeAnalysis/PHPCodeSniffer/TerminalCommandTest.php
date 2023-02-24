@@ -247,5 +247,4 @@ class TerminalCommandTest extends TestCase
 
         $this->subject->__toString();
     }
-
 }
