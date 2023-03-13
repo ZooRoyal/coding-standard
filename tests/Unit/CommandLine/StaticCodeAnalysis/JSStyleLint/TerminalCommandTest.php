@@ -100,18 +100,31 @@ class TerminalCommandTest extends TestCase
             'all' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install stylelint c d --quiet --fix --allow-empty-input --config='
+                        'expectedCommand' => 'npx --no-install stylelint c d --quiet --fix ' .
+                            '--allow-empty-input --config-basedir --config='
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc ' .
                             '--ignore-pattern=a/ --ignore-pattern=b/',
                         'excluded' => [
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/a', self::FORGED_ABSOLUTE_ROOT),
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/b', self::FORGED_ABSOLUTE_ROOT),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/a',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/b',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
                         ],
                         'extensions' => ['qweasd', 'argh'],
                         'fixingMode' => true,
                         'targets' => [
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/c', self::FORGED_ABSOLUTE_ROOT),
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/d', self::FORGED_ABSOLUTE_ROOT),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/c',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/d',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
                         ],
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
                     ]
@@ -121,7 +134,7 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --allow-empty-input --config='
+                            . ' --allow-empty-input --config-basedir --config='
                             . self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc',
                     ]
                 ),
@@ -129,12 +142,18 @@ class TerminalCommandTest extends TestCase
             'excluding' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install stylelint . --allow-empty-input --config='
+                        'expectedCommand' => 'npx --no-install stylelint . --allow-empty-input --config-basedir --config='
                             . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc --ignore-pattern=a/ --ignore-pattern=b/',
                         'excluded' => [
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/a', self::FORGED_ABSOLUTE_ROOT),
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/b', self::FORGED_ABSOLUTE_ROOT),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/a',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/b',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
                         ],
                     ]
                 ),
@@ -142,8 +161,10 @@ class TerminalCommandTest extends TestCase
             'extensions' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install stylelint **/*.{asdqwe,qweasd} --allow-empty-input --config='
-                            . self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc',
+                        'expectedCommand' => 'npx --no-install stylelint **/*.{asdqwe,qweasd} ' .
+                            '--allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
+                            . '/config/stylelint/.stylelintrc',
                         'extensions' => ['asdqwe', 'qweasd'],
                     ]
                 ),
@@ -151,8 +172,10 @@ class TerminalCommandTest extends TestCase
             'fixing' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --fix --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
+                        'expectedCommand' => 'npx --no-install stylelint '
+                            . self::FORGED_RELATIV_ROOT
+                            . ' --fix --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'fixingMode' => true,
                     ]
@@ -161,11 +184,19 @@ class TerminalCommandTest extends TestCase
             'targeted' => [
                 new TerminalCommandTestData(
                     [
-                        'expectedCommand' => 'npx --no-install stylelint c d --allow-empty-input --config=' .
-                            self::FORGED_PACKAGE_DIRECTORY . '/config/stylelint/.stylelintrc',
+                        'expectedCommand' => 'npx --no-install stylelint c d'
+                            . ' --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
+                            . '/config/stylelint/.stylelintrc',
                         'targets' => [
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/c', self::FORGED_ABSOLUTE_ROOT),
-                            new EnhancedFileInfo(self::FORGED_ABSOLUTE_ROOT . '/d', self::FORGED_ABSOLUTE_ROOT),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/c',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
+                            new EnhancedFileInfo(
+                                self::FORGED_ABSOLUTE_ROOT . '/d',
+                                self::FORGED_ABSOLUTE_ROOT
+                            ),
                         ],
                     ]
                 ),
@@ -174,7 +205,8 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --quiet --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
+                            . ' --quiet --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_QUIET,
                     ]
@@ -184,7 +216,8 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --formatter verbose --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
+                            . ' --formatter verbose --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERBOSE,
                     ]
@@ -194,7 +227,8 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --formatter verbose --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
+                            . ' --formatter verbose --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'fixingMode' => false,
                         'verbosityLevel' => OutputInterface::VERBOSITY_VERY_VERBOSE,
@@ -205,7 +239,8 @@ class TerminalCommandTest extends TestCase
                 new TerminalCommandTestData(
                     [
                         'expectedCommand' => 'npx --no-install stylelint ' . self::FORGED_RELATIV_ROOT
-                            . ' --formatter verbose --allow-empty-input --config=' . self::FORGED_PACKAGE_DIRECTORY
+                            . ' --formatter verbose --allow-empty-input --config-basedir --config='
+                            . self::FORGED_PACKAGE_DIRECTORY
                             . '/config/stylelint/.stylelintrc',
                         'verbosityLevel' => OutputInterface::VERBOSITY_DEBUG,
                     ]

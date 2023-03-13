@@ -1,0 +1,13 @@
+$component: 'mdc-dialog';
+
+.#{$component} {
+    font-size: 16px;
+}
+
+.keksdose {
+    background-color: red;
+
+    p {
+        margin: 0;
+    }
+}

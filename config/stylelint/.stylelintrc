@@ -2,21 +2,33 @@
   "extends": [
     "stylelint-config-standard"
   ],
-  "customSyntax": "postcss-less",
-  "ignoreFiles": ["Resources/*/dist/**/**/**"],
-  "plugins": [
-    "stylelint-scss"
+  "overrides": [
+    {
+      "files": ["*.less", "**/*.less"],
+      "customSyntax": "postcss-less",
+      "rules": {
+        "function-no-unknown": [true, {"ignoreFunctions": ["extend"]}]
+      }
+    },
+    {
+      "files": ["*.scss", "**/*.scss"],
+      "customSyntax": "postcss-scss",
+      "extends": ["stylelint-config-standard-scss"]
+    },
+    {
+      "files": ["*.sass", "**/*.sass"],
+      "customSyntax": "postcss-sass",
+      "extends": ["stylelint-config-standard-scss"]
+    }
   ],
+  "plugins": ["stylelint-scss"],
+  "ignoreFiles": ["Resources/*/dist/**/**/**"],
   "rules": {
     "at-rule-no-unknown": null,
     "block-no-empty": true,
     "no-descending-specificity": null,
-    "indentation": 4,
-    "number-leading-zero": "never",
-    "max-empty-lines": 2,
-    "selector-list-comma-newline-after": null,
     "declaration-empty-line-before": null,
-    "max-nesting-depth": 3,
+    "max-nesting-depth": 5,
     "selector-type-no-unknown": [
       true,
       {
@@ -24,6 +36,8 @@
           "custom-elements"
         ]
       }
-    ]
+    ],
+    "scss/double-slash-comment-empty-line-before": "always",
+    "scss/map-keys-quotes": "always"
   }
 }

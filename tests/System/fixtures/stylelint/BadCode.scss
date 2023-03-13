@@ -1,41 +1,57 @@
 $color1: 1;
+$text: 'hamlo';
 
 div#blaelement {
-    .headline {
-      color: $color1;
+  .headline {
+    color: $color1;
+
+    &::after {
+      content: $text;
     }
+  }
 
+  .test-bla {
+    box-shadow: 0px 2px 2px red;
 
-
-
-    .test-bla {
-        box-shadow: 0px 2px 2px red;
+    div {
+      div {
         div {
-             div {
-                 .test-div {
-                     h2 {
-                         span {
-                             color: red;
-                         }
-                     }
-                 }
-             }
+          div {
+            div {
+              .test-div {
+                h2 {
+                  span {
+                    color: red;
+                  }
+                }
+              }
+            }
+          }
         }
+      }
     }
+  }
 
-    .achja {
-        z-index: 20;
-        display: block;
-        width: 200px;
-        height: 100px;
-        color: red;
-        font-size: 20px;
-        background: red;
-        border: 1px solid red;
-        -moz-transition: all 0.5s;
-        -ms-transition: all 0.5s;
-        -webkit-transition: all 0.5s;
-        -o-transition: all 0.5s;
-        transition: all 0.5s;
-    }
+
+  .achja {
+    z-index: 20;
+    display: block;
+    width: 200px;
+    height: 100px;
+    color: red;
+    font-size: 20px;
+    background: red;
+    border: 1px solid red;
+    -moz-transition: all 0.5s;
+    -ms-transition: all 0.5s;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+  }
+
 }
+//uwotmate
+$TestMap: (
+        helvetica: 14px,
+        arial: 25px
+);

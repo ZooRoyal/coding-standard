@@ -12,7 +12,7 @@ use Hamcrest\Matchers as H;
 
 use function Amp\ByteStream\buffer;
 
-class RunStylelintWithConfig extends AsyncTestCase
+class RunStylelintWithConfigTest extends AsyncTestCase
 {
     /**
      * @test
@@ -35,8 +35,9 @@ class RunStylelintWithConfig extends AsyncTestCase
         $exitCode = yield $process->join();
 
         self::assertSame(2, $exitCode);
-        MatcherAssert::assertThat($output, H::containsString('Expected indentation of 4 spaces'));
+        MatcherAssert::assertThat($output, H::containsString('Unexpected empty block'));
     }
+
     /**
      * @test
      * @large
@@ -59,7 +60,30 @@ class RunStylelintWithConfig extends AsyncTestCase
         $exitCode = yield $process->join();
 
         self::assertSame(2, $exitCode);
-        MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 3'));
+        MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 5'));
+    }
+
+    /**
+     * @test
+     * @large
+     * @coversNothing
+     *
+     * @return array<int,Promise>
+     */
+    public function makeSureGoodScssPasses(): iterable
+    {
+        $process = new Process(
+            [
+                __DIR__ . '/../../../node_modules/.bin/stylelint',
+                '--config=' . __DIR__ . '/../../../config/stylelint/.stylelintrc',
+                __DIR__ . '/../fixtures/stylelint/GoodCode.scss',
+            ]
+        );
+
+        yield $process->start();
+        $exitCode = yield $process->join();
+
+        self::assertSame(0, $exitCode);
     }
 
     /**
@@ -84,7 +108,7 @@ class RunStylelintWithConfig extends AsyncTestCase
         $exitCode = yield $process->join();
 
         self::assertSame(2, $exitCode);
-        MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 3'));
+        MatcherAssert::assertThat($output, H::containsString('Expected nesting depth to be no more than 5'));
     }
 
     /**
