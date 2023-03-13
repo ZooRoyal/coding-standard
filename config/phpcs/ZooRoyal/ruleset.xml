@@ -185,7 +185,6 @@
         </properties>
     </rule>
     <rule ref="SlevomatCodingStandard.Functions.DisallowEmptyFunction"/>
-    <rule ref="SlevomatCodingStandard.Functions.DisallowNamedArguments"/>
 <!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInCall"/>-->
 <!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInClosureUse"/>-->
 <!--    <rule ref="SlevomatCodingStandard.Functions.RequireTrailingCommaInDeclaration"/>-->
