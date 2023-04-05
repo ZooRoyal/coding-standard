@@ -1,0 +1,63 @@
+---
+on:
+  workflow_dispatch:
+    inputs:
+      versionToRelease:
+        description: 'This is the version of Coding-Standard src to be release'     
+        required: true
+        type: string
+
+jobs:
+  release:
+    runs-on: ["ubuntu-latest"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Checkout src
+        uses: actions/checkout@v3
+        with:
+          repository: zooroyal/coding-standard-source
+          path: cs-src
+          ref: ${{ inputs.versionToRelease }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup git user
+        run : | 
+          git config --global user.name ${{ github.actor }}
+          git config --global user.email ${{ github.actor }}@users.noreply.github.com
+
+      - name: Auth to github repository
+        run : |
+          git remote set-url --push origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
+      
+      - name: Copy configs from source
+        run : |
+          rm -rf config;
+          cp -r cs-src/config .;
+          git add config;
+
+      - name: Find and replace version string
+        run : |
+          rm bin/coding-standard;
+          cp src/coding-standard.tpl bin/coding-standard;
+          sed -i 's/___VERSION___/${{ inputs.versionToRelease }}/g' bin/coding-standard
+          git add bin;
+
+      - name: Commit and push changes
+        run : |
+          git commit -m "Update to upstream version ${{ inputs.versionToRelease }}";
+          git push;
+
+      - name: CreateRelease
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ inputs.versionToRelease }}
+          release_name: Update to upstream version ${{ inputs.versionToRelease }}
+          body: |
+            This release uses new upstream [Coding-Standard ${{ inputs.versionToRelease }}](https://github.com/zooroyal/coding-standard-source/releases/tag/${{ inputs.versionToRelease }}).
+          draft: false
+          prerelease: false
