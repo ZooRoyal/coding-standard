@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
     inputs:
       versionToRelease:
-        description: 'This is the version of Coding-Standard src to be release'     
+        description: 'This is the version of Coding-Standard src to be release'
         required: true
         type: string
 
@@ -24,19 +24,13 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup git user
-        run : | 
+        run : |
           git config --global user.name ${{ github.actor }}
           git config --global user.email ${{ github.actor }}@users.noreply.github.com
 
       - name: Auth to github repository
         run : |
           git remote set-url --push origin https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
-      
-      - name: Copy configs from source
-        run : |
-          rm -rf config;
-          cp -r cs-src/config .;
-          git add config;
 
       - name: Find and replace version string
         run : |
