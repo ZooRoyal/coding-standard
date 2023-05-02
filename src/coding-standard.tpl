@@ -1,0 +1,52 @@
+#!/bin/bash
+
+set -e;
+
+if ! docker info > /dev/null 2>&1; then
+  echo Docker not available. You need to install docker if you want to use \
+    the Coding-Standard this way. Aborting!;
+  exit 1;
+fi
+
+function cleanup {
+  docker kill cs-container > /dev/null;
+}
+
+trap cleanup EXIT;
+
+# start container
+CONTAINER_ID=$(
+  docker run --rm -d \
+    --name cs-container \
+    --entrypoint "/bin/sleep" \
+    ghcr.io/zooroyal/coding-standard-source:___VERSION___ \
+    infinity
+)
+
+# copy files into container
+docker cp "$(pwd)"/. cs-container:/app/
+
+# save state in container
+if [ -n "$(git status -s)" ]; then
+  docker exec cs-container git add .
+  docker exec cs-container git commit -m "Before coding standard" -q
+fi
+
+# execute coding-standard
+set +e
+
+docker exec -it cs-container /coding-standard/src/bin/coding-standard $@
+CS_EXIT_CODE=$?
+
+set -e
+
+# gather changed files
+CHANGED_FILES=$(docker exec cs-container git diff --name-only HEAD)
+if [ ! -z "$CHANGED_FILES" ]; then
+  for FILENAME in $CHANGED_FILES; do
+    # Sync changes to $FILENAME
+    docker cp cs-container:/app/"$FILENAME" "$(pwd)"/"$FILENAME"
+  done
+fi
+
+exit $CS_EXIT_CODE

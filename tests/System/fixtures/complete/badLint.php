@@ -1,3 +1,0 @@
-<?php
-
-a =; class nope!;
