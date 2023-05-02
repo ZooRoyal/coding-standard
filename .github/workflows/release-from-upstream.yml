@@ -43,6 +43,7 @@ jobs:
         run : |
           git commit -m "Update to upstream version ${{ inputs.versionToRelease }}";
           git push;
+          echo "COMMIT=$(git rev-parse HEAD)" >> $GITHUB_ENV;
 
       - name: CreateRelease
         uses: actions/create-release@v1
@@ -55,3 +56,4 @@ jobs:
             This release uses new upstream [Coding-Standard ${{ inputs.versionToRelease }}](https://github.com/zooroyal/coding-standard-source/releases/tag/${{ inputs.versionToRelease }}).
           draft: false
           prerelease: false
+          commitish: ${{ env.COMMIT }}
