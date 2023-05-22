@@ -19,7 +19,7 @@ CONTAINER_ID=$(
   docker run --rm -d \
     --name cs-container \
     --entrypoint "/bin/sleep" \
-    ghcr.io/zooroyal/coding-standard-source:4.0.0-RC7 \
+    ghcr.io/zooroyal/coding-standard-source:4.0.0-RC8 \
     infinity
 )
 
