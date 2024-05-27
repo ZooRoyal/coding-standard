@@ -1,0 +1,11 @@
+on:
+pull_request_target:
+  types:
+    - closed
+  branches:
+    - 'master'
+
+jobs:
+create-release:
+  uses: ZooRoyal/reusable-workflows/.github/workflows/create-release.yml@master
+  secrets: inherit
